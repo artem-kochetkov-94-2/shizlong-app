@@ -1,0 +1,37 @@
+.tabList {
+  display: flex;
+  gap: 16px;
+}
+
+.tabButton {
+  position: relative;
+  padding: 6px 0;
+  font-size: 16px;
+  font-family: Roboto;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19.2px;
+  color: #A0A7B1;
+  outline: none;
+}
+
+.tabButton:hover {
+  color: #3D8393;
+}
+
+.active {
+  color: #3D8393;
+}
+
+.active::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  bottom: 0;
+  height: 2px;
+  background-color: #3D8393;
+}

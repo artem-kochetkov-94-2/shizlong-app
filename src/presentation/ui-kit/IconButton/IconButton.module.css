@@ -1,0 +1,46 @@
+.iconButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    font-size: inherit;
+    border: none;
+    cursor: pointer;
+}
+
+.extra-small {
+    width: 18px;
+    height: 18px;
+}
+
+.small {
+    width: 24px;
+    height: 24px;
+}
+
+.medium {
+    width: 38px;
+    height: 38px;
+}
+
+.large {
+    width: 44px;
+    height: 44px;
+}
+
+.circle {
+    border-radius: 50%;
+}
+
+.rounded {
+    border-radius: 12px;
+}
+
+.gray {
+    background-color: #F3F4F6;
+}
+
+.white {
+    background-color: #ffffff;
+}

@@ -1,0 +1,40 @@
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  svg {
+    font-size: 15px;
+  }
+}
+
+.fullStar {
+  color: #FFD700;
+}
+
+.halfStar {
+  color: #FFD700;
+}
+
+.emptyStar {
+  color: #C0C0C0;
+}
+
+.value {
+  margin-left: 10px;
+  margin-right: 4px;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
+  color: #292C31;
+}
+
+.count {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.8px;
+  letter-spacing: 0px;
+  color: #A0A7B1;
+}

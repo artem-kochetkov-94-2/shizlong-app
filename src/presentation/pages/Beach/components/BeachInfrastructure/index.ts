@@ -1,0 +1,1 @@
+export { BeachInfrastructure } from './BeachInfrastructure';

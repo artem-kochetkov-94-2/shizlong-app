@@ -1,0 +1,39 @@
+.menu {
+    display: flex;
+    gap: 8px;
+    background-color: #f5f5f5;
+}
+
+.menuItem {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 92px;
+    height: 70px;
+    padding: 10px 10px;
+    border-radius: 12px;
+    background-color: #fff;
+
+    &:first-child {
+        justify-content: center;
+        align-items: center;
+        width: 70px;
+    }
+
+    span {
+        font-family: "Roboto";
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 14.4px;
+        color: #FFFFFF;
+    }
+
+    img {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+.active {
+    background-color: #FFBC02;
+}

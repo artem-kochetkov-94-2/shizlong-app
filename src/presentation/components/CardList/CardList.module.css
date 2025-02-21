@@ -1,0 +1,15 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.title {
+    margin: 0;
+    font-family: "Roboto";
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19.2px;
+    color: #A0A7B1;
+}

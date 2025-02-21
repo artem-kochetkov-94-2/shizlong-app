@@ -1,0 +1,1 @@
+export { Beaches } from './Beaches';

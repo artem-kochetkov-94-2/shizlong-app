@@ -1,0 +1,42 @@
+.services {
+  padding: 16px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.serviceList {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 12px;
+}
+
+.serviceItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.serviceName {
+  color: #333;
+}
+
+.servicePrice {
+  color: #666;
+}
+
+.serviceDuration {
+  color: #999;
+}
+
+.showMore {
+  background: none;
+  border: none;
+  color: #007BFF;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+} 

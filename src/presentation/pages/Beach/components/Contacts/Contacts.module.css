@@ -1,0 +1,31 @@
+.contactItem {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.contactItem:last-child {
+  margin-bottom: 0;
+}
+
+.icon {
+  flex-shrink: 0;
+  color: #FFBC02;
+}
+
+.label {
+  margin-bottom: 4px;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.8px;
+  color: #292C31;
+}
+
+.text {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.8px;
+  color: #A0A7B1;
+}
