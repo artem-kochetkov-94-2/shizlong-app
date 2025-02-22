@@ -10,6 +10,8 @@ import { ReactComponent as FilterIcon } from './assets/filter.svg';
 import { ReactComponent as QRCodeIcon } from './assets/qr-code.svg';
 import { ReactComponent as RouteIcon } from './assets/route.svg';
 import { ReactComponent as ArrowLeftIcon } from './assets/arrow-left.svg';
+import { ReactComponent as ArrowBottomIcon } from './assets/arrow-bottom.svg';
+import { ReactComponent as CrossIcon } from './assets/cross.svg';
 import { IconName } from './types';
 
 export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = {
@@ -25,4 +27,6 @@ export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = 
   'qr-code': QRCodeIcon,
   route: RouteIcon,
   'arrow-left': ArrowLeftIcon,
+  'arrow-bottom': ArrowBottomIcon,
+  cross: CrossIcon,
 };

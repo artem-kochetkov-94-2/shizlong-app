@@ -10,6 +10,8 @@ export type IconName =
     | 'filter'
     | 'qr-code'
     | 'route'
-    | 'arrow-left';
+    | 'arrow-left'
+    | 'arrow-bottom'
+    | 'cross';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';

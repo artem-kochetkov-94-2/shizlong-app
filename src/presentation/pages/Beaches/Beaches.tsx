@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { beachStore } from "@src/application/store/beaches";
+import { beachStore } from "@src/application/store/beachesStore";
 import { CardList } from "@presentation/components/CardList";
 import { Navigation } from "./components/Navigation";
 import { Drawer } from "@src/presentation/ui-kit/Drawer";

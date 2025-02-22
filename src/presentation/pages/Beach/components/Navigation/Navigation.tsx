@@ -2,7 +2,7 @@ import { Rating } from "@presentation/components/Rating";
 import { Tag } from "@presentation/ui-kit/Tag";
 import { Tabs, useTabs } from "@src/presentation/ui-kit/Tabs";
 import { RawBeach } from "@src/infrastructure/beaches/types";
-import { beachTabs } from "@src/application/store/beach";
+import { beachTabs } from "@src/application/store/beachStore";
 import { Images } from "./components/Images";
 import styles from './Navigation.module.css';
 

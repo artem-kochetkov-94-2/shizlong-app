@@ -4,7 +4,7 @@ import { IconName, IconSize } from '@presentation/ui-kit/Icon/types';
 import { Icon } from '@presentation/ui-kit/Icon';
 
 interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  iconName: IconName;
+  iconName?: IconName;
   size?: IconSize;
   iconSize?: IconSize;
   shape?: 'circle' | 'rounded';
@@ -17,6 +17,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
   size = 'medium',
   iconSize = 'small',
   color = 'gray',
+  children,
   className,
   ...rest
 }) => {
@@ -25,7 +26,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
       className={`${styles.iconButton} ${styles[size]} ${styles[shape]} ${styles[color]} ${className}`}
       {...rest}
     >
-      <Icon name={iconName} size={iconSize} />
+      {children ? children : iconName ? <Icon name={iconName} size={iconSize} /> : null}
     </button>
   );
 };

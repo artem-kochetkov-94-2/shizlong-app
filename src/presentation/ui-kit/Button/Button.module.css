@@ -1,0 +1,66 @@
+.button {
+  padding: 0 28px;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+}
+
+/* Variants */
+.primary {
+  background-color: #41BECE;
+  color: white;
+}
+
+.secondary {
+  background-color: #ED9B58;
+  color: white;
+}
+
+.tertiary {
+  background-color: #F3F4F6;
+  color: black;
+}
+
+/* Sizes */
+.medium {
+  height: 44px;
+}
+
+.large {
+  height: 49px;
+}
+
+/* Width */
+.fullWidth {
+  width: 100%;
+}
+
+/* Disabled state */
+.disabled {
+  background-color: #F3F4F6;
+  color: #BEC5CF;
+  cursor: not-allowed;
+}
+
+/* Hover states */
+.primary:hover:not(.disabled) {
+  background-color: #3DA9A7;
+}
+
+.secondary:hover:not(.disabled) {
+  background-color: #E08E51;
+}
+
+.tertiary:hover:not(.disabled) {
+  background-color: #E6C152;
+}
+
+.text:hover:not(.disabled) {
+  color: #636366;
+}
