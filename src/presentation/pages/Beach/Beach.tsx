@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { Header } from "./components/Header";
 import { Navigation } from "./components/Navigation";
 import styles from './Beach.module.css';
-
+import { Button } from "@presentation/ui-kit/Button";
 export const Beach = observer(() => {
   const { id } = useParams<{ id: string }>();
   const { beach, services, infrastructure, peculiarities } = beachStore;
@@ -37,6 +37,10 @@ export const Beach = observer(() => {
             <Features title="Особенности" items={peculiarities} />
           </>
         }
+        footer={
+          <Button variant="secondary">Выбрать место</Button>
+        }
+        height={468}
       />
     </>
   );

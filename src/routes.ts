@@ -1,7 +1,8 @@
 export const Routes = {
     Home: '/',
+    Init: '/init',
+    Cities: '/cities',
     Auth: '/auth',
-    Login: '/login',
     Verification: '/verification',
     Profile: '/profile',
     Beaches: '/beaches',

@@ -12,6 +12,12 @@ export type IconName =
     | 'route'
     | 'arrow-left'
     | 'arrow-bottom'
-    | 'cross';
+    | 'cross'
+    | 'settings'
+    | 'abonement'
+    | 'bell'
+    | 'profile-circle'
+    | 'card'
+    | 'arrow-right';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';

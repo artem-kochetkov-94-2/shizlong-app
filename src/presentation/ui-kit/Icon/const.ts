@@ -12,6 +12,12 @@ import { ReactComponent as RouteIcon } from './assets/route.svg';
 import { ReactComponent as ArrowLeftIcon } from './assets/arrow-left.svg';
 import { ReactComponent as ArrowBottomIcon } from './assets/arrow-bottom.svg';
 import { ReactComponent as CrossIcon } from './assets/cross.svg';
+import { ReactComponent as SettingsIcon } from './assets/settings.svg';
+import { ReactComponent as AbonementIcon } from './assets/abonement.svg';
+import { ReactComponent as BellIcon } from './assets/bell.svg';
+import { ReactComponent as ProfileCircleIcon } from './assets/profile-circle.svg';
+import { ReactComponent as CardIcon } from './assets/card.svg';
+import { ReactComponent as ArrowRightIcon } from './assets/arrow-right.svg';
 import { IconName } from './types';
 
 export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = {
@@ -29,4 +35,10 @@ export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = 
   'arrow-left': ArrowLeftIcon,
   'arrow-bottom': ArrowBottomIcon,
   cross: CrossIcon,
+  settings: SettingsIcon,
+  abonement: AbonementIcon,
+  bell: BellIcon,
+  'profile-circle': ProfileCircleIcon,
+  card: CardIcon,
+  'arrow-right': ArrowRightIcon,
 };

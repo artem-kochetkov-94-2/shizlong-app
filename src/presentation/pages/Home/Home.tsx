@@ -10,7 +10,7 @@ export const Home = () => {
     <>
       <Map />
       <Outlet />
-      {isHome && <Navigate to={Routes.Beaches} />}
+      {isHome && <Navigate to={Routes.Init} />}
     </>
   );
 }
