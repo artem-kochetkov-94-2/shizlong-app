@@ -2,7 +2,7 @@ import { Button } from "@src/presentation/ui-kit/Button";
 import { IconButton } from "@src/presentation/ui-kit/IconButton";
 import { Drawer } from "@src/presentation/ui-kit/Drawer";
 import styles from "./Cities.module.css";
-import citiesImg from "./assets/cities.svg";
+import citiesImg from "./assets/cities.png";
 import { SearchInput } from "@src/presentation/ui-kit/SearchInput";
 import { useState } from "react";
 import classNames from "classnames";
