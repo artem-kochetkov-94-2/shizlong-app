@@ -24,7 +24,7 @@ export const Drawer = ({
     height,
     ...divProps
 }: DrawerProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
     <div
