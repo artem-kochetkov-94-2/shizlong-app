@@ -4,7 +4,7 @@ import { Card } from '@src/presentation/ui-kit/Card';
 import { IconButton } from '@presentation/ui-kit/IconButton';
 import { Icon } from '@presentation/ui-kit/Icon';
 
-interface FeatureItem {
+export interface FeatureItem {
   name: string;
   icon: string;
   extraTitle?: string;

@@ -18,6 +18,15 @@ import { ReactComponent as BellIcon } from './assets/bell.svg';
 import { ReactComponent as ProfileCircleIcon } from './assets/profile-circle.svg';
 import { ReactComponent as CardIcon } from './assets/card.svg';
 import { ReactComponent as ArrowRightIcon } from './assets/arrow-right.svg';
+import { ReactComponent as CheckIcon } from './assets/check.svg';
+import { ReactComponent as InMapIcon } from './assets/in-map.svg';
+import { ReactComponent as StopIcon } from './assets/stop.svg';
+import { ReactComponent as MegaphoneIcon } from './assets/megaphone.svg';
+import { ReactComponent as LocationFlagIcon } from './assets/location-flag.svg';
+import { ReactComponent as QRCode2Icon } from './assets/qr-code2.svg';
+import { ReactComponent as PalmIcon } from './assets/palm.svg';
+import { ReactComponent as BeachIcon } from './assets/beach.svg';
+import { ReactComponent as Check2Icon } from './assets/check2.svg';
 import { IconName } from './types';
 
 export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = {
@@ -41,4 +50,13 @@ export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = 
   'profile-circle': ProfileCircleIcon,
   card: CardIcon,
   'arrow-right': ArrowRightIcon,
+  check: CheckIcon,
+  'in-map': InMapIcon,
+  stop: StopIcon,
+  megaphone: MegaphoneIcon,
+  'location-flag': LocationFlagIcon,
+  'qr-code2': QRCode2Icon,
+  palm: PalmIcon,
+  beach: BeachIcon,
+  'check2': Check2Icon,
 };

@@ -12,6 +12,10 @@ class BeachesStore {
   setBeaches(beaches: RawBeach[]) {
     this.beaches = beaches;
   }
+
+  get favoriteBeaches() {
+    return this.beaches.filter((beach) => beach.isFavorite);
+  }
 }
 
 export const beachStore = new BeachesStore();

@@ -9,6 +9,10 @@ import { Auth } from '@src/presentation/pages/Auth';
 import { Verification } from '@src/presentation/pages/Verification';
 import { Init } from '@src/presentation/pages/Init';
 import { Cities } from './presentation/pages/Cities';
+import { Favorites } from './presentation/pages/Favorites';
+import { Notifications } from './presentation/pages/Notifications';
+import { Abonements } from './presentation/pages/Abonements';
+import { Abonement } from './presentation/pages/Abonement';
 
 function App() {
   return (
@@ -24,6 +28,10 @@ function App() {
             <Route path={RoutesMap.Beach} element={<Beach />} />
           </Route>
           <Route path={RoutesMap.Profile} element={<Profile />} />
+          <Route path={RoutesMap.Favorites} element={<Favorites />} />
+          <Route path={RoutesMap.Notifications} element={<Notifications />} />
+          <Route path={RoutesMap.Abonements} element={<Abonements />} />
+          <Route path={RoutesMap.Abonement} element={<Abonement />} />
         </Routes>
       </Layout>
     </BrowserRouter>

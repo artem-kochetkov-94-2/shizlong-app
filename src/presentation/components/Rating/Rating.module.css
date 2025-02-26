@@ -21,8 +21,11 @@
 }
 
 .value {
+  display: inline-flex;
+  margin-bottom: 2px;
   margin-left: 10px;
   margin-right: 4px;
+  padding-top: 4px;
   font-family: Roboto;
   font-weight: 500;
   font-size: 14px;

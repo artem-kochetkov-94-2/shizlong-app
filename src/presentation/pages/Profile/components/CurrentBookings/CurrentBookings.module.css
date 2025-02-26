@@ -1,0 +1,204 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    padding-top: 10px;
+}
+
+.item {
+    border-radius: 12px;
+    background-color: #fff;
+}
+
+.wrapper {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 106px;
+    padding: 8px;
+    gap: 14px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 3px 5px;
+}
+
+.category {
+    font-family: "Roboto";
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14.4px;
+    color: #A0A7B1;
+}
+
+.name {
+    margin-bottom: 10px;
+    font-family: "Roboto";
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19.2px;
+    color: #292C31;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 9px;
+
+    span:last-child {
+        font-family: Roboto;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 14.4px;
+        color: #A0A7B1;
+    }
+}
+
+.slider {
+    position: relative;
+    width: 120px;
+    height: 90px;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14.4px;
+    white-space: nowrap;
+    color: #6B7280;
+
+    svg {
+        font-size: 18px;
+        color: #FFBC02;
+    }
+}
+
+.favorite {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #fff;
+    border-radius: 50%;
+
+    & > button {
+        width: 34px;
+        height: 34px;
+    }
+
+    svg {
+        color: #F95E5E;
+    }
+}
+
+.status {
+    z-index: 1;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    height: 17px;
+    padding: 1.5px 8px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13.2px;
+    border-radius: 4px;
+    backdrop-filter: blur(10px);
+    color: #FFFFFF;
+}
+
+.qrCode {
+    position: absolute;
+    z-index: 10;
+    bottom: 4px;
+    right: 4px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 12px;
+    border: 1px solid #FFFFFF80;
+    background: #FFFFFFCC;
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 2px 10px 0px #0000001A;
+}
+
+/* time slider */
+
+.timeSlider {
+    position: relative;
+    width: 100%;
+    height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f5f5f5;
+    overflow: hidden;
+}
+
+.highlight {
+    position: absolute;
+    left: 0;
+    width: 20%;
+    height: 100%;
+    background-color: rgba(255, 223, 128, 0.5);
+    z-index: 1;
+}
+
+.timeMarker {
+    position: absolute;
+    left: 20%;
+    width: 2px;
+    height: 100%;
+    background-color: black;
+    z-index: 2;
+}
+
+.timeLabels {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    z-index: 3;
+}
+
+.timeLabels span {
+    font-size: 14px;
+    color: #333;
+}
+
+/* actions */
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 8px;
+}
+
+.actionItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

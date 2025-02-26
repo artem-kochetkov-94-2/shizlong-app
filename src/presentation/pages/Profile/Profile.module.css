@@ -1,5 +1,6 @@
 .profile {
-  background-color: #f9f9f9;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 .header {
@@ -9,6 +10,10 @@
   background-color: #FFBC02;
   background-size: cover;
   background-position: top center;
+
+  button:last-child svg {
+    fill: #A0A7B1;
+  }
 }
 
 .userInfo {
@@ -34,30 +39,30 @@
 }
 
 .userName {
-    margin-bottom: 5px;
-    font-family: Roboto;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19.2px;
-    color: #292C31;
+  margin-bottom: 5px;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19.2px;
+  color: #292C31;
 }
 
 .userPhone {
-    font-family: Roboto;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 16.8px;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
 }
 
 .userPhone {
-    font-family: Roboto;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 16.8px;    
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;    
 }
 
 .container {
-    padding: 0 14px;
+  padding: 0 14px;
 }
 
 .actions {
@@ -69,49 +74,114 @@
 }
 
 .actionItem {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: calc(33.333% - 8px);
-    height: 88px;
-    padding: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, #FFFFFF 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: calc(33.333% - 8px);
+  height: 88px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, #FFFFFF 100%);
 
-    span {
-        font-family: Roboto;
-        font-weight: 500;
-        font-size: 12px;
-        line-height: 14.4px;
-    }
+  span {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14.4px;
+  }
+}
+
+.notifications {
+  position: relative;
+}
+
+.notificationsCount {
+  position: absolute;
+  top: 7px;
+  left: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 18px;
+  height: 18px;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14.4px;
+  border-radius: 50%;
+  background-color: #F95E5E;
+  color: #ffffff;
+}
+
+.abonement {
+  display: flex;
+  gap: 2px;
+}
+
+.abonementCount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 17px;
+  height: 14px;
+  border-radius: 4px;
+  background-color: #FFBC02;
+  color: #FFFFFF;
 }
 
 .reminders {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 26px;
 }
 
 .reminderItem {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    height: 44px;
-    padding-left: 16px;
-    padding-right: 10px;
-    border-left: 6px solid #F95E5E;
-    border-radius: 10px;
-    background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding-left: 16px;
+  padding-right: 10px;
+  border-left: 6px solid #F95E5E;
+  border-radius: 10px;
+  background-color: #FFFFFF;
 
-    span {
-        margin-left: 2px;
-        margin-right: auto;
-        font-family: Roboto;
-        font-weight: 500;
-        font-size: 14px;
-        line-height: 16.8px;
-        color: #292C31;
-    }
+  span {
+    margin-left: 2px;
+    margin-right: auto;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #292C31;
+  }
+}
+
+.bookingsTitle {
+  margin-bottom: 3px;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21.09px;
+  color: #292C31;
+}
+
+.bookingsEmpty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.bookingsEmptyTitle {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.8px;
+  text-align: center;
+  color: #A0A7B1;
 }

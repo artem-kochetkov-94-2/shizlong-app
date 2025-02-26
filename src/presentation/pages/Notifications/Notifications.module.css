@@ -1,0 +1,126 @@
+.notifications {
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+    background-color: #F3F4F6;
+    overflow: hidden;
+}
+
+.header {
+    height: 65px;
+    margin-bottom: 15px;
+    padding: 12px 15px;
+    border-bottom: 1px solid #E3E5EA;
+    background-color: #ffffff;
+}
+
+.navigation {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.title {
+    padding-top: 3px;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21.09px;
+}
+
+.count {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 22px;
+    height: 19px;
+    padding-top: 2px;
+    padding-left: 6px;
+    padding-right: 8px;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19.2px;
+    border-radius: 4px;
+    background-color: #BEC5CF;
+    color: #FFFFFF;
+    opacity: 0.7;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 100%;
+    padding: 0 15px 15px;
+    overflow-y: auto;
+}
+
+.notification {
+    display: flex;
+    gap: 10px;
+    position: relative;
+}
+
+.notificationContent {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 15px;
+    padding-bottom: 38px;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+.notificationTitle {
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18.2px;
+    color: #292C31;
+
+    span {
+        font-weight: 700;
+        color: #161D25;
+    }
+}
+
+.notificationDescription {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.8px;
+}
+
+.notificationLocation {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #A0A7B1;
+}
+
+.notificationTime {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    height: 25px;
+    border-top-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    padding-inline: 10px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.8px;
+    background-color: #E3E5EA;
+    color: #6B7280;
+}

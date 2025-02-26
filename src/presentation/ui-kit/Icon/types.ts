@@ -9,6 +9,7 @@ export type IconName =
     | 'search'
     | 'filter'
     | 'qr-code'
+    | 'qr-code2'
     | 'route'
     | 'arrow-left'
     | 'arrow-bottom'
@@ -18,6 +19,14 @@ export type IconName =
     | 'bell'
     | 'profile-circle'
     | 'card'
-    | 'arrow-right';
+    | 'arrow-right'
+    | 'check'
+    | 'in-map'
+    | 'stop'
+    | 'megaphone'
+    | 'location-flag'
+    | 'palm'
+    | 'beach'
+    | 'check2';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
