@@ -1,5 +1,11 @@
 .wrapper {
-    padding-bottom: 0;
+    gap: 8px;
+    width: 100%;
+    padding-inline: 15px;
+    padding-top: 2px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: #fff;
 }
 
 .category {

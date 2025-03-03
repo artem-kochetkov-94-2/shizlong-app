@@ -30,7 +30,7 @@ export const Auth = () => {
                         size="medium"
                         shape="rounded"
                         className={styles.closeButton}
-                        onClick={() => navigate(Routes.Beaches)}
+                        onClick={() => navigate(Routes.Locations)}
                     />
 
                     <div className={styles.content}>

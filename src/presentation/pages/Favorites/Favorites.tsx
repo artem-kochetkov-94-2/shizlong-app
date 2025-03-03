@@ -1,5 +1,5 @@
 import { CardList } from "@presentation/components/CardList";
-import { beachStore } from "@src/application/store/beachesStore";
+import { locationsStore } from "@src/application/store/locationsStore";
 import { observer } from "mobx-react-lite";
 import styles from './Favorites.module.css';
 import { Tabs, useTabs } from "@src/presentation/ui-kit/Tabs";
@@ -9,13 +9,13 @@ import { useNavigate } from "react-router-dom";
 
 export const tabs: Tab[] = [
     {
-      value: 'beaches',
+      value: 'locations',
       label: 'Пляжи',
     },
 ];
 
 export const Favorites = observer(() => {
-    const { favoriteBeaches } = beachStore;
+    const { favoriteLocations } = locationsStore;
     const { currentTab, setCurrentTab } = useTabs(tabs[0].value);
     const navigate = useNavigate();
 
@@ -42,7 +42,7 @@ export const Favorites = observer(() => {
                 />
             </div>
             <div className={styles.content}>
-                <CardList items={favoriteBeaches} />
+                <CardList items={favoriteLocations} />
             </div>
         </div>
     );

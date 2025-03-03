@@ -1,8 +1,10 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Layout } from '@src/presentation/components/Layout/Layout';
 import { Routes as RoutesMap } from '@src/routes';
-import { Beaches } from '@src/presentation/pages/Beaches';
-import { Beach } from '@src/presentation/pages/Beach';
+import { Locations } from '@src/presentation/pages/Locations';
+// todo
+import { Location } from '@src/presentation/pages/Beach';
+import { Sector } from '@src/presentation/pages/Sector';
 import { Profile } from '@src/presentation/pages/Profile';
 import { Home } from '@src/presentation/pages/Home';
 import { Auth } from '@src/presentation/pages/Auth';
@@ -13,6 +15,8 @@ import { Favorites } from './presentation/pages/Favorites';
 import { Notifications } from './presentation/pages/Notifications';
 import { Abonements } from './presentation/pages/Abonements';
 import { Abonement } from './presentation/pages/Abonement';
+import { Module } from './presentation/pages/Module';
+import { Booking } from './presentation/pages/Booking';
 
 function App() {
   return (
@@ -24,8 +28,11 @@ function App() {
             <Route path={RoutesMap.Auth} element={<Auth />} />
             <Route path={RoutesMap.Verification} element={<Verification />} />
             <Route path={RoutesMap.Cities} element={<Cities />} />
-            <Route path={RoutesMap.Beaches} element={<Beaches />} />
-            <Route path={RoutesMap.Beach} element={<Beach />} />
+            <Route path={RoutesMap.Locations} element={<Locations />} />
+            <Route path={RoutesMap.Location} element={<Location />} />
+            <Route path={RoutesMap.Sector} element={<Sector />} />
+            <Route path={RoutesMap.Module} element={<Module />} />
+            <Route path={RoutesMap.Booking} element={<Booking />} />
           </Route>
           <Route path={RoutesMap.Profile} element={<Profile />} />
           <Route path={RoutesMap.Favorites} element={<Favorites />} />

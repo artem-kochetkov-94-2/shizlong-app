@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { IconButton } from "@src/presentation/ui-kit/IconButton";
 import styles from './Header.module.css';
 
-export const Header = ({ name, category }: { name: string, category: string }) => {
+export const Header = ({ name }: { name: string }) => {
     const navigate = useNavigate();
 
     return (
@@ -16,7 +16,7 @@ export const Header = ({ name, category }: { name: string, category: string }) =
                 color="white"
             />
             <div className={styles.title}>
-                <span className={styles.category}>{category}</span>
+                <span className={styles.category}>пляж</span>
                 <span className={styles.name}>{name}</span>
             </div>
             <div className={styles.icons}>

@@ -31,6 +31,8 @@
     height: 44px;
 }
 
+/* Shapes */
+
 .circle {
     border-radius: 50%;
 }
@@ -39,12 +41,22 @@
     border-radius: 12px;
 }
 
+/* Colors */
+
 .gray {
     background-color: #F3F4F6;
 }
 
 .white {
     background-color: #ffffff;
+}
+
+.secondary {
+    background-color: #ED9B58;
+
+    svg {
+        color: #fff;
+    }
 }
 
 .withBorder {

@@ -1,1 +1,1 @@
-export * from "./Beach";
+export { Location } from "./Location";

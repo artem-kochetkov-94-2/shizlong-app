@@ -62,7 +62,7 @@ export const Init = observer(() => {
                 size="large"
                 className={styles.iconClose}
                 shape="rounded"
-                onClick={() => navigate(Routes.Beaches)}
+                onClick={() => navigate(Routes.Locations)}
             />
         </div>
     );

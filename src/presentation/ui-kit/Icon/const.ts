@@ -27,6 +27,8 @@ import { ReactComponent as QRCode2Icon } from './assets/qr-code2.svg';
 import { ReactComponent as PalmIcon } from './assets/palm.svg';
 import { ReactComponent as BeachIcon } from './assets/beach.svg';
 import { ReactComponent as Check2Icon } from './assets/check2.svg';
+import { ReactComponent as LikeIcon } from './assets/like.svg';
+import { ReactComponent as Check3Icon } from './assets/check3.svg';
 import { IconName } from './types';
 
 export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = {
@@ -59,4 +61,6 @@ export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = 
   palm: PalmIcon,
   beach: BeachIcon,
   'check2': Check2Icon,
+  like: LikeIcon,
+  'check3': Check3Icon,
 };

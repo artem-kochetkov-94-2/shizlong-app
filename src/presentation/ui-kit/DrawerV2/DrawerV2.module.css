@@ -1,0 +1,17 @@
+.divider {
+    position: relative;
+    height: 20px;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 70px;
+        height: 4px;
+        border-radius: 10px;
+        opacity: 0.3;
+        background-color: #6B7280;
+        transform: translate(-50%, -50%);
+    }
+}

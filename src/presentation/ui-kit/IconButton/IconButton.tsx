@@ -3,13 +3,15 @@ import styles from './IconButton.module.css';
 import { IconName, IconSize } from '@presentation/ui-kit/Icon/types';
 import { Icon } from '@presentation/ui-kit/Icon';
 import classNames from 'classnames';
+import { IconColor } from '@presentation/ui-kit/Icon/types';
 
 interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   iconName?: IconName;
   size?: IconSize;
   iconSize?: IconSize;
   shape?: 'circle' | 'rounded';
-  color?: 'gray' | 'white';
+  color?: 'gray' | 'white' | 'secondary';
+  iconColor?: IconColor;
   withBorder?: boolean;
   withBlur?: boolean;
 }
@@ -24,6 +26,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
   className,
   withBorder = false,
   withBlur = false,
+  iconColor,
   ...rest
 }) => {
   return (
@@ -41,7 +44,13 @@ export const IconButton: React.FC<IconButtonProps> = ({
       )}
       {...rest}
     >
-      {children ? children : iconName ? <Icon name={iconName} size={iconSize} /> : null}
+      {children ? children : iconName ? (
+        <Icon
+          name={iconName}
+          size={iconSize}
+          color={iconColor}
+        />
+      ) : null}
     </button>
   );
 };

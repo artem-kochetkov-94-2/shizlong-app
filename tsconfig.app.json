@@ -30,5 +30,5 @@
       "@infrastructure/*": ["src/infrastructure/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "src/global.d.ts"]
 }

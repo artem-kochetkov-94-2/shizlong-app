@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
-  padding: 0 28px;
+  padding: 0 15px;
   font-family: Roboto;
   font-weight: 500;
   font-size: 14px;
@@ -19,24 +19,60 @@
 .primary {
   background-color: #41BECE;
   color: white;
+  border: 1px solid #41BECE;
 }
 
 .secondary {
   background-color: #ED9B58;
   color: white;
+  border: 1px solid #ED9B58;
+
+  box-shadow: 0px 7px 15px 0px #EDC9674D;
 }
 
 .tertiary {
   background-color: #F3F4F6;
   color: black;
+  border: 1px solid #F3F4F6;
 }
 
 .yellow {
   background-color: #FBD24C;
+  border: 1px solid #FBD24C;
   color: #292C31;
+
+  box-shadow: 0px 7px 15px 0px #EDC9674D;
+
+  &.ghost {
+    color: #FDAD01;
+  }
+}
+
+.gray {
+  background-color: #A0A7B1;
+  color: #fff;
+  border: 1px solid #A0A7B1;
+}
+
+/* Ghost */
+
+.ghost {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/* Full radius */
+
+.fullRadius {
+  border-radius: 30px;
 }
 
 /* Sizes */
+
+.small {
+  height: 38px;
+}
+
 .medium {
   height: 44px;
 }

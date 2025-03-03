@@ -2,32 +2,25 @@ import React, { useState } from 'react';
 import styles from './About.module.css';
 import { Card } from '@src/presentation/ui-kit/Card';
 
-export const About: React.FC = () => {
+export const About: React.FC<{ title?: string, description?: string }> = ({
+  title = "Описание",
+  description = "",
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const title = "Описание";
-  const description = ["Абонемент «Семейный» – ваш ключ к идеальному пляжному отдыху в центре Сочи!", "Наслаждайтесь комфортом и роскошью на благоустроенном песчано-галечном пляже с протяженной береговой линией без волнорезов. Абонемент включает:"];
-  const features = ["Доступ к пляжному комплексу на 7 дней", "Комфортный шезлонг с матрасом", "Большой пляжный зонт..."];
+  const maxSymbols = 300;
 
   return (
     <Card>
       <div className={styles.about}>
         <div className={styles.title}>{title}</div>
         <div className={styles.description}>
-          {description.map((item, index) => (
-            <p key={index}>{item}</p>
-          ))}
+          {description.slice(0, isOpen ? description.length : maxSymbols)}
         </div>
-        <ul className={styles.features}>
-          {features.map((feature, index) => (
-            <li key={index} className={styles.feature}>
-              <span className={styles.checkmark}>✔</span> {feature}
-            </li>
-          ))}
-        </ul>
-        <button className={styles.showMore} onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? 'Скрыть' : 'Показать всё'}
-        </button>
+        {description.length > maxSymbols && (
+          <button className={styles.showMore} onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? 'Скрыть' : 'Показать всё'}
+          </button>
+        )}
       </div>
     </Card>
   );

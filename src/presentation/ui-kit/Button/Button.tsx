@@ -4,9 +4,11 @@ import cn from 'classnames';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'yellow';
-  size?: 'medium' | 'large';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'yellow' | 'gray';
+  size?: 'medium' | 'large' | 'small';
   fullWidth?: boolean;
+  ghost?: boolean;
+  fullRadius?: boolean;
 }
 
 export const Button = ({
@@ -16,6 +18,8 @@ export const Button = ({
   fullWidth = true,
   className,
   disabled,
+  ghost,
+  fullRadius,
   ...props
 }: ButtonProps) => {
   return (
@@ -27,6 +31,8 @@ export const Button = ({
         {
           [styles.fullWidth]: fullWidth,
           [styles.disabled]: disabled,
+          [styles.ghost]: ghost,
+          [styles.fullRadius]: fullRadius,
         },
         className
       )}

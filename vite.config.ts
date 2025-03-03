@@ -26,4 +26,7 @@ export default defineConfig({
       background_color: '#ffffff',
     },
   })],
+  server: {
+    port: 3000,
+  },
 });

@@ -1,6 +1,6 @@
-import { RawBeach } from "../infrastructure/beaches/types";
+import { RawLocation } from "../infrastructure/Locations/types";
 
-export const mockCardListData: RawBeach[] = [
+export const mockCardListData: RawLocation[] = [
   {
     id: '1',
     category: "Пляж",

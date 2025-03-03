@@ -1,0 +1,314 @@
+/* header */
+
+.header {
+    display: flex;
+    gap: 10px;
+    padding: 10px 15px;
+    border-bottom: 1px solid #E3E5EA;
+}
+
+.headerContent {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.title {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21.09px;
+    color: #292C31;
+}
+
+.subtitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #A0A7B1;
+}
+
+/* content */
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    background: #F3F4F6;
+}
+
+.modules {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.module {
+    display: flex;
+    align-items: center;    
+    gap: 10px;
+}
+
+.moduleName {
+    max-width: 200px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #292C31;
+
+    span {
+        color: #A0A7B1;
+    }
+}
+
+.moduleExtraContent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: auto;
+}
+
+.modulePrice {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #292C31;    
+}
+
+.modulePriceFor {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14.4px;
+    color: #A0A7B1;
+}
+
+/* Card */
+
+.card {
+    padding: 7px 15px;
+}
+
+.cardTitle {
+    display: flex;
+    flex-direction: column;
+    margin-right: auto;
+
+    span:first-child {
+        font-family: Roboto;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 14.4px;
+        color: #A0A7B1;
+    }
+
+    span:last-child {
+        font-family: Roboto;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 18.75px;
+        color: #292C31;
+    }
+}
+
+/* Date */
+
+.date {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    svg {
+        color: #FFBC02;
+    }
+}
+
+.time {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    
+}
+
+.people {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* Accessories */
+
+.accessories {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.accessoriesTitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19.2px;
+    color: #161D25;    
+}
+
+.accessoriesContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.accessory {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #E3E5EA;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    svg {
+        color: #FFBC02;
+    }
+}
+
+.accessoryName {
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1;
+    color: #292C31;
+}
+
+.accessoryPrice {
+    margin-left: auto;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16.8px;    
+    color: #292C31;
+}
+
+/* Promocode */
+
+.promocode {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 10px;
+    background: #E3E5EA;
+}
+
+.promocodeTitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19.2px;
+    color: #6B7280;
+}
+
+.promocodeRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    input,
+    button {
+        width: 50%;
+    }
+
+    button {
+        font-family: Roboto;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16.8px;
+    }
+}
+
+.promocodeInput {
+    height: 44px;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+
+    &::placeholder {
+        font-family: Roboto;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 18.75px;
+        color: #BEC5CF;
+    }
+}
+
+.promocodeAccepted {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    gap: 10px;
+    padding-left: 20px;
+    padding-right: 10px;
+    border-left: 6px solid #161D25;
+    border-radius: 10px;
+    background: #A0A7B1;
+
+    svg {
+        color: #fff;
+    }
+}
+
+.promocodeAcceptedTitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #fff;
+}
+/* Rules */
+
+.rules {
+    max-width: 231px;
+    margin: 0 auto;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.8px;
+    text-align: center;
+    color: #A0A7B1;
+
+    span {
+        color: #292C31;
+    }
+}
+
+/* footer */
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+    padding: 15px;
+
+    button {
+        max-width: 246px;
+    }
+
+    span {
+        font-family: Roboto;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 19.2px;
+        white-space: nowrap;
+        color: #292C31;
+    }
+}

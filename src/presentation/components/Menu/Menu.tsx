@@ -6,7 +6,7 @@ import styles from './Menu.module.css';
 
 export const Menu = () => {
     const location = useLocation();
-    const isBeachesActive = location.pathname === Routes.Beaches;
+    const isLocationsActive = location.pathname === Routes.Locations;
 
     return (
         <div className={styles.menu}>
@@ -14,7 +14,7 @@ export const Menu = () => {
                 <Icon name="qr-code" size="medium" />
             </div>
 
-            <div className={`${styles.menuItem} ${isBeachesActive ? styles.active : ''}`}>
+            <div className={`${styles.menuItem} ${isLocationsActive ? styles.active : ''}`}>
                 <img src={umbrella} alt="" />
                 <span>Пляжи</span>
             </div>

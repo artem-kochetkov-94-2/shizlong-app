@@ -1,3 +1,5 @@
+/* Sizes */
+
 .extra-small {
     font-size: 18px;
 }
@@ -12,4 +14,10 @@
   
 .large {
     font-size: 44px;
+}
+
+/* Colors */
+
+.secondary {
+    color: #EA8432;
 }

@@ -20,13 +20,17 @@ export type IconName =
     | 'profile-circle'
     | 'card'
     | 'arrow-right'
-    | 'check'
     | 'in-map'
     | 'stop'
     | 'megaphone'
     | 'location-flag'
     | 'palm'
     | 'beach'
-    | 'check2';
+    | 'check'
+    | 'check2'
+    | 'check3'
+    | 'like';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
+
+export type IconColor = 'secondary';
