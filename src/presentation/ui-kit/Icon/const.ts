@@ -29,9 +29,17 @@ import { ReactComponent as BeachIcon } from './assets/beach.svg';
 import { ReactComponent as Check2Icon } from './assets/check2.svg';
 import { ReactComponent as LikeIcon } from './assets/like.svg';
 import { ReactComponent as Check3Icon } from './assets/check3.svg';
+import { ReactComponent as HelpIcon } from './assets/help.svg';
+import { ReactComponent as CreditCardIcon } from './assets/credit-card.svg';
+import { ReactComponent as NotifiIcon } from './assets/notifi.svg';
+import { ReactComponent as EditIcon } from './assets/edit.svg';
+import { ReactComponent as ExitIcon } from './assets/exit.svg';
 import { IconName } from './types';
 
-export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = {
+export const icons: Record<
+  IconName,
+  React.FC<React.SVGProps<SVGSVGElement>>
+> = {
   favorite: FavoriteIcon,
   'favorite-outline': FavoriteOutlineIcon,
   profile: ProfileIcon,
@@ -60,7 +68,12 @@ export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = 
   'qr-code2': QRCode2Icon,
   palm: PalmIcon,
   beach: BeachIcon,
-  'check2': Check2Icon,
+  check2: Check2Icon,
   like: LikeIcon,
-  'check3': Check3Icon,
+  check3: Check3Icon,
+  help: HelpIcon,
+  'credit-card': CreditCardIcon,
+  notifi: NotifiIcon,
+  edit: EditIcon,
+  exit: ExitIcon,
 };
