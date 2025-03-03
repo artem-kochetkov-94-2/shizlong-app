@@ -17,6 +17,10 @@ import { Abonements } from './presentation/pages/Abonements';
 import { Abonement } from './presentation/pages/Abonement';
 import { Module } from './presentation/pages/Module';
 import { Booking } from './presentation/pages/Booking';
+import { NotificationsSettings } from './presentation/pages/NotificationsSettings';
+import { Support } from './presentation/pages/Support';
+import { ProfileEdit } from './presentation/pages/ProfileEdit';
+import { PaymentMethods } from './presentation/pages/PaymentMethods';
 
 function App() {
   return (
@@ -35,14 +39,18 @@ function App() {
             <Route path={RoutesMap.Booking} element={<Booking />} />
           </Route>
           <Route path={RoutesMap.Profile} element={<Profile />} />
+          <Route path={RoutesMap.ProfileEdit} element={<ProfileEdit />} />
           <Route path={RoutesMap.Favorites} element={<Favorites />} />
           <Route path={RoutesMap.Notifications} element={<Notifications />} />
+          <Route path={RoutesMap.NotificationSettings} element={<NotificationsSettings />} />
           <Route path={RoutesMap.Abonements} element={<Abonements />} />
           <Route path={RoutesMap.Abonement} element={<Abonement />} />
+          <Route path={RoutesMap.Support} element={<Support />} />
+          <Route path={RoutesMap.PaymentMethods} element={<PaymentMethods />} />
         </Routes>
       </Layout>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
