@@ -36,13 +36,16 @@
 }
 
 .radioGroup {
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: max-content;
   padding: 0 14px;
 }
 
 .radioItem {
-  margin-bottom: 15px;
-  padding: 15px;
+  min-height: 44px;
+  padding: 15px 15px 0px 15px;
   border-radius: 10px;
   font-family: 'Roboto';
   font-size: 16px;
@@ -50,6 +53,11 @@
   background-color: #fff;
   color: #6b7280;
   cursor: pointer;
+  pointer-events: none;
+}
+
+.radioItem > * {
+  pointer-events: auto;
 }
 
 .radioInput {
@@ -57,10 +65,10 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   position: relative;
-  top: 6px;
+  top: 0;
   left: 0;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   margin-right: 12px;
   border-radius: 50%;
   border: 2px solid #ccc;
@@ -71,8 +79,8 @@
 .radioInput:checked::before {
   content: '';
   position: absolute;
-  top: 4px;
-  left: 4px;
+  top: 2px;
+  left: 2px;
   width: 12px;
   height: 12px;
   background-color: #ffbc02;
@@ -86,11 +94,17 @@
 .radioLabel {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   height: 100%;
   font-size: 16px;
   cursor: pointer;
 }
+
+.checkContainer {
+  display: flex;
+  align-items: center;
+}
+
 .radioLabel span.open {
   color:#161D25;
 }
@@ -111,8 +125,8 @@
 }
 
 .expandableContent.open {
-  max-height: max-content;
+  max-height: fit-content;
   padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
   border-top: 1px solid #F3F4F6;
 }

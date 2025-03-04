@@ -1,0 +1,90 @@
+.list {
+  padding-left: 5px;
+  margin-bottom: 6px;
+}
+.inputContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+}
+
+.input {
+  height: 50px;
+  width: 100%;
+  border-radius: 8px;
+  border: none;
+  background-color: #f3f4f6;
+  padding: 15px 16px 8px 16px;
+  margin-bottom: 6px;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18.75px;
+}
+
+.input:focus {
+  border-color: #f1c40f;
+}
+
+.label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #aaa;
+  transition: all 0.2s;
+  pointer-events: none;
+}
+
+.focus {
+  top: 4px;
+  font-size: 12px;
+  color: #6b7280;
+  transform: translateY(0);
+  margin-bottom: 3px;
+}
+
+.reminderItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding-left: 16px;
+  padding-right: 10px;
+  margin-bottom: 12px;
+  border-left: 6px solid #292c31;
+  border-radius: 10px;
+  background-color: #f3f4f6;
+}
+
+.reminderItem span {
+  margin-left: 2px;
+  margin-right: auto;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
+  color: #292c31;
+}
+
+.textColor {
+  color: #6b7280;
+}
+
+.emailHeader {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14.4px;
+}
+
+.email {
+  margin-bottom: 14px;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18.75px;
+  color: #292c31;
+}

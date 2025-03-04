@@ -28,7 +28,7 @@ export const NotificationsSettings = () => {
             onClick={() => setSelected(id)}
           >
             <label htmlFor={id} className={styles.radioLabel}>
-              <div>
+              <div className={styles.checkContainer}>
                 <input 
                   type='radio'
                   id={id}

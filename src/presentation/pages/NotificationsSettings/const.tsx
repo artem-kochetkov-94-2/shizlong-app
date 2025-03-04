@@ -1,7 +1,7 @@
+import { EmailSettings } from './components/EmailSettings';
 import { TelegramSettings } from './components/TelegramSettings';
 
 const WhatsAppSettings = () => <div>Настройки WhatsApp-уведомлений</div>;
-const EmailSettings = () => <div>Настройки Email-уведомлений</div>;
 const SmsSettings = () => <div>Настройки Sms-уведомлений</div>;
 const PushSettings = () => <div>Настройки Push-уведомлений</div>;
 
