@@ -1,9 +1,9 @@
 import { EmailSettings } from './components/EmailSettings';
+import { PushSettings } from './components/PushSettings';
 import { SmsSettings } from './components/SmsSettings';
 import { TelegramSettings } from './components/TelegramSettings';
 
 const WhatsAppSettings = () => <div>Настройки WhatsApp-уведомлений</div>;
-const PushSettings = () => <div>Настройки Push-уведомлений</div>;
 
 export const items = [
   { id: 'option1', label: 'Telegram', content: <TelegramSettings /> },

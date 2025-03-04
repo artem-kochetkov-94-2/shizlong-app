@@ -37,7 +37,8 @@ export type IconName =
   | 'notifi'
   | 'edit'
   | 'exit'
-  | 'copy';
+  | 'copy'
+  | 'download';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
 
