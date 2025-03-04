@@ -1,0 +1,118 @@
+.NotificationsSettings {
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #f3f4f6;
+}
+
+.header {
+  display: flex;
+  height: 70px;
+  justify-content: start;
+  align-items: center;
+  padding: 0 14px;
+  margin-bottom: 15px;
+  gap: 10px;
+  background-color: #fff;
+}
+
+.header span {
+  font-family: 'Roboto';
+  font-size: 18px;
+  font-weight: 500;
+  color: #292c31;
+}
+
+.button {
+  box-shadow: 0px 7px 15px 0px rgba(0, 0, 0, 0.07);
+}
+
+.subHeader {
+  padding: 0 14px;
+  margin-bottom: 10px;
+  font-family: 'Roboto';
+  font-size: 16px;
+  font-weight: 500;
+  color: #a0a7b1;
+}
+
+.radioGroup {
+  height: 100%;
+  padding: 0 14px;
+}
+
+.radioItem {
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 10px;
+  font-family: 'Roboto';
+  font-size: 16px;
+  font-weight: 400;
+  background-color: #fff;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.radioInput {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  top: 6px;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.radioInput:checked::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 12px;
+  height: 12px;
+  background-color: #ffbc02;
+  border-radius: 50%;
+}
+.radioInput:checked {
+  background-color: #fff;
+  border: 2px solid #ffbc02;
+}
+
+.radioLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 100%;
+  font-size: 16px;
+  cursor: pointer;
+}
+.radioLabel span.open {
+  color:#161D25;
+}
+
+.status {
+  font-size: 14px;
+  color: #888;
+  margin-left: 10px;
+  text-align: end;
+}
+
+.expandableContent {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease-in-out;
+  padding: 0 10px;
+  margin-top: 10px;
+}
+
+.expandableContent.open {
+  max-height: max-content;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid #F3F4F6;
+}

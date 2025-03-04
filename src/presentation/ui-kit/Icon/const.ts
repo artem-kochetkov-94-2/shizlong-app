@@ -34,6 +34,10 @@ import { ReactComponent as CreditCardIcon } from './assets/credit-card.svg';
 import { ReactComponent as NotifiIcon } from './assets/notifi.svg';
 import { ReactComponent as EditIcon } from './assets/edit.svg';
 import { ReactComponent as ExitIcon } from './assets/exit.svg';
+import { ReactComponent as CopyIcon } from './assets/copy.svg';
+import { ReactComponent as Check4Icon } from './assets/check4.svg';
+import { ReactComponent as Check5Icon } from './assets/check5.svg';
+
 import { IconName } from './types';
 
 export const icons: Record<
@@ -71,9 +75,12 @@ export const icons: Record<
   check2: Check2Icon,
   like: LikeIcon,
   check3: Check3Icon,
+  check4: Check4Icon,
+  check5: Check5Icon,
   help: HelpIcon,
   'credit-card': CreditCardIcon,
   notifi: NotifiIcon,
   edit: EditIcon,
   exit: ExitIcon,
+  copy: CopyIcon,
 };

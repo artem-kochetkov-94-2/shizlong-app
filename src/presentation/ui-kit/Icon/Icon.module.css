@@ -1,23 +1,27 @@
 /* Sizes */
 
 .extra-small {
-    font-size: 18px;
+  font-size: 18px;
 }
-  
+
 .small {
-    font-size: 24px;
+  font-size: 24px;
 }
-  
+
 .medium {
-    font-size: 38px;
+  font-size: 38px;
 }
-  
+
 .large {
-    font-size: 44px;
+  font-size: 44px;
 }
 
 /* Colors */
 
 .secondary {
-    color: #EA8432;
+  color: #ea8432;
+}
+
+.dark {
+  color: #4c515b;
 }

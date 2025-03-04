@@ -29,13 +29,16 @@ export type IconName =
   | 'check'
   | 'check2'
   | 'check3'
+  | 'check4'
+  | 'check5'
   | 'like'
   | 'help'
   | 'credit-card'
   | 'notifi'
   | 'edit'
-  | 'exit';
+  | 'exit'
+  | 'copy';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
 
-export type IconColor = 'secondary';
+export type IconColor = 'secondary' | 'dark';
