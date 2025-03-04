@@ -1,35 +1,21 @@
-import { Icon } from '@src/presentation/ui-kit/Icon';
-import styles from './NotificationsSettings.module.css';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { items } from './const';
+import { PageHeader } from '@src/presentation/ui-kit/PageHeader';
+import styles from './NotificationsSettings.module.css';
 
 export const NotificationsSettings = () => {
   const [selected, setSelected] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   return (
     <div className={styles.NotificationsSettings}>
-      <div className={styles.header}>
-        <button 
-          className={styles.button} 
-          onClick={() => navigate(-1)}
-        >
-          <Icon name={'arrow-left'} size={'small'} color={'dark'} />
-        </button>
-        <span>Настройка уведомлений</span>
-      </div>
+      <PageHeader>Настройка уведомлений</PageHeader>
       <div className={styles.subHeader}>Выберите способ уведомления</div>
       <div className={styles.radioGroup}>
         {items.map(({ id, label, content }) => (
-          <div 
-            key={id} 
-            className={styles.radioItem} 
-            onClick={() => setSelected(id)}
-          >
+          <div key={id} className={styles.radioItem} onClick={() => setSelected(id)}>
             <label htmlFor={id} className={styles.radioLabel}>
               <div className={styles.checkContainer}>
-                <input 
+                <input
                   type='radio'
                   id={id}
                   name='radio'

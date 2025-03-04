@@ -4,28 +4,6 @@
   background-color: #f3f4f6;
 }
 
-.header {
-  display: flex;
-  height: 70px;
-  justify-content: start;
-  align-items: center;
-  padding: 0 14px;
-  margin-bottom: 15px;
-  gap: 10px;
-  background-color: #fff;
-}
-
-.header span {
-  font-family: 'Roboto';
-  font-size: 18px;
-  font-weight: 500;
-  color: #292c31;
-}
-
-.button {
-  box-shadow: 0px 7px 15px 0px rgba(0, 0, 0, 0.07);
-}
-
 .subHeader {
   padding: 0 14px;
   margin-bottom: 10px;
@@ -106,7 +84,7 @@
 }
 
 .radioLabel span.open {
-  color:#161D25;
+  color: #161d25;
 }
 
 .status {
@@ -128,5 +106,5 @@
   max-height: fit-content;
   padding-top: 10px;
   padding-bottom: 15px;
-  border-top: 1px solid #F3F4F6;
+  border-top: 1px solid #f3f4f6;
 }
