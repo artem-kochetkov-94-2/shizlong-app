@@ -1,0 +1,35 @@
+.desc {
+  margin-bottom: 12px;
+}
+
+.list {
+  padding-left: 5px;
+  margin-bottom: 6px;
+}
+
+.margin {
+  margin-bottom: 12px;
+}
+
+.reminderItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding-left: 16px;
+  padding-right: 10px;
+  margin-bottom: 12px;
+  border-left: 6px solid #292C31;
+  border-radius: 10px;
+  background-color: #F3F4F6;
+}
+
+.reminderItem span {
+  margin-left: 2px;
+  margin-right: auto;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
+  color: #292C31;
+}

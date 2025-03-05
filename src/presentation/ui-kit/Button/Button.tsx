@@ -4,7 +4,7 @@ import cn from 'classnames';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'yellow' | 'gray';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'yellow' | 'gray' | 'gray2';
   size?: 'medium' | 'large' | 'small';
   fullWidth?: boolean;
   ghost?: boolean;
@@ -42,4 +42,4 @@ export const Button = ({
       {children}
     </button>
   );
-}; 
+};

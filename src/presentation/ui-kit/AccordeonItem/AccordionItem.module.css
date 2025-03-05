@@ -1,0 +1,58 @@
+.accordionItem {
+  min-height: 44px;
+  padding: 15px 15px 0px 15px;
+  border-radius: 10px;
+  font-family: 'Roboto';
+  font-size: 16px;
+  font-weight: 400;
+  background-color: #fff;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.accordionItem button:focus,
+button:active,
+button:focus-visible {
+  border: none;
+  outline: none;
+}
+
+.button {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
+  text-align: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.icon {
+  font-size: 10px;
+  transition: transform 0.3s ease;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+.expandableContent {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease-in-out;
+  margin-top: 10px;
+}
+
+.expandableContent.open {
+  max-height: fit-content;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  border-top: 1px solid #f3f4f6;
+}

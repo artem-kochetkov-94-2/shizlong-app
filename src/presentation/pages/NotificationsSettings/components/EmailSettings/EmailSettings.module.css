@@ -1,0 +1,43 @@
+.list {
+  padding-left: 5px;
+  margin-bottom: 15px;
+}
+
+.reminderItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding-left: 16px;
+  padding-right: 10px;
+  margin-bottom: 12px;
+  border-left: 6px solid #292c31;
+  border-radius: 10px;
+  background-color: #f3f4f6;
+}
+
+.reminderItem span {
+  margin-left: 2px;
+  margin-right: auto;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
+  color: #292c31;
+}
+
+.emailHeader {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14.4px;
+}
+
+.email {
+  margin-bottom: 14px;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18.75px;
+  color: #292c31;
+}

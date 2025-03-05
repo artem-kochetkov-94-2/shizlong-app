@@ -1,0 +1,33 @@
+.div { 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0  15px;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18.75px;
+  border-radius: 10px;
+  background-color: #F3F4F6;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Sizes */
+
+.small {
+  height: 38px;
+}
+
+.medium {
+  height: 44px;
+}
+
+.large {
+  height: 49px;
+}
+
+/* Width */
+.fullWidth {
+  width: 100%;
+}

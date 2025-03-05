@@ -1,0 +1,84 @@
+.profileEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 15px;
+}
+
+.editorCard1 {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.editorCard2 {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.profilePhoto {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 64px;
+  border: 2px dashed #bec5cf;
+  border-radius: 50%;
+}
+
+.h2 {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19.2px;
+}
+
+.input {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  padding: 0 15px;
+  border: 1.5px solid #bec5cf;
+  border-radius: 8px;
+
+  & > div:first-child {
+    position: absolute;
+    top: -8px;
+    left: 10px;
+    padding: 0 5px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14.4px;
+    background-color: #fff;
+    color: #a0a7b1;
+  }
+
+  input {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    right: 15px;
+    padding: 0;
+    border: none;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 18.75px;
+    color: #292c31;
+    transform: translateY(-50%);
+    outline: none;
+
+    &::placeholder {
+      color: #a0a7b1;
+    }
+  }
+}
