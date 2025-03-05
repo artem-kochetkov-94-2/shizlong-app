@@ -1,5 +1,5 @@
-import { Rating } from "@presentation/components/Rating";
-import { Tag } from "@presentation/ui-kit/Tag";
+// import { Rating } from "@presentation/components/Rating";
+// import { Tag } from "@presentation/ui-kit/Tag";
 import { Tabs, useTabs } from "@src/presentation/ui-kit/Tabs";
 import { RawLocation } from "@src/infrastructure/Locations/types";
 import { locationTabs } from "@src/application/store/locationStore";

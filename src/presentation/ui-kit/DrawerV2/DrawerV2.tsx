@@ -6,6 +6,7 @@ interface DrawerV2Props {
     overflowHeight?: number;
     open?: boolean;
     fullScreen?: boolean;
+    overlay?: boolean;
     onChange?: (open: boolean) => void;
 }
 
@@ -13,6 +14,7 @@ export const DrawerV2 = ({
     children,
     overflowHeight = 74,
     fullScreen = false,
+    overlay = true,
     ...rest
 }: DrawerV2Props) => {
     return (
@@ -20,6 +22,7 @@ export const DrawerV2 = ({
             overflowHeight={overflowHeight}
             style={{ zIndex: 1000 }}
             fullScreen={fullScreen}
+            overlay={overlay}
             {...rest}
         >
             <div className={styles.divider} />

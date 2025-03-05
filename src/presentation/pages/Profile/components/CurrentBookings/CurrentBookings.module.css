@@ -143,51 +143,6 @@
     box-shadow: 0px 2px 10px 0px #0000001A;
 }
 
-/* time slider */
-
-.timeSlider {
-    position: relative;
-    width: 100%;
-    height: 88px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #f5f5f5;
-    overflow: hidden;
-}
-
-.highlight {
-    position: absolute;
-    left: 0;
-    width: 20%;
-    height: 100%;
-    background-color: rgba(255, 223, 128, 0.5);
-    z-index: 1;
-}
-
-.timeMarker {
-    position: absolute;
-    left: 20%;
-    width: 2px;
-    height: 100%;
-    background-color: black;
-    z-index: 2;
-}
-
-.timeLabels {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 10px;
-    z-index: 3;
-}
-
-.timeLabels span {
-    font-size: 14px;
-    color: #333;
-}
-
 /* actions */
 
 .actions {

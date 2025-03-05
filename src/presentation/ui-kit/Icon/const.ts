@@ -40,7 +40,9 @@ import { ReactComponent as Check5Icon } from './assets/check5.svg';
 import { ReactComponent as DownloadIcon } from './assets/download.svg';
 import { ReactComponent as CheckYellowIcon } from './assets/checkYellow.svg';
 import { ReactComponent as TelegramIcon } from './assets/telegram.svg';
-
+import { ReactComponent as SunIcon } from './assets/sun.svg';
+import { ReactComponent as MoonIcon } from './assets/moon.svg';
+import { ReactComponent as TapIcon } from './assets/tap.svg';
 import { IconName } from './types';
 
 export const icons: Record<
@@ -89,4 +91,7 @@ export const icons: Record<
   download: DownloadIcon,
   checkYellow: CheckYellowIcon,
   telegram: TelegramIcon,
+  sun: SunIcon,
+  moon: MoonIcon,
+  tap: TapIcon,
 };

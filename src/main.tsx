@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import 'swiper/swiper-bundle.css';
+import 'react-calendar/dist/Calendar.css';
 
 import { registerSW } from 'virtual:pwa-register';
 

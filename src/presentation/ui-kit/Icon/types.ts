@@ -40,7 +40,10 @@ export type IconName =
   | 'exit'
   | 'copy'
   | 'download'
-  | 'telegram';
+  | 'telegram'
+  | 'sun'
+  | 'moon'
+  | 'tap';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
 

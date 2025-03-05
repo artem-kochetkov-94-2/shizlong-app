@@ -19,4 +19,5 @@ export const Routes = {
   PaymentMethods: '/payment-methods',
   Support: '/support',
   Privacy: 'privacy-policy',
+  UiKit: '/ui-kit',
 } as const;

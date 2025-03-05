@@ -22,6 +22,7 @@ import { Support } from './presentation/pages/Support';
 import { ProfileEdit } from './presentation/pages/ProfileEdit';
 import { PaymentMethods } from './presentation/pages/PaymentMethods';
 import { PrivacyPolicy } from './presentation/pages/PrivacyPolicy';
+import { UiKit } from './presentation/pages/UiKit';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path={RoutesMap.Support} element={<Support />} />
           <Route path={RoutesMap.PaymentMethods} element={<PaymentMethods />} />
           <Route path={RoutesMap.Privacy} element={<PrivacyPolicy />} />
+          <Route path={RoutesMap.UiKit} element={<UiKit />} />
         </Routes>
       </Layout>
     </BrowserRouter>

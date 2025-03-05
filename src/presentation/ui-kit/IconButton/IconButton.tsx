@@ -10,10 +10,11 @@ interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
   size?: IconSize;
   iconSize?: IconSize;
   shape?: 'circle' | 'rounded';
-  color?: 'gray' | 'white' | 'secondary';
+  color?: 'gray' | 'white' | 'secondary' | 'transparent';
   iconColor?: IconColor;
   withBorder?: boolean;
   withBlur?: boolean;
+  withShadow?: boolean;
 }
 
 export const IconButton: React.FC<IconButtonProps> = ({
@@ -26,6 +27,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
   className,
   withBorder = false,
   withBlur = false,
+  withShadow = true,
   iconColor,
   ...rest
 }) => {
@@ -40,6 +42,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
         {
           [styles.withBorder]: withBorder,
           [styles.withBlur]: withBlur,
+          [styles.withShadow]: withShadow,
         }
       )}
       {...rest}

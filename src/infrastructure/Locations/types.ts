@@ -54,3 +54,17 @@ export interface RawAdditionalService {
     created_at: Date;
     updated_at: Date;
 }
+
+export interface RawSectorSchema {
+    id: number;
+    sector_id: number;
+    name: string;
+    is_active: string;
+    time_of_day: TimeOfDay;
+    created_at: Date;
+    updated_at: Date;
+    time_start: string;
+    time_end: string;
+}
+
+export type TimeOfDay = 'evening' | 'day';

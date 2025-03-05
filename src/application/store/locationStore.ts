@@ -74,6 +74,7 @@ class LocationStore {
 
   init(locationId: number) {
     this.fetchLocation(locationId);
+    this.fetchSectors(locationId);
     this.fetchAdditionalServices(locationId);
   }
 
@@ -82,7 +83,6 @@ class LocationStore {
     console.log('choosePlace');
 
     try {
-      await this.fetchSectors(this.locationId);
       mapStore.drawPlan(this.sectors);
       mapStore.setCenter(this.location!.coordinates[0], this.location!.coordinates[1]);
       mapStore.setZoom(18);

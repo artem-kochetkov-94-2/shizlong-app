@@ -4,24 +4,63 @@ import { Header } from "./components/Header";
 import { useParams } from "react-router-dom";
 import styles from './Sector.module.css';
 import { BookingDrawer } from "./components/BookingDrawer";
+import { useEffect } from "react";
+import { sectorStore } from "@src/application/store/sectorStore";
+import { SwiperSlide } from "swiper/react";
+import { Swiper } from "swiper/react";
+import { Swiper as SwiperType } from "swiper";
+import { useNavigate } from "react-router-dom";
+import { Routes } from "@src/routes";
 
 export const Sector = observer(() => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { location, sectors } = locationStore;
+  const { sector } = sectorStore;
 
-  const sector = sectors.find((sector) => sector.id === Number(id));
+  useEffect(() => {
+    sectorStore.init(Number(id));
+  }, [id]);
+
+  useEffect(() => {
+    if (!sector || location) return;
+
+    locationStore.init(sector.location_id);
+  }, [sector, location]);
 
   if (!sector || !location) return null;
+
+  const sectorIndex = sectors.findIndex(s => s.id === sector.id);
+
+  const handleSlideChange = (swiper: SwiperType) => {
+    const id = sectors[swiper.activeIndex].id;
+    navigate(`${Routes.Sector.replace(':id', `${id}`)}`);
+  };
 
   return (
     <div className={styles.wrapper}>
       <Header name={location.name} sector={sector} />
 
-      <img
-        src={sector.link_plan}
-        alt={sector.name}
-        className={styles.plan}
-      />
+      <Swiper
+          spaceBetween={0}
+          slidesPerView={1}
+          touchRatio={1}
+          simulateTouch={true}
+          touchStartPreventDefault={false}
+          initialSlide={sectorIndex}
+          className={styles.swiper}
+          onSlideChange={handleSlideChange}
+        >
+          {sectors.map((s) => (
+            <SwiperSlide key={s.id}>
+              <img
+                src={s.link_plan}
+                alt={s.name}
+                className={styles.plan}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
       <BookingDrawer />
     </div>
