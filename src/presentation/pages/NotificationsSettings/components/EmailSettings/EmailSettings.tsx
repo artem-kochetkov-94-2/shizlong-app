@@ -2,11 +2,9 @@ import { Button } from '@src/presentation/ui-kit/Button';
 import styles from './EmailSettings.module.css';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { useState } from 'react';
-import classNames from 'classnames';
+import { StyledInput } from '@src/presentation/ui-kit/StyledInput';
 
 export const EmailSettings = () => {
-  const [email, setEmail] = useState('');
-  const [isFocused, setIsFocused] = useState(false);
   const [isAccept, setIsAccept] = useState(false);
 
   return (
@@ -18,11 +16,10 @@ export const EmailSettings = () => {
             <span>Уведомления настроены</span>
           </div>
           <div className={styles.emailHeader}>E-mail</div>
-          <div className={styles.email}>{email}</div>
+          <div className={styles.email}>MargoSokolova@mail.ru</div>
           <Button
-            variant={'tertiary'}
+            variant={'gray2'}
             size={'large'}
-            className={styles.textColor}
             onClick={() => setIsAccept(!isAccept)}
           >
             Изменить e-mail
@@ -32,28 +29,11 @@ export const EmailSettings = () => {
       {!isAccept && (
         <>
           <div className={styles.list}>1. Укажите e-mail</div>
-          <div className={styles.inputContainer}>
-            <label
-              className={classNames(styles.label, {
-                [styles.focus]: email || isFocused,
-              })}
-            >
-              E-mail
-            </label>
-            <input
-              type='email'
-              className={styles.input}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-            />
-          </div>
+          <StyledInput placeholder='E-mail' type={'e-mail'} />
           <Button
             variant={'yellow'}
             size={'large'}
             onClick={() => setIsAccept(!isAccept)}
-            disabled={email === ''}
           >
             Подтвердить e-mail
           </Button>

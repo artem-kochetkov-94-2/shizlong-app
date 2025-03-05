@@ -2,10 +2,6 @@
   margin-bottom: 12px;
 }
 
-.textColor {
-  color: #6b7280;
-}
-
 .reminderItem {
   display: flex;
   align-items: center;

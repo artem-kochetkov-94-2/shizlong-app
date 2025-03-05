@@ -7,7 +7,7 @@ export const SmsSettings = () => {
       <div className={styles.desc}>Уведомления будут приходить на ваш номер телефона</div>
       <div className={styles.phoneHeader}>Телефон</div>
       <div className={styles.phone}>+7 (925) 222-33-44</div>
-      <Button className={styles.textColor} variant={'tertiary'} size={'large'}>
+      <Button variant={'gray2'} size={'large'}>
         Изменить телефон
       </Button>
     </div>

@@ -17,41 +17,47 @@
 
 /* Variants */
 .primary {
-  background-color: #41BECE;
+  background-color: #41bece;
   color: white;
-  border: 1px solid #41BECE;
+  border: 1px solid #41bece;
 }
 
 .secondary {
-  background-color: #ED9B58;
+  background-color: #ed9b58;
   color: white;
-  border: 1px solid #ED9B58;
+  border: 1px solid #ed9b58;
 
-  box-shadow: 0px 7px 15px 0px #EDC9674D;
+  box-shadow: 0px 7px 15px 0px #edc9674d;
 }
 
 .tertiary {
-  background-color: #F3F4F6;
+  background-color: #f3f4f6;
   color: black;
-  border: 1px solid #F3F4F6;
+  border: 1px solid #f3f4f6;
 }
 
 .yellow {
-  background-color: #FBD24C;
-  border: 1px solid #FBD24C;
-  color: #292C31;
+  background-color: #fbd24c;
+  border: 1px solid #fbd24c;
+  color: #292c31;
 
-  box-shadow: 0px 7px 15px 0px #EDC9674D;
+  box-shadow: 0px 7px 15px 0px #edc9674d;
 
   &.ghost {
-    color: #FDAD01;
+    color: #fdad01;
   }
 }
 
 .gray {
-  background-color: #A0A7B1;
+  background-color: #a0a7b1;
   color: #fff;
-  border: 1px solid #A0A7B1;
+  border: 1px solid #a0a7b1;
+}
+
+.gray2 {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #f3f4f6;
 }
 
 /* Ghost */
@@ -88,22 +94,22 @@
 
 /* Disabled state */
 .disabled {
-  background-color: #F3F4F6;
-  color: #BEC5CF;
+  background-color: #f3f4f6;
+  color: #bec5cf;
   cursor: not-allowed;
 }
 
 /* Hover states */
 .primary:hover:not(.disabled) {
-  background-color: #3DA9A7;
+  background-color: #3da9a7;
 }
 
 .secondary:hover:not(.disabled) {
-  background-color: #E08E51;
+  background-color: #e08e51;
 }
 
 .tertiary:hover:not(.disabled) {
-  background-color: #E6C152;
+  background-color: #e6c152;
 }
 
 .text:hover:not(.disabled) {

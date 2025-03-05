@@ -34,12 +34,7 @@ export const PushSettings = () => {
           )}
         </>
       ) : (
-        <Button
-          variant={'tertiary'}
-          size={'large'}
-          className={styles.textColor}
-          onClick={() => setIsDownload(true)}
-        >
+        <Button variant={'gray2'} size={'large'} onClick={() => setIsDownload(true)}>
           <Icon name={'download'} size={'extra-small'} />
           Скачать приложение
         </Button>
