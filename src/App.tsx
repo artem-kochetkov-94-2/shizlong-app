@@ -40,19 +40,19 @@ function App() {
             <Route path={RoutesMap.Module} element={<Module />} />
             <Route path={RoutesMap.Booking} element={<Booking />} />
           </Route>
+
           <Route path={RoutesMap.Profile} element={<Profile />} />
-          <Route path={RoutesMap.ProfileEdit} element={<ProfileEdit />} />
-          <Route path={RoutesMap.Favorites} element={<Favorites />} />
-          <Route path={RoutesMap.Notifications} element={<Notifications />} />
-          <Route
-            path={RoutesMap.NotificationSettings}
-            element={<NotificationsSettings />}
-          />
           <Route path={RoutesMap.Abonements} element={<Abonements />} />
           <Route path={RoutesMap.Abonement} element={<Abonement />} />
+          <Route path={RoutesMap.Notifications} element={<Notifications />} />
+
+          <Route path={RoutesMap.ProfileEdit} element={<ProfileEdit />} />
+          <Route path={RoutesMap.Favorites} element={<Favorites />} />
+          <Route path={RoutesMap.NotificationSettings} element={<NotificationsSettings />} />
           <Route path={RoutesMap.Support} element={<Support />} />
           <Route path={RoutesMap.PaymentMethods} element={<PaymentMethods />} />
           <Route path={RoutesMap.Privacy} element={<PrivacyPolicy />} />
+ 
           <Route path={RoutesMap.UiKit} element={<UiKit />} />
         </Routes>
       </Layout>

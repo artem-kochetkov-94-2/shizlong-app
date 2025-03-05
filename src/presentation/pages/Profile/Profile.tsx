@@ -14,6 +14,7 @@ import { Rating } from '@src/presentation/components/Rating';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { DropdownMenu } from './components/DropdownMenu/DropdownMenu';
+import { Routes } from '@src/routes';
 
 export const bookingsTabs: Tab[] = [
   {
@@ -75,7 +76,7 @@ export const Profile = observer(() => {
         <div className={styles.actions}>
           <div
             className={classNames(styles.actionItem, styles.notifications)}
-            onClick={() => navigate('/notifications')}
+            onClick={() => navigate(Routes.Notifications)}
           >
             <IconButton iconName='bell' size='large' withBorder withBlur />
             <span>Уведомления</span>
@@ -83,7 +84,7 @@ export const Profile = observer(() => {
           </div>
           <div
             className={styles.actionItem}
-            onClick={() => navigate('/favorites')}
+            onClick={() => navigate(Routes.Favorites)}
           >
             <IconButton
               iconName='favorite-outline'
@@ -95,7 +96,7 @@ export const Profile = observer(() => {
           </div>
           <div
             className={classNames(styles.actionItem)}
-            onClick={() => navigate('/abonements')}
+            onClick={() => navigate(Routes.Abonements)}
           >
             <IconButton iconName='abonement' size='large' withBorder withBlur />
             <span className={styles.abonement}>

@@ -10,6 +10,7 @@ export const NotificationsSettings = () => {
     <div className={styles.NotificationsSettings}>
       <PageHeader>Настройка уведомлений</PageHeader>
       <div className={styles.subHeader}>Выберите способ уведомления</div>
+
       <div className={styles.radioGroup}>
         {items.map(({ id, label, content }) => (
           <div key={id} className={styles.radioItem} onClick={() => setSelected(id)}>

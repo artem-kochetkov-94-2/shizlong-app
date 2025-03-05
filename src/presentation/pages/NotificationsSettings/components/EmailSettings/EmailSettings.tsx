@@ -6,6 +6,7 @@ import { StyledInput } from '@src/presentation/ui-kit/StyledInput';
 
 export const EmailSettings = () => {
   const [isAccept, setIsAccept] = useState(false);
+  const [email, setEmail] = useState('');
 
   return (
     <div className={styles.telegramSettings}>
@@ -17,6 +18,7 @@ export const EmailSettings = () => {
           </div>
           <div className={styles.emailHeader}>E-mail</div>
           <div className={styles.email}>MargoSokolova@mail.ru</div>
+
           <Button
             variant={'gray2'}
             size={'large'}
@@ -26,10 +28,11 @@ export const EmailSettings = () => {
           </Button>
         </>
       )}
+
       {!isAccept && (
         <>
           <div className={styles.list}>1. Укажите e-mail</div>
-          <StyledInput placeholder='E-mail' type={'e-mail'} />
+          <StyledInput placeholder='E-mail' type={'e-mail'} value={email} onChange={setEmail} />
           <Button
             variant={'yellow'}
             size={'large'}

@@ -18,7 +18,9 @@ export const CopyableDiv = ({
 }: CopyableDivProps) => {
     const [copied, setCopied] = useState(false);
     
-   const handleCopy = () => {
+   const handleCopy = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
     const textToCopy = children?.toString() || "";
 
     navigator.clipboard.writeText(textToCopy).then(() => {

@@ -1,7 +1,7 @@
-import { Icon } from '@src/presentation/ui-kit/Icon';
 import { useNavigate } from 'react-router-dom';
 import { ReactNode } from 'react';
 import styles from './PageHeader.module.css';
+import { IconButton } from '../IconButton';
 
 interface PageHeaderProps {
   children: ReactNode;
@@ -9,11 +9,15 @@ interface PageHeaderProps {
 
 export const PageHeader: React.FC<PageHeaderProps> = ({ children }) => {
   const navigate = useNavigate();
+
   return (
     <div className={styles.pageHeader}>
-      <button className={styles.button} onClick={() => navigate(-1)}>
-        <Icon name={'arrow-left'} size={'small'} color={'dark'} />
-      </button>
+      <IconButton
+        onClick={() => navigate(-1)}
+        iconName="arrow-left"
+        size="large"
+        shape="rounded"
+      />
       <span>{children}</span>
     </div>
   );

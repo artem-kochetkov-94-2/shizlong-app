@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './StyledInput.module.css';
+import cn from 'classnames';
 
 interface StyledInputProps {
   placeholder?: string;
@@ -23,10 +24,12 @@ export const StyledInput = ({
       <input
         type={type}
         value={value}
-        className={styles.input}
+        className={cn(styles.input, {
+          [styles.inputFocused]: value,
+        })}
         onChange={handleInputChange}
       />
-      <label className={styles.label}>{placeholder}</label>
+      <label className={styles.label}>{placeholder} {value}</label>
     </div>
   );
 };

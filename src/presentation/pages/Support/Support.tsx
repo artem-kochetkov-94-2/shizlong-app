@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 export const Support = () => {
   return (
-    <>
+    <div className={styles.support}>
       <PageHeader>Помощь</PageHeader>
       <div className={styles.wrapper}>
         <div className={styles.badge}>
@@ -88,6 +88,6 @@ export const Support = () => {
           <Icon name={'arrow-right'} size={'small'} />
         </Link>
       </div>
-    </>
+    </div>
   );
 };
