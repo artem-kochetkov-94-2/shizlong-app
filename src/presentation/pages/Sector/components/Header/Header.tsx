@@ -2,9 +2,19 @@ import { useNavigate } from "react-router-dom";
 import { IconButton } from "@src/presentation/ui-kit/IconButton";
 import styles from './Header.module.css';
 import { RawSector } from "@src/infrastructure/Locations/types";
-
-export const Header = ({ name, sector }: { name: string, sector: RawSector }) => {
+import { observer } from "mobx-react-lite";
+import { locationStore } from "@src/application/store/locationStore";
+import classNames from "classnames";
+                                                                                                               
+export const Header = observer(({
+    name,
+    sector,
+}: {
+    name: string,
+    sector: RawSector,
+}) => {
     const navigate = useNavigate();
+    const { sectors } = locationStore;
 
     return (
         <div className={styles.header}>
@@ -34,6 +44,18 @@ export const Header = ({ name, sector }: { name: string, sector: RawSector }) =>
                     color="white"
                 />
             </div>
+
+            <div className={styles.slides}>
+                {sectors.map((s) => (
+                    <div
+                        key={s.id}
+                        className={classNames(styles.slidesItem, {
+                            [styles.slidesItemActive]: sector.id === s.id,
+                        })}
+                        style={{ width: `${100 / sectors.length}%` }}
+                    />
+                ))}
+            </div>
         </div>
     );
-}
+});

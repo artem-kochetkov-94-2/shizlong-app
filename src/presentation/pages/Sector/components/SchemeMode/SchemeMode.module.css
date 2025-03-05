@@ -1,0 +1,31 @@
+.schemeMode {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 283px;
+}
+
+.schemeModeTitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14.4px;
+    color: #6B7280;
+}
+
+.schemeModeItems {
+    display: flex;
+    align-items: center;
+}
+
+.schemeModeItem {
+    svg {
+        color: #161D2580;
+    }
+}
+
+.active {
+    svg {
+        color: #4C515B;
+    }
+}

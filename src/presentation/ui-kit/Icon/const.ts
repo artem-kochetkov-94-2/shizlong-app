@@ -29,6 +29,9 @@ import { ReactComponent as BeachIcon } from './assets/beach.svg';
 import { ReactComponent as Check2Icon } from './assets/check2.svg';
 import { ReactComponent as LikeIcon } from './assets/like.svg';
 import { ReactComponent as Check3Icon } from './assets/check3.svg';
+import { ReactComponent as SunIcon } from './assets/sun.svg';
+import { ReactComponent as MoonIcon } from './assets/moon.svg';
+import { ReactComponent as TapIcon } from './assets/tap.svg';
 import { IconName } from './types';
 
 export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = {
@@ -63,4 +66,7 @@ export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = 
   'check2': Check2Icon,
   like: LikeIcon,
   'check3': Check3Icon,
+  sun: SunIcon,
+  moon: MoonIcon,
+  tap: TapIcon,
 };

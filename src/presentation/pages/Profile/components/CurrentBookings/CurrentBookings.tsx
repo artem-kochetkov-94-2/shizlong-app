@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import styles from "./CurrentBookings.module.css";
 import { bgColorByStatus, colorByStatus } from "@src/presentation/pages/Profile/const";
 import { Button } from "@presentation/ui-kit/Button";
+import { TimeSlider } from "@src/presentation/components/TimeSlider";
 
 export const CurrentBookings = observer(() => {
     const { currentBookings } = bookingsStore;
@@ -82,18 +83,10 @@ export const CurrentBookings = observer(() => {
                         )}
                     </div>
 
-                    <div className={styles.timeSlider}>
-                        <div className={styles.highlight}></div>
-                        <div className={styles.timeMarker}></div>
-                        <div className={styles.timeLabels}>
-                            <span>16:00</span>
-                            <span>17:00</span>
-                            <span>18:00</span>
-                            <span>19:00</span>
-                            <span>20:00</span>
-                            <span>21:00</span>
-                        </div>
-                    </div>
+                    <TimeSlider
+                        timeStart="10:00:00"
+                        timeEnd="13:00:00"
+                    />
 
                     <div className={styles.actions}>
                         <div className={styles.actionItem}>

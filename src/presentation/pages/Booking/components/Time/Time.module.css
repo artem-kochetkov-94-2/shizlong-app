@@ -1,0 +1,87 @@
+/*  header */
+
+.header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 52px;
+    padding-top: 4px;
+    border-bottom: 1px solid #E3E5EA;
+}
+
+.headerTitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21.09px;
+    text-align: center;
+    color: #292C31;    
+}
+
+.headerDate {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16.8px;
+    text-align: center;
+    color: #A0A7B1;    
+}
+
+.headerClose {
+    position: absolute;
+    right: 15px;
+    top: -6px;
+}
+
+/*  body */
+
+.body {
+    padding: 16px;
+    background-color: #F3F4F6;
+}
+
+.reservations {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 5px;
+}
+
+.reservation {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16.8px;
+
+    span:nth-child(2) {
+        margin-left: auto;
+    }
+
+    span:last-child {
+        color: #6B7280;
+    }
+}
+
+.free {
+    color: #64B64B;
+}
+
+.booked {
+    color: #F95E5E;
+}
+
+/*  footer */
+
+.footer {
+    display: flex;
+    gap: 10px;
+    padding: 16px;
+
+    button {
+        width: 50%;
+    }
+}

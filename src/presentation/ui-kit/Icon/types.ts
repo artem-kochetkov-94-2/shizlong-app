@@ -29,7 +29,10 @@ export type IconName =
     | 'check'
     | 'check2'
     | 'check3'
-    | 'like';
+    | 'like'
+    | 'sun'
+    | 'moon'
+    | 'tap';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
 
