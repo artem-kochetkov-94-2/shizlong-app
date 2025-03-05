@@ -18,4 +18,5 @@ export const Routes = {
   Booking: '/booking',
   PaymentMethods: '/payment-methods',
   Support: '/support',
+  Privacy: 'privacy-policy',
 } as const;

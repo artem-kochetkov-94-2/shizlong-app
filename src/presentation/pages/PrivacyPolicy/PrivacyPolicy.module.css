@@ -1,0 +1,30 @@
+.wrapper {
+  margin: 15px;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+.header {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
+  color: #161d25;
+}
+
+.description p {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18.2px;
+  color: #4c515b;
+}
+
+.description span {
+  font-family: Roboto;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18.2px;
+  color: #161d25;
+}

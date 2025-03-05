@@ -38,10 +38,15 @@ import { ReactComponent as CopyIcon } from './assets/copy.svg';
 import { ReactComponent as Check4Icon } from './assets/check4.svg';
 import { ReactComponent as Check5Icon } from './assets/check5.svg';
 import { ReactComponent as DownloadIcon } from './assets/download.svg';
+import { ReactComponent as CheckYellowIcon } from './assets/checkYellow.svg';
+import { ReactComponent as TelegramIcon } from './assets/telegram.svg';
 
 import { IconName } from './types';
 
-export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = {
+export const icons: Record<
+  IconName,
+  React.FC<React.SVGProps<SVGSVGElement>>
+> = {
   favorite: FavoriteIcon,
   'favorite-outline': FavoriteOutlineIcon,
   profile: ProfileIcon,
@@ -82,4 +87,6 @@ export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = 
   exit: ExitIcon,
   copy: CopyIcon,
   download: DownloadIcon,
+  checkYellow: CheckYellowIcon,
+  telegram: TelegramIcon,
 };

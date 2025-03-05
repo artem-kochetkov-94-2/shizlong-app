@@ -31,6 +31,7 @@ export type IconName =
   | 'check3'
   | 'check4'
   | 'check5'
+  | 'checkYellow'
   | 'like'
   | 'help'
   | 'credit-card'
@@ -38,7 +39,8 @@ export type IconName =
   | 'edit'
   | 'exit'
   | 'copy'
-  | 'download';
+  | 'download'
+  | 'telegram';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
 
