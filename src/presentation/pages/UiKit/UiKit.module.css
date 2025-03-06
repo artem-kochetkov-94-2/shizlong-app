@@ -1,5 +1,10 @@
 .uiKit {
-    svg {
-        color: blue;
-    }
+  svg {
+    color: #fdad01;
+  }
+}
+
+.background {
+  background-color: #fafafa;
+  border: dashed 2px #9747ff;
 }

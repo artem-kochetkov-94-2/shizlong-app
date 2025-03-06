@@ -29,7 +29,7 @@ export const StyledInput = ({
         })}
         onChange={handleInputChange}
       />
-      <label className={styles.label}>{placeholder} {value}</label>
+      <label className={styles.label}>{placeholder}</label>
     </div>
   );
 };
