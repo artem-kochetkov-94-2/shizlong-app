@@ -33,20 +33,31 @@ export const UiKit = () => {
 
       <Card className={styles.background}>
         <Button variant='primary' size='small'>
-          Button
+          Разрещить геолокацию
         </Button>
-        <Button variant='primary'>Button</Button>
-        <Button variant='primary' size='large'>
-          Button
+        <Button variant='yellow' size='small'>
+          Далее
         </Button>
-        <Button variant='primary' size='small' fullWidth={false}>
-          Button
+        <Button variant='gray' size='small'>
+          Далее
         </Button>
-        <Button variant='primary' size='medium' fullWidth={false}>
-          Button
+        <Button variant='secondary' size='small'>
+          Далее
         </Button>
-        <Button variant='primary' size='large' fullWidth={false}>
-          Button
+        <Button variant='tertiary' size='small'>
+          Далее
+        </Button>
+        <Button variant='yellow' size='large' fullWidth={false}>
+          Далее
+        </Button>
+        <Button variant='yellow' size='medium' fullWidth={false}>
+          Далее
+        </Button>
+        <Button variant='yellow' size='small' fullWidth={false}>
+          Далее
+        </Button>
+        <Button variant='yellow' size='small' fullWidth={false} disabled>
+          Далее
         </Button>
       </Card>
 
