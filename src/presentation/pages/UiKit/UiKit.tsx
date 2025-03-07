@@ -126,9 +126,23 @@ export const UiKit = () => {
       {/* Блок с тегами */}
       <Card className={styles.background}>
         <Tag size='medium' color='primary' text='Открыто' />
+        <Tag size='medium' color='primary' text='Открыто' />
         <Tag size='medium' color='secondary' text='Дневной' />
-        <Tag size='medium' color='gray' text='Низкие' />
-        <Tag size='small' color='gray' text='Низкие' />
+        <Tag
+          size='medium'
+          color='gray'
+          text='2 шезлонга с зонтиком'
+          leftContent={<Icon name={'megaphone'} size={'extra-small'} />}
+          rightContent={'#12'}
+        />
+        <Tag
+          size='medium'
+          color='default'
+          text='2 шезлонга с зонтиком'
+          leftContent={<Icon name={'megaphone'} size={'extra-small'} />}
+          rightContent={'#12'}
+        />
+        <Tag size='small' color='primary' text='Низкие' />
       </Card>
     </div>
   );
