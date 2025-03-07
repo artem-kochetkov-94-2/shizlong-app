@@ -8,9 +8,13 @@ import { Card } from '@src/presentation/ui-kit/Card';
 import { StyledInput } from '@src/presentation/ui-kit/StyledInput';
 import { useState } from 'react';
 import { ReminderItem } from '@src/presentation/ui-kit/ReminderItem';
+import { RadioItem } from '@src/presentation/ui-kit/RadioItem';
+import { items } from '../NotificationsSettings/const';
 
 export const UiKit = () => {
   const [valueInput, setValueInput] = useState('');
+  const [selected, setSelected] = useState<string>('');
+
   return (
     <div
       style={{
@@ -23,6 +27,7 @@ export const UiKit = () => {
         overflowY: 'auto',
       }}
     >
+      {/*Блок с иконками */}
       <Card className={styles.background}>
         <div className={styles.uiKit}>
           {Object.entries(icons).map(([key]) => (
@@ -31,6 +36,7 @@ export const UiKit = () => {
         </div>
       </Card>
 
+      {/*Блок с кнопками */}
       <Card className={styles.background}>
         <Button variant='primary' size='small'>
           Разрещить геолокацию
@@ -61,6 +67,7 @@ export const UiKit = () => {
         </Button>
       </Card>
 
+      {/*Блок с кнопками ReminderItem*/}
       <Card className={styles.background}>
         <ReminderItem variant='default'>Незавершённый заказ</ReminderItem>
         <ReminderItem variant='primary' arrow>
@@ -80,6 +87,7 @@ export const UiKit = () => {
         </ReminderItem>
       </Card>
 
+      {/*Блок с инпут*/}
       <Card className={styles.background}>
         <StyledInput
           type={'text'}
@@ -87,6 +95,22 @@ export const UiKit = () => {
           value={valueInput}
           onChange={setValueInput}
         />
+      </Card>
+
+      {/* Блок с RadioItem */}
+      <Card className={styles.background}>
+        {items.map(({ id, label, content, status, statusState }) => (
+          <RadioItem
+            id={id}
+            label={label}
+            selected={selected}
+            status={status}
+            statusState={statusState}
+            onClick={() => setSelected(id)}
+          >
+            {content}
+          </RadioItem>
+        ))}
       </Card>
     </div>
   );
