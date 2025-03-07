@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { ReminderItem } from '@src/presentation/ui-kit/ReminderItem';
 import { RadioItem } from '@src/presentation/ui-kit/RadioItem';
 import { items } from '../NotificationsSettings/const';
+import { AccordionItem } from '@src/presentation/ui-kit/AccordeonItem';
 
 export const UiKit = () => {
   const [valueInput, setValueInput] = useState('');
@@ -111,6 +112,14 @@ export const UiKit = () => {
             {content}
           </RadioItem>
         ))}
+      </Card>
+
+      {/* Блок с AccordeonItem */}
+      <Card className={styles.background}>
+        <AccordionItem title={'Как отменить свою бронь?'}>
+          В случае возникновения проблем обратитесь в службу поддержки через чат в
+          приложении.
+        </AccordionItem>
       </Card>
     </div>
   );
