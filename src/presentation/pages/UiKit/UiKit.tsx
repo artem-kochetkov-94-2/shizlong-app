@@ -11,6 +11,7 @@ import { ReminderItem } from '@src/presentation/ui-kit/ReminderItem';
 import { RadioItem } from '@src/presentation/ui-kit/RadioItem';
 import { items } from '../NotificationsSettings/const';
 import { AccordionItem } from '@src/presentation/ui-kit/AccordeonItem';
+import { Tag } from '@src/presentation/ui-kit/Tag';
 
 export const UiKit = () => {
   const [valueInput, setValueInput] = useState('');
@@ -120,6 +121,14 @@ export const UiKit = () => {
           В случае возникновения проблем обратитесь в службу поддержки через чат в
           приложении.
         </AccordionItem>
+      </Card>
+
+      {/* Блок с тегами */}
+      <Card className={styles.background}>
+        <Tag size='medium' color='primary' text='Открыто' />
+        <Tag size='medium' color='secondary' text='Дневной' />
+        <Tag size='medium' color='gray' text='Низкие' />
+        <Tag size='small' color='gray' text='Низкие' />
       </Card>
     </div>
   );
