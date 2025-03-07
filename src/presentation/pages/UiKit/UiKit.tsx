@@ -12,6 +12,7 @@ import { RadioItem } from '@src/presentation/ui-kit/RadioItem';
 import { items } from '../NotificationsSettings/const';
 import { AccordionItem } from '@src/presentation/ui-kit/AccordeonItem';
 import { Tag } from '@src/presentation/ui-kit/Tag';
+import { CheckBox } from '@src/presentation/ui-kit/CheckBox';
 
 export const UiKit = () => {
   const [valueInput, setValueInput] = useState('');
@@ -143,6 +144,20 @@ export const UiKit = () => {
           rightContent={'#12'}
         />
         <Tag size='small' color='primary' text='Низкие' />
+      </Card>
+
+      {/* Блок с checkbox */}
+      <Card className={styles.background}>
+        <CheckBox
+          rightContent={'3207'}
+          leftContent={<Icon name='calendar' size='small' />}
+          text={'Одиночный шезлонг деревянный'}
+        />
+        <CheckBox
+          leftContent={<Icon name='location' size='small' />}
+          text={'Спортивный инвентарь'}
+        />
+        <CheckBox rightContent={'8657'} text={'Выше среднего'} />
       </Card>
     </div>
   );

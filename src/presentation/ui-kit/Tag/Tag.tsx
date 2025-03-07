@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
+import cn from 'classnames';
 import styles from './Tag.module.css';
-import classNames from 'classnames';
-
 interface TagProps {
   text: ReactNode;
   size?: 'small' | 'medium';
@@ -18,7 +17,7 @@ export const Tag = ({
   leftContent,
 }: TagProps) => {
   return (
-    <div className={classNames(styles.tag, styles[size], styles[color])}>
+    <div className={cn(styles.tag, styles[size], styles[color])}>
       {leftContent && <div className={styles.leftContent}>{leftContent}</div>}
       {text && <div className={styles.text}>{text}</div>}
       {rightContent && <div className={styles.rightContent}>{rightContent}</div>}
