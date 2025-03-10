@@ -1,16 +1,16 @@
-import { locationStore } from "@src/application/store/locationStore";
-import { observer } from "mobx-react-lite";
-import { Header } from "./components/Header";
-import { useParams } from "react-router-dom";
+import { locationStore } from '@src/application/store/locationStore';
+import { observer } from 'mobx-react-lite';
+import { Header } from './components/Header';
+import { useParams } from 'react-router-dom';
 import styles from './Sector.module.css';
-import { BookingDrawer } from "./components/BookingDrawer";
-import { useEffect } from "react";
-import { sectorStore } from "@src/application/store/sectorStore";
-import { SwiperSlide } from "swiper/react";
-import { Swiper } from "swiper/react";
-import { Swiper as SwiperType } from "swiper";
-import { useNavigate } from "react-router-dom";
-import { Routes } from "@src/routes";
+import { BookingDrawer } from './components/BookingDrawer';
+import { useEffect } from 'react';
+import { sectorStore } from '@src/application/store/sectorStore';
+import { SwiperSlide } from 'swiper/react';
+import { Swiper } from 'swiper/react';
+import { Swiper as SwiperType } from 'swiper';
+import { useNavigate } from 'react-router-dom';
+import { Routes } from '@src/routes';
 
 export const Sector = observer(() => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export const Sector = observer(() => {
 
   if (!sector || !location) return null;
 
-  const sectorIndex = sectors.findIndex(s => s.id === sector.id);
+  const sectorIndex = sectors.findIndex((s) => s.id === sector.id);
 
   const handleSlideChange = (swiper: SwiperType) => {
     const id = sectors[swiper.activeIndex].id;
@@ -42,25 +42,21 @@ export const Sector = observer(() => {
       <Header name={location.name} sector={sector} />
 
       <Swiper
-          spaceBetween={0}
-          slidesPerView={1}
-          touchRatio={1}
-          simulateTouch={true}
-          touchStartPreventDefault={false}
-          initialSlide={sectorIndex}
-          className={styles.swiper}
-          onSlideChange={handleSlideChange}
-        >
-          {sectors.map((s) => (
-            <SwiperSlide key={s.id}>
-              <img
-                src={s.link_plan}
-                alt={s.name}
-                className={styles.plan}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        spaceBetween={0}
+        slidesPerView={1}
+        touchRatio={1}
+        simulateTouch={true}
+        touchStartPreventDefault={false}
+        initialSlide={sectorIndex}
+        className={styles.swiper}
+        onSlideChange={handleSlideChange}
+      >
+        {sectors.map((s) => (
+          <SwiperSlide key={s.id}>
+            <img src={s.link_plan} alt={s.name} className={styles.plan} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
       <BookingDrawer />
     </div>

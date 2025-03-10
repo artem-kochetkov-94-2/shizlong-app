@@ -13,10 +13,14 @@ import { items } from '../NotificationsSettings/const';
 import { AccordionItem } from '@src/presentation/ui-kit/AccordeonItem';
 import { Tag } from '@src/presentation/ui-kit/Tag';
 import { CheckBox } from '@src/presentation/ui-kit/CheckBox';
+import { RoundedTabs } from '@src/presentation/ui-kit/RoundedTabs';
+import { bookStore, SectorTab, sectorTabs } from '@src/application/store/bookStore';
+import { observer } from 'mobx-react-lite';
 
-export const UiKit = () => {
+export const UiKit = observer(() => {
   const [valueInput, setValueInput] = useState('');
   const [selected, setSelected] = useState<string>('');
+  const { activeTab } = bookStore;
 
   return (
     <div
@@ -104,6 +108,7 @@ export const UiKit = () => {
       <Card className={styles.background}>
         {items.map(({ id, label, content, status, statusState }) => (
           <RadioItem
+            key={id}
             id={id}
             label={label}
             selected={selected}
@@ -159,6 +164,15 @@ export const UiKit = () => {
         />
         <CheckBox rightContent={'8657'} text={'Выше среднего'} />
       </Card>
+
+      {/* Блок с toggle */}
+      <Card className={styles.background}>
+        <RoundedTabs
+          activeTab={activeTab}
+          tabs={sectorTabs}
+          onTabChange={(tab) => bookStore.setActiveTab(tab as SectorTab)}
+        ></RoundedTabs>
+      </Card>
     </div>
   );
-};
+});
