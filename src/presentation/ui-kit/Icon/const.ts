@@ -43,12 +43,10 @@ import { ReactComponent as TelegramIcon } from './assets/telegram.svg';
 import { ReactComponent as SunIcon } from './assets/sun.svg';
 import { ReactComponent as MoonIcon } from './assets/moon.svg';
 import { ReactComponent as TapIcon } from './assets/tap.svg';
+import { ReactComponent as beachFilterIcon } from './assets/beachFilterIcon.svg';
 import { IconName } from './types';
 
-export const icons: Record<
-  IconName,
-  React.FC<React.SVGProps<SVGSVGElement>>
-> = {
+export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = {
   favorite: FavoriteIcon,
   'favorite-outline': FavoriteOutlineIcon,
   profile: ProfileIcon,
@@ -94,4 +92,5 @@ export const icons: Record<
   sun: SunIcon,
   moon: MoonIcon,
   tap: TapIcon,
+  beachFilter: beachFilterIcon,
 };

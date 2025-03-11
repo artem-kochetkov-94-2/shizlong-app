@@ -43,7 +43,8 @@ export type IconName =
   | 'telegram'
   | 'sun'
   | 'moon'
-  | 'tap';
+  | 'tap'
+  | 'beachFilter';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
 
