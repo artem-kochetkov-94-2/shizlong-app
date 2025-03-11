@@ -25,7 +25,9 @@ export const Filters = observer(() => {
           renderComponent(component, () => handleSetComponent('empty'))}
         {component === 'empty' && (
           <>
-            <FilterPageHeader onClick={() => navigate(-1)}>Фильтры</FilterPageHeader>
+            <FilterPageHeader onClick={() => navigate(-1)} count={3}>
+              Фильтры
+            </FilterPageHeader>
             <div className={styles.container}>
               <Card>
                 <FilterLink

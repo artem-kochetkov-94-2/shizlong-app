@@ -34,3 +34,16 @@
   color: #ffbc02;
   cursor: pointer;
 }
+.count {
+  display: flex;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 170%;
+  color: #ffffff;
+  background-color: #f95e5e;
+  border-radius: 50%;
+}
