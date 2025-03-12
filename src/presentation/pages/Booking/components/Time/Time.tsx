@@ -4,6 +4,8 @@ import styles from "./Time.module.css";
 import { Button } from "@src/presentation/ui-kit/Button";
 import { Card } from "@src/presentation/ui-kit/Card";
 import cn from "classnames";
+import { Icon } from "@src/presentation/ui-kit/Icon";
+import { Time as TimeComponent } from "@src/presentation/components/Time";
 
 export const Time = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
     return (
@@ -25,24 +27,35 @@ export const Time = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void
 
                 <div className={styles.body}>
                     <Card>
-
-                    <div className={styles.reservations}>
-                        <div className={cn(styles.reservation, styles.free)}>
-                            <span>Свободен</span>
-                            <span>09:00 - 13:00</span>
-                            <span>4 ч.</span>
+                        <div className={styles.time}>
+                            <TimeComponent />
+                            <TimeComponent />
                         </div>
-                        <div className={cn(styles.reservation, styles.free)}>
-                            <span>Свободен</span>
-                            <span>18:00 - 21:00</span>
-                            <span>3 ч.</span>
+                        <div className={styles.reservations}>
+                            <div className={styles.reservationsTitle}>
+                                <Icon name="time" size="extra-small"/>
+                                <span>Доступность модуля</span>
+                                <span>24 августа</span>
+                            </div>
+                            <div className={cn(styles.reservation, styles.free)}>
+                                <span>Свободен</span>
+                                <span>09:00 - 13:00</span>
+                                <span>4 ч.</span>
+                            </div>
+                            <div className={cn(styles.reservation, styles.free)}>
+                                <span>Свободен</span>
+                                <span>18:00 - 21:00</span>
+                                <span>3 ч.</span>
+                            </div>
+                            <div className={cn(styles.reservation, styles.booked)}>
+                                <span>Занят</span>
+                                <span>13:00 - 18:00</span>
+                                <span>5 ч.</span>
+                            </div>
                         </div>
-                        <div className={cn(styles.reservation, styles.booked)}>
-                            <span>Занят</span>
-                            <span>13:00 - 18:00</span>
-                            <span>5 ч.</span>
+                        <div className={styles.reservationsFooter}>
+                            По местному времени
                         </div>
-                    </div>
                     </Card>
                 </div>
 

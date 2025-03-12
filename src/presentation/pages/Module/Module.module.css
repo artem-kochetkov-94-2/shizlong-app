@@ -51,7 +51,7 @@
         box-shadow: 0px 1.64px 6.58px 0px #00000040;
     }
 
-    &.free {
+    &.available {
         &::after {
             background-color: #64B64B;
         }
@@ -151,6 +151,11 @@
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.descriptionImg {
+    max-width: 44px;
+    max-height: 44px;
 }
 
 .descriptionText {

@@ -43,6 +43,8 @@ import { ReactComponent as TelegramIcon } from './assets/telegram.svg';
 import { ReactComponent as SunIcon } from './assets/sun.svg';
 import { ReactComponent as MoonIcon } from './assets/moon.svg';
 import { ReactComponent as TapIcon } from './assets/tap.svg';
+import { ReactComponent as ArrowTopIcon } from './assets/arrow-up.svg';
+import { ReactComponent as ArrowDownIcon } from './assets/arrow-down.svg';
 import { IconName } from './types';
 
 export const icons: Record<
@@ -94,4 +96,6 @@ export const icons: Record<
   sun: SunIcon,
   moon: MoonIcon,
   tap: TapIcon,
+  'arrow-up': ArrowTopIcon,
+  'arrow-down': ArrowDownIcon,
 };

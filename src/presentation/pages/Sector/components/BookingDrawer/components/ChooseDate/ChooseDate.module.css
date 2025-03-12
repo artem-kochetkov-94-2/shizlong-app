@@ -1,0 +1,18 @@
+.modulesControlsItem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 33.333%;
+    height: 100%;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16.8px;
+    border: 1px solid #E3E5EA;
+    border-right: 1px solid #FFFFFF;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    background-color: #E3E5EA;
+    overflow: hidden;
+}

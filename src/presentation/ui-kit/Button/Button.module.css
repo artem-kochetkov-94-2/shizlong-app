@@ -19,15 +19,18 @@
 .primary {
   background-color: #41bece;
   color: white;
-  border: 1px solid #41bece;
+  border: 1px solid #41BECE;
+
+  &.withShadow {
+    box-shadow: 0px 15px 20px 0px #30D5DC40;
+  }
 }
 
 .secondary {
   background-color: #ed9b58;
   color: white;
-  border: 1px solid #ed9b58;
-
-  box-shadow: 0px 7px 15px 0px #edc9674d;
+  border: 1px solid #ED9B58;
+  box-shadow: 0px 7px 15px 0px #EDC9674D;
 }
 
 .tertiary {
@@ -94,9 +97,14 @@
 
 /* Disabled state */
 .disabled {
-  background-color: #f3f4f6;
-  color: #bec5cf;
+  border-color: #F3F4F6;
+  background-color: #F3F4F6;
+  color: #BEC5CF;
   cursor: not-allowed;
+
+  &.withShadow {
+    box-shadow: none;
+  }
 }
 
 /* Hover states */

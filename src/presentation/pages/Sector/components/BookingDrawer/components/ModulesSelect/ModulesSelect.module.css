@@ -1,0 +1,43 @@
+.modulesSelectDropdown {
+    top: calc(100% + 8px);
+}
+
+.modulesSelect {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #3D8393;
+
+    svg {
+        color: #3D8393;
+    }
+}
+
+.modulesSelectOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 145px;
+    padding: 15px;
+}
+
+.label {
+    gap: 12px;
+  
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 120%;
+  
+    color: #A0A7B1;
+  
+    &.active {
+      color: #292C31;
+    }
+  }
+  

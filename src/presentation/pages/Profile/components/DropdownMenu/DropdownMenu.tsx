@@ -1,10 +1,9 @@
-import { observer } from 'mobx-react-lite';
 import styles from './DropdownMenu.module.css';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { Link } from 'react-router-dom';
 import { Routes } from '@src/routes';
 
-export const DropdownMenu = observer(() => {
+export const DropdownMenu = () => {
   return (
     <div className={styles.container}>
       <Link to={Routes.ProfileEdit} className={styles.link}>
@@ -29,4 +28,4 @@ export const DropdownMenu = observer(() => {
       </Link>
     </div>
   );
-});
+};

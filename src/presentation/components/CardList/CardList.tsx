@@ -12,6 +12,7 @@ export const CardList = ({ items, title, category }: CardListProps) => {
   return (
     <>
       {title && <p className={styles.title}>{title}</p>}
+
       <div className={styles.wrapper}>
         {items.map((item) => (
           <CardItem key={item.id} data={item} category={category} />

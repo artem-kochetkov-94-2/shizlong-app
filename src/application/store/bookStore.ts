@@ -10,7 +10,7 @@ export const modulesSelectOptions = [
     value: 'group',
     label: 'группу модулей',
   },
-] as const;
+];
 
 export const sectorTabs: Tab[] = [
   {
@@ -45,7 +45,7 @@ export type ModulesSelectValue = typeof modulesSelectOptions[number]['value'];
 
 class BookStore {
   modulesSelectValue: ModulesSelectValue = 'one';
-  activeTab: SectorTab = 'bookings';
+  activeTab: SectorTab = 'order';
   activeBookingsTab = 'bookings';
 
   constructor() {

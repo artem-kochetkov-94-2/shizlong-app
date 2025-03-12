@@ -1,0 +1,46 @@
+.react-flow__node {
+    width: auto;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+
+    img {
+        display: block;
+    }
+}
+
+.react-flow__handle {
+    display: none;
+}
+
+.react-flow__controls {
+    top: 130px;
+    bottom: auto !important;
+    left: auto !important;
+    right: 10px !important;
+
+    width: 136px;
+    height: 44px;
+
+    align-items: center;
+    gap: 5px;
+
+    margin: 0;
+
+    border: 1px solid #FFFFFF80;
+    border-radius: 12px;
+
+    background: #FFFFFFB2;
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 2px 10px 0px #0000001A;
+
+    transform: translateY(-50%);
+}
+
+.react-flow__controls-button {
+    flex: 1;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+}

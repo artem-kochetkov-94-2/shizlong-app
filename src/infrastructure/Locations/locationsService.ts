@@ -1,5 +1,12 @@
 import { API_URL } from "@src/const";
-import { RawAdditionalService, RawLocation, RawSector, RawSectorSchema } from "./types";
+import {
+    RawAdditionalService,
+    RawBeachAccessory,
+    RawLocation,
+    RawModule,
+    RawSector,
+    RawSectorSchema,
+} from "./types";
 import { ApiResponse } from "@src/infrastructure/types";
 
 const routes = {
@@ -8,7 +15,9 @@ const routes = {
     sectors: '/get-sectors',
     sector: '/get-sector',
     additionalServices: '/get-additional-services',
+    getBeachAccessories: '/get-beach-accessories',
     schemes: '/get-schemes',
+    modules: '/get-modules',
 };
 
 class LocationsService {
@@ -129,6 +138,46 @@ class LocationsService {
         };
 
         return result.data as RawAdditionalService[];
+    }
+
+    async getBeachAccessories(id: number) {
+        const response = await fetch(`${this.apiUrl}${routes.getBeachAccessories}`, {
+            method: 'POST',
+            body: JSON.stringify({
+                location_id: id,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const result: ApiResponse<RawBeachAccessory[]> = await response.json();
+
+        if (!result.success) {
+            throw new Error('Fetch error');
+        };
+
+        return result.data as RawBeachAccessory[];
+    }
+
+    async getModules(locationId: number) {
+        const response = await fetch(`${this.apiUrl}${routes.modules}`, {
+            method: 'POST',
+            body: JSON.stringify({
+                location_id: locationId,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const result: ApiResponse<Record<"module", RawModule>[]> = await response.json();
+
+        if (!result.success) {
+            throw new Error('Fetch error');
+        };
+
+        return result.data.map((item) => item.module);
     }
 }
 

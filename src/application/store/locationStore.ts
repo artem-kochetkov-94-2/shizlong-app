@@ -1,5 +1,5 @@
 import { makeAutoObservable, autorun } from 'mobx';
-import { RawLocation, RawSector, RawAdditionalService } from '@src/infrastructure/Locations/types';
+import { RawLocation, RawSector, RawAdditionalService, RawModule, RawBeachAccessory } from '@src/infrastructure/Locations/types';
 import { Tab } from '@src/presentation/ui-kit/Tabs/Tabs';
 import { locationsService } from '@src/infrastructure/Locations/locationsService';
 import { mapStore } from './mapStore';
@@ -30,9 +30,13 @@ class LocationStore {
   isLoading = false;
   isSectorsLoading = false;
   isAdditionalServicesLoading = false;
+  isBeachAccessoriesLoading = false;
+  isModulesLoading = false;
   mapStore = mapStore;
   sectors: RawSector[] = [];
   additionalServices: RawAdditionalService[] = [];
+  beachAccessories: RawBeachAccessory[] = [];
+  modules: RawModule[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -66,16 +70,20 @@ class LocationStore {
     this.locationId = null;
     this.sectors = [];
     this.additionalServices = [];
+    this.beachAccessories = [];
     this.location = null;
     this.isLoading = false;
     this.isSectorsLoading = false;
     this.isAdditionalServicesLoading = false;
+    this.isBeachAccessoriesLoading = false;
   }
 
   init(locationId: number) {
     this.fetchLocation(locationId);
     this.fetchSectors(locationId);
     this.fetchAdditionalServices(locationId);
+    this.fetchBeachAccessories(locationId);
+    this.fetchModules(locationId);
   }
 
   async choosePlace() {
@@ -117,6 +125,19 @@ class LocationStore {
     }
   }
 
+  async fetchBeachAccessories(id: number) {
+    try {
+      this.isBeachAccessoriesLoading = true;
+      const beachAccessories = await locationsService.getBeachAccessories(id);
+      console.log('beachAccessories', beachAccessories);
+      this.beachAccessories = beachAccessories;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.isBeachAccessoriesLoading = false;
+    }
+  }
+
   async fetchSectors(id: number) {
     try {
       this.isSectorsLoading = true;
@@ -127,6 +148,19 @@ class LocationStore {
       console.error(error);
     } finally {
       this.isSectorsLoading = false;
+    }
+  }
+
+  async fetchModules(id: number) {
+    try {
+      this.isModulesLoading = true;
+      const modules = await locationsService.getModules(id);
+      console.log('modules', modules);
+      this.modules = modules;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.isModulesLoading = false;
     }
   }
 

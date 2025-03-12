@@ -11,12 +11,15 @@ import { Swiper } from "swiper/react";
 import { Swiper as SwiperType } from "swiper";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "@src/routes";
+import { Plan } from "./components/Plan";
+import { Module } from '@src/presentation/pages/Module';
 
 export const Sector = observer(() => {
   const navigate = useNavigate();
+
   const { id } = useParams<{ id: string }>();
   const { location, sectors } = locationStore;
-  const { sector } = sectorStore;
+  const { sector, selectedModule } = sectorStore;
 
   useEffect(() => {
     sectorStore.init(Number(id));
@@ -44,25 +47,26 @@ export const Sector = observer(() => {
       <Swiper
           spaceBetween={0}
           slidesPerView={1}
-          touchRatio={1}
-          simulateTouch={true}
-          touchStartPreventDefault={false}
+          // touchRatio={1}
+          // simulateTouch={true}
+          // touchStartPreventDefault={false}
+
+          noSwipingClass="swiper-slide"
+          noSwiping={true}
+
           initialSlide={sectorIndex}
           className={styles.swiper}
           onSlideChange={handleSlideChange}
         >
           {sectors.map((s) => (
             <SwiperSlide key={s.id}>
-              <img
-                src={s.link_plan}
-                alt={s.name}
-                className={styles.plan}
-              />
+              <Plan sectorId={s.id} />
             </SwiperSlide>
           ))}
         </Swiper>
 
       <BookingDrawer />
+      {selectedModule && <Module onClose={() => sectorStore.setSelectedModule(null)} />}
     </div>
   );
 });

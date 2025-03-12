@@ -43,7 +43,9 @@ export type IconName =
   | 'telegram'
   | 'sun'
   | 'moon'
-  | 'tap';
+  | 'tap'
+  | 'arrow-up'
+  | 'arrow-down';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
 

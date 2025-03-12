@@ -9,7 +9,6 @@ export const Routes = {
   Locations: '/locations',
   Location: '/location/:id',
   Sector: '/sector/:id',
-  Module: '/module/:id',
   Favorites: '/favorites',
   Notifications: '/notifications',
   NotificationSettings: '/notifications-settings',

@@ -1,13 +1,15 @@
 import { VerificationStrategy } from "./verificationStrategy";
+import { authorizationService } from "@src/infrastructure/authorization/authorizationService";
 
 export class SmsStrategy implements VerificationStrategy {
-    init() {
+    async init(phoneNumber: string) {
         console.log('SmsStrategy init');
+        return authorizationService.sendSms(phoneNumber);
     }
 
-    sendCode(value: string) {
+    async sendCode(phoneNumber: string, value: string) {
         console.log('SmsStrategy sendCode', value);
-        throw new Error('SmsStrategy sendCode');
+        return authorizationService.verifySms(phoneNumber, value);
     }
 }
 
