@@ -24,6 +24,7 @@ import { PaymentMethods } from './presentation/pages/PaymentMethods';
 import { PrivacyPolicy } from './presentation/pages/PrivacyPolicy';
 import { UiKit } from './presentation/pages/UiKit';
 import { Filters } from './presentation/pages/Filters';
+import { Receipt } from './presentation/pages/Receipt';
 
 function App() {
   return (
@@ -59,6 +60,7 @@ function App() {
 
           <Route path={RoutesMap.UiKit} element={<UiKit />} />
           <Route path={RoutesMap.Filters} element={<Filters />} />
+          <Route path={RoutesMap.Receipt} element={<Receipt />} />
         </Routes>
       </Layout>
     </BrowserRouter>

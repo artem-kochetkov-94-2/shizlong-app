@@ -1,0 +1,105 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+  background-color: #f3f4f6;
+}
+
+.container hr {
+  border: none;
+  border-top: 2px solid transparent;
+  border-image: repeating-linear-gradient(
+      to right,
+      #ccc 0,
+      #ccc 10px,
+      transparent 10px,
+      transparent 20px
+    )
+    1;
+  margin: 30px 0;
+}
+.card {
+  display: flex;
+  gap: 8px;
+}
+
+.header {
+  font-family: Core Rhino 85;
+  color: #3d8393;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.paragraph {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  letter-spacing: 0px;
+  text-align: center;
+  color: #a0a7b1;
+}
+
+.wrapper {
+  margin-bottom: 30px;
+}
+
+.subHeader {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 12px;
+  color: #a0a7b1;
+}
+.info {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  color: #292c31;
+}
+
+.paid {
+  display: flex;
+  justify-content: center;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  margin-top: 30px;
+  color: #3d8393;
+  border: 1px solid #3d8393;
+  border-radius: 8px;
+  position: relative;
+  font-size: 16px;
+}
+
+.badge::before,
+.badge::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 12px;
+  border: 1px solid #3d8393;
+}
+
+.badge::before {
+  top: 5px;
+  left: 5px;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 4px 0 0 0;
+}
+
+.badge::after {
+  bottom: 5px;
+  right: 5px;
+  border-left: none;
+  border-top: none;
+  border-radius: 0 0 4px 0;
+}

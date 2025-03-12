@@ -44,7 +44,9 @@ export type IconName =
   | 'sun'
   | 'moon'
   | 'tap'
-  | 'beachFilter';
+  | 'beachFilter'
+  | 'send'
+  | 'save';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
 
