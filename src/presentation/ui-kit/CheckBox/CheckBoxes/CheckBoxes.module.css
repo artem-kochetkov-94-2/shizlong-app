@@ -1,0 +1,26 @@
+.checkBoxes {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  background-color: #f3f4f6;
+}
+
+.checkBoxes > * {
+  background-image: linear-gradient(
+    to bottom,
+    transparent calc(100% - 1px),
+    #f3f4f6 calc(100% - 1px)
+  );
+  background-size: calc(100% - 20px) 100%;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+
+.checkBoxes > *:first-child {
+  border-radius: 10px 10px 0 0;
+}
+
+.checkBoxes > *:last-child {
+  border-radius: 0 0 10px 10px;
+  background-image: none;
+}

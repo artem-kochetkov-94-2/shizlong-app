@@ -43,14 +43,14 @@ import { ReactComponent as TelegramIcon } from './assets/telegram.svg';
 import { ReactComponent as SunIcon } from './assets/sun.svg';
 import { ReactComponent as MoonIcon } from './assets/moon.svg';
 import { ReactComponent as TapIcon } from './assets/tap.svg';
+import { ReactComponent as beachFilterIcon } from './assets/beachFilterIcon.svg';
+import { ReactComponent as sendIcon } from './assets/send.svg';
+import { ReactComponent as saveIcon } from './assets/save.svg';
 import { ReactComponent as ArrowTopIcon } from './assets/arrow-up.svg';
 import { ReactComponent as ArrowDownIcon } from './assets/arrow-down.svg';
 import { IconName } from './types';
 
-export const icons: Record<
-  IconName,
-  React.FC<React.SVGProps<SVGSVGElement>>
-> = {
+export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = {
   favorite: FavoriteIcon,
   'favorite-outline': FavoriteOutlineIcon,
   profile: ProfileIcon,
@@ -96,6 +96,9 @@ export const icons: Record<
   sun: SunIcon,
   moon: MoonIcon,
   tap: TapIcon,
+  beachFilter: beachFilterIcon,
+  send: sendIcon,
+  save: saveIcon,
   'arrow-up': ArrowTopIcon,
   'arrow-down': ArrowDownIcon,
 };

@@ -19,4 +19,7 @@ export const Routes = {
   Support: '/support',
   Privacy: 'privacy-policy',
   UiKit: '/ui-kit',
+  Filters: '/filters',
+  Receipt: '/receipt',
+  StaffCall: '/staffcall',
 } as const;

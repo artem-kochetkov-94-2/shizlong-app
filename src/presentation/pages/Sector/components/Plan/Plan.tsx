@@ -12,7 +12,7 @@ import { SERVER_URL } from '@src/const';
 import styles from './plan.module.css';
 import cn from 'classnames';
 
-export const Plan = observer(() => {
+export const Plan = observer(({ sectorId }: { sectorId: number }) => {
   const [nodes, setNodes] = useNodesState<Node>([]);
   const { modules } = locationStore;
   const { sector, activeScheme } = sectorStore;

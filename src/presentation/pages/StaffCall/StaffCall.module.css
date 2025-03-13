@@ -1,0 +1,56 @@
+.subHeader {
+  padding: 15px 15px 0 15px;
+  background-color: #f3f4f6;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 16px;
+  color: #a0a7b1;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 15px 0 15px;
+  background-color: #f3f4f6;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+}
+.info span {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  color: #a0a7b1;
+}
+
+.wrapper {
+  padding: 15px 15px 0 15px;
+  background-color: #f3f4f6;
+}
+
+.comment {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 16px;
+  color: #161d25;
+  margin-bottom: 15px;
+}
+.commentInput {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 101px;
+  border-radius: 10px;
+  border: 1.5px solid #ccc;
+  padding: 13px 16px;
+  resize: none;
+  outline: none;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+}

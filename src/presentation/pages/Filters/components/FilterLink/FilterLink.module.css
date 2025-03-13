@@ -1,0 +1,25 @@
+.filterLink {
+  display: flex;
+  justify-content: space-between;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.icon {
+  margin-left: 10px;
+}
+
+.button {
+  flex-grow: 1;
+  flex-shrink: 1;
+  text-align: end;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  color: #ffbc02;
+}
+
+.button span {
+  cursor: pointer;
+}

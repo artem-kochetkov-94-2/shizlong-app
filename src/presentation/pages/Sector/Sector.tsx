@@ -1,7 +1,7 @@
-import { locationStore } from "@src/application/store/locationStore";
-import { observer } from "mobx-react-lite";
-import { Header } from "./components/Header";
-import { useParams } from "react-router-dom";
+import { locationStore } from '@src/application/store/locationStore';
+import { observer } from 'mobx-react-lite';
+import { Header } from './components/Header';
+import { useParams } from 'react-router-dom';
 import styles from './Sector.module.css';
 import { BookingDrawer } from "./components/BookingDrawer";
 import { useEffect } from "react";
@@ -33,7 +33,7 @@ export const Sector = observer(() => {
 
   if (!sector || !location) return null;
 
-  const sectorIndex = sectors.findIndex(s => s.id === sector.id);
+  const sectorIndex = sectors.findIndex((s) => s.id === sector.id);
 
   const handleSlideChange = (swiper: SwiperType) => {
     const id = sectors[swiper.activeIndex].id;

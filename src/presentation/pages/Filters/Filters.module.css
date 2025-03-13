@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+  background-color: #f3f4f6;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.filterLink svg {
+  flex-grow: 0;
+  margin-right: auto;
+  text-align: start;
+}
+.filterLink span {
+  margin-right: 10px;
+}

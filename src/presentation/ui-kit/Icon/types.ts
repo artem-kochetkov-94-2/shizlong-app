@@ -44,6 +44,9 @@ export type IconName =
   | 'sun'
   | 'moon'
   | 'tap'
+  | 'beachFilter'
+  | 'send'
+  | 'save'
   | 'arrow-up'
   | 'arrow-down';
 
