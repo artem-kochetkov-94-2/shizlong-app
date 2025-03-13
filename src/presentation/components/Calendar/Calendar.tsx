@@ -5,9 +5,7 @@ import { useState } from "react";
 import { Calendar as CalendarComponent } from "react-calendar";
 import { Sheet } from 'react-modal-sheet';
 import { formatFullDate } from "@src/application/utils/formatDate";
-
-type ValuePiece = Date | null;
-export type DateValue = ValuePiece | [ValuePiece, ValuePiece];
+import { DateValue } from "@src/application/types/date";
 
 interface CalendarProps {
     isOpen: boolean;

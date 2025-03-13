@@ -94,6 +94,10 @@ class LocationStore {
       mapStore.drawPlan(this.sectors);
       mapStore.setCenter(this.location!.coordinates[0], this.location!.coordinates[1]);
       mapStore.setZoom(18);
+
+      if (this.location?.rotation) {
+        mapStore.setRotation(this.location.rotation);
+      }
     } catch (e) {
       console.error(e);
     }

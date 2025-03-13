@@ -15,6 +15,7 @@ import { SERVER_URL } from '@src/const';
 import { Routes } from '@src/routes';
 import { useNavigate } from 'react-router-dom';
 import { ModuleStatus } from '@src/infrastructure/Locations/types';
+import { bookStore } from '@src/application/store/bookStore';
 
 const labels: Record<ModuleStatus, string> = {
     available: 'свободен',
@@ -25,6 +26,8 @@ const labels: Record<ModuleStatus, string> = {
 export const Module = observer(({ onClose }: { onClose?: () => void }) => {
     const { selectedModule } = sectorStore;
     const { beachAccessories, location } = locationStore;
+    const { formattedTime, formattedDate } = bookStore;
+
     const navigate = useNavigate();
 
     if (!selectedModule) return null;
@@ -55,7 +58,7 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                             <div className={cn(styles.status, styles[isMyBooking ? 'my' : selectedModule?.status])}>
                                 <span>{isMyBooking ? 'моя бронь' : labels[selectedModule?.status]}</span>
                             </div>
-                            <div className={styles.time}>с 10:00 до 13:00, 14 июля</div>
+                            <div className={styles.time}>{formattedTime}, {formattedDate}</div>
                         </div>
 
                         {isMyBooking && (
@@ -210,15 +213,15 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                     </Sheet.Scroller>
 
                     <div className={styles.footer}>
-                        <Button size="medium" variant="yellow">
+                        <Button size="medium" variant="yellow" onClick={() => navigate(Routes.Booking)}>
                             Заказать
                         </Button>
                         {/* <Button size="medium" variant="secondary">
                             Заказать по абонементу
                         </Button> */}
                         <span>
-                            с 10:00 до 13:00<br />
-                            8 октября
+                            {formattedTime}<br />
+                            {formattedDate}
                         </span>
                     </div>
                 </Sheet.Content>

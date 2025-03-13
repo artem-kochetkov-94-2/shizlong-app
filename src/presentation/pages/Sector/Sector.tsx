@@ -12,7 +12,7 @@ import { Swiper as SwiperType } from "swiper";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "@src/routes";
 import { Plan } from "./components/Plan";
-import { Module } from '@src/presentation/pages/Module';
+import { Module } from '@src/presentation/components/Module';
 
 export const Sector = observer(() => {
   const navigate = useNavigate();

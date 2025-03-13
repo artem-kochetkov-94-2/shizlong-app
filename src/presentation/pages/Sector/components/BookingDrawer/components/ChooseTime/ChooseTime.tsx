@@ -1,9 +1,11 @@
 import styles from './ChooseTime.module.css';
 import { useEffect, useState } from 'react';
+import { bookStore } from '@src/application/store/bookStore';
+import { observer } from 'mobx-react-lite';
 
-export const ChooseTime = () => {
-    const [hours, setHours] = useState(2);
-    const [isOpen, setIsOpen] = useState(true);
+export const ChooseTime = observer(() => {
+    const { hours } = bookStore;
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -39,11 +41,11 @@ export const ChooseTime = () => {
                 <input
                     type="number"
                     value={hours.toString()}
-                    onChange={(e) => setHours(Number(e.target.value))}
+                    onChange={(e) => bookStore.setHours(Number(e.target.value))}
                     className={styles.modulesControlsItemInput}
                     onKeyDown={enterHandler}
                 />
             )}
         </div>
     );
-};
+});

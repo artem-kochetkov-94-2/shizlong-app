@@ -5,6 +5,7 @@ import { observer } from "mobx-react-lite";
 import styles from './ModulesSelect.module.css';
 import classNames from 'classnames';
 import { Icon } from "@src/presentation/ui-kit/Icon";
+
 export const ModulesSelect = observer(() => {
     const { modulesSelectValue } = bookStore;
     const [modulesSelectOpen, setModulesSelectOpen] = useState(false);

@@ -14,4 +14,11 @@ const formatFullDate = (date: Date) => {
     });
 };
 
-export { formatShortDate, formatFullDate };
+const formatShortDateWithoutYear = (date: Date) => {
+    return date.toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: 'long',
+    });
+};
+
+export { formatShortDate, formatFullDate, formatShortDateWithoutYear };

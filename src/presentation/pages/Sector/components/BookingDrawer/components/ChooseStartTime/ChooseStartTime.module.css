@@ -15,6 +15,13 @@
     border-bottom-left-radius: 50px;
     background-color: #E3E5EA;
     overflow: hidden;
+
+    input {
+        border: none;
+        border-radius: 0;
+        background-color: transparent;
+        outline: none;
+    }
 }
 
 .modulesControlsItemActive {
