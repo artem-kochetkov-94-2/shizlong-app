@@ -9,6 +9,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
   ghost?: boolean;
   fullRadius?: boolean;
+  withShadow?: boolean;
 }
 
 export const Button = ({
@@ -20,6 +21,7 @@ export const Button = ({
   disabled,
   ghost,
   fullRadius,
+  withShadow,
   ...props
 }: ButtonProps) => {
   return (
@@ -33,6 +35,7 @@ export const Button = ({
           [styles.disabled]: disabled,
           [styles.ghost]: ghost,
           [styles.fullRadius]: fullRadius,
+          [styles.withShadow]: withShadow,
         },
         className
       )}

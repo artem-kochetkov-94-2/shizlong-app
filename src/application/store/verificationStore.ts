@@ -9,7 +9,9 @@ class VerificationStore {
   private _phoneNumber: string = '';
   private _verificationError: string | null = null;
   private _strategy: VerificationStrategy | null = null;
-  
+  private _isFetchingCode: boolean = false;
+  private _isSendingCode: boolean = false;
+
   constructor() {
     makeAutoObservable(this);
     this.verificationController = verificationController;
@@ -26,6 +28,14 @@ class VerificationStore {
 
   get strategy() {
     return this._strategy;
+  }
+
+  get isFetchingCode() {
+    return this._isFetchingCode;
+  }
+
+  get isSendingCode() {
+    return this._isSendingCode;
   }
 
   setStrategy(strategy: VerificationStrategy) {
@@ -48,17 +58,25 @@ class VerificationStore {
     this.run();
   }
 
-  run() {
-    this.strategy?.init();
+  async run() {
+    try {
+      this._isFetchingCode = true;
+      await this.strategy?.init(this.phoneNumber);
+    } catch (error) {
+      this._verificationError = 'Ошибка запроса кода';
+    } finally {
+      this._isFetchingCode = false;
+    }
   }
 
-  sendCode(value: string) {
+  async sendCode(value: string) {
     try {
-      this.strategy?.sendCode(value);
+      this._isSendingCode = true;
+      await this.strategy?.sendCode(this.phoneNumber, value);
     } catch (error) {
       this._verificationError = 'Код неверный';
-      // this.verificationError = 'Код неверный. Вы исчерпали суточный лимит попыток. Повторите завтра.';
-      // this.verificationError = error as string;
+    } finally {
+      this._isSendingCode = false;
     }
   }
 

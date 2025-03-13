@@ -1,7 +1,7 @@
 .wrapper {
     display: flex;
     flex-direction: column;
-    padding-bottom: 15px;
+    padding: 0 15px 28px;
     text-align: center;
 }
 
@@ -18,7 +18,7 @@
 
 .closeButton {
     position: absolute;
-    top: 16px;
+    top: -4px;
     right: 16px;
 }
 

@@ -46,7 +46,9 @@ export type IconName =
   | 'tap'
   | 'beachFilter'
   | 'send'
-  | 'save';
+  | 'save'
+  | 'arrow-up'
+  | 'arrow-down';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
 

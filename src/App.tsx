@@ -15,7 +15,6 @@ import { Favorites } from './presentation/pages/Favorites';
 import { Notifications } from './presentation/pages/Notifications';
 import { Abonements } from './presentation/pages/Abonements';
 import { Abonement } from './presentation/pages/Abonement';
-import { Module } from './presentation/pages/Module';
 import { Booking } from './presentation/pages/Booking';
 import { NotificationsSettings } from './presentation/pages/NotificationsSettings';
 import { Support } from './presentation/pages/Support';
@@ -34,13 +33,15 @@ function App() {
         <Routes>
           <Route path={RoutesMap.Home} element={<Home />}>
             <Route path={RoutesMap.Init} element={<Init />} />
+
             <Route path={RoutesMap.Auth} element={<Auth />} />
             <Route path={RoutesMap.Verification} element={<Verification />} />
+
             <Route path={RoutesMap.Cities} element={<Cities />} />
+
             <Route path={RoutesMap.Locations} element={<Locations />} />
             <Route path={RoutesMap.Location} element={<Location />} />
             <Route path={RoutesMap.Sector} element={<Sector />} />
-            <Route path={RoutesMap.Module} element={<Module />} />
             <Route path={RoutesMap.Booking} element={<Booking />} />
           </Route>
 

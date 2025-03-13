@@ -3,20 +3,23 @@ import { observer } from 'mobx-react-lite';
 import { Header } from './components/Header';
 import { useParams } from 'react-router-dom';
 import styles from './Sector.module.css';
-import { BookingDrawer } from './components/BookingDrawer';
-import { useEffect } from 'react';
-import { sectorStore } from '@src/application/store/sectorStore';
-import { SwiperSlide } from 'swiper/react';
-import { Swiper } from 'swiper/react';
-import { Swiper as SwiperType } from 'swiper';
-import { useNavigate } from 'react-router-dom';
-import { Routes } from '@src/routes';
+import { BookingDrawer } from "./components/BookingDrawer";
+import { useEffect } from "react";
+import { sectorStore } from "@src/application/store/sectorStore";
+import { SwiperSlide } from "swiper/react";
+import { Swiper } from "swiper/react";
+import { Swiper as SwiperType } from "swiper";
+import { useNavigate } from "react-router-dom";
+import { Routes } from "@src/routes";
+import { Plan } from "./components/Plan";
+import { Module } from '@src/presentation/components/Module';
 
 export const Sector = observer(() => {
   const navigate = useNavigate();
+
   const { id } = useParams<{ id: string }>();
   const { location, sectors } = locationStore;
-  const { sector } = sectorStore;
+  const { sector, selectedModule } = sectorStore;
 
   useEffect(() => {
     sectorStore.init(Number(id));
@@ -42,23 +45,28 @@ export const Sector = observer(() => {
       <Header name={location.name} sector={sector} />
 
       <Swiper
-        spaceBetween={0}
-        slidesPerView={1}
-        touchRatio={1}
-        simulateTouch={true}
-        touchStartPreventDefault={false}
-        initialSlide={sectorIndex}
-        className={styles.swiper}
-        onSlideChange={handleSlideChange}
-      >
-        {sectors.map((s) => (
-          <SwiperSlide key={s.id}>
-            <img src={s.link_plan} alt={s.name} className={styles.plan} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+          spaceBetween={0}
+          slidesPerView={1}
+          // touchRatio={1}
+          // simulateTouch={true}
+          // touchStartPreventDefault={false}
+
+          noSwipingClass="swiper-slide"
+          noSwiping={true}
+
+          initialSlide={sectorIndex}
+          className={styles.swiper}
+          onSlideChange={handleSlideChange}
+        >
+          {sectors.map((s) => (
+            <SwiperSlide key={s.id}>
+              <Plan sectorId={s.id} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
       <BookingDrawer />
+      {selectedModule && <Module onClose={() => sectorStore.setSelectedModule(null)} />}
     </div>
   );
 });

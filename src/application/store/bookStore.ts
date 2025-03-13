@@ -1,5 +1,7 @@
 import { Tab } from '@src/presentation/ui-kit/RoundedTabs';
 import { makeAutoObservable } from 'mobx';
+import { DateValue } from '@src/application/types/date';
+import { formatShortDateWithoutYear } from '../utils/formatDate';
 
 export const modulesSelectOptions = [
   {
@@ -10,7 +12,7 @@ export const modulesSelectOptions = [
     value: 'group',
     label: 'группу модулей',
   },
-] as const;
+];
 
 export const sectorTabs: Tab[] = [
   {
@@ -45,11 +47,30 @@ export type ModulesSelectValue = typeof modulesSelectOptions[number]['value'];
 
 class BookStore {
   modulesSelectValue: ModulesSelectValue = 'one';
-  activeTab: SectorTab = 'bookings';
+  activeTab: SectorTab = 'order';
   activeBookingsTab = 'bookings';
+  date: DateValue = new Date();
+  hours: number = 2;
+  startTime: string = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  get endTime() {
+    const [hours, minutes] = this.startTime.split(':').map(Number);
+    const endDate = new Date(this.date as Date);
+    endDate.setHours(hours + this.hours, minutes);
+
+    return endDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  get formattedTime() {
+    return `с ${this.startTime} до ${this.endTime}`;
+  }
+
+  get formattedDate() {
+    return formatShortDateWithoutYear(this.date as Date);
   }
 
   setModulesSelectValue(value: ModulesSelectValue) {
@@ -62,6 +83,18 @@ class BookStore {
 
   setActiveBookingsTab(value: BookingsTab) {
     this.activeBookingsTab = value;
+  }
+
+  setDate(value: DateValue) {
+    this.date = value;
+  }
+
+  setHours(value: number) {
+    this.hours = value;
+  }
+
+  setStartTime(value: string) {
+    this.startTime = value;
   }
 }
 

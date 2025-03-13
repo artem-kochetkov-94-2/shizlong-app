@@ -1,4 +1,4 @@
 export interface VerificationStrategy {
-    init: () => void;
-    sendCode: (value: string) => void;
+    init: (phoneNumber: string) => Promise<unknown>;
+    sendCode: (phoneNumber: string, value: string) => Promise<unknown>;
 }
