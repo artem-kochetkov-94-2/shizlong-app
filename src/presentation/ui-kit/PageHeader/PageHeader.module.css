@@ -9,9 +9,21 @@
   background-color: #fff;
 }
 
-.pageHeader span {
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.header span {
   font-family: 'Roboto';
   font-size: 18px;
   font-weight: 500;
   color: #292c31;
+}
+
+.subheader {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  color: #a0a7b1;
 }
