@@ -90,6 +90,8 @@
 
 .image {
     display: block;
+    max-width: 140px;
+    max-height: 105px;
 }
 
 /* Content */
@@ -234,8 +236,10 @@
     align-items: center;
     gap: 10px;
 
-    svg {
-        color: #FFBC02;
+    img {
+        max-width: 18px;
+        max-height: 18px;
+        display: block;
     }
 }
 

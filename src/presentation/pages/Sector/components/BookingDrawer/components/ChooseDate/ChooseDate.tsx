@@ -11,8 +11,6 @@ export const ChooseDate = observer(() => {
     const { date } = bookStore;
     const [isOpen, setIsOpen] = useState(false);
 
-    const onClose = () => setIsOpen(false);
-
     const onChange = (value: DateValue) => {
         bookStore.setDate(value);
         setIsOpen(false);
@@ -30,7 +28,7 @@ export const ChooseDate = observer(() => {
             {isOpen && (
                 <Calendar
                     isOpen={isOpen}
-                    onClose={onClose}
+                    onClose={() => setIsOpen(false)}
                     initialValue={date}
                     onChange={onChange}
                 />

@@ -1,6 +1,34 @@
 import { makeAutoObservable } from 'mobx';
 import markerIcon from '@presentation/components/Map/assets/marker.png';
+import markerUserIcon from '@presentation/components/Map/assets/markerUser.png';
 import { RawLocation, RawSector } from '@src/infrastructure/Locations/types';
+import { GeoStore, geoStore } from './geoStore';
+import mapTooltip from '@src/assets/mapTooltip.svg';
+import mapTooltipFavorite from '@src/assets/mapTooltipFavorite.svg';
+
+const labelParams = {
+  color: '#ffffff',
+  fontSize: 16,
+  image: {
+    url: mapTooltip,
+    padding: [5, 10, 5, 10],
+    stretchX: [
+      [10, 20],
+      [20, 30],
+    ],
+    stretchY: [[0, 22]],
+  }
+};
+
+const labelFavoriteParams = {
+  ...labelParams,
+  color: '#161D25',
+  image: {
+    ...labelParams.image,
+    url: mapTooltipFavorite,
+    padding: [7, 15, 7, 15],
+  }
+}
 
 class MapStore {
   map: mapgl.Map | null = null;
@@ -8,14 +36,21 @@ class MapStore {
   center: [number, number] | null = null;
   markerClickCb: ((location: RawLocation) => void) | null = null;
   sectorClickCb: ((sector: RawSector) => void) | null = null;
+  private geoStore: GeoStore;
 
   constructor() {
     makeAutoObservable(this);
+    this.geoStore = geoStore;
   }
 
   setMapInstance(map: any, mapglAPI: any) {
     this.map = map;
     this.mapglAPI = mapglAPI;
+  }
+
+  init() {
+    this.setCenter(geoStore.location.longitude, geoStore.location.latitude);
+    this.addUserMarker();
   }
 
   destroy() {
@@ -43,6 +78,19 @@ class MapStore {
     this.map.setRotation(rotation);
   }
 
+  addUserMarker() {
+    if (!this.map) return;
+
+    new this.mapglAPI.Marker(this.map, {
+      coordinates: [this.geoStore.location.longitude, this.geoStore.location.latitude],
+      icon: markerUserIcon,
+      label: {
+        ...labelParams,
+        text: 'Я здесь',
+      },
+    });
+  }
+
   setMarkers(locations: RawLocation[]) {
     if (!this.map) return;
 
@@ -51,12 +99,9 @@ class MapStore {
         coordinates: location.coordinates,
         icon: markerIcon,
         label: {
+          ...labelParams,
           text: location.name,
-          color: '#ffffff',
-          fontSize: 16,
-          haloColor: '#000000',
-          haloRadius: 10,
-        },
+        }
       });
 
       marker.on('click', () => {

@@ -48,7 +48,6 @@ export const Locations = observer(() => {
                     </div>
                 </Sheet.Content>
             </Sheet.Container>
-            <Sheet.Backdrop />
         </Sheet>
     );
 });

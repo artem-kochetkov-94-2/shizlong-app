@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-class GeoStore {
+export class GeoStore {
   location: { latitude: number; longitude: number } = { latitude: 0, longitude: 0 };
   error: string | null = null;
   permissionStatus: PermissionState | null = null;

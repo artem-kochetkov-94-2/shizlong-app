@@ -11,6 +11,7 @@ class VerificationStore {
   private _strategy: VerificationStrategy | null = null;
   private _isFetchingCode: boolean = false;
   private _isSendingCode: boolean = false;
+  private _accessToken: string | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -36,6 +37,10 @@ class VerificationStore {
 
   get isSendingCode() {
     return this._isSendingCode;
+  }
+
+  get accessToken() {
+    return this._accessToken;
   }
 
   setStrategy(strategy: VerificationStrategy) {
@@ -69,10 +74,12 @@ class VerificationStore {
     }
   }
 
-  async sendCode(value: string) {
+  async sendCode(value: string, successCb: VoidFunction) {
     try {
       this._isSendingCode = true;
-      await this.strategy?.sendCode(this.phoneNumber, value);
+      const result = await this.strategy?.sendCode(this.phoneNumber, value);
+      this._accessToken = result?.access_token || null;
+      successCb();
     } catch (error) {
       this._verificationError = 'Код неверный';
     } finally {

@@ -6,8 +6,10 @@ import { Card } from "@src/presentation/ui-kit/Card";
 import cn from "classnames";
 import { Icon } from "@src/presentation/ui-kit/Icon";
 import { Time as TimeComponent } from "@src/presentation/components/Time";
+import { bookStore } from "@src/application/store/bookStore";
+import { observer } from "mobx-react-lite";
 
-export const Time = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+export const Time = observer(({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
     return (
         <DrawerV2 open={isOpen} onChange={onClose}>
             <div className={styles.calendar}>
@@ -28,8 +30,14 @@ export const Time = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void
                 <div className={styles.body}>
                     <Card>
                         <div className={styles.time}>
-                            <TimeComponent />
-                            <TimeComponent />
+                            <TimeComponent
+                                value={bookStore.startTime}
+                                onChange={(value) => bookStore.setStartTime(value)}
+                            />
+                            {/* <TimeComponent
+                                value={bookStore.endTime}
+                                onChange={(value) => bookStore.setEndTime(value)}
+                            /> */}
                         </div>
                         <div className={styles.reservations}>
                             <div className={styles.reservationsTitle}>
@@ -66,4 +74,4 @@ export const Time = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void
             </div>
         </DrawerV2>
     );
-}
+});

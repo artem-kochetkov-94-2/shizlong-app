@@ -13,7 +13,6 @@ export const ChooseStartTime = observer(() => {
             styles.modulesControlsItemActive
         )}>
             <Time value={startTime} onChange={(value) => bookStore.setStartTime(value)} />
-            {/* с 10:40 */}
         </div>
     );
 });

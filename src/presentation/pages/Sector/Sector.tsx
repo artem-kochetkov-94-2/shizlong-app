@@ -13,13 +13,15 @@ import { useNavigate } from "react-router-dom";
 import { Routes } from "@src/routes";
 import { Plan } from "./components/Plan";
 import { Module } from '@src/presentation/components/Module';
+import { bookStore } from '@src/application/store/bookStore';
 
 export const Sector = observer(() => {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
   const { location, sectors } = locationStore;
-  const { sector, selectedModule } = sectorStore;
+  const { sector } = sectorStore;
+  const { selectedModule } = bookStore;
 
   useEffect(() => {
     sectorStore.init(Number(id));
@@ -66,7 +68,7 @@ export const Sector = observer(() => {
         </Swiper>
 
       <BookingDrawer />
-      {selectedModule && <Module onClose={() => sectorStore.setSelectedModule(null)} />}
+      {selectedModule && <Module onClose={() => bookStore.setSelectedModule(null)} />}
     </div>
   );
 });

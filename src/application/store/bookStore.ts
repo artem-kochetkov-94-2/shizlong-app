@@ -2,6 +2,7 @@ import { Tab } from '@src/presentation/ui-kit/RoundedTabs';
 import { makeAutoObservable } from 'mobx';
 import { DateValue } from '@src/application/types/date';
 import { formatShortDateWithoutYear } from '../utils/formatDate';
+import { RawModule } from '@src/infrastructure/Locations/types';
 
 export const modulesSelectOptions = [
   {
@@ -52,6 +53,7 @@ class BookStore {
   date: DateValue = new Date();
   hours: number = 2;
   startTime: string = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+  selectedModule: RawModule | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -95,6 +97,10 @@ class BookStore {
 
   setStartTime(value: string) {
     this.startTime = value;
+  }
+
+  setSelectedModule(module: RawModule | null) {
+    this.selectedModule = module;
   }
 }
 

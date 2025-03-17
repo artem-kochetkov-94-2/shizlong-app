@@ -8,7 +8,6 @@ import { Icon } from "@src/presentation/ui-kit/Icon";
 import { Button } from "@src/presentation/ui-kit/Button";
 import { AbonementCard } from "@src/presentation/components/AbonementCard";
 import { Sheet } from "react-modal-sheet";
-import { sectorStore } from '@src/application/store/sectorStore';
 import { observer } from 'mobx-react-lite';
 import { locationStore } from '@src/application/store/locationStore';
 import { SERVER_URL } from '@src/const';
@@ -24,7 +23,7 @@ const labels: Record<ModuleStatus, string> = {
 }
 
 export const Module = observer(({ onClose }: { onClose?: () => void }) => {
-    const { selectedModule } = sectorStore;
+    const { selectedModule } = bookStore;
     const { beachAccessories, location } = locationStore;
     const { formattedTime, formattedDate } = bookStore;
 
@@ -35,14 +34,16 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
     const isMyBooking = false;
 
     const handleShowSchema = () => {
-        navigate(Routes.Sector.replace(':id', selectedModule?.sector_id.toString() || ''));
+        navigate(Routes.Sector.replace(':id', selectedModule?.module.sector_id.toString() || ''));
         onClose?.();
     }
+
+    console.log(JSON.parse(JSON.stringify(selectedModule.module)))
 
     return (
         <Sheet
             isOpen={true}
-            onClose={() => sectorStore.setSelectedModule(null)}
+            onClose={() => bookStore.setSelectedModule(null)}
             detent="content-height"
         >
             <Sheet.Container>
@@ -50,13 +51,13 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                 <Sheet.Content>
                     <div className={styles.header}>
                         <div className={styles.headline}>
-                            <div className={styles.headlineTitle}>{selectedModule?.name}</div>
-                            <Tag text={`${selectedModule?.price_per_hour} ₽ в час`} size="medium" />
+                            <div className={styles.headlineTitle}>{selectedModule?.module.name}</div>
+                            <Tag text={`${selectedModule?.module.price_per_hour} ₽ в час`} size="medium" />
                         </div>
 
                         <div className={styles.statusRow}>
-                            <div className={cn(styles.status, styles[isMyBooking ? 'my' : selectedModule?.status])}>
-                                <span>{isMyBooking ? 'моя бронь' : labels[selectedModule?.status]}</span>
+                            <div className={cn(styles.status, styles[isMyBooking ? 'my' : selectedModule?.module.status])}>
+                                <span>{isMyBooking ? 'моя бронь' : labels[selectedModule?.module.status]}</span>
                             </div>
                             <div className={styles.time}>{formattedTime}, {formattedDate}</div>
                         </div>
@@ -70,8 +71,18 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                             </div>
                         )}
 
+                            {selectedModule.module.imgages?.map((i) => (
+                               <img src={`${SERVER_URL}/${i}`} className={styles.image} />
+                            ))}
+
                         <Swiper spaceBetween={8} slidesPerView={'auto'}>
-                            <SwiperSlide>
+                            {selectedModule.module.imgages?.map((i) => (
+                                <SwiperSlide key={i}>
+                                    <img src={`${SERVER_URL}/${i}`} className={styles.image} />
+                                </SwiperSlide>
+                            ))}
+                            
+                            {/* <SwiperSlide>
                                 <img src="https://placehold.co/140x105" className={styles.image} />
                             </SwiperSlide>
                             <SwiperSlide>
@@ -79,10 +90,7 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                             </SwiperSlide>
                             <SwiperSlide>
                                 <img src="https://placehold.co/140x105" className={styles.image} />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://placehold.co/140x105" className={styles.image} />
-                            </SwiperSlide>
+                            </SwiperSlide> */}
                         </Swiper>
                     </div>
 
@@ -164,13 +172,15 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
 
                             <Card>
                                 <div className={styles.description}>
-                                    <img className={styles.descriptionImg} src={`${SERVER_URL}${selectedModule?.placed_icon.link_icon}`} />
-                                    {/* <img className={styles.descriptionImg} src="https://placehold.co/44x44" /> */}
-                                    <div className={styles.descriptionText}>{selectedModule?.name}</div>
+                                    <img className={styles.descriptionImg} src={`${SERVER_URL}${selectedModule?.module.placed_icon.link_icon}`} />
+                                    <div className={styles.descriptionText}>{selectedModule?.module.name}</div>
                                 </div>
                             </Card>
 
-                            <About title="Описание" description="Подарите себе комфортный отдых на свежем воздухе с нашим стильным и практичным шезлонгом. Регулируемая спинка с несколькими положениями наклона, мягкий матрас, удобный подголовник." />
+                            <About
+                                title="Описание"
+                                description={selectedModule.module.description || ""}
+                            />
 
                             <Card>
                                 <div className={styles.accessories}>
@@ -178,7 +188,7 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                                     <div className={styles.accessoriesList}>
                                         {beachAccessories.map((accessory) => (
                                             <div className={styles.accessoriesItem}>
-                                                <Icon name="time" size="extra-small" />
+                                                <img src={accessory.link_icon} alt={accessory.name} />
                                                 <div className={styles.accessoriesItemTitle}>
                                                     {accessory.name}
                                                 </div>

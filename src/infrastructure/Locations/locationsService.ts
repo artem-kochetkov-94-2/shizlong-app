@@ -1,4 +1,4 @@
-import { API_URL } from "@src/const";
+import { API_URL, API_URL_V2 } from "@src/const";
 import {
     RawAdditionalService,
     RawBeachAccessory,
@@ -17,11 +17,11 @@ const routes = {
     additionalServices: '/get-additional-services',
     getBeachAccessories: '/get-beach-accessories',
     schemes: '/get-schemes',
-    modules: '/get-modules',
 };
 
 class LocationsService {
     private readonly apiUrl = API_URL;
+    private readonly apiUrlV2 = API_URL_V2;
 
     async getLocations() {
         const response = await fetch(`${this.apiUrl}${routes.locations}`, {
@@ -161,23 +161,16 @@ class LocationsService {
     }
 
     async getModules(locationId: number) {
-        const response = await fetch(`${this.apiUrl}${routes.modules}`, {
-            method: 'POST',
-            body: JSON.stringify({
-                location_id: locationId,
-            }),
+        const response = await fetch(`${this.apiUrlV2}/location/${locationId}/modules`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         });
 
-        const result: ApiResponse<Record<"module", RawModule>[]> = await response.json();
+        const result: RawModule[] = await response.json();
 
-        if (!result.success) {
-            throw new Error('Fetch error');
-        };
-
-        return result.data.map((item) => item.module);
+        return result;
     }
 }
 

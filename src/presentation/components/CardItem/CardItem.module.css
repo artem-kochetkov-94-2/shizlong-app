@@ -48,6 +48,10 @@
     border-radius: 6px;
     overflow: hidden;
     flex-shrink: 0;
+
+    img {
+        max-width: 120px;
+    }
 }
 
 .range {
