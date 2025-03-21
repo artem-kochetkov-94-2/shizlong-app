@@ -2,6 +2,7 @@ import styles from './ChooseTime.module.css';
 import { useEffect, useState } from 'react';
 import { bookStore } from '@src/application/store/bookStore';
 import { observer } from 'mobx-react-lite';
+import { declensionOfHours } from '@src/application/utils/formatDate';
 
 export const ChooseTime = observer(() => {
     const { hours } = bookStore;
@@ -33,7 +34,7 @@ export const ChooseTime = observer(() => {
         <div className={styles.modulesControlsItem}>
             {!isOpen && (
                 <div className={styles.modulesControlsItemLabel} onClick={handleClick}>
-                    на {hours} часа
+                    на {hours} {declensionOfHours(hours)}
                 </div>
             )}
 
@@ -42,6 +43,7 @@ export const ChooseTime = observer(() => {
                     type="number"
                     value={hours.toString()}
                     onChange={(e) => bookStore.setHours(Number(e.target.value))}
+                    // onChange={(e) => bookStore.setHours(Number(e.target.value))}
                     className={styles.modulesControlsItemInput}
                     onKeyDown={enterHandler}
                 />

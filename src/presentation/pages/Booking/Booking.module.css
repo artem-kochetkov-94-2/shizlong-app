@@ -169,12 +169,19 @@
     flex-direction: column;
 }
 
+.accessoryWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid #E3E5EA;
+}
+
 .accessory {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 0;
-    border-bottom: 1px solid #E3E5EA;
+    width: 100%;
 
     &:last-child {
         border-bottom: none;
@@ -188,6 +195,7 @@
 }
 
 .accessoryName {
+    padding-right: 20px;
     font-family: Roboto;
     font-weight: 400;
     font-size: 14px;
@@ -196,12 +204,17 @@
 }
 
 .accessoryPrice {
+    flex-shrink: 0;
     margin-left: auto;
     font-family: Roboto;
     font-weight: 500;
     font-size: 14px;
     line-height: 16.8px;    
     color: #292C31;
+}
+
+.accessoryToggle {
+    flex-shrink: 0;
 }
 
 /* Promocode */

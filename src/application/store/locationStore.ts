@@ -31,11 +31,11 @@ class LocationStore {
   isSectorsLoading = false;
   isAdditionalServicesLoading = false;
   isBeachAccessoriesLoading = false;
-  isModulesLoading = false;
   mapStore = mapStore;
   sectors: RawSector[] = [];
   additionalServices: RawAdditionalService[] = [];
   beachAccessories: RawBeachAccessory[] = [];
+  isModulesLoading = false;
   modules: RawModule[] = [];
 
   constructor() {
@@ -60,6 +60,14 @@ class LocationStore {
       name: service.name,
       icon: service.link_icon,
     }));
+  }
+
+  get minModulePrice() {
+    const sortedModules = this.modules
+      .slice()
+      .filter(m => m.module.price_per_hour !== null)
+      .sort((a, b) => a.module.price_per_hour! - b.module.price_per_hour!);
+    return sortedModules[0]?.module.price_per_hour || 0;
   }
 
   setLocation(locationId: number) {
@@ -155,10 +163,10 @@ class LocationStore {
     }
   }
 
-  async fetchModules(id: number) {
+  async fetchModules(id: number, from_date?: string, to_date?: string) {
     try {
       this.isModulesLoading = true;
-      const modules = await locationsService.getModules(id);
+      const modules = await locationsService.getModules(id, from_date, to_date);
       console.log('modules', modules);
       this.modules = modules;
     } catch (error) {
@@ -166,88 +174,6 @@ class LocationStore {
     } finally {
       this.isModulesLoading = false;
     }
-  }
-
-  get services() {
-    return [
-      {
-        name: 'Одиночный шезлонг пластиковый',
-        icon: 'https://placehold.co/24x24',
-        extraTitle: '600 ₽',
-        extraDescription: 'за 1 час',
-      },
-      {
-        name: 'Одиночный шезлонг деревянный',
-        icon: 'https://placehold.co/24x24',
-        extraTitle: '900 ₽',
-        extraDescription: 'за 1 час',
-      },
-      {
-        name: '2 шезлонга с зонтиком',
-        icon: 'https://placehold.co/24x24',
-        extraTitle: '1 800 ₽',
-        extraDescription: 'за 3 часа',
-      },
-      {
-        name: 'Качеля',
-        icon: 'https://placehold.co/24x24',
-        extraTitle: '1 200 ₽',
-        extraDescription: 'за 1 час',
-      },
-      {
-        name: 'Ракушка',
-        icon: 'https://placehold.co/24x24',
-        extraTitle: '9 800 ₽',
-        extraDescription: 'за 3 часа',
-      },
-      {
-        name: 'Одиночный шезлонг пластиковый 2',
-        icon: 'https://placehold.co/24x24',
-        extraTitle: '600 ₽',
-        extraDescription: 'за 1 час',
-      },
-      {
-        name: 'Одиночный шезлонг деревянный 2',
-        icon: 'https://placehold.co/24x24',
-        extraTitle: '900 ₽',
-        extraDescription: 'за 1 час',
-      },
-      {
-        name: '2 шезлонга с зонтиком 2',
-        icon: 'https://placehold.co/24x24',
-        extraTitle: '1 800 ₽',
-        extraDescription: 'за 3 часа',
-      },
-      {
-        name: 'Качеля 2',
-        icon: 'https://placehold.co/24x24',
-        extraTitle: '1 200 ₽',
-        extraDescription: 'за 1 час',
-      },
-      {
-        name: 'Ракушка 2',
-        icon: 'https://placehold.co/24x24',
-        extraTitle: '9 800 ₽',
-        extraDescription: 'за 3 часа',
-      },
-    ];
-  }
-
-  get peculiarities() {
-    return [
-      {
-        name: 'Доступно для инвалидов',
-        icon: 'https://placehold.co/24x24',
-      },
-      {
-        name: 'Бесплатный wi-fi',
-        icon: 'https://placehold.co/24x24',
-      },
-      {
-        name: 'Можно с животными',
-        icon: 'https://placehold.co/24x24',
-      },
-    ];
   }
 }
 

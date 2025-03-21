@@ -1,4 +1,3 @@
-import { DrawerV2 } from "@src/presentation/ui-kit/DrawerV2"
 import { IconButton } from "@src/presentation/ui-kit/IconButton"
 import styles from "./Time.module.css";
 import { Button } from "@src/presentation/ui-kit/Button";
@@ -8,70 +7,120 @@ import { Icon } from "@src/presentation/ui-kit/Icon";
 import { Time as TimeComponent } from "@src/presentation/components/Time";
 import { bookStore } from "@src/application/store/bookStore";
 import { observer } from "mobx-react-lite";
+import { Sheet } from 'react-modal-sheet';
+import {
+    formatFullDate,
+    formatTimeRange,
+    getTimeRangeDurationInHoursAndMinutes,
+    calculateTimeDifferenceInHours,
+} from "@src/application/utils/formatDate";
+import { useState } from "react";
 
-export const Time = observer(({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+interface TimeProps {
+    isOpen: boolean,
+    onClose: () => void,
+    startTime: string,
+    endTime: string
+}
+
+export const Time = observer(({
+    isOpen,
+    onClose,
+    startTime,
+    endTime,
+}: TimeProps) => {
+    const { selectedModule, formattedDate, date } = bookStore;
+    const [start, setStart] = useState(startTime);
+    const [end, setEnd] = useState(endTime);
+
+    if (!selectedModule) return null;
+
+    const handleSubmit = () => {
+        bookStore.setStartTime(start);
+        bookStore.setHours(calculateTimeDifferenceInHours(start, end));
+        onClose();
+    }
+
     return (
-        <DrawerV2 open={isOpen} onChange={onClose}>
-            <div className={styles.calendar}>
-                <div className={styles.header}>
-                    <div className={styles.headerTitle}>Выберите день</div>
-                    <div className={styles.headerDate}>24 августа 2025</div>
+        <Sheet
+            isOpen={isOpen}
+            onClose={() => onClose()}
+            detent="content-height"
+        >
+            <Sheet.Container>
+                <Sheet.Header />
+                <Sheet.Content>
+                    <div className={styles.calendar}>
+                        <div className={styles.header}>
+                            <div className={styles.headerTitle}>Выберите время отдыха</div>
+                            <div className={styles.headerDate}>{formatFullDate(date as Date)}</div>
 
-                    <IconButton
-                        iconName="cross"
-                        size="large"
-                        shape="rounded"
-                        className={styles.headerClose}
-                        color="gray"
-                        withShadow={false}
-                    />
-                </div>
-
-                <div className={styles.body}>
-                    <Card>
-                        <div className={styles.time}>
-                            <TimeComponent
-                                value={bookStore.startTime}
-                                onChange={(value) => bookStore.setStartTime(value)}
+                            <IconButton
+                                iconName="cross"
+                                size="large"
+                                shape="rounded"
+                                className={styles.headerClose}
+                                color="gray"
+                                withShadow={false}
+                                onClick={onClose}
                             />
-                            {/* <TimeComponent
-                                value={bookStore.endTime}
-                                onChange={(value) => bookStore.setEndTime(value)}
-                            /> */}
                         </div>
-                        <div className={styles.reservations}>
-                            <div className={styles.reservationsTitle}>
-                                <Icon name="time" size="extra-small"/>
-                                <span>Доступность модуля</span>
-                                <span>24 августа</span>
-                            </div>
-                            <div className={cn(styles.reservation, styles.free)}>
-                                <span>Свободен</span>
-                                <span>09:00 - 13:00</span>
-                                <span>4 ч.</span>
-                            </div>
-                            <div className={cn(styles.reservation, styles.free)}>
-                                <span>Свободен</span>
-                                <span>18:00 - 21:00</span>
-                                <span>3 ч.</span>
-                            </div>
-                            <div className={cn(styles.reservation, styles.booked)}>
-                                <span>Занят</span>
-                                <span>13:00 - 18:00</span>
-                                <span>5 ч.</span>
-                            </div>
-                        </div>
-                        <div className={styles.reservationsFooter}>
-                            По местному времени
-                        </div>
-                    </Card>
-                </div>
 
-                <div className={styles.footer}>
-                    <Button size="medium" variant="yellow">Выбрать</Button>
-                    <Button size="medium" variant="tertiary" onClick={onClose}>Отмена</Button>
-                </div>
-            </div>
-        </DrawerV2>
+                        <div className={styles.body}>
+                            <Card>
+                                <div className={styles.time}>
+                                    <TimeComponent
+                                        value={start}
+                                        onChange={(value) => setStart(value)}
+                                    />
+                                    <TimeComponent
+                                        value={end}
+                                        onChange={(value) => setEnd(value)}
+                                    />
+                                </div>
+                                <div className={styles.reservations}>
+                                    <div className={styles.reservationsTitle}>
+                                        <Icon name="time" size="extra-small"/>
+                                        <span>Доступность модуля</span>
+                                        <span>{formattedDate}</span>
+                                    </div>
+
+                                    {selectedModule.slots.map((s) => {
+                                        const duration = getTimeRangeDurationInHoursAndMinutes(s.start_hour, s.end_hour);
+
+                                        return (
+                                            <div
+                                                className={
+                                                    cn(
+                                                        styles.reservation,
+                                                        {
+                                                            [styles.free]: !s.is_busy,
+                                                            [styles.booked]: s.is_busy,
+                                                        }
+                                                    )
+                                                }
+                                            >
+                                                <span>{s.is_busy ? 'Занят' : 'Свободен'}</span>
+                                                <span>{formatTimeRange(s.start_hour, s.end_hour)}</span>
+                                                <span>{duration.hours} ч. {duration.minutes ? `${duration.minutes} мин.` : ''}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                <div className={styles.reservationsFooter}>
+                                    По местному времени
+                                </div>
+                            </Card>
+                        </div>
+
+                        <div className={styles.footer}>
+                            <Button size="medium" variant="yellow" onClick={handleSubmit}>Выбрать</Button>
+                            <Button size="medium" variant="tertiary" onClick={onClose}>Отмена</Button>
+                        </div>
+                    </div>
+                </Sheet.Content>
+            </Sheet.Container>
+            <Sheet.Backdrop />
+        </Sheet>
     );
 });

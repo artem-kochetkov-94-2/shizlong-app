@@ -1,0 +1,36 @@
+.counter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    background-color: #F3F4F6;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.counterButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 33px;
+    height: 100%;
+    padding: 0;
+    padding-bottom: 6px;
+    font-size: 20px;
+    vertical-align: middle;
+    border: none;
+    background: none;
+    color: #292C31;
+    cursor: pointer;
+    outline: none;
+}
+
+.counterValue {
+    min-width: 25px;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 120%;
+    text-align: center;
+    color: #292C31;
+}

@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import markerIcon from '@presentation/components/Map/assets/marker.png';
+import markerActiveIcon from '@presentation/components/Map/assets/markerActive.png';
 import markerUserIcon from '@presentation/components/Map/assets/markerUser.png';
 import { RawLocation, RawSector } from '@src/infrastructure/Locations/types';
 import { GeoStore, geoStore } from './geoStore';
@@ -36,6 +37,7 @@ class MapStore {
   center: [number, number] | null = null;
   markerClickCb: ((location: RawLocation) => void) | null = null;
   sectorClickCb: ((sector: RawSector) => void) | null = null;
+  locationMarkers: Map<number, unknown> = new Map();
   private geoStore: GeoStore;
 
   constructor() {
@@ -91,22 +93,38 @@ class MapStore {
     });
   }
 
+  setLocationMarker(location: RawLocation) {
+    const marker = new this.mapglAPI.Marker(this.map, {
+      coordinates: location.coordinates,
+      icon: markerIcon,
+      label: {
+        ...labelParams,
+        text: location.name,
+      }
+    });
+
+    marker.on('click', () => {
+      this.markerClickCb?.(location);
+    });
+
+    return marker;
+  }
+
   setMarkers(locations: RawLocation[]) {
     if (!this.map) return;
 
+    const markers = new Map();
+    
     locations.forEach((location) => {
-      const marker = new this.mapglAPI.Marker(this.map, {
-        coordinates: location.coordinates,
-        icon: markerIcon,
-        label: {
-          ...labelParams,
-          text: location.name,
-        }
-      });
+      markers.set(location.id, this.setLocationMarker(location));
+    });
 
-      marker.on('click', () => {
-        this.markerClickCb?.(location);
-      });
+    this.locationMarkers = markers;
+  }
+
+  toggleSelectionLocationMarker(id: number, selected: boolean) {
+    this.locationMarkers.get(id)?.setIcon({
+      icon: selected ? markerActiveIcon : markerIcon
     });
   }
 

@@ -3,8 +3,10 @@ import { makeAutoObservable } from 'mobx';
 import { VerificationController, verificationController } from '@src/domain/common/verification/verificationController';
 import { CallStrategy, callStrategy } from '@src/domain/common/verification/callStrategy';
 import { smsStrategy } from '@src/domain/common/verification/smsStrategy';
+import { cacheService } from '@src/application/services/cacheService/cacheService';
+import { KEY } from '@src/application/services/cacheService/types';
 
-class VerificationStore {
+export class VerificationStore {
   private verificationController: VerificationController;
   private _phoneNumber: string = '';
   private _verificationError: string | null = null;
@@ -17,6 +19,8 @@ class VerificationStore {
     makeAutoObservable(this);
     this.verificationController = verificationController;
     this._strategy = this.verificationController.getStrategy();
+
+    this._accessToken = cacheService.get(KEY.Token, false) || null;
   }
 
   get phoneNumber() {
@@ -79,6 +83,7 @@ class VerificationStore {
       this._isSendingCode = true;
       const result = await this.strategy?.sendCode(this.phoneNumber, value);
       this._accessToken = result?.access_token || null;
+      cacheService.set(KEY.Token, this._accessToken || '');
       successCb();
     } catch (error) {
       this._verificationError = 'Код неверный';

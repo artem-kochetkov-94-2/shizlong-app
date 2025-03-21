@@ -136,6 +136,7 @@ second, second and am/pm */
     }
 
     svg {
+        margin-bottom: 3px;
         color: #FFBC02;
     }
 }

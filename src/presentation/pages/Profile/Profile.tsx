@@ -12,7 +12,7 @@ import { CurrentBookings } from './components/CurrentBookings/CurrentBookings';
 import { observer } from 'mobx-react-lite';
 import { Rating } from '@src/presentation/components/Rating';
 import { useNavigate } from 'react-router-dom';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { DropdownMenu } from './components/DropdownMenu/DropdownMenu';
 import { Routes } from '@src/routes';
 
@@ -46,6 +46,10 @@ export const Profile = observer(() => {
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
+
+  useEffect(() => {
+    bookingsStore.getMyBookings();
+  }, []);
 
   return (
     <div className={styles.profile}>

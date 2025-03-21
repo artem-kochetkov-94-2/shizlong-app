@@ -6,7 +6,7 @@ import { About } from "@src/presentation/components/About";
 import { Card } from "@src/presentation/ui-kit/Card";
 import { Icon } from "@src/presentation/ui-kit/Icon";
 import { Button } from "@src/presentation/ui-kit/Button";
-import { AbonementCard } from "@src/presentation/components/AbonementCard";
+// import { AbonementCard } from "@src/presentation/components/AbonementCard";
 import { Sheet } from "react-modal-sheet";
 import { observer } from 'mobx-react-lite';
 import { locationStore } from '@src/application/store/locationStore';
@@ -15,6 +15,7 @@ import { Routes } from '@src/routes';
 import { useNavigate } from 'react-router-dom';
 import { ModuleStatus } from '@src/infrastructure/Locations/types';
 import { bookStore } from '@src/application/store/bookStore';
+import { formatTimeRange, getTimeRangeDurationInHoursAndMinutes } from '@src/application/utils/formatDate';
 
 const labels: Record<ModuleStatus, string> = {
     available: 'свободен',
@@ -31,14 +32,18 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
 
     if (!selectedModule) return null;
 
+    // @todo: добавить проверку на мою бронь
     const isMyBooking = false;
 
     const handleShowSchema = () => {
         navigate(Routes.Sector.replace(':id', selectedModule?.module.sector_id.toString() || ''));
         onClose?.();
-    }
+    };
 
-    console.log(JSON.parse(JSON.stringify(selectedModule.module)))
+    const goToLocation = () => {
+        navigate(Routes.Location.replace(':id', location?.id.toString() || ''));
+        onClose?.();
+    };
 
     return (
         <Sheet
@@ -52,7 +57,7 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                     <div className={styles.header}>
                         <div className={styles.headline}>
                             <div className={styles.headlineTitle}>{selectedModule?.module.name}</div>
-                            <Tag text={`${selectedModule?.module.price_per_hour} ₽ в час`} size="medium" />
+                            <Tag text={`${selectedModule?.module.price_per_hour || 0} ₽ в час`} size="medium" />
                         </div>
 
                         <div className={styles.statusRow}>
@@ -71,26 +76,12 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                             </div>
                         )}
 
-                            {selectedModule.module.imgages?.map((i) => (
-                               <img src={`${SERVER_URL}/${i}`} className={styles.image} />
-                            ))}
-
                         <Swiper spaceBetween={8} slidesPerView={'auto'}>
-                            {selectedModule.module.imgages?.map((i) => (
-                                <SwiperSlide key={i}>
+                            {selectedModule.module.images?.map((i) => (
+                                <SwiperSlide key={i} className={styles.swiperSlide}>
                                     <img src={`${SERVER_URL}/${i}`} className={styles.image} />
                                 </SwiperSlide>
                             ))}
-                            
-                            {/* <SwiperSlide>
-                                <img src="https://placehold.co/140x105" className={styles.image} />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://placehold.co/140x105" className={styles.image} />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://placehold.co/140x105" className={styles.image} />
-                            </SwiperSlide> */}
                         </Swiper>
                     </div>
 
@@ -103,27 +94,33 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                                             <Icon size="extra-small" name="time" />
                                             <div>
                                                 <span>Доступность модуля</span>
-                                                <span>14 июля</span>
+                                                <span>{formattedDate}</span>
                                             </div>
                                         </div>
 
                                         <div className={styles.infoItemContent}>
                                             <div className={styles.reservations}>
-                                                <div className={cn(styles.reservation, styles.free)}>
-                                                    <span>Свободен</span>
-                                                    <span>09:00 - 13:00</span>
-                                                    <span>4 ч.</span>
-                                                </div>
-                                                <div className={cn(styles.reservation, styles.free)}>
-                                                    <span>Свободен</span>
-                                                    <span>18:00 - 21:00</span>
-                                                    <span>3 ч.</span>
-                                                </div>
-                                                <div className={cn(styles.reservation, styles.booked)}>
-                                                    <span>Занят</span>
-                                                    <span>13:00 - 18:00</span>
-                                                    <span>5 ч.</span>
-                                                </div>
+                                                {selectedModule.slots.map((s) => {
+                                                    const duration = getTimeRangeDurationInHoursAndMinutes(s.start_hour, s.end_hour);
+
+                                                    return (
+                                                        <div
+                                                            className={
+                                                                cn(
+                                                                    styles.reservation,
+                                                                    {
+                                                                        [styles.free]: !s.is_busy,
+                                                                        [styles.booked]: s.is_busy,
+                                                                    }
+                                                                )
+                                                            }
+                                                        >
+                                                            <span>{s.is_busy ? 'Занят' : 'Свободен'}</span>
+                                                            <span>{formatTimeRange(s.start_hour, s.end_hour)}</span>
+                                                            <span>{duration.hours} ч. {duration.minutes ? `${duration.minutes} мин.` : ''}</span>
+                                                        </div>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                     </li>
@@ -140,6 +137,7 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                                                 fullWidth={false}
                                                 ghost={true}
                                                 fullRadius={true}
+                                                onClick={goToLocation}
                                         >
                                                 {location?.name}
                                             </Button>
@@ -155,7 +153,7 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                                             <div className={styles.infoItemText}>{location?.address}</div>
                                         </div>
                                     </li>
-                                    <li className={styles.infoItem}>
+                                    {/* <li className={styles.infoItem}>
                                         <div className={styles.infoItemHeader}>
                                             <Icon size="extra-small" name="like" />
                                             <div>Комфортное размещение</div>
@@ -166,7 +164,7 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                                                 Одного человека
                                             </div>
                                         </div>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </Card>
 
@@ -211,14 +209,14 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                                 </div>
                             </Card>
 
-                            <div className={styles.abonements}>
+                            {/* <div className={styles.abonements}>
                                 <div className={styles.abonementsTitle}>Доступен по абонементам <span>2</span></div>
-                                {/* <div className={styles.abonementsTitle}>Можно заказать модуль бесплатно по вашему абонементу</div> */}
+                                <div className={styles.abonementsTitle}>Можно заказать модуль бесплатно по вашему абонементу</div>
 
                                 {[1, 2].map((_, index) => (
                                     <AbonementCard key={index} />
                                 ))}
-                            </div>
+                            </div> */}
                         </div>
                     </Sheet.Scroller>
 
@@ -235,7 +233,7 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
                         </span>
                     </div>
                 </Sheet.Content>
-                </Sheet.Container>
+            </Sheet.Container>
             <Sheet.Backdrop />
         </Sheet>
     );

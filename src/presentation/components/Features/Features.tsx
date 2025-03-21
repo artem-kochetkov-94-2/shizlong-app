@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styles from './Features.module.css';
 import { Card } from '@src/presentation/ui-kit/Card';
-import { IconButton } from '@presentation/ui-kit/IconButton';
 import { Icon } from '@presentation/ui-kit/Icon';
 
 export interface FeatureItem {
@@ -32,9 +31,9 @@ export const Features: React.FC<FeaturesProps> = ({ items, title, extraLength = 
             return (
               <li key={index} className={styles.item}>
                 <div className={styles.itemContent}>
-                  <IconButton shape="rounded" size="large">
+                  <div className={styles.imageWrapper}>
                     <img src={icon} />
-                  </IconButton>
+                  </div>
                   <span className={styles.name}>{name}</span>
                 </div>
               

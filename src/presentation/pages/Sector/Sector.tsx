@@ -14,6 +14,7 @@ import { Routes } from "@src/routes";
 import { Plan } from "./components/Plan";
 import { Module } from '@src/presentation/components/Module';
 import { bookStore } from '@src/application/store/bookStore';
+import { formatDateTime } from '@src/application/utils/formatDate';
 
 export const Sector = observer(() => {
   const navigate = useNavigate();
@@ -32,6 +33,21 @@ export const Sector = observer(() => {
 
     locationStore.init(sector.location_id);
   }, [sector, location]);
+
+  useEffect(() => {
+    if (!sector || !location) return;
+
+    const {
+      from_date,
+      to_date,
+    } = formatDateTime(bookStore.date as Date, bookStore.hours, bookStore.startTime);
+
+    locationStore.fetchModules(
+      sector.location_id,
+      from_date,
+      to_date,
+    );
+  }, [sector, location, bookStore.date, bookStore.hours, bookStore.startTime]);
 
   if (!sector || !location) return null;
 

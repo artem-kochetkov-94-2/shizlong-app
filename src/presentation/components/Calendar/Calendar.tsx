@@ -32,7 +32,9 @@ export const Calendar = ({ isOpen, onClose, initialValue, onChange }: CalendarPr
                         <div className={styles.calendarHeader}>
                             <div className={styles.calendarHeaderLeft}>
                                 <div className={styles.calendarHeaderTitle}>Выберите день</div>
-                                <div className={styles.calendarHeaderDate}>{initialValue ? formatFullDate(initialValue as Date) : ''}</div>
+                                <div className={styles.calendarHeaderDate}>
+                                    {initialValue ? formatFullDate(initialValue as Date) : ''}
+                                </div>
                             </div>
                             <IconButton
                                 iconName="cross"

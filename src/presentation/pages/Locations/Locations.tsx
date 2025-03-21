@@ -40,12 +40,14 @@ export const Locations = observer(() => {
         >
             <Sheet.Container>
                 <Sheet.Header />
-                <Sheet.Content>
+                <Sheet.Content style={{ paddingBottom: ref.current?.y }}>
                     <Navigation />
-                    <div className={styles.content}>
-                        <Menu />
-                        <CardList title="Пляжи рядом" items={locations} category="пляж" />
-                    </div>
+                    <Sheet.Scroller >
+                        <div className={styles.content}>
+                            <Menu />
+                            <CardList title="Пляжи рядом" items={locations} category="пляж" />
+                        </div>
+                    </Sheet.Scroller>
                 </Sheet.Content>
             </Sheet.Container>
         </Sheet>

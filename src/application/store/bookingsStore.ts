@@ -1,23 +1,34 @@
 import { makeAutoObservable } from 'mobx';
 import { bookingsService } from '@src/infrastructure/bookings/bookingsService';
+import { RawBooking } from '@src/infrastructure/bookings/types';
 
 class BookingsStore {
   private bookingsService = bookingsService;
-  currentBookings: unknown[] = [];
-  completedBookings: unknown[] = [];
+  isLoading: boolean = false;
+  bookings: RawBooking[] = [];
 
   constructor() {
     makeAutoObservable(this);
-    this.getCurrentBookings();
-    this.getCompletedBookings();
   }
 
-  getCurrentBookings() {
-    this.currentBookings = this.bookingsService.getCurrentBookings();
+  get currentBookings() {
+    return this.bookings.filter((booking) => booking.status === 'pending' || booking.status === 'confirmed');
   }
 
-  getCompletedBookings() {
-    this.completedBookings = this.bookingsService.getCompletedBookings();
+  get completedBookings() {
+    return this.bookings.filter((booking) => booking.status === 'completed' || booking.status === 'cancelled');
+  }
+
+  async getMyBookings() {
+    try {
+      this.isLoading = true;
+      const bookings = await this.bookingsService.getMyBookings();
+      this.bookings = bookings;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   get iosEmptyBookings() {

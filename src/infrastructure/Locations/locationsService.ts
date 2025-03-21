@@ -160,12 +160,18 @@ class LocationsService {
         return result.data as RawBeachAccessory[];
     }
 
-    async getModules(locationId: number) {
+    async getModules(locationId: number, from_date?: string, to_date?: string) {
+        const body = {
+            from_date,
+            to_date,
+        };
+
         const response = await fetch(`${this.apiUrlV2}/location/${locationId}/modules`, {
-            method: 'GET',
+            method: 'post',
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify(body),
         });
 
         const result: RawModule[] = await response.json();

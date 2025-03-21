@@ -40,6 +40,20 @@
   gap: 12px;
 }
 
+.imageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+
+  img {
+    display: block;
+    max-width: 44px;
+    max-height: 44px;
+  }
+}
+
 .itemExtra {
   display: flex;
   flex-direction: column;

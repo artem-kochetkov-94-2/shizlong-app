@@ -5,7 +5,7 @@ import { Icon } from '@presentation/ui-kit/Icon';
 interface RatingProps {
   value: number;
   count: number;
-  showCount: boolean;
+  showCount?: boolean;
 }
 
 function formatNumber(value: number): string {

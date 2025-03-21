@@ -68,8 +68,8 @@ export const Plan = observer(({ sectorId }: { sectorId: number }) => {
                 orientation="horizontal"
             />
             {/* <img
-                src={s.link_plan}
-                alt={s.name}
+                src={sector?.link_plan}
+                alt={sector?.name}
                 className={styles.plan}
             /> */}
         </ReactFlow>

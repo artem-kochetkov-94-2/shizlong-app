@@ -94,7 +94,7 @@ export interface Module {
     laravel_through_key: number;
     description: string | null;
     number: string | null;
-    imgages: string[] | null;
+    images: string[] | null;
     placed_icon: {
         id: number;
         location_id: number;
@@ -128,9 +128,9 @@ export interface Module {
 }
 
 export interface Slot {
-    "startHour": Date;
-    "endHour": Date;
-    "isBusy": boolean;
+    "start_hour": Date;
+    "end_hour": Date;
+    "is_busy": boolean;
 }
 
 export interface RawModule {
