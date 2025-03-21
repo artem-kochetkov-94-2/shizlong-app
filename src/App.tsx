@@ -16,7 +16,7 @@ import { Init } from '@src/presentation/pages/Init';
 // import { Abonements } from './presentation/pages/Abonements';
 // import { Abonement } from './presentation/pages/Abonement';
 import { Booking } from './presentation/pages/Booking';
-// import { NotificationsSettings } from './presentation/pages/NotificationsSettings';
+import { NotificationsSettings } from './presentation/pages/NotificationsSettings';
 // import { Support } from './presentation/pages/Support';
 // import { ProfileEdit } from './presentation/pages/ProfileEdit';
 // import { PaymentMethods } from './presentation/pages/PaymentMethods';
@@ -52,10 +52,10 @@ function App() {
 
           {/* <Route path={RoutesMap.ProfileEdit} element={<ProfileEdit />} /> */}
           {/* <Route path={RoutesMap.Favorites} element={<Favorites />} /> */}
-          {/* <Route
+          <Route
             path={RoutesMap.NotificationSettings}
             element={<NotificationsSettings />}
-          /> */}
+          />
           {/* <Route path={RoutesMap.Support} element={<Support />} /> */}
           {/* <Route path={RoutesMap.PaymentMethods} element={<PaymentMethods />} /> */}
           {/* <Route path={RoutesMap.Privacy} element={<PrivacyPolicy />} /> */}

@@ -1,7 +1,7 @@
 import { HTMLAttributes, ReactNode } from 'react';
-import styles from './RadioItem.module.css';
-import cn from 'classnames';
 import { Icon } from '../Icon';
+import cn from 'classnames';
+import styles from './RadioItem.module.css';
 
 interface RadioItemProps extends HTMLAttributes<HTMLLabelElement> {
   children: ReactNode;
@@ -11,6 +11,7 @@ interface RadioItemProps extends HTMLAttributes<HTMLLabelElement> {
   statusState: 'error' | 'success';
   status?: string;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 export const RadioItem: React.FC<RadioItemProps> = ({
@@ -21,20 +22,31 @@ export const RadioItem: React.FC<RadioItemProps> = ({
   statusState,
   onClick,
   selected,
+  disabled,
 }) => {
   return (
-    <div key={id} className={styles.radioItem} onClick={onClick}>
+    <div
+      key={id}
+      className={cn(styles.radioItem, { [styles.disabled]: disabled })}
+      onClick={!disabled ? onClick : undefined}
+    >
       <label htmlFor={id} className={styles.radioLabel}>
         <div className={styles.checkContainer}>
           <input
-            type='radio'
             id={id}
+            type='radio'
             name='radio'
             className={styles.radioInput}
             defaultChecked={selected === id}
+            disabled={disabled}
           />
           <span className={`${selected === id ? styles.open : ''}`}>{label}</span>
         </div>
+        {disabled && (
+          <div>
+            <span>В разработке</span>
+          </div>
+        )}
         {selected === id && (
           <div className={cn(styles.status, styles[statusState])}>
             <span>{status}</span>
