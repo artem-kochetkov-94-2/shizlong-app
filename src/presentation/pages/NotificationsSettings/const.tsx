@@ -12,6 +12,7 @@ interface Item {
   content: ReactNode;
   statusState: 'error' | 'success';
   status: string;
+  disabled: boolean;
 }
 
 export const items: Item[] = [
@@ -21,6 +22,7 @@ export const items: Item[] = [
     content: <TelegramSettings />,
     statusState: 'error',
     status: 'подключите бота',
+    disabled: false,
   },
   {
     id: 'option2',
@@ -28,6 +30,7 @@ export const items: Item[] = [
     content: <WhatsAppSettings />,
     statusState: 'success',
     status: '',
+    disabled: true,
   },
   {
     id: 'option3',
@@ -35,6 +38,7 @@ export const items: Item[] = [
     content: <EmailSettings />,
     statusState: 'error',
     status: 'подвердите e-mail',
+    disabled: true,
   },
   {
     id: 'option4',
@@ -42,6 +46,7 @@ export const items: Item[] = [
     content: <SmsSettings />,
     statusState: 'success',
     status: 'выбрано',
+    disabled: true,
   },
   {
     id: 'option5',
@@ -49,5 +54,6 @@ export const items: Item[] = [
     content: <PushSettings />,
     statusState: 'success',
     status: 'выбрано',
+    disabled: true,
   },
 ];
