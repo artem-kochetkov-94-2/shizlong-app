@@ -29,7 +29,7 @@ import { UiKit } from './presentation/pages/UiKit';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/shizlong-app">
       <Layout>
         <Routes>
           <Route path={RoutesMap.Home} element={<Home />}>
