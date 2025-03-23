@@ -9,7 +9,7 @@ import {
 import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { SERVER_URL } from '@src/const';
-import styles from './plan.module.css';
+import styles from './Plan.module.css';
 import cn from 'classnames';
 import { bookStore } from '@src/application/store/bookStore';
 
