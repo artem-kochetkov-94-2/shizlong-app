@@ -78,7 +78,7 @@ export const Sector = observer(() => {
         >
           {sectors.map((s) => (
             <SwiperSlide key={s.id}>
-              <Plan sectorId={s.id} />
+              <Plan />
             </SwiperSlide>
           ))}
         </Swiper>

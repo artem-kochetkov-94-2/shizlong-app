@@ -13,6 +13,7 @@ class LocationsStore {
   }
 
   get favoriteLocations() {
+    // @ts-ignore
     return this.locations.filter((location) => location.isFavorite);
   }
 

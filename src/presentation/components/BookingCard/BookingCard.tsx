@@ -73,7 +73,10 @@ export const BookingCard = ({ booking }: { booking: RawBooking }) => {
                         <span>{bookingStatusMap[booking.status]}</span>
                     </div>
 
-                    <div className={styles.qrCode}>
+                    <div
+                        className={styles.qrCode}
+                        onClick={() => navigate(Routes.BookingDetails.replace(':id', booking.id.toString()))}
+                    >
                         <Icon name="qr-code2" size="small" />
                     </div>
                 </div>
@@ -146,7 +149,7 @@ export const BookingCard = ({ booking }: { booking: RawBooking }) => {
                 </div> */}
             </div>
 
-            <img src={`data:image/png;base64, ${booking.qr_code}`} />
+            {/* <img src={`data:image/png;base64, ${booking.qr_code}`} /> */}
         </div>
     );
 };

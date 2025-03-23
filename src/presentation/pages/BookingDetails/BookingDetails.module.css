@@ -1,0 +1,123 @@
+/* content */
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    background-color: #F3F4F6;
+}
+
+/* card */
+
+.card {
+    border: 1px solid #FFFFFF80;
+    backdrop-filter: blur(10px);
+}
+
+.cardHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.cardHeaderContent {
+    flex: 1;
+}
+
+.cardTitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 100%;
+    color: #292C31;
+}
+
+.cardSubtitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 120%;
+    color: #161D25;
+}
+
+/* cardBody */
+
+.cardBodyHeader {
+    margin-bottom: 15px;
+}
+
+.cardBodyHeaderRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+/* .cardBodyHeaderCol {} */
+
+.cardBodyHeaderTitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 120%;
+    letter-spacing: 0%;
+    color: #A0A7B1;
+}
+
+.cardBodyHeaderSubtitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 100%;
+    color: #292C31;
+}
+
+.cardBodyHeaderText {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 120%;
+    color: #A0A7B1;
+}
+
+/* contacts */
+
+.contactItem {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+  
+.contactItem:last-child {
+    margin-bottom: 0;
+}
+  
+.icon {
+    flex-shrink: 0;
+    color: #FFBC02;
+}
+  
+.label {
+    padding-top: 2px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #292C31;
+}
+  
+.text {
+    padding-top: 2px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #A0A7B1;
+}
+
+.timeRangeTag {
+    position: relative;
+    top: -4px;
+}

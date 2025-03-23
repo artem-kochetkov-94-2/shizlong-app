@@ -7,6 +7,7 @@ interface TagProps {
   color?: 'primary' | 'secondary' | 'gray' | 'default';
   rightContent?: ReactNode;
   leftContent?: ReactNode;
+  shadow?: boolean;
 }
 
 export const Tag = ({
@@ -15,9 +16,10 @@ export const Tag = ({
   color = 'primary',
   rightContent,
   leftContent,
+  shadow,
 }: TagProps) => {
   return (
-    <div className={cn(styles.tag, styles[size], styles[color])}>
+    <div className={cn(styles.tag, styles[size], styles[color], { [styles.shadow]: shadow })}>
       {leftContent && <div className={styles.leftContent}>{leftContent}</div>}
       {text && <div className={styles.text}>{text}</div>}
       {rightContent && <div className={styles.rightContent}>{rightContent}</div>}

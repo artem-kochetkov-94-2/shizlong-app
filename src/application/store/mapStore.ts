@@ -5,7 +5,7 @@ import markerUserIcon from '@presentation/components/Map/assets/markerUser.png';
 import { RawLocation, RawSector } from '@src/infrastructure/Locations/types';
 import { GeoStore, geoStore } from './geoStore';
 import mapTooltip from '@src/assets/mapTooltip.svg';
-import mapTooltipFavorite from '@src/assets/mapTooltipFavorite.svg';
+// import mapTooltipFavorite from '@src/assets/mapTooltipFavorite.svg';
 
 const labelParams = {
   color: '#ffffff',
@@ -21,17 +21,18 @@ const labelParams = {
   }
 };
 
-const labelFavoriteParams = {
-  ...labelParams,
-  color: '#161D25',
-  image: {
-    ...labelParams.image,
-    url: mapTooltipFavorite,
-    padding: [7, 15, 7, 15],
-  }
-}
+// const labelFavoriteParams = {
+//   ...labelParams,
+//   color: '#161D25',
+//   image: {
+//     ...labelParams.image,
+//     url: mapTooltipFavorite,
+//     padding: [7, 15, 7, 15],
+//   }
+// }
 
 class MapStore {
+  // @ts-ignore
   map: mapgl.Map | null = null;
   mapglAPI: any | null = null;
   center: [number, number] | null = null;
@@ -123,6 +124,7 @@ class MapStore {
   }
 
   toggleSelectionLocationMarker(id: number, selected: boolean) {
+    // @ts-ignore
     this.locationMarkers.get(id)?.setIcon({
       icon: selected ? markerActiveIcon : markerIcon
     });

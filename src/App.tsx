@@ -16,6 +16,7 @@ import { Init } from '@src/presentation/pages/Init';
 // import { Abonements } from './presentation/pages/Abonements';
 // import { Abonement } from './presentation/pages/Abonement';
 import { Booking } from './presentation/pages/Booking';
+import { BookingDetails } from './presentation/pages/BookingDetails';
 // import { NotificationsSettings } from './presentation/pages/NotificationsSettings';
 // import { Support } from './presentation/pages/Support';
 // import { ProfileEdit } from './presentation/pages/ProfileEdit';
@@ -43,6 +44,8 @@ function App() {
             <Route path={RoutesMap.Location} element={<Location />} />
             <Route path={RoutesMap.Sector} element={<Sector />} />
             <Route path={RoutesMap.Booking} element={<Booking />} />
+            <Route path={RoutesMap.BookingDetails} element={<BookingDetails />} />
+            {/* <Route path={RoutesMap.BookingDetails} element={<BookingQr />} /> */}
           </Route>
 
           <Route path={RoutesMap.Profile} element={<Profile />} />

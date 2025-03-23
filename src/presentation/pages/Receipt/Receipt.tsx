@@ -4,6 +4,7 @@ import { DrawerV2 } from '@src/presentation/ui-kit/DrawerV2';
 import { Card } from '@src/presentation/ui-kit/Card';
 import { Button } from '@src/presentation/ui-kit/Button';
 import { Icon } from '@src/presentation/ui-kit/Icon';
+import { DecorateButton } from '@src/presentation/components/DecorateButton';
 
 export const Receipt = () => {
   return (
@@ -43,9 +44,7 @@ export const Receipt = () => {
               <div className={styles.subHeader}>Дополнительная информация</div>
               <div className={styles.info}>Любая дополнительная информация о платеже</div>
             </div>
-            <div className={styles.paid}>
-              <div className={styles.badge}>Оплачено 3 600 ₽</div>
-            </div>
+            <DecorateButton text={'Оплачено 3 600 ₽'} />
           </Card>
         </div>
         <Card className={styles.card}>

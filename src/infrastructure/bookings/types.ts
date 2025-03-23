@@ -32,6 +32,7 @@ export interface RawBooking {
     module: {
         id: number;
         name: string;
+        number: string;
         sector_id: number;
         sector: {
             id: number;
@@ -41,9 +42,25 @@ export interface RawBooking {
                 id: number;
                 name: string;
                 link_space: string;
-            }
+                address: string;
+                city: string;
+                region: string;
+                district: string | null;
+            };
+        };
+    };
+    booking_accessories: {
+        id: number;
+        booking_id: number;
+        beach_accessory_id: number;
+        quantity: number;
+        beach_accessory: {
+            id: number;
+            name: string;
+            price: number;
+            link_icon: string;
         }
-    }
+    }[];
 }
 
 type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed';

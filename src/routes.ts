@@ -15,6 +15,7 @@ export const Routes = {
   Abonements: '/abonements',
   Abonement: '/abonement',
   Booking: '/booking',
+  BookingDetails: '/booking/:id',
   PaymentMethods: '/payment-methods',
   Support: '/support',
   Privacy: 'privacy-policy',

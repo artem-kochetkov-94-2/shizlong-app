@@ -13,7 +13,7 @@ import styles from './plan.module.css';
 import cn from 'classnames';
 import { bookStore } from '@src/application/store/bookStore';
 
-export const Plan = observer(({ sectorId }: { sectorId: number }) => {
+export const Plan = observer(() => {
   const [nodes, setNodes] = useNodesState<Node>([]);
   const { modules } = locationStore;
   const { sector, activeScheme } = sectorStore;

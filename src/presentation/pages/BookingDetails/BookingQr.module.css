@@ -1,0 +1,154 @@
+/* header */
+
+.header {
+    padding-inline: 58px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E3E5EA;
+}
+
+.title {
+    margin-bottom: 5px;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 100%;
+    text-align: center;
+    color: #292C31;
+}
+
+.subtitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 120%;
+    text-align: center;
+    color: #A0A7B1;
+}
+
+.closeButton {
+    position: absolute;
+    right: 16px;
+    top: 0;
+}
+
+/* content */
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-top: 10px;
+    padding-inline: 16px;
+    background-color: #F3F4F6;
+}
+
+/* qr */
+
+.qr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 187px;
+    margin: 0 auto;
+    padding: 5px;
+    padding-top: 20px;
+    padding-block: 15px;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+}
+
+.qrCodeTitle {
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 120%;
+    text-align: center;
+    color: #A0A7B1;
+}
+
+.qrCodeImg {
+    width: 167px;
+}
+
+.qrCodeTitle {
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 120%;
+    text-align: center;
+    color: #A0A7B1;
+}
+
+.services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* accessories */
+
+.accessories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.accessoryImage {
+    display: block;
+    max-width: 18px;
+    max-height: 18px;
+    width: 100%;
+}
+
+/* contacts */
+
+.contactItem {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+  
+.contactItem:last-child {
+    margin-bottom: 0;
+}
+  
+.icon {
+    flex-shrink: 0;
+    color: #FFBC02;
+}
+  
+.label {
+    padding-top: 2px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #292C31;
+}
+  
+.text {
+    padding-top: 2px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #A0A7B1;
+}
+
+.timeRangeTag {
+    position: relative;
+    top: -4px;
+}
+
+/* payment */
+
+.payment {
+    display: flex;
+    gap: 10px;
+
+    & > * {
+        width: calc(50% - 5px);
+        flex-shrink: 0;
+    }
+}

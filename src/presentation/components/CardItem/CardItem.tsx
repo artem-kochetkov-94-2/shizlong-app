@@ -1,6 +1,6 @@
-import { IconButton } from "@presentation/ui-kit/IconButton";
+// import { IconButton } from "@presentation/ui-kit/IconButton";
 import { RawLocation } from "@src/infrastructure/Locations/types";
-import { Tag } from "@presentation/ui-kit/Tag";
+// import { Tag } from "@presentation/ui-kit/Tag";
 import { Icon } from "@presentation/ui-kit/Icon";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import styles from "./CardItem.module.css";
@@ -18,6 +18,7 @@ const MAX_OPTIONS_TO_VIEW = 4;
 export const CardItem = ({ data, optionsToView = MAX_OPTIONS_TO_VIEW, category }: CardItemProps) => {
   const { id, name, link_space, working_hours } = data;
   const maxOptionsToView = Math.min(optionsToView, MAX_OPTIONS_TO_VIEW);
+  console.log(maxOptionsToView);
 
   return (
     <Link to={Routes.Location.replace(':id', `${id}`)}>
