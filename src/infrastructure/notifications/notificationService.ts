@@ -1,12 +1,13 @@
+import { API_URL } from '@src/const';
+import { TelegramResponse } from './types';
 import {
   VerificationStore,
   verificationStore,
 } from '@src/application/store/verificationStore';
-import { API_URL } from '@src/const';
-import { TelegramResponse } from './types';
 
 const routes = {
   telegram: '/telegram/get-subscription-code',
+  telegramCheckStatus: '/telegram/check-subscription',
 };
 
 class NotificationsService {
@@ -30,6 +31,20 @@ class NotificationsService {
     const result: TelegramResponse = await response.json();
 
     return result.code;
+  }
+  async checkTelegramStatus() {
+    const response = await fetch(`${this.apiUrlV1}${routes.telegramCheckStatus}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${this.verificationStore.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const result = await response.json();
+
+    return result;
   }
 }
 

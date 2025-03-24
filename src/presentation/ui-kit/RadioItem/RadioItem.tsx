@@ -8,8 +8,8 @@ interface RadioItemProps extends HTMLAttributes<HTMLLabelElement> {
   id: string;
   label: string;
   selected: string;
-  statusState: 'error' | 'success';
-  status?: string;
+  status?: boolean;
+  statusText: string;
   onClick: () => void;
   disabled?: boolean;
 }
@@ -19,7 +19,7 @@ export const RadioItem: React.FC<RadioItemProps> = ({
   id,
   label,
   status,
-  statusState,
+  statusText,
   onClick,
   selected,
   disabled,
@@ -48,9 +48,19 @@ export const RadioItem: React.FC<RadioItemProps> = ({
           </div>
         )}
         {selected === id && (
-          <div className={cn(styles.status, styles[statusState])}>
-            <span>{status}</span>
-            {statusState === 'success' && <Icon name='check4' size='small' />}
+          <div
+            className={cn(styles.status, {
+              [styles.error]: !status,
+            })}
+          >
+            {!status ? (
+              <span>{statusText}</span>
+            ) : (
+              <>
+                <span>Выбрано</span>
+                <Icon name='check4' size='small' />
+              </>
+            )}
           </div>
         )}
       </label>
