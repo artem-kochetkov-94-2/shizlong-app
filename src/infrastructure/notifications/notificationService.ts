@@ -32,6 +32,7 @@ class NotificationsService {
 
     return result.code;
   }
+
   async checkTelegramStatus() {
     const response = await fetch(`${this.apiUrlV1}${routes.telegramCheckStatus}`, {
       method: 'POST',
