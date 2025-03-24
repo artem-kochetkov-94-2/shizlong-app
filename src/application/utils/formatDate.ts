@@ -14,6 +14,16 @@ const formatFullDate = (date: Date) => {
     });
 };
 
+const formatFullDateWithTime = (date: Date) => {
+    return date.toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+};
+
 const formatShortDateWithoutYear = (date: Date) => {
     return date.toLocaleDateString('ru-RU', {
         day: '2-digit',
@@ -137,4 +147,5 @@ export {
     formatDateTime,
     calculateTimeDifferenceInHours,
     convertToISO,
+    formatFullDateWithTime,
 };

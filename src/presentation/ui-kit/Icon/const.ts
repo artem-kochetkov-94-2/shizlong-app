@@ -48,6 +48,8 @@ import { ReactComponent as sendIcon } from './assets/send.svg';
 import { ReactComponent as saveIcon } from './assets/save.svg';
 import { ReactComponent as ArrowTopIcon } from './assets/arrow-up.svg';
 import { ReactComponent as ArrowDownIcon } from './assets/arrow-down.svg';
+import { ReactComponent as CancelIcon } from './assets/cancel.svg';
+import { ReactComponent as RetryIcon } from './assets/retry.svg';
 import { IconName } from './types';
 
 export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = {
@@ -101,4 +103,6 @@ export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = 
   save: saveIcon,
   'arrow-up': ArrowTopIcon,
   'arrow-down': ArrowDownIcon,
+  cancel: CancelIcon,
+  retry: RetryIcon,
 };

@@ -12,24 +12,72 @@ import { SERVER_URL } from '@src/const';
 import styles from './Plan.module.css';
 import cn from 'classnames';
 import { bookStore } from '@src/application/store/bookStore';
+import { RawModule, RawSector } from '@src/infrastructure/Locations/types';
+import { Icon } from '@src/presentation/ui-kit/Icon';
 
-export const Plan = observer(() => {
+export const Plan = observer(({
+    onNext,
+    onPrev,
+}: {
+    onNext: () => void,
+    onPrev: () => void,
+}) => {
   const [nodes, setNodes] = useNodesState<Node>([]);
   const { modules } = locationStore;
   const { sector, activeScheme } = sectorStore;
 
-  useEffect(() => {
-    if (!sector || !modules) return;
+  const getPlanSize = (coords: [number, number][]) => {
+    let minX = coords[0][0];
+    let maxX = coords[0][0];
+    let minY = coords[0][1];
+    let maxY = coords[0][1];
 
-    const sectorModules = modules.filter((m) => m.module.sector_id === sector.id && m.module.sector_scheme_id === activeScheme?.id);
+    coords.forEach(([x, y]) => {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+    });
 
-    const nodes = sectorModules.map((m) => {
+    const width = maxX - minX;
+    const height = maxY - minY;
+
+    return { width, height };
+  }
+
+  const getNodes = (sector: RawSector, sectorModules: RawModule[]) => {
+    const nodes: Node[] = [{
+        id: 'sector_scheme',
+        focusable: false,
+        selectable: false,
+        dragging: false,
+        data: {
+            label: (
+                <img
+                    src={sector.link_plan}
+                    alt={sector.name}
+                    className={styles.plan}
+                />
+            ),
+        },
+        position: {
+            x: 0,
+            y: 0,
+        },
+        width: getPlanSize(sector.sector_coords_pixel).width,
+        height: getPlanSize(sector.sector_coords_pixel).height,
+        style: {
+            border: '5px solid red',
+        },
+    }];
+
+    sectorModules.forEach((m) => {
         const module = m.module;
         // const inlineStyles = m.placed_icon.style?.split(';');
         // const width = inlineStyles?.find(style => style.includes('width'))?.split(':')[1];
         // const height = inlineStyles?.find(style => style.includes('height'))?.split(':')[1];
 
-        return {
+        const node = {
             // type: 'input',
             id: `${module.id}`,
             data: {
@@ -55,14 +103,30 @@ export const Plan = observer(() => {
                 y: Number(module.placed_icon.top),
             },
         };
+
+        nodes.push(node);
     });
 
+    return nodes;
+  }
+
+  useEffect(() => {
+    if (!sector || !modules) return;
+
+    const sectorModules = modules.filter((m) => m.module.sector_id === sector.id && m.module.sector_scheme_id === activeScheme?.id);
+
+    const nodes = getNodes(sector, sectorModules);
     setNodes(nodes);
   }, [sector, modules, activeScheme]);
 
   return (
     <>
-        <ReactFlow nodes={nodes} fitView={true}>
+        <ReactFlow
+            nodes={nodes}
+            fitView={true}
+            // fitViewOptions={{ padding: 10 }}
+            key={activeScheme?.id}
+        >
             <Controls
                 showInteractive={false}
                 orientation="horizontal"
@@ -73,6 +137,12 @@ export const Plan = observer(() => {
                 className={styles.plan}
             /> */}
         </ReactFlow>
+        <div className={styles.left} onClick={onPrev}>
+            <Icon name="arrow-left" color="dark" size="small" />
+        </div>
+        <div className={styles.right} onClick={onNext}>
+            <Icon name="arrow-right" color="dark" size="small" />
+        </div>
     </>
   );
 });

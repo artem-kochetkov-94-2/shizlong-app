@@ -48,8 +48,10 @@ export type IconName =
   | 'send'
   | 'save'
   | 'arrow-up'
-  | 'arrow-down';
+  | 'arrow-down'
+  | 'cancel'
+  | 'retry';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
 
-export type IconColor = 'secondary' | 'dark';
+export type IconColor = 'secondary' | 'dark' | 'white';

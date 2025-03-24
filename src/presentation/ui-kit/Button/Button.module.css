@@ -7,12 +7,17 @@
   font-family: Roboto;
   font-weight: 500;
   font-size: 14px;
-  line-height: 16.8px;
+  line-height: 1;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   outline: none;
+
+  svg {
+    vertical-align: middle;
+    margin-bottom: 4px;
+  }
 }
 
 /* Variants */
@@ -48,6 +53,10 @@
 
   &.ghost {
     color: #fdad01;
+  }
+
+  svg {
+    color: #292C31;
   }
 }
 

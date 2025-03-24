@@ -17,6 +17,8 @@ import { Init } from '@src/presentation/pages/Init';
 // import { Abonement } from './presentation/pages/Abonement';
 import { Booking } from './presentation/pages/Booking';
 import { BookingDetails } from './presentation/pages/BookingDetails';
+import { BookingDetailsQR } from './presentation/pages/BookingDetailsQR';
+import { BookingDetailsReceipt } from './presentation/pages/BookingDetailsReceipt';
 // import { NotificationsSettings } from './presentation/pages/NotificationsSettings';
 // import { Support } from './presentation/pages/Support';
 // import { ProfileEdit } from './presentation/pages/ProfileEdit';
@@ -24,12 +26,11 @@ import { BookingDetails } from './presentation/pages/BookingDetails';
 // import { PrivacyPolicy } from './presentation/pages/PrivacyPolicy';
 import { UiKit } from './presentation/pages/UiKit';
 // import { Filters } from './presentation/pages/Filters';
-// import { Receipt } from './presentation/pages/Receipt';
 // import { StaffCall } from './presentation/pages/StaffCall';
 
 function App() {
   return (
-    <BrowserRouter basename="/shizlong-app">
+    <BrowserRouter>
       <Layout>
         <Routes>
           <Route path={RoutesMap.Home} element={<Home />}>
@@ -45,7 +46,8 @@ function App() {
             <Route path={RoutesMap.Sector} element={<Sector />} />
             <Route path={RoutesMap.Booking} element={<Booking />} />
             <Route path={RoutesMap.BookingDetails} element={<BookingDetails />} />
-            {/* <Route path={RoutesMap.BookingDetails} element={<BookingQr />} /> */}
+            <Route path={RoutesMap.BookingDetailsQR} element={<BookingDetailsQR />} />
+            <Route path={RoutesMap.BookingDetailsReceipt} element={<BookingDetailsReceipt />} />
           </Route>
 
           <Route path={RoutesMap.Profile} element={<Profile />} />

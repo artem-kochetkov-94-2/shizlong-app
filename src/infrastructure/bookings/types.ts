@@ -34,6 +34,13 @@ export interface RawBooking {
         name: string;
         number: string;
         sector_id: number;
+        placed_icon_id: number;
+        placed_icon_group_id: number | null;
+        placed_icon: {
+            id: number;
+            link_icon: string;
+        };
+        placed_icon_group: null,
         sector: {
             id: number;
             name: string;

@@ -149,6 +149,34 @@ class MapStore {
     });
   }
 
+  fitBounds(polygon: [number, number][]) {
+    if (!this.map || !this.mapglAPI) return;
+
+    // this.addPolygon(polygon);
+
+    let northEast = polygon[0];
+    let southWest = polygon[0];
+
+    polygon.forEach(([longitude, latitude]) => {
+      if (latitude > northEast[1] || (latitude === northEast[1] && longitude > northEast[0])) {
+        northEast = [longitude, latitude];
+      }
+      if (latitude < southWest[1] || (latitude === southWest[1] && longitude < southWest[0])) {
+        southWest = [longitude, latitude];
+      }
+    });
+
+    this.map.fitBounds(
+      {
+        northEast: northEast,
+        southWest: southWest,
+      },
+      {
+        considerRotation: true,
+      },
+    );
+  }
+
   addPolygon(coordinates: [number, number][]) {
     if (!this.map || !this.mapglAPI) return;
 

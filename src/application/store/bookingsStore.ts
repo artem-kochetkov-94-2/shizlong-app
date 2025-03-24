@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import { bookingsService } from '@src/infrastructure/bookings/bookingsService';
 import { RawBooking } from '@src/infrastructure/bookings/types';
 
-class BookingsStore {
+export class BookingsStore {
   private bookingsService = bookingsService;
   isLoading: boolean = false;
   bookings: RawBooking[] = [];

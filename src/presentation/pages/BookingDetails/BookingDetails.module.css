@@ -1,3 +1,20 @@
+/* header */
+
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 85px;
+    box-shadow: 0px 15px 20px 0px #ED9B5840;
+    background: #FFBC02;
+    background-size: cover;
+    background-position: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    overflow: hidden;
+}
+
 /* content */
 
 .content {
@@ -5,6 +22,7 @@
     flex-direction: column;
     gap: 16px;
     padding: 16px;
+    padding-top: 4px;
     background-color: #F3F4F6;
 }
 
@@ -13,6 +31,7 @@
 .card {
     border: 1px solid #FFFFFF80;
     backdrop-filter: blur(10px);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, #FFFFFF 100%);
 }
 
 .cardHeader {
@@ -24,6 +43,7 @@
 
 .cardHeaderContent {
     flex: 1;
+    padding-top: 4px;
 }
 
 .cardTitle {
@@ -39,7 +59,14 @@
     font-weight: 500;
     font-size: 14px;
     line-height: 120%;
-    color: #161D25;
+    color: #A0A7B1;
+}
+
+/* actions */
+
+.actions {
+    display: flex;
+    gap: 10px;
 }
 
 /* cardBody */
@@ -67,6 +94,7 @@
 }
 
 .cardBodyHeaderSubtitle {
+    margin-bottom: 2px;
     font-family: Roboto;
     font-weight: 500;
     font-size: 18px;
@@ -120,4 +148,95 @@
 .timeRangeTag {
     position: relative;
     top: -4px;
+}
+
+/* Accessories */
+
+.accessories {
+    display: flex;
+    flex-direction: column;
+}
+
+.accessoriesTitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19.2px;
+    color: #161D25;    
+}
+
+.accessoriesSubtitle {
+    margin-bottom: 10px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 120%;
+    color: #A0A7B1;
+}
+
+.accessoriesContent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.accessoryWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.accessory {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    img {
+        max-width: 18px;
+        max-height: 18px;
+        display: block;
+    }
+}
+
+.accessoryName {
+    padding-right: 20px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1;
+    color: #292C31;
+}
+
+.accessoryPrice {
+    flex-shrink: 0;
+    margin-left: auto;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16.8px;    
+    color: #A0A7B1;
+}
+
+.accessoryToggle {
+    flex-shrink: 0;
+}
+
+/* payment */
+
+.payment {
+    display: flex;
+    padding: 16px;
+    gap: 10px;
+    border-top: 1px solid #E3E5EA;
+    background: #FFFFFF;
+
+    & > * {
+        width: calc(50% - 5px);
+        flex-shrink: 0;
+    }
 }

@@ -2,27 +2,22 @@ import { IconButton } from "@src/presentation/ui-kit/IconButton";
 import { Routes } from "@src/routes";
 import { Sheet } from "react-modal-sheet";
 import { useNavigate, useParams } from "react-router-dom";
-import styles from "./BookingQr.module.css";
+import styles from "./BookingDetailsQr.module.css";
 import { Card } from "@src/presentation/ui-kit/Card";
 import { bookingsStore } from "@src/application/store/bookingsStore";
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
 import { Tag } from "@src/presentation/ui-kit/Tag";
 import { Icon } from "@src/presentation/ui-kit/Icon";
 import { formatFullDate, formatTimeRange, getTimeRangeDurationInHours, declensionOfHours } from "@src/application/utils/formatDate";
 import { Button } from "@src/presentation/ui-kit/Button";
 import { DecorateButton } from "@src/presentation/components/DecorateButton";
 
-export const BookingQr = observer(() => {
+export const BookingDetailsQR = observer(() => {
     const { id } = useParams();
     const navigate = useNavigate();
 
     const { bookings } = bookingsStore;
     const booking = bookings.find(b => b.id === Number(id));
-
-    useEffect(() => {
-        bookingsStore.getMyBookings();
-    }, []);
 
     if (!booking) {
         return <div>Бронь не найдена</div>;
@@ -48,7 +43,7 @@ export const BookingQr = observer(() => {
                             size="medium"
                             shape="rounded"
                             className={styles.closeButton}
-                            onClick={() => navigate(Routes.Locations)}
+                            onClick={() => navigate(-1)}
                             withShadow={false}
                         />
                     </div>
@@ -117,21 +112,25 @@ export const BookingQr = observer(() => {
                                         size="extra-small"
                                         className={styles.icon}
                                     />
-                                    {/* todo */}
-                                    <div className={styles.text}>Краснодарский край, Сочи, микрорайон Центральный</div>
+                                    <div className={styles.text}>
+                                        {booking?.module.sector.location.region},{' '}
+                                        {booking?.module.sector.location.city},{' '}
+                                        {booking?.module.sector.location.address}
+                                    </div>
                                 </div>
                             </div>
                         </Card>
 
                         <div className={styles.payment}>
-                            {/* format price */}
                             <DecorateButton text={`Оплачено ${booking.total_price.toLocaleString('ru-RU')} ₽`} />
-                            <Button variant={'gray2'}>
-                                <Icon name={'check2'} size='extra-small' /> Показать чек
+                            <Button
+                                variant={'gray2'}
+                                onClick={() => navigate(Routes.BookingDetailsReceipt.replace(':id', booking.id.toString()))}
+                            >
+                                <Icon name={'check2'} size='extra-small' />
+                                <span>Показать чек</span>
                             </Button>
                         </div>
-
-                        <div style={{ height: 500 }}></div>
                     </div>
                 </Sheet.Content>
             </Sheet.Container>

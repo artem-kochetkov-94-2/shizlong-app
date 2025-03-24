@@ -58,6 +58,10 @@
     }
 }
 
+.red {
+    background-color: #F95E5E;
+}
+
 .transparent {
     background-color: transparent;
 }

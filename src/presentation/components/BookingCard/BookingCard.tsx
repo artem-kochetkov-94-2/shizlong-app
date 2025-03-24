@@ -37,7 +37,9 @@ export const BookingCard = ({ booking }: { booking: RawBooking }) => {
             <div className={styles.wrapper}>
                 <div className={styles.content}>
                     <div className={styles.category}>Пляж</div>
-                    <div className={styles.name}>{booking.module.sector.location.name}</div>
+                    <div className={styles.name}>
+                        {booking.module.sector.location.name}
+                    </div>
 
                     <div className={styles.row}>
                         {/* <Tag text="Вы на пляже" /> */}
@@ -77,7 +79,7 @@ export const BookingCard = ({ booking }: { booking: RawBooking }) => {
                         className={styles.qrCode}
                         onClick={() => navigate(Routes.BookingDetails.replace(':id', booking.id.toString()))}
                     >
-                        <Icon name="qr-code2" size="small" />
+                        <Icon name="qr-code2" size="small" color="dark" />
                     </div>
                 </div>
 
@@ -115,6 +117,7 @@ export const BookingCard = ({ booking }: { booking: RawBooking }) => {
                         iconSize="small"
                         shape="rounded"
                         color="white"
+                        iconColor="dark"
                     />
                     <IconButton
                         iconName="in-map"
@@ -122,6 +125,7 @@ export const BookingCard = ({ booking }: { booking: RawBooking }) => {
                         iconSize="small"
                         shape="rounded"
                         color="white"
+                        iconColor="dark"
                     />
                 </div>
 
@@ -148,8 +152,6 @@ export const BookingCard = ({ booking }: { booking: RawBooking }) => {
                     />
                 </div> */}
             </div>
-
-            {/* <img src={`data:image/png;base64, ${booking.qr_code}`} /> */}
         </div>
     );
 };

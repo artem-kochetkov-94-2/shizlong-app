@@ -96,12 +96,13 @@ class LocationStore {
 
   async choosePlace() {
     if (!this.locationId) return;
-    console.log('choosePlace');
 
     try {
       mapStore.drawPlan(this.sectors);
-      mapStore.setCenter(this.location!.coordinates[0], this.location!.coordinates[1]);
-      mapStore.setZoom(18);
+
+      if (this.location?.poligon) {
+        mapStore.fitBounds(this.location.poligon);
+      }
 
       if (this.location?.rotation) {
         mapStore.setRotation(this.location.rotation);

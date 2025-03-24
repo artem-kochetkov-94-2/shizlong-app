@@ -34,6 +34,10 @@
   }
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .itemContent {
   display: flex;
   align-items: center;
@@ -60,13 +64,22 @@
   padding-top: 7px;
 }
 
+.itemArrow {
+  display: flex;
+  align-items: center;
+}
+
 .name {
   font-family: Roboto;
   font-weight: 400;
   font-size: 14px;
   line-height: 16.8px;
   color: #292C31;
-} 
+}
+
+.nameAccent {
+  color: #A0A7B1;
+}
 
 .extraTitle {
   white-space: nowrap;

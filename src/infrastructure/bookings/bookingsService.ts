@@ -17,6 +17,10 @@ class BookingsService {
   }
 
   async getMyBookings() {
+    if (!this.verificationStore.accessToken) {
+      return [];
+    }
+
     const response = await fetch(`${this.apiUrlV1}${routes.myBookings}`, {
       method: 'POST',
       headers: {

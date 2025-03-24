@@ -16,8 +16,10 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ children, subHeader }) =
       <IconButton
         onClick={() => navigate(-1)}
         iconName='arrow-left'
-        size='large'
+        size='medium'
         shape='rounded'
+        color='white'
+        iconColor='dark'
       />
       <div className={styles.header}>
         <span>{children}</span>
