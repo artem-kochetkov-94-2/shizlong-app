@@ -3,11 +3,10 @@ import { observer } from 'mobx-react-lite';
 import { Button } from '@src/presentation/ui-kit/Button';
 import { CopyableDiv } from '@src/presentation/ui-kit/CopyableDiv';
 import { Icon } from '@src/presentation/ui-kit/Icon';
-<<<<<<< HEAD
 import { notificationsStore } from '@src/application/store/notificationsStore';
 import styles from './TelegramSettings.module.css';
 
-export const TelegramSettings: React.FC = observer(() => {
+export const TelegramSettings = observer(() => {
   const code = notificationsStore.telegramCode;
   const status = notificationsStore.notifications[0].status;
 
@@ -15,35 +14,17 @@ export const TelegramSettings: React.FC = observer(() => {
 
   useEffect(() => {
     notificationsStore.checkTelegramStatus();
-=======
-import { useEffect } from 'react';
-import { notificationsStore } from '@src/application/store/notificationsStore';
-import { observer } from 'mobx-react-lite';
-
-export const TelegramSettings = observer(() => {
-  const code = notificationsStore.telegramCode;
-  const telegramBotLink = 'https://t.me/test_shezlong_bot';
-
-  useEffect(() => {
->>>>>>> origin/telegram-notification
     notificationsStore.getTelegramCode();
   }, []);
 
   return (
     <div className={styles.telegramSettings}>
-<<<<<<< HEAD
       {status && (
         <div className={styles.reminderItem}>
           <Icon size='small' name='check5' />
           <span>Уведомления настроены</span>
         </div>
       )}
-=======
-      <div className={styles.reminderItem}>
-        <Icon size='small' name='check5' />
-        <span>Уведомления настроены</span>
-      </div>
->>>>>>> origin/telegram-notification
       <div className={styles.desc}>
         Вы можете настроить уведомления о новых событиях на сайте в ваш Telergam. Для
         этого мы создали официального Telegram-бота

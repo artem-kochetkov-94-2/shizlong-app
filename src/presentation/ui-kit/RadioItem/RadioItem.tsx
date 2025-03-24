@@ -8,7 +8,7 @@ interface RadioItemProps extends HTMLAttributes<HTMLLabelElement> {
   id: string;
   label: string;
   selected: string;
-  status?: string;
+  status?: boolean;
   statusText: string;
   onClick: () => void;
   disabled?: boolean;
