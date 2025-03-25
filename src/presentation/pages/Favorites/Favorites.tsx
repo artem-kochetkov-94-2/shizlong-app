@@ -44,7 +44,7 @@ export const Favorites = observer(() => {
       </div>
       <div className={styles.content}>
         {favoriteLocations.length === 0 && <div>Пожалуйста, добавьте избранный пляж</div>}
-        <CardList items={favoriteLocations} />
+        <CardList items={favoriteLocations} isFavorite={true} />
       </div>
     </div>
   );

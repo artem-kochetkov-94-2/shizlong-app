@@ -12,6 +12,7 @@ interface CardItemProps {
   data: RawLocation;
   optionsToView?: number;
   category?: string;
+  isFavorite: boolean;
 }
 
 const MAX_OPTIONS_TO_VIEW = 4;
@@ -20,6 +21,7 @@ export const CardItem = ({
   data,
   optionsToView = MAX_OPTIONS_TO_VIEW,
   category,
+  isFavorite,
 }: CardItemProps) => {
   const { id, name, link_space, working_hours, favorite } = data;
   const maxOptionsToView = Math.min(optionsToView, MAX_OPTIONS_TO_VIEW);
@@ -64,7 +66,7 @@ export const CardItem = ({
           </Swiper>
         </div>
 
-        {favorite && (
+        {(favorite || isFavorite) && (
           <div className={styles.favorite}>
             <IconButton
               iconName='favorite'
