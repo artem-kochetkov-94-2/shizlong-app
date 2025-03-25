@@ -10,10 +10,6 @@
   overflow: hidden;
 }
 
-.disabled {
-  display: none;
-}
-
 .extra-small {
   width: 18px;
   height: 18px;

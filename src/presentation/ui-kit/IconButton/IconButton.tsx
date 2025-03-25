@@ -46,7 +46,6 @@ export const IconButton: React.FC<IconButtonProps> = ({
           [styles.withBorder]: withBorder,
           [styles.withBlur]: withBlur,
           [styles.withShadow]: withShadow,
-          [styles.disabled]: disabled,
         }
       )}
       {...rest}
