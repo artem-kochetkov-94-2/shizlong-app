@@ -21,6 +21,7 @@
   line-height: 21.75px;
   color: #161d25;
 }
+
 .circle {
   position: relative;
   width: 20px;
@@ -51,7 +52,7 @@
 
 .info {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   font-family: Roboto;
   font-weight: 400;
   font-size: 14px;
