@@ -1,6 +1,9 @@
 import { VerificationStrategy } from '@src/domain/common/verification/verificationStrategy';
 import { makeAutoObservable } from 'mobx';
-import { VerificationController, verificationController } from '@src/domain/common/verification/verificationController';
+import {
+  VerificationController,
+  verificationController,
+} from '@src/domain/common/verification/verificationController';
 import { CallStrategy, callStrategy } from '@src/domain/common/verification/callStrategy';
 import { smsStrategy } from '@src/domain/common/verification/smsStrategy';
 import { cacheService } from '@src/application/services/cacheService/cacheService';
@@ -45,6 +48,10 @@ export class VerificationStore {
 
   get accessToken() {
     return this._accessToken;
+  }
+
+  get isVerified() {
+    return !!this._accessToken;
   }
 
   setStrategy(strategy: VerificationStrategy) {

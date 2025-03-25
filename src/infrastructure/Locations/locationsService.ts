@@ -1,183 +1,278 @@
-import { API_URL, API_URL_V2 } from "@src/const";
+import { API_URL, API_URL_V2 } from '@src/const';
 import {
-    RawAdditionalService,
-    RawBeachAccessory,
-    RawLocation,
-    RawModule,
-    RawSector,
-    RawSectorSchema,
-} from "./types";
-import { ApiResponse } from "@src/infrastructure/types";
+  RawAdditionalService,
+  RawBeachAccessory,
+  RawLocation,
+  RawModule,
+  RawSector,
+  RawSectorSchema,
+} from './types';
+import { ApiResponse } from '@src/infrastructure/types';
+import {
+  verificationStore,
+  VerificationStore,
+} from '@src/application/store/verificationStore';
 
 const routes = {
-    locations: '/get-locations',
-    location: '/get-location',
-    sectors: '/get-sectors',
-    sector: '/get-sector',
-    additionalServices: '/get-additional-services',
-    getBeachAccessories: '/get-beach-accessories',
-    schemes: '/get-schemes',
+  locations: '/get-locations',
+  locationWithFavorite: '/get-locations-with-favorite ',
+  favoritelocations: '/get-favorite-locations',
+  addFavoritelocation: '/add-favorite-location',
+  removeFavoritelocation: '/remove-favorite-location',
+  location: '/get-location',
+  sectors: '/get-sectors',
+  sector: '/get-sector',
+  additionalServices: '/get-additional-services',
+  getBeachAccessories: '/get-beach-accessories',
+  schemes: '/get-schemes',
 };
 
 class LocationsService {
-    private readonly apiUrl = API_URL;
-    private readonly apiUrlV2 = API_URL_V2;
+  private readonly apiUrl = API_URL;
+  private readonly apiUrlV2 = API_URL_V2;
+  private readonly verificationStore: VerificationStore;
 
-    async getLocations() {
-        const response = await fetch(`${this.apiUrl}${routes.locations}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+  constructor() {
+    this.verificationStore = verificationStore;
+  }
 
-        const result: ApiResponse<RawLocation[]> = await response.json();
+  async getLocations() {
+    const response = await fetch(`${this.apiUrl}${routes.locations}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-        if (!result.success) {
-            throw new Error('Fetch error');
-        };
+    const result: ApiResponse<RawLocation[]> = await response.json();
 
-        return result.data as RawLocation[];
+    if (!result.success) {
+      throw new Error('Fetch error');
     }
 
-    async getLocation(id: number) {
-        const response = await fetch(`${this.apiUrl}${routes.location}`, {
-            method: 'POST',
-            body: JSON.stringify({
-                location_id: id,
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+    return result.data as RawLocation[];
+  }
 
-        const result: ApiResponse<RawLocation> = await response.json();
+  async getFavoriteLocations() {
+    const response = await fetch(`${this.apiUrl}${routes.favoritelocations}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.verificationStore.accessToken}`,
+      },
+    });
 
-        if (!result.success) {
-            throw new Error('Fetch error');
-        };
+    const result: ApiResponse<RawLocation[]> = await response.json();
 
-        return result.data as RawLocation;
+    if (!result.success) {
+      throw new Error('Fetch error');
     }
 
-    async getSectors(id: number) {
-        const response = await fetch(`${this.apiUrl}${routes.sectors}`, {
-            method: 'POST',
-            body: JSON.stringify({
-                location_id: id,
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+    return result.data as RawLocation[];
+  }
 
-        const result: ApiResponse<RawSector[]> = await response.json();
+  async getLocationWhithFavorite() {
+    const response = await fetch(`${this.apiUrl}${routes.locationWithFavorite}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.verificationStore.accessToken}`,
+      },
+    });
 
-        if (!result.success) {
-            throw new Error('Fetch error');
-        };
+    const result: ApiResponse<RawLocation[]> = await response.json();
 
-        return result.data as RawSector[];
+    if (!result.success) {
+      throw new Error('Fetch error');
     }
 
-    async getSector(id: number) {
-        const response = await fetch(`${this.apiUrl}${routes.sector}`, {
-            method: 'POST',
-            body: JSON.stringify({
-                sector_id: id,
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+    return result.data as RawLocation[];
+  }
 
-        const result: ApiResponse<RawSector> = await response.json();
+  async addFavoritelocation(id: number) {
+    const response = await fetch(`${this.apiUrl}${routes.addFavoritelocation}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.verificationStore.accessToken}`,
+      },
+      body: JSON.stringify({
+        location_id: id,
+      }),
+    });
 
-        if (!result.success) {
-            throw new Error('Fetch error');
-        };
+    const result = await response.json();
 
-        return result.data as RawSector;
+    if (!result.success) {
+      throw new Error('Fetch error');
     }
 
-    async getSchemes(sectorId: number) {
-        const response = await fetch(`${this.apiUrl}${routes.schemes}`, {
-            method: 'POST',
-            body: JSON.stringify({
-                sector_id: sectorId,
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+    return result;
+  }
 
-        const result: ApiResponse<RawSectorSchema[]> = await response.json();
+  async removeFavoritelocation(id: number) {
+    const response = await fetch(`${this.apiUrl}${routes.removeFavoritelocation}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.verificationStore.accessToken}`,
+      },
+      body: JSON.stringify({
+        location_id: id,
+      }),
+    });
 
-        if (!result.success) {
-            throw new Error('Fetch error');
-        };
+    const result = await response.json();
 
-        return result.data as RawSectorSchema[];
+    if (!result.success) {
+      throw new Error('Fetch error');
     }
 
-    async getAdditionalServices(id: number) {
-        const response = await fetch(`${this.apiUrl}${routes.additionalServices}`, {
-            method: 'POST',
-            body: JSON.stringify({
-                location_id: id,
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+    return result;
+  }
 
-        const result: ApiResponse<RawAdditionalService[]> = await response.json();
+  async getLocation(id: number) {
+    const response = await fetch(`${this.apiUrl}${routes.location}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        location_id: id,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-        if (!result.success) {
-            throw new Error('Fetch error');
-        };
+    const result: ApiResponse<RawLocation> = await response.json();
 
-        return result.data as RawAdditionalService[];
+    if (!result.success) {
+      throw new Error('Fetch error');
     }
 
-    async getBeachAccessories(id: number) {
-        const response = await fetch(`${this.apiUrl}${routes.getBeachAccessories}`, {
-            method: 'POST',
-            body: JSON.stringify({
-                location_id: id,
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+    return result.data as RawLocation;
+  }
 
-        const result: ApiResponse<RawBeachAccessory[]> = await response.json();
+  async getSectors(id: number) {
+    const response = await fetch(`${this.apiUrl}${routes.sectors}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        location_id: id,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-        if (!result.success) {
-            throw new Error('Fetch error');
-        };
+    const result: ApiResponse<RawSector[]> = await response.json();
 
-        return result.data as RawBeachAccessory[];
+    if (!result.success) {
+      throw new Error('Fetch error');
     }
 
-    async getModules(locationId: number, from_date?: string, to_date?: string) {
-        const body = {
-            from_date,
-            to_date,
-        };
+    return result.data as RawSector[];
+  }
 
-        const response = await fetch(`${this.apiUrlV2}/location/${locationId}/modules`, {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-        });
+  async getSector(id: number) {
+    const response = await fetch(`${this.apiUrl}${routes.sector}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        sector_id: id,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-        const result: RawModule[] = await response.json();
+    const result: ApiResponse<RawSector> = await response.json();
 
-        return result;
+    if (!result.success) {
+      throw new Error('Fetch error');
     }
+
+    return result.data as RawSector;
+  }
+
+  async getSchemes(sectorId: number) {
+    const response = await fetch(`${this.apiUrl}${routes.schemes}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        sector_id: sectorId,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const result: ApiResponse<RawSectorSchema[]> = await response.json();
+
+    if (!result.success) {
+      throw new Error('Fetch error');
+    }
+
+    return result.data as RawSectorSchema[];
+  }
+
+  async getAdditionalServices(id: number) {
+    const response = await fetch(`${this.apiUrl}${routes.additionalServices}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        location_id: id,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const result: ApiResponse<RawAdditionalService[]> = await response.json();
+
+    if (!result.success) {
+      throw new Error('Fetch error');
+    }
+
+    return result.data as RawAdditionalService[];
+  }
+
+  async getBeachAccessories(id: number) {
+    const response = await fetch(`${this.apiUrl}${routes.getBeachAccessories}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        location_id: id,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const result: ApiResponse<RawBeachAccessory[]> = await response.json();
+
+    if (!result.success) {
+      throw new Error('Fetch error');
+    }
+
+    return result.data as RawBeachAccessory[];
+  }
+
+  async getModules(locationId: number, from_date?: string, to_date?: string) {
+    const body = {
+      from_date,
+      to_date,
+    };
+
+    const response = await fetch(`${this.apiUrlV2}/location/${locationId}/modules`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const result: RawModule[] = await response.json();
+
+    return result;
+  }
 }
 
 export const locationsService = new LocationsService();

@@ -1,43 +1,49 @@
 .header {
-    position: absolute;
-    top: 42px;
-    left: 10px;
-    right: 10px;
-    display: flex;
-    align-items: center;
-    height: 58px;
-    gap: 10px;
-    padding: 0 10px;
-    border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+  position: absolute;
+  top: 42px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  height: 58px;
+  gap: 10px;
+  padding: 0 10px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+.favorite {
+  svg {
+    fill: #f95e5e;
+    color: #f95e5e;
+  }
 }
 
 .title {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .category {
-    font-family: "Roboto";
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 14.4px;
-    color: #6B7280;
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14.4px;
+  color: #6b7280;
 }
 
 .name {
-    font-family: "Roboto";
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19.2px;
-    color: #292C31;
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19.2px;
+  color: #292c31;
 }
 
 .icons {
-    display: flex;
-    gap: 8px;
-    margin-left: auto;
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
 }
