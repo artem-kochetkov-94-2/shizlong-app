@@ -77,9 +77,6 @@ class NotificationsStore {
     try {
       this.isLoading = true;
       const code = await this.notificationsService.getTelegramCode();
-      if (!code) {
-        throw new Error('Не удалось получить код Telegram');
-      }
       this.telegramCode = code;
     } catch (error) {
       console.error(error);

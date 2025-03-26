@@ -20,7 +20,7 @@ class NotificationsService {
 
   async getTelegramCode() {
     if (!this.verificationStore.accessToken) {
-      return;
+      throw new Error('Нет токена');
     }
 
     const response = await fetch(`${this.apiUrlV1}${routes.telegram}`, {
