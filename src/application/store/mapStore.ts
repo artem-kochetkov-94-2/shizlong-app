@@ -173,6 +173,11 @@ class MapStore {
       },
       {
         considerRotation: true,
+        padding: {
+          left: 10,
+          bottom: 400,
+          right: 10,
+        },
       },
     );
   }

@@ -1,0 +1,1 @@
+export { PaymentMethodsAdd } from './PaymentMethodsAdd';

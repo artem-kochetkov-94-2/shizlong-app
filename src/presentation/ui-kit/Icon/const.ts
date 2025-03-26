@@ -50,6 +50,7 @@ import { ReactComponent as ArrowTopIcon } from './assets/arrow-up.svg';
 import { ReactComponent as ArrowDownIcon } from './assets/arrow-down.svg';
 import { ReactComponent as CancelIcon } from './assets/cancel.svg';
 import { ReactComponent as RetryIcon } from './assets/retry.svg';
+import { ReactComponent as Card2Icon } from './assets/card2.svg';
 import { IconName } from './types';
 
 export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = {
@@ -105,4 +106,5 @@ export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = 
   'arrow-down': ArrowDownIcon,
   cancel: CancelIcon,
   retry: RetryIcon,
+  card2: Card2Icon,
 };

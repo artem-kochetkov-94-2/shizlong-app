@@ -22,7 +22,8 @@ import { BookingDetailsReceipt } from './presentation/pages/BookingDetailsReceip
 import { NotificationsSettings } from './presentation/pages/NotificationsSettings';
 // import { Support } from './presentation/pages/Support';
 // import { ProfileEdit } from './presentation/pages/ProfileEdit';
-// import { PaymentMethods } from './presentation/pages/PaymentMethods';
+import { PaymentMethods } from './presentation/pages/PaymentMethods';
+import { PaymentMethodsAdd } from './presentation/pages/PaymentMethodsAdd';
 // import { PrivacyPolicy } from './presentation/pages/PrivacyPolicy';
 import { UiKit } from './presentation/pages/UiKit';
 // import { Filters } from './presentation/pages/Filters';
@@ -65,7 +66,8 @@ function App() {
             element={<NotificationsSettings />}
           />
           {/* <Route path={RoutesMap.Support} element={<Support />} /> */}
-          {/* <Route path={RoutesMap.PaymentMethods} element={<PaymentMethods />} /> */}
+          <Route path={RoutesMap.PaymentMethods} element={<PaymentMethods />} />
+          <Route path={RoutesMap.PaymentMethodsAdd} element={<PaymentMethodsAdd />} />
           {/* <Route path={RoutesMap.Privacy} element={<PrivacyPolicy />} /> */}
 
           <Route path={RoutesMap.UiKit} element={<UiKit />} />

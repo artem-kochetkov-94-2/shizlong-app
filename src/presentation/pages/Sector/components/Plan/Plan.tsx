@@ -57,6 +57,10 @@ export const Plan = observer(({
                     src={sector.link_plan}
                     alt={sector.name}
                     className={styles.plan}
+                    // style={{
+                    //     width: getPlanSize(sector.sector_coords_pixel).width,
+                    //     height: getPlanSize(sector.sector_coords_pixel).height,
+                    // }}
                 />
             ),
         },
@@ -64,16 +68,16 @@ export const Plan = observer(({
             x: 0,
             y: 0,
         },
-        width: getPlanSize(sector.sector_coords_pixel).width,
-        height: getPlanSize(sector.sector_coords_pixel).height,
-        style: {
-            border: '5px solid red',
-        },
+        // width: getPlanSize(sector.sector_coords_pixel).width,
+        // height: getPlanSize(sector.sector_coords_pixel).height,
+        // style: {
+        //     border: '5px solid red',
+        // },
     }];
 
     sectorModules.forEach((m) => {
         const module = m.module;
-        // const inlineStyles = m.placed_icon.style?.split(';');
+        // const inlineStyles = m.module.placed_icon.style?.split(';');
         // const width = inlineStyles?.find(style => style.includes('width'))?.split(':')[1];
         // const height = inlineStyles?.find(style => style.includes('height'))?.split(':')[1];
 
@@ -102,6 +106,8 @@ export const Plan = observer(({
                 x: Number(module.placed_icon.left),
                 y: Number(module.placed_icon.top),
             },
+            // width: Number(width),
+            // height: Number(height),
         };
 
         nodes.push(node);
