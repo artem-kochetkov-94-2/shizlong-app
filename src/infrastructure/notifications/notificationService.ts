@@ -39,7 +39,7 @@ class NotificationsService {
 
   async checkTelegramStatus() {
     if (!this.verificationStore.accessToken) {
-      return false;
+      throw new Error('Нет токена');
     }
 
     const response = await fetch(`${this.apiUrlV1}${routes.telegramCheckStatus}`, {
