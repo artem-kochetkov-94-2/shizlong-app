@@ -1,12 +1,11 @@
 import { makeAutoObservable } from 'mobx';
-import { RawSector, RawSectorSchema, RawModule } from '@src/infrastructure/Locations/types';
+import { RawSector, RawSectorSchema } from '@src/infrastructure/Locations/types';
 import { locationsService } from '@src/infrastructure/Locations/locationsService';
 
 class SectorStore {
   schemes: RawSectorSchema[] = [];
   sector: RawSector | null = null;
   activeScheme: RawSectorSchema | null = null;
-  selectedModule: RawModule | null = null;
   isSchemesLoading = false;
   isSectorLoading = false;
 
@@ -18,17 +17,12 @@ class SectorStore {
     this.sector = null;
     this.schemes = [];
     this.activeScheme = null;
-    this.selectedModule = null;
     this.isSchemesLoading = false;
     this.isSectorLoading = false;
   }
 
   setActiveScheme(scheme: RawSectorSchema) {
     this.activeScheme = scheme;
-  }
-
-  setSelectedModule(module: RawModule | null) {
-    this.selectedModule = module;
   }
 
   async init(sectorId: number) {

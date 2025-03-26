@@ -1,7 +1,18 @@
 import styles from "./Time.module.css";
 
-export const Time = () => {
+interface TimeProps {
+    value: string;
+    onChange: (value: string) => void;
+}
+
+export const Time = ({ value, onChange }: TimeProps) => {
     return (
-        <input aria-label="Time" type="time" className={styles.input} />
+        <input
+            aria-label="Time"
+            type="time"
+            className={styles.input}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+        />
     );
 };

@@ -1,0 +1,1 @@
+export { BookingDetailsReceipt } from './BookingDetailsReceipt';

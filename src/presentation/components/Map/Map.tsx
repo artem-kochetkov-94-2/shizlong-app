@@ -51,7 +51,7 @@ export const Map = observer(() => {
     // 2gis second - longitude
     if (!mapStore.map || !geoStore.location) return;
 
-    mapStore.setCenter(geoStore.location.longitude, geoStore.location.latitude);
+    mapStore.init();
   }, [geoStore.location, mapStore.map]);
 
   return <div id={MAP_CONTAINER_ID} className={styles.map} />;

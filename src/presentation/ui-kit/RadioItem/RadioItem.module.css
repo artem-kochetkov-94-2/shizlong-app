@@ -1,0 +1,95 @@
+.radioItem {
+  min-height: 44px;
+  padding: 15px 15px 0px 15px;
+  border-radius: 10px;
+  font-family: 'Roboto';
+  font-size: 16px;
+  font-weight: 400;
+  background-color: #fff;
+  color: #6b7280;
+  cursor: pointer;
+  pointer-events: none;
+}
+
+.disabled {
+  color: #bec5cf;
+}
+.radioItem > * {
+  pointer-events: auto;
+}
+
+.radioInput {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.radioInput:checked::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  background-color: #ffbc02;
+  border-radius: 50%;
+}
+.radioInput:checked {
+  background-color: #fff;
+  border: 2px solid #ffbc02;
+}
+
+.radioLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.checkContainer {
+  display: flex;
+  align-items: center;
+}
+
+.radioLabel span.open {
+  color: #161d25;
+}
+
+.status {
+  display: flex;
+  font-size: 14px;
+  color: #888;
+  margin-left: 10px;
+  text-align: end;
+}
+
+.error {
+  color: #f95e5e;
+}
+
+.expandableContent {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease-in-out;
+  padding: 0 10px;
+  margin-top: 10px;
+}
+
+.expandableContent.open {
+  max-height: fit-content;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  border-top: 1px solid #f3f4f6;
+}

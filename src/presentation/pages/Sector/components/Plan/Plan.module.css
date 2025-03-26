@@ -43,3 +43,29 @@
 .booked span {
     background: #F95E5E;
 }
+
+.left,
+.right {
+    position: absolute;
+    z-index: 100;
+    top: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 200px;
+    transform: translateY(-50%);
+    background: #ED9B5880;
+}
+
+.left {
+    left: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.right {
+    right: 0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}

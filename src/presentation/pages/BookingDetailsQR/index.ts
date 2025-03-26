@@ -1,0 +1,1 @@
+export { BookingDetailsQR } from './BookingDetailsQR';

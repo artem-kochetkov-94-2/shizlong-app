@@ -18,6 +18,7 @@ export const DrawerV2 = ({
     ...rest
 }: DrawerV2Props) => {
     return (
+        // @ts-ignore
         <SwipeableBottomSheet
             overflowHeight={overflowHeight}
             style={{ zIndex: 1000 }}

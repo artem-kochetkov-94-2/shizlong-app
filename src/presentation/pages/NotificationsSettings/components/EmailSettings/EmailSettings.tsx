@@ -1,10 +1,10 @@
-import { Button } from '@src/presentation/ui-kit/Button';
-import styles from './EmailSettings.module.css';
-import { Icon } from '@src/presentation/ui-kit/Icon';
 import { useState } from 'react';
+import { Button } from '@src/presentation/ui-kit/Button';
+import { Icon } from '@src/presentation/ui-kit/Icon';
 import { StyledInput } from '@src/presentation/ui-kit/StyledInput';
+import styles from './EmailSettings.module.css';
 
-export const EmailSettings = () => {
+export const EmailSettings: React.FC = () => {
   const [isAccept, setIsAccept] = useState(false);
   const [email, setEmail] = useState('');
 
@@ -19,11 +19,7 @@ export const EmailSettings = () => {
           <div className={styles.emailHeader}>E-mail</div>
           <div className={styles.email}>MargoSokolova@mail.ru</div>
 
-          <Button
-            variant={'gray2'}
-            size={'large'}
-            onClick={() => setIsAccept(!isAccept)}
-          >
+          <Button variant={'gray2'} size={'large'} onClick={() => setIsAccept(!isAccept)}>
             Изменить e-mail
           </Button>
         </>
@@ -32,7 +28,12 @@ export const EmailSettings = () => {
       {!isAccept && (
         <>
           <div className={styles.list}>1. Укажите e-mail</div>
-          <StyledInput placeholder='E-mail' type={'e-mail'} value={email} onChange={setEmail} />
+          <StyledInput
+            placeholder='E-mail'
+            type={'e-mail'}
+            value={email}
+            onChange={setEmail}
+          />
           <Button
             variant={'yellow'}
             size={'large'}

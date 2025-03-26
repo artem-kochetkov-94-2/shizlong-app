@@ -1,0 +1,86 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+  background-color: #f3f4f6;
+}
+
+.container hr {
+  border: none;
+  border-top: 2px solid transparent;
+  border-image: repeating-linear-gradient(
+      to right,
+      #ccc 0,
+      #ccc 10px,
+      transparent 10px,
+      transparent 20px
+    )
+    1;
+  margin: 20px 0;
+}
+
+.card {
+  display: flex;
+  gap: 8px;
+}
+
+.header {
+  font-family: Core Rhino 85;
+  color: #3d8393;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.paragraph {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  letter-spacing: 0px;
+  text-align: center;
+  color: #a0a7b1;
+}
+
+.wrapper {
+  margin-bottom: 30px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+}
+
+.subHeader {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 120%;
+  color: #a0a7b1;
+}
+
+.info {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  color: #292c31;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.col:first-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.col:last-child {
+  flex-shrink: 0;
+}

@@ -1,1 +1,1 @@
-export { Calendar, type DateValue } from './Calendar';
+export { Calendar } from './Calendar';

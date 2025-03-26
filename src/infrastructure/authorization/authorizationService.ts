@@ -1,18 +1,19 @@
-import { API_URL } from "@src/const";
+import { API_URL_V2 } from "@src/const";
 import { ApiResponse } from "@src/infrastructure/types";
+import { TryCodeResponse } from "./types";
 
 const routes = {
-    sendCode: '/send-code',
-    verifyCode: '/verify-code',
+    requestCode: '/auth/request_code',
+    verifyCode: '/auth/try_code',
     sendSms: '/send-sms',
     verifySms: '/verify-sms-code',
 };
 
 class AuthorizationService {
-    private readonly apiUrl = API_URL;
+    private readonly apiUrl = API_URL_V2;
 
     async sendCode(phone: string) {
-        const response = await fetch(`${this.apiUrl}${routes.sendCode}`, {
+        const response = await fetch(`${this.apiUrl}${routes.requestCode}`, {
             method: 'POST',
             body: JSON.stringify({
                 phone,
@@ -64,13 +65,13 @@ class AuthorizationService {
             credentials: 'include',
         });
 
-        const result: ApiResponse<unknown> = await response.json();
+        const result: TryCodeResponse = await response.json();
 
-        if (!result.success) {
+        if (!result.access_token) {
             throw new Error('Fetch error');
         };
 
-        return result.data as unknown;
+        return result;
     }
 
     async verifySms(phone: string, code: string) {
@@ -85,13 +86,13 @@ class AuthorizationService {
             },
         });
 
-        const result: ApiResponse<unknown> = await response.json();
+        const result: TryCodeResponse = await response.json();
 
-        if (!result.success) {
+        if (!result.access_token) {
             throw new Error('Fetch error');
         };
 
-        return result.data as unknown;
+        return result;
     }    
 }
 

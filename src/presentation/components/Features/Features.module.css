@@ -34,10 +34,28 @@
   }
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .itemContent {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.imageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+
+  img {
+    display: block;
+    max-width: 44px;
+    max-height: 44px;
+  }
 }
 
 .itemExtra {
@@ -46,13 +64,22 @@
   padding-top: 7px;
 }
 
+.itemArrow {
+  display: flex;
+  align-items: center;
+}
+
 .name {
   font-family: Roboto;
   font-weight: 400;
   font-size: 14px;
   line-height: 16.8px;
   color: #292C31;
-} 
+}
+
+.nameAccent {
+  color: #A0A7B1;
+}
 
 .extraTitle {
   white-space: nowrap;

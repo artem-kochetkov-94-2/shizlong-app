@@ -10,7 +10,7 @@ interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
   size?: IconSize;
   iconSize?: IconSize;
   shape?: 'circle' | 'rounded';
-  color?: 'gray' | 'white' | 'secondary' | 'transparent';
+  color?: 'gray' | 'white' | 'red' | 'secondary' | 'transparent';
   iconColor?: IconColor;
   withBorder?: boolean;
   withBlur?: boolean;

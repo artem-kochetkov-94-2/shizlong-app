@@ -3,19 +3,24 @@ import { makeAutoObservable } from 'mobx';
 import { VerificationController, verificationController } from '@src/domain/common/verification/verificationController';
 import { CallStrategy, callStrategy } from '@src/domain/common/verification/callStrategy';
 import { smsStrategy } from '@src/domain/common/verification/smsStrategy';
+import { cacheService } from '@src/application/services/cacheService/cacheService';
+import { KEY } from '@src/application/services/cacheService/types';
 
-class VerificationStore {
+export class VerificationStore {
   private verificationController: VerificationController;
   private _phoneNumber: string = '';
   private _verificationError: string | null = null;
   private _strategy: VerificationStrategy | null = null;
   private _isFetchingCode: boolean = false;
   private _isSendingCode: boolean = false;
+  private _accessToken: string | null = null;
 
   constructor() {
     makeAutoObservable(this);
     this.verificationController = verificationController;
     this._strategy = this.verificationController.getStrategy();
+
+    this._accessToken = cacheService.get(KEY.Token, false) || null;
   }
 
   get phoneNumber() {
@@ -36,6 +41,10 @@ class VerificationStore {
 
   get isSendingCode() {
     return this._isSendingCode;
+  }
+
+  get accessToken() {
+    return this._accessToken;
   }
 
   setStrategy(strategy: VerificationStrategy) {
@@ -69,10 +78,13 @@ class VerificationStore {
     }
   }
 
-  async sendCode(value: string) {
+  async sendCode(value: string, successCb: VoidFunction) {
     try {
       this._isSendingCode = true;
-      await this.strategy?.sendCode(this.phoneNumber, value);
+      const result = await this.strategy?.sendCode(this.phoneNumber, value);
+      this._accessToken = result?.access_token || null;
+      cacheService.set(KEY.Token, this._accessToken || '');
+      successCb();
     } catch (error) {
       this._verificationError = 'Код неверный';
     } finally {

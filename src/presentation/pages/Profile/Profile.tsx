@@ -12,7 +12,7 @@ import { CurrentBookings } from './components/CurrentBookings/CurrentBookings';
 import { observer } from 'mobx-react-lite';
 import { Rating } from '@src/presentation/components/Rating';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { DropdownMenu } from './components/DropdownMenu/DropdownMenu';
 import { Routes } from '@src/routes';
 
@@ -28,32 +28,51 @@ export const bookingsTabs: Tab[] = [
 ];
 
 export const Profile = observer(() => {
-  const avatar = 'https://placehold.co/64x64';
+  const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { iosEmptyBookings } = bookingsStore;
   const { currentTab, setCurrentTab } = useTabs(bookingsTabs[0].value);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { currentBookings } = bookingsStore;
   const navigate = useNavigate();
 
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedAvatar(file);
+    }
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <div className={styles.profile}>
-      <div
-        className={styles.header}
-        style={{ backgroundImage: `url(${backgroundImg})` }}
-      >
+      <div className={styles.header} style={{ backgroundImage: `url(${backgroundImg})` }}>
         <IconButton
           iconName='arrow-left'
           size='medium'
           shape='rounded'
           withBorder
           withBlur
+          onClick={() => navigate(-1)}
         />
 
         <div className={styles.userInfo}>
           <div
-            className={classNames(styles.avatar, !avatar && styles.avatarEmpty)}
+            className={classNames(styles.avatar, !selectedAvatar && styles.avatarEmpty)}
+            onClick={handleAvatarClick}
           >
-            {avatar && <img src={avatar} alt='' />}
+            <input
+              ref={fileInputRef}
+              type='file'
+              accept='image/*'
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+            />
+            {!selectedAvatar && <Icon name={'profile'} />}
+            {selectedAvatar && <img src={URL.createObjectURL(selectedAvatar)} alt='' />}
           </div>
           <div>
             <div className={styles.userName}>User 2458</div>
@@ -82,16 +101,8 @@ export const Profile = observer(() => {
             <span>Уведомления</span>
             <span className={styles.notificationsCount}>1</span>
           </div>
-          <div
-            className={styles.actionItem}
-            onClick={() => navigate(Routes.Favorites)}
-          >
-            <IconButton
-              iconName='favorite-outline'
-              size='large'
-              withBorder
-              withBlur
-            />
+          <div className={styles.actionItem} onClick={() => navigate(Routes.Favorites)}>
+            <IconButton iconName='favorite-outline' size='large' withBorder withBlur />
             <span>Избранное</span>
           </div>
           <div
@@ -117,7 +128,7 @@ export const Profile = observer(() => {
             <span>Привязать банковскую карту</span>
             <Icon size='small' name='arrow-right' />
           </div>
-          <div className={styles.reminderItem}>
+          <div className={styles.reminderItem} onClick={() => navigate(Routes.NotificationSettings)}>
             <Icon size='small' name='bell' />
             <span>Настроить уведомления</span>
             <Icon size='small' name='arrow-right' />
@@ -134,9 +145,7 @@ export const Profile = observer(() => {
 
           {iosEmptyBookings ? (
             <div className={styles.bookingsEmpty}>
-              <div className={styles.bookingsEmptyTitle}>
-                У вас пока нет броней
-              </div>
+              <div className={styles.bookingsEmptyTitle}>У вас пока нет броней</div>
               <img src={bookingsEmptyImg} />
             </div>
           ) : (
@@ -159,12 +168,11 @@ export const Profile = observer(() => {
               {currentTab === 'current' && <CurrentBookings />}
 
               {currentTab === 'completed' && <CompletedBookings />}
-
-              {isDropdownOpen && <DropdownMenu />}
             </>
           )}
         </div>
       </div>
+      {isDropdownOpen && <DropdownMenu />}
     </div>
   );
 });

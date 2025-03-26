@@ -27,6 +27,7 @@ export const Notifications = observer(() => {
                 </div>
             </div>
             <div className={styles.content}>
+                {/* @ts-ignore */}
                 {notifications.map((n: any) => {
                     return (
                         <div className={styles.notification}>

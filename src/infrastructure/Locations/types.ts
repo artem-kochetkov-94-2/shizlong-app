@@ -79,7 +79,7 @@ export interface RawSectorSchema {
 
 export type ModuleStatus = 'available' | 'booked' | 'inactive';
 
-export interface RawModule {
+export interface Module {
     id: number;
     name: string;
     sector_id: number;
@@ -88,10 +88,13 @@ export interface RawModule {
     placed_icon_group_id: null;
     created_at: Date;
     updated_at: Date;
-    price_per_hour: number;
+    price_per_hour: number | null;
     min_booking_duration: number;
     status: ModuleStatus;
     laravel_through_key: number;
+    description: string | null;
+    number: string | null;
+    images: string[] | null;
     placed_icon: {
         id: number;
         location_id: number;
@@ -110,6 +113,29 @@ export interface RawModule {
         link_icon: string;
     },
     placed_icon_group: null;
+    // "sector_scheme": {
+    //     "id": 5,
+    //     "sector_id": 3,
+    //     "name": "Схема 1",
+    //     "is_active": "1",
+    //     "time_of_day": "day",
+    //     "created_at": "2025-03-14T14:59:32.000000Z",
+    //     "updated_at": "2025-03-14T14:59:32.000000Z",
+    //     "time_start": "07:00:00",
+    //     "time_end": "13:00:00"
+    // },
+    // "bookings": []
+}
+
+export interface Slot {
+    "start_hour": Date;
+    "end_hour": Date;
+    "is_busy": boolean;
+}
+
+export interface RawModule {
+    module: Module;
+    slots: Slot[];
 }
 
 export type TimeOfDay = 'evening' | 'day';

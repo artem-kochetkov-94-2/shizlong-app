@@ -7,12 +7,12 @@
   display: flex;
   height: 195px;
   padding: 44px 14px;
-  background-color: #FFBC02;
+  background-color: #ffbc02;
   background-size: cover;
   background-position: top center;
 
   button:last-child svg {
-    fill: #A0A7B1;
+    fill: #a0a7b1;
   }
 }
 
@@ -28,12 +28,22 @@
   margin-right: 15px;
   border-radius: 50%;
   overflow: hidden;
+  cursor: pointer;
 
   &.avatarEmpty {
-    border: 2px solid #FFFFFFB2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #ffffffb2;
+    svg {
+      color: #ffffffb2;
+    }
   }
 
   img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
   }
 }
@@ -44,7 +54,7 @@
   font-weight: 500;
   font-size: 16px;
   line-height: 19.2px;
-  color: #292C31;
+  color: #292c31;
 }
 
 .userPhone {
@@ -58,7 +68,7 @@
   font-family: Roboto;
   font-weight: 500;
   font-size: 14px;
-  line-height: 16.8px;    
+  line-height: 16.8px;
 }
 
 .container {
@@ -83,7 +93,7 @@
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 15px;
   backdrop-filter: blur(10px);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, #FFFFFF 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, #ffffff 100%);
 
   span {
     font-family: Roboto;
@@ -111,7 +121,7 @@
   font-size: 12px;
   line-height: 14.4px;
   border-radius: 50%;
-  background-color: #F95E5E;
+  background-color: #f95e5e;
   color: #ffffff;
 }
 
@@ -127,8 +137,8 @@
   min-width: 17px;
   height: 14px;
   border-radius: 4px;
-  background-color: #FFBC02;
-  color: #FFFFFF;
+  background-color: #ffbc02;
+  color: #ffffff;
 }
 
 .reminders {
@@ -145,9 +155,9 @@
   height: 44px;
   padding-left: 16px;
   padding-right: 10px;
-  border-left: 6px solid #F95E5E;
+  border-left: 6px solid #f95e5e;
   border-radius: 10px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 
   span {
     margin-left: 2px;
@@ -156,7 +166,7 @@
     font-weight: 500;
     font-size: 14px;
     line-height: 16.8px;
-    color: #292C31;
+    color: #292c31;
   }
 }
 
@@ -166,7 +176,7 @@
   font-weight: 500;
   font-size: 18px;
   line-height: 21.09px;
-  color: #292C31;
+  color: #292c31;
 }
 
 .bookingsEmpty {
@@ -183,5 +193,5 @@
   font-size: 14px;
   line-height: 16.8px;
   text-align: center;
-  color: #A0A7B1;
+  color: #a0a7b1;
 }

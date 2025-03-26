@@ -1,38 +1,38 @@
 import { useState } from 'react';
-import { items } from './const';
 import { PageHeader } from '@src/presentation/ui-kit/PageHeader';
+import { RadioItem } from '@src/presentation/ui-kit/RadioItem';
 import styles from './NotificationsSettings.module.css';
+import { notificationsStore } from '@src/application/store/notificationsStore';
+import { observer } from 'mobx-react-lite';
 
-export const NotificationsSettings = () => {
-  const [selected, setSelected] = useState<string | null>(null);
+export const NotificationsSettings = observer(() => {
+  const { notifications } = notificationsStore;
+  const [selected, setSelected] = useState<string>(notifications[0].id);
 
   return (
     <div className={styles.NotificationsSettings}>
-      <PageHeader>Настройка уведомлений</PageHeader>
+      <PageHeader topPadding>Настройка уведомлений</PageHeader>
       <div className={styles.subHeader}>Выберите способ уведомления</div>
 
       <div className={styles.radioGroup}>
-        {items.map(({ id, label, content }) => (
-          <div key={id} className={styles.radioItem} onClick={() => setSelected(id)}>
-            <label htmlFor={id} className={styles.radioLabel}>
-              <div className={styles.checkContainer}>
-                <input
-                  type='radio'
-                  id={id}
-                  name='radio'
-                  className={styles.radioInput}
-                  defaultChecked={selected === id}
-                />
-                <span className={`${selected === id ? styles.open : ''}`}>{label}</span>
-              </div>
-              {selected === id && <span className={styles.status}>Установите приложение</span>}
-            </label>
-            <div className={`${styles.expandableContent} ${selected === id ? styles.open : ''}`}>
-              {selected === id && content}
-            </div>
-          </div>
-        ))}
+        {notificationsStore.notifications.map(
+          ({ id, label, content, status, statusText, disabled, caption }) => (
+            <RadioItem
+              key={id}
+              id={id}
+              label={label}
+              caption={caption}
+              selected={selected}
+              status={status}
+              onClick={() => setSelected(id)}
+              disabled={disabled}
+              statusText={statusText}
+            >
+              {content}
+            </RadioItem>
+          )
+        )}
       </div>
     </div>
   );
-};
+});

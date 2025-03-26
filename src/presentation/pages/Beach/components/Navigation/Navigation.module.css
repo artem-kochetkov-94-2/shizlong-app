@@ -33,3 +33,44 @@
     align-items: center;
     margin-bottom: 10px;
 }
+
+/* short */
+
+.wrapperShort {
+    gap: 8px;
+    width: 100%;
+    padding-inline: 15px;
+    padding-top: 2px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: #fff;
+}
+
+.categoryShort {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14.4px;
+    color: #A0A7B1;
+}
+
+.rowShort {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.nameShort {
+    padding-top: 4px;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21.09px;
+    letter-spacing: 0px;
+    color: #292C31;
+}
+
+.tagShort {
+    flex-shrink: 0;
+}

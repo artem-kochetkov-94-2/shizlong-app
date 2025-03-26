@@ -88,8 +88,16 @@
     }
 }
 
+.swiperSlide {
+    width: auto !important;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
 .image {
     display: block;
+    max-width: 140px;
+    max-height: 105px;
 }
 
 /* Content */
@@ -184,17 +192,22 @@
 .reservation {
     display: flex;
     align-items: center;
-    gap: 50px;
+    gap: 15px;
     font-family: Roboto;
     font-weight: 500;
     font-size: 14px;
     line-height: 16.8px;
 
-    span:nth-child(2) {
-        margin-left: auto;
+    span {
+        white-space: nowrap;
+    }
+
+    span:first-child {
+        min-width: 80px;
     }
 
     span:last-child {
+        margin-left: auto;
         color: #6B7280;
     }
 }
@@ -234,8 +247,10 @@
     align-items: center;
     gap: 10px;
 
-    svg {
-        color: #FFBC02;
+    img {
+        max-width: 18px;
+        max-height: 18px;
+        display: block;
     }
 }
 

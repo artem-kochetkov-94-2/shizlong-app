@@ -4,19 +4,29 @@
     gap: 10px;
     overflow-y: auto;
     padding: 15px;
-    padding-bottom: calc(74px + 15px);
     background-color: #F3F4F6;
     overflow-y: auto;
 }
 
 .footer {
-    position: fixed;
-    z-index: 10001;
-    bottom: 0;
-    left: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     width: 100%;
     padding: 15px;
+    border-top: 1px solid #E3E5EA;
     background-color: #ffffff;
+}
+
+.shortFooter {
+    padding-block: 10px;
+    border-top: none;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .plan {
@@ -30,4 +40,3 @@
         width: 100%;
     }
 }
-

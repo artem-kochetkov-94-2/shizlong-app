@@ -5,9 +5,7 @@ import { useState } from "react";
 import { Calendar as CalendarComponent } from "react-calendar";
 import { Sheet } from 'react-modal-sheet';
 import { formatFullDate } from "@src/application/utils/formatDate";
-
-type ValuePiece = Date | null;
-export type DateValue = ValuePiece | [ValuePiece, ValuePiece];
+import { DateValue } from "@src/application/types/date";
 
 interface CalendarProps {
     isOpen: boolean;
@@ -34,7 +32,9 @@ export const Calendar = ({ isOpen, onClose, initialValue, onChange }: CalendarPr
                         <div className={styles.calendarHeader}>
                             <div className={styles.calendarHeaderLeft}>
                                 <div className={styles.calendarHeaderTitle}>Выберите день</div>
-                                <div className={styles.calendarHeaderDate}>{initialValue ? formatFullDate(initialValue as Date) : ''}</div>
+                                <div className={styles.calendarHeaderDate}>
+                                    {initialValue ? formatFullDate(initialValue as Date) : ''}
+                                </div>
                             </div>
                             <IconButton
                                 iconName="cross"

@@ -88,7 +88,7 @@ export const Verification = observer(() => {
                                     inputMode={"tel"}
                                     onChange={(value) => {
                                         if (value.length === 4) {
-                                            verificationStore.sendCode(value);
+                                            verificationStore.sendCode(value, () => navigate(Routes.Locations));
                                         }
                                     }}
                                 />

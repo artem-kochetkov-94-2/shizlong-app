@@ -18,7 +18,8 @@ import { useEffect, useRef, useState } from "react";
 import { ModulesSelect } from "./components/ModulesSelect";
 import { ChooseDate } from "./components/ChooseDate";
 import { ChooseTime } from "./components/ChooseTime";
-import { ChooseStartTime } from "./components/ChooseStartTime";
+//@ts-ignore
+import { ChooseStartTime } from "./components/ChooseStartTime/ChooseStartTIme";
 // import { TimeSlider } from "@src/presentation/components/TimeSlider";
 
 const SNAP_POINTS = [758, 309, 79];
