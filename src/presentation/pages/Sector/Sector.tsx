@@ -38,6 +38,14 @@ export const Sector = observer(() => {
   useEffect(() => {
     if (!sector || !location) return;
 
+    if (!bookStore.startTime || bookStore.hours === 0) {
+      return;
+    }
+
+    console.log('bookStore.date', bookStore.date);
+    console.log('bookStore.hours', bookStore.hours);
+    console.log('bookStore.startTime', bookStore.startTime);
+
     const {
       from_date,
       to_date,

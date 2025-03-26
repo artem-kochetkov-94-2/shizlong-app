@@ -41,11 +41,11 @@ export class PaymentStore {
   async init() {
     try {
         const session = await paymentService.getSession();
-        this.sessionId = session.sessionId;
+        this.sessionId = session.session_id;
 
         const auth = {
-            merchantCode: session.merchantCode,
-            sessionId: session.sessionId,
+            merchantCode: session.merchant_id,
+            sessionId: session.session_id,
         };
         const fonts = [{ src: 'https://fonts.googleapis.com/css?family=Source+Code+Pro' }];
 
@@ -57,21 +57,19 @@ export class PaymentStore {
     }
   }
 
-  async createToken(additionalData: { holder_name: string }) {
+  async addNewCard(additionalData: { holder_name: string }) {
     if (!this.sessionId) {
         return;
     }
 
     try {
-        const token: FormRequestResponse = await window.PayUSecureFields.createToken(this.cardNumber, {
+        const result: FormRequestResponse = await window.PayUSecureFields.createToken(this.cardNumber, {
             additionalData
         });
 
-        console.log(token);
-
-        // if (token.statusCode === 'SUCCESS') {
-        //     await paymentService.sendFormData(token.token, this.sessionId);
-        // }
+        if (result.statusCode === 'SUCCESS') {
+            await paymentService.addNewCard(result.token, this.sessionId);
+        }
     } catch (error) {
         console.error(error);
     }

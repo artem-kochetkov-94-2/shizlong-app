@@ -21,7 +21,7 @@ export const PaymentMethodsAdd = () => {
         holder_name: document.getElementById('cardholder-name')?.value,
       }
       
-      await paymentStore.createToken(additionalData);
+      await paymentStore.addNewCard(additionalData);
     }
 
     formElement?.addEventListener('submit', listener);

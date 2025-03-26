@@ -27,11 +27,7 @@ export type FormRequestErrorResponse = {
 export type FormRequestResponse = FormRequestSuccessResponse | FormRequestErrorResponse;
 
 export type SessionResponse = {
-    sessionId: string;
-    merchantCode: string;
-    createdAt: string;
-    lifetimeMinutes: number;
-    code: number;
-    message: string;
-    status: string;
+    session_id: string;
+    merchant_id: string;
+    lifetime_minutes: number;
 }

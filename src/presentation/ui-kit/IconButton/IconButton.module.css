@@ -8,6 +8,10 @@
     border: none;
     cursor: pointer;
     overflow: hidden;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 .extra-small {
@@ -44,14 +48,26 @@
 
 .gray {
     background-color: #F3F4F6;
+
+    &:hover {
+        border-color: #F3F4F6;
+    }
 }
 
 .white {
     background-color: #ffffff;
+
+    &:hover {
+        border-color: #fff;
+    }
 }
 
 .secondary {
     background-color: #ED9B58;
+
+    &:hover {
+        border-color: #ED9B58;
+    }
 
     svg {
         color: #fff;
@@ -60,6 +76,10 @@
 
 .red {
     background-color: #F95E5E;
+
+    &:hover {
+        border-color: #F95E5E;
+    }
 }
 
 .transparent {
