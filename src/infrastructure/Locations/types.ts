@@ -31,7 +31,6 @@ export interface RawLocation {
   created_at: Date;
   updated_at: Date;
 }
-
 export interface RawSector {
   id: number;
   name: string;

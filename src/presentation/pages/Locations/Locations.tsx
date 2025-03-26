@@ -45,12 +45,7 @@ export const Locations = observer(() => {
           <Sheet.Scroller>
             <div className={styles.content}>
               <Menu />
-              <CardList
-                title='Пляжи рядом'
-                items={locations}
-                category='пляж'
-                isFavorite={false}
-              />
+              <CardList title='Пляжи рядом' items={locations} category='пляж' />
             </div>
           </Sheet.Scroller>
         </Sheet.Content>

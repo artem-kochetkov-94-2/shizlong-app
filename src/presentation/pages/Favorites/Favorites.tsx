@@ -43,8 +43,7 @@ export const Favorites = observer(() => {
         <Tabs tabs={tabs} activeTab={currentTab} onTabChange={setCurrentTab} />
       </div>
       <div className={styles.content}>
-        {favoriteLocations.length === 0 && <div>Пожалуйста, добавьте избранный пляж</div>}
-        <CardList items={favoriteLocations} isFavorite={true} />
+        <CardList items={favoriteLocations} />
       </div>
     </div>
   );

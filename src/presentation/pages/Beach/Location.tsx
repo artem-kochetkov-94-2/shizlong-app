@@ -25,7 +25,6 @@ export const Location = observer(() => {
   const [snap, setSnap] = useState(INITIAL_SNAP_POINT);
   const ref = useRef<SheetRef>(null);
   const { id } = useParams<{ id: string }>();
-  const isFavorite = locationsStore.getFavoriteStatus(Number(id));
   const { location, additionalServicesAsFeatures, modules } = locationStore;
 
   useEffect(() => {
@@ -49,7 +48,7 @@ export const Location = observer(() => {
 
   return (
     <>
-      <Header name={location.name} id={location.id} isFavorite={isFavorite} />
+      <Header />
 
       <Sheet
         ref={ref}

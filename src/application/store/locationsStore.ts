@@ -8,6 +8,7 @@ class LocationsStore {
   locations: RawLocation[] = [];
   favoriteLocations: RawLocation[] = [];
   isLoading = false;
+  isLoadingFavorite = false;
   mapStore = mapStore;
 
   constructor() {
@@ -16,14 +17,14 @@ class LocationsStore {
 
   async fetchfavoriteLocations() {
     try {
-      this.isLoading = true;
+      this.isLoadingFavorite = true;
       const locations = await locationsService.getFavoriteLocations();
       this.favoriteLocations = locations;
       console.log(locations);
     } catch (error) {
       console.error(error);
     } finally {
-      this.isLoading = false;
+      this.isLoadingFavorite = false;
     }
   }
 
@@ -87,6 +88,9 @@ class LocationsStore {
   }
 
   getFavoriteStatus(id: number): boolean | null {
+    if (this.favoriteLocations.some((loc) => loc.id === id)) {
+      return true;
+    }
     const location = this.locations.find((loc) => loc.id === id);
     return location?.favorite ?? null;
   }

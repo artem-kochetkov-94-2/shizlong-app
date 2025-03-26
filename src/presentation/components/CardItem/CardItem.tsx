@@ -7,12 +7,12 @@ import styles from './CardItem.module.css';
 import { Routes } from '@src/routes';
 import { Link } from 'react-router-dom';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
+import { locationsStore } from '@src/application/store/locationsStore';
 
 interface CardItemProps {
   data: RawLocation;
   optionsToView?: number;
   category?: string;
-  isFavorite: boolean;
 }
 
 const MAX_OPTIONS_TO_VIEW = 4;
@@ -21,10 +21,10 @@ export const CardItem = ({
   data,
   optionsToView = MAX_OPTIONS_TO_VIEW,
   category,
-  isFavorite,
 }: CardItemProps) => {
-  const { id, name, link_space, working_hours, favorite } = data;
+  const { id, name, link_space, working_hours } = data;
   const maxOptionsToView = Math.min(optionsToView, MAX_OPTIONS_TO_VIEW);
+  const isFavorite = locationsStore.getFavoriteStatus(id);
   console.log(maxOptionsToView);
 
   return (
@@ -66,7 +66,7 @@ export const CardItem = ({
           </Swiper>
         </div>
 
-        {(favorite || isFavorite) && (
+        {isFavorite && (
           <div className={styles.favorite}>
             <IconButton
               iconName='favorite'
