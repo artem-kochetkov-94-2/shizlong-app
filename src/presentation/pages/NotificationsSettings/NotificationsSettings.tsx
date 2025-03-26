@@ -3,9 +3,11 @@ import { PageHeader } from '@src/presentation/ui-kit/PageHeader';
 import { RadioItem } from '@src/presentation/ui-kit/RadioItem';
 import styles from './NotificationsSettings.module.css';
 import { notificationsStore } from '@src/application/store/notificationsStore';
+import { observer } from 'mobx-react-lite';
 
-export const NotificationsSettings = () => {
-  const [selected, setSelected] = useState<string>('');
+export const NotificationsSettings = observer(() => {
+  const { notifications } = notificationsStore;
+  const [selected, setSelected] = useState<string>(notifications[0].id);
 
   return (
     <div className={styles.NotificationsSettings}>
@@ -33,4 +35,4 @@ export const NotificationsSettings = () => {
       </div>
     </div>
   );
-};
+});
