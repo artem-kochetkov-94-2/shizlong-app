@@ -56,6 +56,7 @@ export const Profile = observer(() => {
           shape='rounded'
           withBorder
           withBlur
+          onClick={() => navigate(-1)}
         />
 
         <div className={styles.userInfo}>
