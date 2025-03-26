@@ -4,13 +4,12 @@ import { Button } from '@src/presentation/ui-kit/Button';
 import { CopyableDiv } from '@src/presentation/ui-kit/CopyableDiv';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { notificationsStore } from '@src/application/store/notificationsStore';
+import { TELEGRAM_BOT_LINK } from '@src/const';
 import styles from './TelegramSettings.module.css';
 
 export const TelegramSettings = observer(() => {
-  const code = notificationsStore.telegramCode;
+  const { telegramCode } = notificationsStore;
   const status = notificationsStore.notifications[0].status;
-
-  const telegramBotLink = 'https://t.me/test_shezlong_bot';
 
   useEffect(() => {
     notificationsStore.checkTelegramStatus();
@@ -31,13 +30,13 @@ export const TelegramSettings = observer(() => {
       </div>
       <div className={styles.list}>1. Скопируйте код</div>
       <CopyableDiv className={styles.margin} size={'large'}>
-        {code}
+        {telegramCode}
       </CopyableDiv>
       <div className={styles.list}>2. Отправьте код боту </div>
       <Button
         variant={'yellow'}
         size={'large'}
-        onClick={() => window.open(telegramBotLink, '_blank')}
+        onClick={() => window.open(TELEGRAM_BOT_LINK, '_blank')}
       >
         Подключить
       </Button>

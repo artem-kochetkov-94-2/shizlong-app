@@ -1,5 +1,5 @@
 import { API_URL } from '@src/const';
-import { TelegramResponse } from './types';
+import { getTelegramCodeResponse } from './types';
 import {
   VerificationStore,
   verificationStore,
@@ -19,6 +19,10 @@ class NotificationsService {
   }
 
   async getTelegramCode() {
+    if (!this.verificationStore.accessToken) {
+      return;
+    }
+
     const response = await fetch(`${this.apiUrlV1}${routes.telegram}`, {
       method: 'POST',
       headers: {
@@ -28,12 +32,16 @@ class NotificationsService {
       },
     });
 
-    const result: TelegramResponse = await response.json();
+    const result: getTelegramCodeResponse = await response.json();
 
     return result.code;
   }
 
   async checkTelegramStatus() {
+    if (!this.verificationStore.accessToken) {
+      return false;
+    }
+
     const response = await fetch(`${this.apiUrlV1}${routes.telegramCheckStatus}`, {
       method: 'POST',
       headers: {

@@ -5,6 +5,7 @@ import styles from './RadioItem.module.css';
 
 interface RadioItemProps extends HTMLAttributes<HTMLLabelElement> {
   children: ReactNode;
+  caption: ReactNode;
   id: string;
   label: string;
   selected: string;
@@ -23,6 +24,7 @@ export const RadioItem: React.FC<RadioItemProps> = ({
   onClick,
   selected,
   disabled,
+  caption,
 }) => {
   return (
     <div
@@ -42,11 +44,7 @@ export const RadioItem: React.FC<RadioItemProps> = ({
           />
           <span className={`${selected === id ? styles.open : ''}`}>{label}</span>
         </div>
-        {disabled && (
-          <div>
-            <span>В разработке</span>
-          </div>
-        )}
+        {caption}
         {selected === id && (
           <div
             className={cn(styles.status, {

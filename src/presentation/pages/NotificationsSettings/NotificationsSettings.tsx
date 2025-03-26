@@ -14,11 +14,12 @@ export const NotificationsSettings = () => {
 
       <div className={styles.radioGroup}>
         {notificationsStore.notifications.map(
-          ({ id, label, content, status, statusText, disabled }) => (
+          ({ id, label, content, status, statusText, disabled, caption }) => (
             <RadioItem
               key={id}
               id={id}
               label={label}
+              caption={caption}
               selected={selected}
               status={status}
               onClick={() => setSelected(id)}

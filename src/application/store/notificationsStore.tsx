@@ -10,6 +10,7 @@ import { WhatsAppSettings } from '@src/presentation/pages/NotificationsSettings/
 interface Notification {
   id: string;
   label: string;
+  caption?: ReactNode;
   content: ReactNode;
   statusText: string;
   status: boolean;
@@ -37,6 +38,7 @@ class NotificationsStore {
       statusText: '',
       status: false,
       disabled: true,
+      caption: <span>в разработке</span>,
     },
     {
       id: 'option3',
@@ -45,6 +47,7 @@ class NotificationsStore {
       statusText: '',
       status: false,
       disabled: true,
+      caption: <span>в разработке</span>,
     },
     {
       id: 'option4',
@@ -53,6 +56,7 @@ class NotificationsStore {
       statusText: '',
       status: false,
       disabled: true,
+      caption: <span>в разработке</span>,
     },
     {
       id: 'option5',
@@ -61,6 +65,7 @@ class NotificationsStore {
       statusText: '',
       status: false,
       disabled: true,
+      caption: <span>в разработке</span>,
     },
   ];
 
@@ -72,7 +77,11 @@ class NotificationsStore {
     try {
       this.isLoading = true;
       const code = await this.notificationsService.getTelegramCode();
-      this.telegramCode = code;
+      if (code) {
+        this.telegramCode = code;
+      } else {
+        console.log('Не удалось получить код Telegram');
+      }
     } catch (error) {
       console.error(error);
     } finally {

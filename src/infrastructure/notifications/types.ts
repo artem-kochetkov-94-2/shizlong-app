@@ -1,4 +1,4 @@
-export interface TelegramResponse {
+export interface getTelegramCodeResponse {
   success: boolean;
   code: string;
 }
