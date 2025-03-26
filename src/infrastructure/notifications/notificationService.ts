@@ -34,6 +34,10 @@ class NotificationsService {
 
     const result: getTelegramCodeResponse = await response.json();
 
+    if (!result.success) {
+      throw new Error(`Ошибка`);
+    }
+
     return result.code;
   }
 
