@@ -9,7 +9,7 @@ export const NotificationsSettings = () => {
 
   return (
     <div className={styles.NotificationsSettings}>
-      <PageHeader>Настройка уведомлений</PageHeader>
+      <PageHeader topPadding>Настройка уведомлений</PageHeader>
       <div className={styles.subHeader}>Выберите способ уведомления</div>
 
       <div className={styles.radioGroup}>
