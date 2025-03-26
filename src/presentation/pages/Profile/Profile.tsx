@@ -127,7 +127,7 @@ export const Profile = observer(() => {
             <span>Привязать банковскую карту</span>
             <Icon size='small' name='arrow-right' />
           </div>
-          <div className={styles.reminderItem}>
+          <div className={styles.reminderItem} onClick={() => navigate(Routes.NotificationSettings)}>
             <Icon size='small' name='bell' />
             <span>Настроить уведомления</span>
             <Icon size='small' name='arrow-right' />
@@ -167,12 +167,11 @@ export const Profile = observer(() => {
               {currentTab === 'current' && <CurrentBookings />}
 
               {currentTab === 'completed' && <CompletedBookings />}
-
-              {isDropdownOpen && <DropdownMenu />}
             </>
           )}
         </div>
       </div>
+      {isDropdownOpen && <DropdownMenu />}
     </div>
   );
 });

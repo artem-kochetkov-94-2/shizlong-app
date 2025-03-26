@@ -9,13 +9,13 @@ import { StyledInput } from '@src/presentation/ui-kit/StyledInput';
 import { useState } from 'react';
 import { ReminderItem } from '@src/presentation/ui-kit/ReminderItem';
 import { RadioItem } from '@src/presentation/ui-kit/RadioItem';
-import { items } from '../NotificationsSettings/const';
 import { AccordionItem } from '@src/presentation/ui-kit/AccordeonItem';
 import { Tag } from '@src/presentation/ui-kit/Tag';
 import { CheckBox } from '@src/presentation/ui-kit/CheckBox';
 import { RoundedTabs } from '@src/presentation/ui-kit/RoundedTabs';
 import { bookStore, SectorTab, sectorTabs } from '@src/application/store/bookStore';
 import { observer } from 'mobx-react-lite';
+import { notificationsStore } from '@src/application/store/notificationsStore';
 
 export const UiKit = observer(() => {
   const [valueInput, setValueInput] = useState('');
@@ -106,19 +106,21 @@ export const UiKit = observer(() => {
 
       {/* Блок с RadioItem */}
       <Card className={styles.background}>
-        {items.map(({ id, label, content, status, statusState }) => (
-          <RadioItem
-            key={id}
-            id={id}
-            label={label}
-            selected={selected}
-            status={status}
-            statusState={statusState}
-            onClick={() => setSelected(id)}
-          >
-            {content}
-          </RadioItem>
-        ))}
+        {notificationsStore.notifications.map(
+          ({ id, label, content, status, statusText }) => (
+            <RadioItem
+              key={id}
+              id={id}
+              label={label}
+              selected={selected}
+              status={status}
+              statusText={statusText}
+              onClick={() => setSelected(id)}
+            >
+              {content}
+            </RadioItem>
+          )
+        )}
       </Card>
 
       {/* Блок с AccordeonItem */}

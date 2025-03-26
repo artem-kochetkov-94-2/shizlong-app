@@ -11,6 +11,9 @@
   pointer-events: none;
 }
 
+.disabled {
+  color: #bec5cf;
+}
 .radioItem > * {
   pointer-events: auto;
 }

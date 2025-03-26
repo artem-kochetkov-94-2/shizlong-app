@@ -19,7 +19,7 @@ import { Booking } from './presentation/pages/Booking';
 import { BookingDetails } from './presentation/pages/BookingDetails';
 import { BookingDetailsQR } from './presentation/pages/BookingDetailsQR';
 import { BookingDetailsReceipt } from './presentation/pages/BookingDetailsReceipt';
-// import { NotificationsSettings } from './presentation/pages/NotificationsSettings';
+import { NotificationsSettings } from './presentation/pages/NotificationsSettings';
 // import { Support } from './presentation/pages/Support';
 // import { ProfileEdit } from './presentation/pages/ProfileEdit';
 import { PaymentMethods } from './presentation/pages/PaymentMethods';
@@ -48,7 +48,10 @@ function App() {
             <Route path={RoutesMap.Booking} element={<Booking />} />
             <Route path={RoutesMap.BookingDetails} element={<BookingDetails />} />
             <Route path={RoutesMap.BookingDetailsQR} element={<BookingDetailsQR />} />
-            <Route path={RoutesMap.BookingDetailsReceipt} element={<BookingDetailsReceipt />} />
+            <Route
+              path={RoutesMap.BookingDetailsReceipt}
+              element={<BookingDetailsReceipt />}
+            />
           </Route>
 
           <Route path={RoutesMap.Profile} element={<Profile />} />
@@ -58,10 +61,10 @@ function App() {
 
           {/* <Route path={RoutesMap.ProfileEdit} element={<ProfileEdit />} /> */}
           {/* <Route path={RoutesMap.Favorites} element={<Favorites />} /> */}
-          {/* <Route
+          <Route
             path={RoutesMap.NotificationSettings}
             element={<NotificationsSettings />}
-          /> */}
+          />
           {/* <Route path={RoutesMap.Support} element={<Support />} /> */}
           <Route path={RoutesMap.PaymentMethods} element={<PaymentMethods />} />
           <Route path={RoutesMap.PaymentMethodsAdd} element={<PaymentMethodsAdd />} />
