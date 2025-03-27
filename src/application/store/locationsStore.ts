@@ -9,6 +9,7 @@ class LocationsStore {
   favoriteLocations: RawLocation[] = [];
   isLoading = false;
   isLoadingFavorite = false;
+  isLoadingToggle = false;
   mapStore = mapStore;
 
   constructor() {
@@ -43,7 +44,7 @@ class LocationsStore {
 
   async toggleFavoriteLocation(id: number, add: boolean) {
     try {
-      this.isLoading = true;
+      this.isLoadingToggle = true;
       let res;
       if (add) {
         res = await locationsService.addFavoritelocation(id);
@@ -51,13 +52,12 @@ class LocationsStore {
         res = await locationsService.removeFavoritelocation(id);
       }
       if (res.success) {
-        this.init();
+        await this.init();
       }
     } catch (error) {
       console.error(error);
     } finally {
-      await this.init();
-      this.isLoading = false;
+      this.isLoadingToggle = false;
     }
   }
 
@@ -88,10 +88,10 @@ class LocationsStore {
   }
 
   getFavoriteStatus(id: number): boolean | null {
-    if (this.favoriteLocations.some((loc) => loc.id === id)) {
+    if (this.favoriteLocations.find((location) => location.id === id)) {
       return true;
     }
-    const location = this.locations.find((loc) => loc.id === id);
+    const location = this.locations.find((location) => location.id === id);
     return location?.favorite ?? null;
   }
 }
