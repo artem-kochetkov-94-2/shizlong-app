@@ -12,9 +12,10 @@ import { CurrentBookings } from './components/CurrentBookings/CurrentBookings';
 import { observer } from 'mobx-react-lite';
 import { Rating } from '@src/presentation/components/Rating';
 import { useNavigate } from 'react-router-dom';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { DropdownMenu } from './components/DropdownMenu/DropdownMenu';
 import { Routes } from '@src/routes';
+import { notificationsStore } from '@src/application/store/notificationsStore';
 
 export const bookingsTabs: Tab[] = [
   {
@@ -34,6 +35,7 @@ export const Profile = observer(() => {
   const { currentTab, setCurrentTab } = useTabs(bookingsTabs[0].value);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { currentBookings } = bookingsStore;
+  const { status } = notificationsStore;
   const navigate = useNavigate();
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +48,9 @@ export const Profile = observer(() => {
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
+  useEffect(() => {
+    notificationsStore.checkTelegramStatus();
+  }, []);
 
   return (
     <div className={styles.profile}>
@@ -127,11 +132,16 @@ export const Profile = observer(() => {
             <span>Привязать банковскую карту</span>
             <Icon size='small' name='arrow-right' />
           </div>
-          <div className={styles.reminderItem} onClick={() => navigate(Routes.NotificationSettings)}>
-            <Icon size='small' name='bell' />
-            <span>Настроить уведомления</span>
-            <Icon size='small' name='arrow-right' />
-          </div>
+          {!status && (
+            <div
+              className={styles.reminderItem}
+              onClick={() => navigate(Routes.NotificationSettings)}
+            >
+              <Icon size='small' name='bell' />
+              <span>Настроить уведомления</span>
+              <Icon size='small' name='arrow-right' />
+            </div>
+          )}
           <div className={styles.reminderItem}>
             <Icon size='small' name='check' />
             <span>Незавершённый заказ</span>
