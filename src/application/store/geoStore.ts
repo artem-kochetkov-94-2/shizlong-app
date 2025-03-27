@@ -23,12 +23,12 @@ export class GeoStore {
 
   init = () => {
     if ("permissions" in navigator) {
-        navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+        geoStore.setPermissionStatus(result.state);
+        result.onchange = () => {
             geoStore.setPermissionStatus(result.state);
-            result.onchange = () => {
-                geoStore.setPermissionStatus(result.state);
-            };
-        });
+        };
+      });
     }
 
     this.getLocation();

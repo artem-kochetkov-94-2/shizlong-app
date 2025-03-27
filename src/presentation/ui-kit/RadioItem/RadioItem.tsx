@@ -1,16 +1,18 @@
 import { HTMLAttributes, ReactNode } from 'react';
-import styles from './RadioItem.module.css';
-import cn from 'classnames';
 import { Icon } from '../Icon';
+import cn from 'classnames';
+import styles from './RadioItem.module.css';
 
 interface RadioItemProps extends HTMLAttributes<HTMLLabelElement> {
   children: ReactNode;
+  caption?: ReactNode;
   id: string;
   label: string;
   selected: string;
-  statusState: 'error' | 'success';
-  status?: string;
+  status?: boolean;
+  statusText: string;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 export const RadioItem: React.FC<RadioItemProps> = ({
@@ -18,27 +20,45 @@ export const RadioItem: React.FC<RadioItemProps> = ({
   id,
   label,
   status,
-  statusState,
+  statusText,
   onClick,
   selected,
+  disabled,
+  caption,
 }) => {
   return (
-    <div key={id} className={styles.radioItem} onClick={onClick}>
+    <div
+      key={id}
+      className={cn(styles.radioItem, { [styles.disabled]: disabled })}
+      onClick={!disabled ? onClick : undefined}
+    >
       <label htmlFor={id} className={styles.radioLabel}>
         <div className={styles.checkContainer}>
           <input
-            type='radio'
             id={id}
+            type='radio'
             name='radio'
             className={styles.radioInput}
             defaultChecked={selected === id}
+            disabled={disabled}
           />
           <span className={`${selected === id ? styles.open : ''}`}>{label}</span>
         </div>
+        {caption}
         {selected === id && (
-          <div className={cn(styles.status, styles[statusState])}>
-            <span>{status}</span>
-            {statusState === 'success' && <Icon name='check4' size='small' />}
+          <div
+            className={cn(styles.status, {
+              [styles.error]: !status,
+            })}
+          >
+            {!status ? (
+              <span>{statusText}</span>
+            ) : (
+              <>
+                <span>Выбрано</span>
+                <Icon name='check4' size='small' />
+              </>
+            )}
           </div>
         )}
       </label>

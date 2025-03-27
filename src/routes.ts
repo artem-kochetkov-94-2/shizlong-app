@@ -19,6 +19,7 @@ export const Routes = {
   BookingDetailsQR: '/booking/:id/qr',
   BookingDetailsReceipt: '/booking/:id/receipt',
   PaymentMethods: '/payment-methods',
+  PaymentMethodsAdd: '/payment-methods-add',
   Support: '/support',
   Privacy: 'privacy-policy',
   UiKit: '/ui-kit',

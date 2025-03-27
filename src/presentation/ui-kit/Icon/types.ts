@@ -19,6 +19,7 @@ export type IconName =
   | 'bell'
   | 'profile-circle'
   | 'card'
+  | 'card2'
   | 'arrow-right'
   | 'in-map'
   | 'stop'

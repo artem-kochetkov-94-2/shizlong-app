@@ -15,6 +15,22 @@ import { bookStore } from '@src/application/store/bookStore';
 import { RawModule, RawSector } from '@src/infrastructure/Locations/types';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 
+// function isModuleAvailable(module: RawModule, date: Date, hours: number, startTime: string) {
+//     const bookingDate = new Date(date);
+//     const [startHour, startMinute] = startTime.split(':').map(Number);
+//     const bookingStartTime = new Date(bookingDate.setHours(startHour, startMinute, 0, 0));
+//     const bookingEndTime = new Date(bookingStartTime.getTime() + hours * 60 * 60 * 1000);
+
+//     return module.slots.some(slot => {
+//         if (slot.is_busy) return false;
+
+//         const slotStartTime = new Date(slot.start_hour);
+//         const slotEndTime = new Date(slot.end_hour);
+
+//         return bookingStartTime >= slotStartTime && bookingEndTime <= slotEndTime;
+//     });
+// }
+
 export const Plan = observer(({
     onNext,
     onPrev,
@@ -26,24 +42,24 @@ export const Plan = observer(({
   const { modules } = locationStore;
   const { sector, activeScheme } = sectorStore;
 
-  const getPlanSize = (coords: [number, number][]) => {
-    let minX = coords[0][0];
-    let maxX = coords[0][0];
-    let minY = coords[0][1];
-    let maxY = coords[0][1];
+//   const getPlanSize = (coords: [number, number][]) => {
+//     let minX = coords[0][0];
+//     let maxX = coords[0][0];
+//     let minY = coords[0][1];
+//     let maxY = coords[0][1];
 
-    coords.forEach(([x, y]) => {
-        if (x < minX) minX = x;
-        if (x > maxX) maxX = x;
-        if (y < minY) minY = y;
-        if (y > maxY) maxY = y;
-    });
+//     coords.forEach(([x, y]) => {
+//         if (x < minX) minX = x;
+//         if (x > maxX) maxX = x;
+//         if (y < minY) minY = y;
+//         if (y > maxY) maxY = y;
+//     });
 
-    const width = maxX - minX;
-    const height = maxY - minY;
+//     const width = maxX - minX;
+//     const height = maxY - minY;
 
-    return { width, height };
-  }
+//     return { width, height };
+//   }
 
   const getNodes = (sector: RawSector, sectorModules: RawModule[]) => {
     const nodes: Node[] = [{
@@ -57,6 +73,10 @@ export const Plan = observer(({
                     src={sector.link_plan}
                     alt={sector.name}
                     className={styles.plan}
+                    // style={{
+                    //     width: getPlanSize(sector.sector_coords_pixel).width,
+                    //     height: getPlanSize(sector.sector_coords_pixel).height,
+                    // }}
                 />
             ),
         },
@@ -64,16 +84,17 @@ export const Plan = observer(({
             x: 0,
             y: 0,
         },
-        width: getPlanSize(sector.sector_coords_pixel).width,
-        height: getPlanSize(sector.sector_coords_pixel).height,
-        style: {
-            border: '5px solid red',
-        },
+        // width: getPlanSize(sector.sector_coords_pixel).width,
+        // height: getPlanSize(sector.sector_coords_pixel).height,
+        // style: {
+        //     border: '5px solid red',
+        // },
     }];
 
     sectorModules.forEach((m) => {
         const module = m.module;
-        // const inlineStyles = m.placed_icon.style?.split(';');
+        // const isAvailable = isModuleAvailable(m, bookStore.date as Date, bookStore.hours, bookStore.startTime);
+        // const inlineStyles = m.module.placed_icon.style?.split(';');
         // const width = inlineStyles?.find(style => style.includes('width'))?.split(':')[1];
         // const height = inlineStyles?.find(style => style.includes('height'))?.split(':')[1];
 
@@ -84,8 +105,8 @@ export const Plan = observer(({
                 label: (
                     <div className={styles.module}>
                         <span className={cn(styles.moduleId, {
-                            [styles.available]: module.status === 'available',
-                            [styles.booked]: module.status === 'booked',
+                            [styles.available]: m.module.status === 'available',
+                            [styles.booked]: m.module.status === 'booked',
                         })}>
                             <span>{m.module.number}</span>
                         </span>
@@ -102,6 +123,8 @@ export const Plan = observer(({
                 x: Number(module.placed_icon.left),
                 y: Number(module.placed_icon.top),
             },
+            // width: Number(width),
+            // height: Number(height),
         };
 
         nodes.push(node);

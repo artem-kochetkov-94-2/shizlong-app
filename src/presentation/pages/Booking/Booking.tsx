@@ -34,6 +34,8 @@ export const Booking = observer(() => {
 
     console.log('accessories', JSON.parse(JSON.stringify(bookStore.accessories)));
 
+    // const onSuccess = () => {}
+
     return (
         <>
             <Sheet

@@ -10,6 +10,9 @@ import {
 import { RawModule } from '@src/infrastructure/Locations/types';
 import { bookingsService } from '@src/infrastructure/bookings/bookingsService';
 import { RawBeachAccessory } from '@src/infrastructure/Locations/types';
+import { eventService } from '../services/EventService/EventService';
+import { EVENT } from '../services/EventService/EventList';
+import { ApiError } from '@src/infrastructure/validateResponse';
 
 
 export const modulesSelectOptions = [
@@ -177,7 +180,12 @@ class BookStore {
       const result = await bookingsService.createBooking(booking);
       console.log(result);
     } catch (error) {
-      console.error(error);
+      if (error instanceof ApiError) {
+        eventService.emit(EVENT.MODAL_ERROR, {
+          isActive: true,
+          message: error.message,
+        });
+      }
     } finally {
       this.isCreatingBooking = false;
     }

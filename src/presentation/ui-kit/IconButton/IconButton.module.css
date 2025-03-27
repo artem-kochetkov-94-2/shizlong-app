@@ -1,13 +1,17 @@
 .iconButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  padding: 0;
-  font-size: inherit;
-  border: none;
-  cursor: pointer;
-  overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    font-size: inherit;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 .extra-small {
@@ -43,16 +47,33 @@
 /* Colors */
 
 .gray {
+<<<<<<< HEAD
   background-color: #f3f4f6;
 }
 
 .white {
   background-color: #ffffff;
+=======
+    background-color: #F3F4F6;
+
+    &:hover {
+        border-color: #F3F4F6;
+    }
+}
+
+.white {
+    background-color: #ffffff;
+
+    &:hover {
+        border-color: #fff;
+    }
+>>>>>>> 3f17c22dba425144ee16095f04837f3f9c28ee75
 }
 
 .secondary {
   background-color: #ed9b58;
 
+<<<<<<< HEAD
   svg {
     color: #fff;
   }
@@ -60,6 +81,23 @@
 
 .red {
   background-color: #f95e5e;
+=======
+    &:hover {
+        border-color: #ED9B58;
+    }
+
+    svg {
+        color: #fff;
+    }
+}
+
+.red {
+    background-color: #F95E5E;
+
+    &:hover {
+        border-color: #F95E5E;
+    }
+>>>>>>> 3f17c22dba425144ee16095f04837f3f9c28ee75
 }
 
 .transparent {

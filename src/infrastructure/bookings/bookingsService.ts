@@ -1,6 +1,7 @@
 import { API_URL, API_URL_V2 } from "@src/const";
 import { BookingRequest, MyBookingsResponse } from "./types";
 import { VerificationStore, verificationStore } from "@src/application/store/verificationStore";
+import { validateResponse } from "../validateResponse";
 
 const routes = {
   create: '/booking/create',
@@ -56,7 +57,9 @@ class BookingsService {
 
     const result: unknown = await response.json();
 
-    return result
+    validateResponse(result);
+
+    return result;
   }
 }
 
