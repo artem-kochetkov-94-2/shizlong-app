@@ -15,6 +15,7 @@ import { Sheet, SheetRef } from 'react-modal-sheet';
 import { DRAG_VELOCITY_THRESHOLD, SERVER_URL } from '@src/const';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import classNames from 'classnames';
+import { locationsStore } from '@src/application/store/locationsStore';
 
 const SNAP_POINTS = [1, 483, 150];
 const INITIAL_SNAP_POINT = 1;
@@ -30,6 +31,7 @@ export const Location = observer(() => {
     if (!id) return;
 
     locationStore.setLocation(Number(id));
+    locationsStore.init();
     mapStore.toggleSelectionLocationMarker(Number(id), true);
 
     return () => {

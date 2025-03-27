@@ -4,15 +4,19 @@ import { locationsStore } from '@src/application/store/locationsStore';
 import { locationStore } from '@src/application/store/locationStore';
 import styles from './Header.module.css';
 import cn from 'classnames';
+import { observer } from 'mobx-react-lite';
 
-export const Header = () => {
+export const Header = observer(() => {
   const navigate = useNavigate();
   const { location } = locationStore;
   const id = Number(location?.id);
+  console.log(id);
   const isFavorite = locationsStore.getFavoriteStatus(id);
+  console.log(isFavorite);
 
   const handleToggleFavorite = (id: number, isFavorite: boolean | null): void => {
     locationsStore.toggleFavoriteLocation(id, !isFavorite);
+    console.log('клик');
   };
 
   return (
@@ -37,10 +41,10 @@ export const Header = () => {
           shape='rounded'
           color='white'
           onClick={() => handleToggleFavorite(id, isFavorite)}
-          disabled={isFavorite === null && true}
+          disabled={isFavorite === null}
         />
         <IconButton iconName='route' size='medium' shape='rounded' color='white' />
       </div>
     </div>
   );
-};
+});

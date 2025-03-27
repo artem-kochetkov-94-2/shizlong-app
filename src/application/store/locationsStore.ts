@@ -23,7 +23,7 @@ class LocationsStore {
       this.favoriteLocations = locations;
       console.log(locations);
     } catch (error) {
-      console.error(error);
+      this.favoriteLocations = [];
     } finally {
       this.isLoadingFavorite = false;
     }
@@ -36,6 +36,7 @@ class LocationsStore {
   async init() {
     if (verificationStore.isVerified) {
       await this.fetchLocationsWhithFavorite();
+      await this.fetchfavoriteLocations();
     } else {
       await this.fetchLocations();
     }
@@ -51,12 +52,10 @@ class LocationsStore {
       } else {
         res = await locationsService.removeFavoritelocation(id);
       }
-      if (res.success) {
-        await this.init();
-      }
     } catch (error) {
       console.error(error);
     } finally {
+      await this.fetchfavoriteLocations();
       this.isLoadingToggle = false;
     }
   }
@@ -87,12 +86,8 @@ class LocationsStore {
     }
   }
 
-  getFavoriteStatus(id: number): boolean | null {
-    if (this.favoriteLocations.find((location) => location.id === id)) {
-      return true;
-    }
-    const location = this.locations.find((location) => location.id === id);
-    return location?.favorite ?? null;
+  getFavoriteStatus(id: number) {
+    return this.favoriteLocations.some((location) => location.id === id);
   }
 }
 
