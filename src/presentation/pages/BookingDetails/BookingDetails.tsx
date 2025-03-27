@@ -63,7 +63,7 @@ export const BookingDetails = observer(() => {
                                 <div className={styles.cardHeaderContent}>
                                     <div className={styles.cardTitle}>Моя бронь</div>
                                     <div className={styles.cardSubtitle}>
-                                        {bookingStatuses[booking.status]}
+                                        {bookingStatuses[booking.status as keyof typeof bookingStatuses]}
                                     </div>
                                 </div>
                                 <div className={styles.cardHeaderActions}>
@@ -151,6 +151,12 @@ export const BookingDetails = observer(() => {
                         </Card>
 
                         <div className={styles.actions}>
+                            {booking.status === 'reserved' && (
+                                <Button variant={'yellow'}>
+                                    <span>Оплатить</span>
+                                </Button>
+                            )}
+
                             {booking.status === 'confirmed' && (
                                 <Button variant={'gray2'}>
                                     <Icon name={'cancel'} size='extra-small' />

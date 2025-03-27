@@ -38,6 +38,15 @@ export class PaymentStore {
     makeAutoObservable(this);
   }
 
+  async getTokens() {
+    try {
+      const result = await paymentService.getTokens();
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async init() {
     try {
         const session = await paymentService.getSession();
@@ -49,6 +58,7 @@ export class PaymentStore {
         };
         const fonts = [{ src: 'https://fonts.googleapis.com/css?family=Source+Code+Pro' }];
 
+        // @ts-ignore
         this.formElements = new window.PayUSecureFields.Init(auth, { fonts })
         console.log(this.formElements);
         this.makeFormElements();
@@ -63,6 +73,7 @@ export class PaymentStore {
     }
 
     try {
+        // @ts-ignore
         const result: FormRequestResponse = await window.PayUSecureFields.createToken(this.cardNumber, {
             additionalData
         });

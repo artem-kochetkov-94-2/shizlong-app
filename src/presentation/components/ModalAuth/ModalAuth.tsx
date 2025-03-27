@@ -4,12 +4,11 @@ import { useState } from 'react';
 import { Button } from '@src/presentation/ui-kit/Button';
 
 interface ModalProps {
-  isOpen: boolean;
+  onClose: () => void;
 }
 
-export const ModalAuth = ({ isOpen }: ModalProps) => {
+export const ModalAuth = ({ onClose }: ModalProps) => {
   const [value, setValue] = useState('');
-  if (!isOpen) return null;
 
   return (
     <div className={styles.overlay}>
@@ -33,6 +32,7 @@ export const ModalAuth = ({ isOpen }: ModalProps) => {
             size='large'
             disabled={value.length !== 11}
             withShadow={true}
+            onClick={onClose}
           >
             Авторизация
           </Button>

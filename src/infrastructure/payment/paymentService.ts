@@ -5,6 +5,7 @@ import { VerificationStore, verificationStore } from "@src/application/store/ver
 const routes = {
     getSession: '/payments/get_session',
     addNewCard: '/payments/add_card',
+    tokens: '/payments/customer/tokens',
 };
 
 class PaymentService {
@@ -44,6 +45,18 @@ class PaymentService {
                 session_id: sessionId,
                 token: token,
             }),
+        });
+
+        console.log(response);
+    }
+
+    async getTokens() {
+        const response = await fetch(`${this.apiUrl}${routes.tokens}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.verificationStore.accessToken}`,
+            },
         });
 
         console.log(response);

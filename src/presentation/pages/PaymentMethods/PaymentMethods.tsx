@@ -4,9 +4,16 @@ import { Button } from '@src/presentation/ui-kit/Button';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { Routes } from '@src/routes';
 import { useNavigate } from 'react-router-dom';
+import { paymentStore } from '@src/application/store/paymentStore';
+import { useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 
-export const PaymentMethods = () => {
+export const PaymentMethods = observer(() => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    paymentStore.getTokens();
+  }, []);
 
   return (
     <>
@@ -39,4 +46,4 @@ export const PaymentMethods = () => {
       </div>
     </>
   );
-};
+});

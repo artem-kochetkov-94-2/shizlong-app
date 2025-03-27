@@ -5,7 +5,7 @@ import styles from './RadioItem.module.css';
 
 interface RadioItemProps extends HTMLAttributes<HTMLLabelElement> {
   children: ReactNode;
-  caption: ReactNode;
+  caption?: ReactNode;
   id: string;
   label: string;
   selected: string;

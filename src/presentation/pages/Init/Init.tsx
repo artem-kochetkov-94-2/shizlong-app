@@ -27,9 +27,9 @@ export const Init = observer(() => {
         return <Navigate to={Routes.Auth} />
     }
 
-    if (permissionStatus === 'denied') {
-        return <Navigate to={Routes.Cities} />
-    }
+    // if (permissionStatus === 'denied') {
+    //     return <Navigate to={Routes.Cities} />
+    // }
 
     return (
         <div>

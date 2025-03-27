@@ -18,6 +18,7 @@ export const PaymentMethodsAdd = () => {
       event.preventDefault();
 
       const additionalData = {
+        // @ts-ignore
         holder_name: document.getElementById('cardholder-name')?.value,
       }
       

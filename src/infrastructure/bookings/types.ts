@@ -70,4 +70,4 @@ export interface RawBooking {
     }[];
 }
 
-type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed';
+type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'reserved';

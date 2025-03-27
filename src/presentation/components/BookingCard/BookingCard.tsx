@@ -9,13 +9,15 @@ import { Button } from "@src/presentation/ui-kit/Button";
 import { IconButton } from "@src/presentation/ui-kit/IconButton";
 
 const bookingStatusMap = {
-    'pending': 'Не оплачена',
+    'reserved': 'Не оплачена',
+    'pending': 'Активна',
     'confirmed': 'Оплачена',
     'cancelled': 'Отменена',
     'completed': 'Завершена',
 }
 
 export const bgColorByStatus = {
+    'reserved': '#161D25CC',
     'completed': '#ED9B58',
     'cancelled': '#F95E5E',
     'pending': '#FBD24C',
@@ -23,6 +25,7 @@ export const bgColorByStatus = {
 }
 
 export const colorByStatus = {
+    'reserved': '#ffffff',
     'completed': '#ffffff',
     'cancelled': '#ffffff',
     'pending': '#292C31',
@@ -129,14 +132,16 @@ export const BookingCard = ({ booking }: { booking: RawBooking }) => {
                     />
                 </div>
 
-                {/* <div className={styles.actionItem}>
-                    <Button
-                        size="medium"
-                        variant="yellow"
-                    >
-                        <span>Продлить</span>
-                    </Button>
-                    <IconButton
+                <div className={styles.actionItem}>
+                    {booking.status === 'reserved' && (
+                        <Button
+                            size="medium"
+                            variant="yellow"
+                        >
+                            <span>Оплатить</span>
+                        </Button>
+                    )}
+                    {/* <IconButton
                         iconName="stop"
                         size="large"
                         iconSize="small"
@@ -149,8 +154,8 @@ export const BookingCard = ({ booking }: { booking: RawBooking }) => {
                         iconSize="small"
                         shape="rounded"
                         color="white"
-                    />
-                </div> */}
+                    /> */}
+                </div>
             </div>
         </div>
     );

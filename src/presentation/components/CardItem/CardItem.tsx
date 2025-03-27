@@ -19,6 +19,7 @@ export const CardItem = ({ data, optionsToView = MAX_OPTIONS_TO_VIEW, category }
   const { id, name, link_space, working_hours } = data;
   const maxOptionsToView = Math.min(optionsToView, MAX_OPTIONS_TO_VIEW);
   console.log(maxOptionsToView);
+  console.log('data', JSON.parse(JSON.stringify(data)));
 
   return (
     <Link to={Routes.Location.replace(':id', `${id}`)}>
