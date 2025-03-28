@@ -1,6 +1,6 @@
-import { CardItem } from "@presentation/components/CardItem";
-import { RawLocation } from "@src/infrastructure/Locations/types";
-import styles from "./CardList.module.css";
+import { CardItem } from '@presentation/components/CardItem';
+import { RawLocation } from '@src/infrastructure/Locations/types';
+import styles from './CardList.module.css';
 
 interface CardListProps {
   items: RawLocation[];
@@ -20,4 +20,4 @@ export const CardList = ({ items, title, category }: CardListProps) => {
       </div>
     </>
   );
-}
+};

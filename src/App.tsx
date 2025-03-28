@@ -11,7 +11,7 @@ import { Auth } from '@src/presentation/pages/Auth';
 import { Verification } from '@src/presentation/pages/Verification';
 import { Init } from '@src/presentation/pages/Init';
 // import { Cities } from './presentation/pages/Cities';
-// import { Favorites } from './presentation/pages/Favorites';
+import { Favorites } from './presentation/pages/Favorites';
 // import { Notifications } from './presentation/pages/Notifications';
 // import { Abonements } from './presentation/pages/Abonements';
 // import { Abonement } from './presentation/pages/Abonement';
@@ -60,7 +60,7 @@ function App() {
           {/* <Route path={RoutesMap.Notifications} element={<Notifications />} /> */}
 
           {/* <Route path={RoutesMap.ProfileEdit} element={<ProfileEdit />} /> */}
-          {/* <Route path={RoutesMap.Favorites} element={<Favorites />} /> */}
+          <Route path={RoutesMap.Favorites} element={<Favorites />} />
           <Route
             path={RoutesMap.NotificationSettings}
             element={<NotificationsSettings />}
