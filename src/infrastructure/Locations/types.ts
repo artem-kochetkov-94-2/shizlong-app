@@ -139,3 +139,8 @@ export interface RawModule {
 }
 
 export type TimeOfDay = 'evening' | 'day';
+
+export interface ApiResponseStatus {
+  success: boolean;
+  message: string;
+}
