@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { paymentService } from '@src/infrastructure/payment/paymentService';
-import { FormRequestResponse } from '@src/infrastructure/payment/types';
+import { FormRequestResponse, Token } from '@src/infrastructure/payment/types';
 
 const style = {
     base: {
@@ -33,6 +33,9 @@ export class PaymentStore {
   cvv: any;
   userAgreement: any;
   sessionId: string | null = null;
+  tokens: Token[] = [];
+  isLoadingTokens = false;
+  isLoadingProcessPayment = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -40,10 +43,14 @@ export class PaymentStore {
 
   async getTokens() {
     try {
+      this.isLoadingTokens = true;
       const result = await paymentService.getTokens();
       console.log(result);
+      this.tokens = result;
     } catch (error) {
       console.error(error);
+    } finally {
+      this.isLoadingTokens = false;
     }
   }
 
@@ -81,6 +88,15 @@ export class PaymentStore {
         if (result.statusCode === 'SUCCESS') {
             await paymentService.addNewCard(result.token, this.sessionId);
         }
+    } catch (error) {
+        console.error(error);
+    }
+  }
+
+  async processPayment(bookingId: number, tokenId: number) {
+    try {
+        this.isLoadingProcessPayment = true;
+        await paymentService.processPayment(bookingId, tokenId);
     } catch (error) {
         console.error(error);
     }

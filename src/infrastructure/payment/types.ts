@@ -31,3 +31,13 @@ export type SessionResponse = {
     merchant_id: string;
     lifetime_minutes: number;
 }
+
+export type Token = {
+    id: number;
+    token: string;
+    holder_name: string;
+    created_at: string;
+}
+
+export type TokenResponse = Token[];
+

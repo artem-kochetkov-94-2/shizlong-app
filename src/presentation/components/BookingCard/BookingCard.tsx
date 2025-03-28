@@ -7,6 +7,8 @@ import styles from "./BookingCard.module.css";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@src/presentation/ui-kit/Button";
 import { IconButton } from "@src/presentation/ui-kit/IconButton";
+import { paymentStore } from "@src/application/store/paymentStore";
+import { observer } from "mobx-react-lite";
 
 const bookingStatusMap = {
     'reserved': 'Не оплачена',
@@ -32,8 +34,9 @@ export const colorByStatus = {
     'confirmed': '#ffffff',
 }
 
-export const BookingCard = ({ booking }: { booking: RawBooking }) => {
+export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
     const navigate = useNavigate();
+    const { tokens } = paymentStore;
 
     return (
         <div className={styles.item} key={booking.id}>
@@ -137,6 +140,12 @@ export const BookingCard = ({ booking }: { booking: RawBooking }) => {
                         <Button
                             size="medium"
                             variant="yellow"
+                            onClick={() => {
+                                console.log('click', JSON.stringify(tokens));
+                                if (tokens.length > 0) {
+                                    paymentStore.processPayment(booking.id, tokens[0].id);
+                                }
+                            }}
                         >
                             <span>Оплатить</span>
                         </Button>
@@ -159,4 +168,4 @@ export const BookingCard = ({ booking }: { booking: RawBooking }) => {
             </div>
         </div>
     );
-};
+});
