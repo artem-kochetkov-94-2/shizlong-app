@@ -1,6 +1,6 @@
 import { API_URL, API_URL_V2 } from '@src/const';
 import {
-  ApiResponseStatus,
+  FavoriteUpdateResult,
   RawAdditionalService,
   RawBeachAccessory,
   RawLocation,
@@ -96,31 +96,21 @@ class LocationsService {
   }
 
   async addFavoritelocation(id: number) {
-    try {
-      const response = await this.restService.post<ApiResponseStatus>({
-        url: routes.addFavoritelocation,
-        data: { location_id: id },
-      });
+    const response = await this.restService.post<FavoriteUpdateResult>({
+      url: routes.addFavoritelocation,
+      data: { location_id: id },
+    });
 
-      return response.response;
-    } catch (error) {
-      console.error('Ошибка при добавление в избранное:', error);
-      throw new Error('Ошибка при добавление в избранное');
-    }
+    return response.response;
   }
 
   async removeFavoritelocation(id: number) {
-    try {
-      const response = await this.restService.post<ApiResponseStatus>({
-        url: routes.removeFavoritelocation,
-        data: { location_id: id },
-      });
+    const response = await this.restService.post<FavoriteUpdateResult>({
+      url: routes.removeFavoritelocation,
+      data: { location_id: id },
+    });
 
-      return response.response;
-    } catch (error) {
-      console.error('Ошибка при удалении из избранного:', error);
-      throw new Error('Ошибка при удалении из избранного');
-    }
+    return response.response;
   }
 
   async getLocation(id: number) {

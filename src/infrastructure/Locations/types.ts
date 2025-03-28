@@ -140,7 +140,7 @@ export interface RawModule {
 
 export type TimeOfDay = 'evening' | 'day';
 
-export interface ApiResponseStatus {
+export interface FavoriteUpdateResult {
   success: boolean;
   message: string;
 }
