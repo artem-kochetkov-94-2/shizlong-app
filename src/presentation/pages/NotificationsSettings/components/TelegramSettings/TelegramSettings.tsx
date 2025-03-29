@@ -9,10 +9,9 @@ import styles from './TelegramSettings.module.css';
 
 export const TelegramSettings = observer(() => {
   const { telegramCode } = notificationsStore;
-  const status = notificationsStore.notifications[0].status;
-
+  const { status } = notificationsStore;
+  console.log(status);
   useEffect(() => {
-    notificationsStore.checkTelegramStatus();
     notificationsStore.getTelegramCode();
   }, []);
 
@@ -36,7 +35,7 @@ export const TelegramSettings = observer(() => {
             {telegramCode}
           </CopyableDiv>
           <div className={styles.list}>2. Отправьте код боту </div>
-          
+
           <Button
             variant={'yellow'}
             size={'large'}
