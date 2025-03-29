@@ -1,5 +1,6 @@
 import { API_URL, API_URL_V2 } from '@src/const';
 import {
+  FavoriteUpdateResult,
   RawAdditionalService,
   RawBeachAccessory,
   RawLocation,
@@ -12,6 +13,7 @@ import {
   verificationStore,
   VerificationStore,
 } from '@src/application/store/verificationStore';
+import { RestService } from '../restService/restService';
 
 const routes = {
   locations: '/get-locations',
@@ -31,9 +33,11 @@ class LocationsService {
   private readonly apiUrl = API_URL;
   private readonly apiUrlV2 = API_URL_V2;
   private readonly verificationStore: VerificationStore;
+  private restService: RestService;
 
   constructor() {
     this.verificationStore = verificationStore;
+    this.restService = new RestService();
   }
 
   async getLocations() {
@@ -92,47 +96,21 @@ class LocationsService {
   }
 
   async addFavoritelocation(id: number) {
-    const response = await fetch(`${this.apiUrl}${routes.addFavoritelocation}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.verificationStore.accessToken}`,
-      },
-      body: JSON.stringify({
-        location_id: id,
-      }),
+    const response = await this.restService.post<FavoriteUpdateResult>({
+      url: routes.addFavoritelocation,
+      data: { location_id: id },
     });
 
-    const result = await response.json();
-
-    if (!result.success) {
-      throw new Error('Fetch error');
-    }
-
-    return result;
+    return response.response;
   }
 
   async removeFavoritelocation(id: number) {
-    const response = await fetch(`${this.apiUrl}${routes.removeFavoritelocation}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.verificationStore.accessToken}`,
-      },
-      body: JSON.stringify({
-        location_id: id,
-      }),
+    const response = await this.restService.post<FavoriteUpdateResult>({
+      url: routes.removeFavoritelocation,
+      data: { location_id: id },
     });
 
-    const result = await response.json();
-
-    if (!result.success) {
-      throw new Error('Fetch error');
-    }
-
-    return result;
+    return response.response;
   }
 
   async getLocation(id: number) {
