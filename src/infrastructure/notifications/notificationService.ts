@@ -1,5 +1,5 @@
 import { API_URL } from '@src/const';
-import { getTelegramCodeResponse } from './types';
+import { CheckTelegramStatusResponse, getTelegramCodeResponse } from './types';
 import {
   VerificationStore,
   verificationStore,
@@ -55,7 +55,7 @@ class NotificationsService {
       },
     });
 
-    const result = await response.json();
+    const result = await response.json() as CheckTelegramStatusResponse;
 
     return result;
   }
