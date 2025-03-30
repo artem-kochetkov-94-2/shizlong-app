@@ -44,6 +44,8 @@ export const Location = observer(() => {
     icon: `${SERVER_URL}${m.module.placed_icon.link_icon}`,
   }));
 
+  console.log('snap', snap);
+
   return (
     <>
       <Header />

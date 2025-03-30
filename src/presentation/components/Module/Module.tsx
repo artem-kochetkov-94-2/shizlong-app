@@ -28,6 +28,8 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
     const { beachAccessories, location } = locationStore;
     const { formattedTime, formattedDate } = bookStore;
 
+    console.log('module', JSON.parse(JSON.stringify(selectedModule)));
+
     const navigate = useNavigate();
 
     if (!selectedModule) return null;

@@ -34,6 +34,9 @@ const formatShortDateWithoutYear = (date: Date) => {
 function formatTimeRange(startHour: Date, endHour: Date) {
     const options = { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' };
 
+    console.log('startHour', startHour);
+    console.log('endHour', endHour);
+
     // @ts-ignore
     const start = new Date(startHour).toLocaleTimeString('ru-RU', options);
     // @ts-ignore

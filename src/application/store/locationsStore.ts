@@ -4,7 +4,7 @@ import { makeAutoObservable } from 'mobx';
 import { mapStore } from './mapStore';
 import { verificationStore } from './verificationStore';
 
-class LocationsStore {
+export class LocationsStore {
   locations: RawLocation[] = [];
   favoriteLocations: RawLocation[] = [];
   isLoading = false;
@@ -52,10 +52,10 @@ class LocationsStore {
       } else {
         res = await locationsService.removeFavoritelocation(id);
       }
+      await this.init();
     } catch (error) {
       console.error(error);
     } finally {
-      await this.fetchfavoriteLocations();
       this.isLoadingToggle = false;
     }
   }

@@ -17,9 +17,9 @@ interface Notification {
   disabled: boolean;
 }
 
-class NotificationsStore {
+export class NotificationsStore {
   private notificationsService = notificationsService;
-  status: boolean = false;
+  isSubscribedToTelegram: boolean = false;
   isLoading: boolean = false;
   telegramCode: string = '';
 
@@ -91,7 +91,7 @@ class NotificationsStore {
       this.isLoading = true;
       const res = await this.notificationsService.checkTelegramStatus();
       this.notifications[0].status = res.is_subscribed_to_telegram;
-      this.status = res.is_subscribed_to_telegram;
+      this.isSubscribedToTelegram = res.is_subscribed_to_telegram;
     } catch (error) {
       console.error(error);
     } finally {

@@ -34,10 +34,9 @@ export type SessionResponse = {
 
 export type Token = {
     id: number;
-    token: string;
-    holder_name: string;
-    created_at: string;
+    card_number: string;
+    expiry_year: string;
+    card_holder_name: string;
 }
 
 export type TokenResponse = Token[];
-

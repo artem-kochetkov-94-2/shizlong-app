@@ -14,7 +14,7 @@ import { useTimer } from "@src/application/hooks/useTimer";
 import { Sheet } from 'react-modal-sheet';
 import { useEffect } from "react";
 
-const RESEND_INTERVAL_SECONDS = 5;
+const RESEND_INTERVAL_SECONDS = 60;
 
 export const Verification = observer(() => {
     const navigate = useNavigate();

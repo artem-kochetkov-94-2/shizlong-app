@@ -262,11 +262,13 @@
 }
 
 .accessoriesItemPrice {
+    flex-shrink: 0;
     margin-left: auto;
     font-family: Roboto;
     font-weight: 500;
     font-size: 14px;
     line-height: 16.8px;
+    white-space: nowrap;
     
 }
 

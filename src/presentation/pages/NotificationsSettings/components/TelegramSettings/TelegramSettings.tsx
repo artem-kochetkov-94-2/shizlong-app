@@ -9,22 +9,22 @@ import styles from './TelegramSettings.module.css';
 
 export const TelegramSettings = observer(() => {
   const { telegramCode } = notificationsStore;
-  const { status } = notificationsStore;
-  console.log(status);
+  const { isSubscribedToTelegram } = notificationsStore;
+
   useEffect(() => {
     notificationsStore.getTelegramCode();
   }, []);
 
   return (
     <div className={styles.telegramSettings}>
-      {status && (
+      {isSubscribedToTelegram && (
         <div className={styles.reminderItem}>
           <Icon size='small' name='check5' />
           <span>Уведомления настроены</span>
         </div>
       )}
 
-      {!status && (
+      {!isSubscribedToTelegram && (
         <>
           <div className={styles.desc}>
             Вы можете настроить уведомления о новых событиях на сайте в ваш Telergam. Для

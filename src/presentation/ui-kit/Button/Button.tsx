@@ -1,6 +1,7 @@
 import { ButtonHTMLAttributes, ReactNode } from 'react';
 import styles from './Button.module.css';
 import cn from 'classnames';
+import { Loader } from '../Loader';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -10,6 +11,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   ghost?: boolean;
   fullRadius?: boolean;
   withShadow?: boolean;
+  isLoading?: boolean;
 }
 
 export const Button = ({
@@ -22,6 +24,7 @@ export const Button = ({
   ghost,
   fullRadius,
   withShadow,
+  isLoading,
   ...props
 }: ButtonProps) => {
   return (
@@ -42,6 +45,7 @@ export const Button = ({
       disabled={disabled}
       {...props}
     >
+      {isLoading && <Loader />}
       {children}
     </button>
   );

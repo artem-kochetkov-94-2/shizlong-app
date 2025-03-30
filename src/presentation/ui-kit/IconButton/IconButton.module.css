@@ -48,6 +48,10 @@
 
 .gray {
   background-color: #f3f4f6;
+
+  &:hover {
+    border-color: #f3f4f6;
+  }
 }
 
 .white {
@@ -68,6 +72,11 @@
 
 .secondary {
   background-color: #ed9b58;
+
+  &:hover {
+    border-color: #ed9b58;
+  }
+
   svg {
     color: #fff;
   }

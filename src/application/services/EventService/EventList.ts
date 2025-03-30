@@ -5,5 +5,5 @@ export enum EVENT {
 
 export type EVENT_DATA = {
     [EVENT.MODAL_AUTH]: { isActive: boolean; };
-    [EVENT.MODAL_ERROR]: { isActive: boolean; message: string; text?: string; };
+    [EVENT.MODAL_ERROR]: { isActive: boolean; message: string; text?: string | string[] };
 };

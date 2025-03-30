@@ -5,7 +5,8 @@ import markerUserIcon from '@presentation/components/Map/assets/markerUser.png';
 import { RawLocation, RawSector } from '@src/infrastructure/Locations/types';
 import { GeoStore, geoStore } from './geoStore';
 import mapTooltip from '@src/assets/mapTooltip.svg';
-// import mapTooltipFavorite from '@src/assets/mapTooltipFavorite.svg';
+import mapTooltipFavorite from '@src/assets/mapTooltipFavorite.svg';
+import { locationsStore, LocationsStore } from './locationsStore';
 
 const labelParams = {
   color: '#ffffff',
@@ -21,15 +22,15 @@ const labelParams = {
   }
 };
 
-// const labelFavoriteParams = {
-//   ...labelParams,
-//   color: '#161D25',
-//   image: {
-//     ...labelParams.image,
-//     url: mapTooltipFavorite,
-//     padding: [7, 15, 7, 15],
-//   }
-// }
+const labelFavoriteParams = {
+  ...labelParams,
+  color: '#161D25',
+  image: {
+    ...labelParams.image,
+    url: mapTooltipFavorite,
+    padding: [7, 15, 7, 15],
+  }
+}
 
 class MapStore {
   // @ts-ignore
@@ -39,11 +40,14 @@ class MapStore {
   markerClickCb: ((location: RawLocation) => void) | null = null;
   sectorClickCb: ((sector: RawSector) => void) | null = null;
   locationMarkers: Map<number, unknown> = new Map();
+  userMarker: unknown | null = null;
   private geoStore: GeoStore;
+  locationStore: LocationsStore;
 
   constructor() {
     makeAutoObservable(this);
     this.geoStore = geoStore;
+    this.locationStore = locationsStore;
   }
 
   setMapInstance(map: any, mapglAPI: any) {
@@ -84,15 +88,20 @@ class MapStore {
   addUserMarker() {
     if (!this.map) return;
 
-    new this.mapglAPI.Marker(this.map, {
-      coordinates: [this.geoStore.location.longitude, this.geoStore.location.latitude],
-      icon: markerUserIcon,
-      label: {
-        ...labelParams,
-        text: 'Я здесь',
-      },
-    });
-  }
+    if (!this.userMarker) {
+      this.userMarker = new this.mapglAPI.Marker(this.map, {
+        coordinates: [this.geoStore.location.longitude, this.geoStore.location.latitude],
+        icon: markerUserIcon,
+        label: {
+          ...labelParams,
+          text: 'Я здесь',
+        },
+      });
+    } else {
+      // @ts-ignore
+      this.userMarker.setCoordinates([this.geoStore.location.longitude, this.geoStore.location.latitude]);
+    }
+  } 
 
   setLocationMarker(location: RawLocation) {
     const marker = new this.mapglAPI.Marker(this.map, {

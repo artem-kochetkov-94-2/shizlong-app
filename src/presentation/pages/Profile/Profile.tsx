@@ -12,10 +12,11 @@ import { CurrentBookings } from './components/CurrentBookings/CurrentBookings';
 import { observer } from 'mobx-react-lite';
 import { Rating } from '@src/presentation/components/Rating';
 import { useNavigate } from 'react-router-dom';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { DropdownMenu } from './components/DropdownMenu/DropdownMenu';
 import { Routes } from '@src/routes';
 import { notificationsStore } from '@src/application/store/notificationsStore';
+import { paymentStore } from '@src/application/store/paymentStore';
 
 export const bookingsTabs: Tab[] = [
   {
@@ -35,7 +36,9 @@ export const Profile = observer(() => {
   const { currentTab, setCurrentTab } = useTabs(bookingsTabs[0].value);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { currentBookings } = bookingsStore;
-  const { status } = notificationsStore;
+  const { isSubscribedToTelegram } = notificationsStore;
+  const { tokens } = paymentStore;
+
   const navigate = useNavigate();
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -48,9 +51,6 @@ export const Profile = observer(() => {
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
-  useEffect(() => {
-    notificationsStore.checkTelegramStatus();
-  }, []);
 
   return (
     <div className={styles.profile}>
@@ -98,21 +98,25 @@ export const Profile = observer(() => {
 
       <div className={styles.container}>
         <div className={styles.actions}>
+          {/* @todo */}
           <div
-            className={classNames(styles.actionItem, styles.notifications)}
-            onClick={() => navigate(Routes.Notifications)}
+            className={classNames(styles.actionItem, styles.notifications, styles.actionItemDisabled)}
+            // onClick={() => navigate(Routes.Notifications)}
           >
             <IconButton iconName='bell' size='large' withBorder withBlur />
             <span>Уведомления</span>
             <span className={styles.notificationsCount}>1</span>
           </div>
+
           <div className={styles.actionItem} onClick={() => navigate(Routes.Favorites)}>
             <IconButton iconName='favorite-outline' size='large' withBorder withBlur />
             <span>Избранное</span>
           </div>
+
+          {/* @todo */}
           <div
-            className={classNames(styles.actionItem)}
-            onClick={() => navigate(Routes.Abonements)}
+            className={classNames(styles.actionItem, styles.actionItemDisabled)}
+            // onClick={() => navigate(Routes.Abonements)}
           >
             <IconButton iconName='abonement' size='large' withBorder withBlur />
             <span className={styles.abonement}>
@@ -123,17 +127,20 @@ export const Profile = observer(() => {
         </div>
 
         <div className={styles.reminders}>
-          <div className={styles.reminderItem}>
+          {/* @todo */}
+          {/* <div className={styles.reminderItem}>
             <Icon size='small' name='profile-circle' />
             <span>Добавить фото и имя</span>
             <Icon size='small' name='arrow-right' />
-          </div>
-          <div className={styles.reminderItem}>
-            <Icon size='small' name='card' />
-            <span>Привязать банковскую карту</span>
-            <Icon size='small' name='arrow-right' />
-          </div>
-          {!status && (
+          </div> */}
+          {!tokens.length && (
+            <div className={styles.reminderItem}>
+              <Icon size='small' name='card' />
+              <span>Привязать банковскую карту</span>
+              <Icon size='small' name='arrow-right' />
+            </div>
+          )}
+          {!isSubscribedToTelegram && (
             <div
               className={styles.reminderItem}
               onClick={() => navigate(Routes.NotificationSettings)}
@@ -143,11 +150,12 @@ export const Profile = observer(() => {
               <Icon size='small' name='arrow-right' />
             </div>
           )}
-          <div className={styles.reminderItem}>
+          {/* @todo */}
+          {/* <div className={styles.reminderItem}>
             <Icon size='small' name='check' />
             <span>Незавершённый заказ</span>
             <Icon size='small' name='arrow-right' />
-          </div>
+          </div> */}
         </div>
 
         <div className={styles.bookings}>

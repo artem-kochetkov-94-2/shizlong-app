@@ -9,6 +9,7 @@ import { Button } from "@src/presentation/ui-kit/Button";
 import { IconButton } from "@src/presentation/ui-kit/IconButton";
 import { paymentStore } from "@src/application/store/paymentStore";
 import { observer } from "mobx-react-lite";
+import { locationsStore } from "@src/application/store/locationsStore";
 
 const bookingStatusMap = {
     'reserved': 'Не оплачена',
@@ -37,6 +38,7 @@ export const colorByStatus = {
 export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
     const navigate = useNavigate();
     const { tokens } = paymentStore;
+    const isFavorite = locationsStore.getFavoriteStatus(booking.module.sector.location.id);
 
     return (
         <div className={styles.item} key={booking.id}>
@@ -89,7 +91,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
                     </div>
                 </div>
 
-                {/* {isFavorite && (
+                {isFavorite && (
                     <div className={styles.favorite}>
                         <IconButton
                             iconName="favorite"
@@ -97,7 +99,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
                             iconSize="extra-small"
                         />
                     </div>
-                )} */}
+                )}
             </div>
 
             {/* <TimeSlider

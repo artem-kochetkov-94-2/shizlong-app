@@ -10,9 +10,7 @@ export const Header = observer(() => {
   const navigate = useNavigate();
   const { location } = locationStore;
   const id = Number(location?.id);
-  console.log(id);
   const isFavorite = locationsStore.getFavoriteStatus(id);
-  console.log(isFavorite);
 
   const handleToggleFavorite = (id: number, isFavorite: boolean | null): void => {
     locationsStore.toggleFavoriteLocation(id, !isFavorite);

@@ -12,10 +12,11 @@
 }
 
 .errorModal {
+    position: relative;
     max-width: 320px;
     width: 100%;
     margin: 0 15px;
-    padding: 20px;
+    padding: 60px 15px 30px;
     border-radius: 20px;
     background-color: white;
     box-shadow: 0px 7px 20px 0px #00000012;
@@ -30,9 +31,22 @@
     text-align: center;
 }
 
-/* .errorModalText {} */
+.errorModalText {
+    ul {
+        margin: 0;
+        list-style-position: inside;
+        padding-left: 15px;
+    }
+
+    li::marker {
+        margin-right: 0;
+    }
+}
 
 .errorModalButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     display: flex;
     justify-content: center;
     align-items: center;

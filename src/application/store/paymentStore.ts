@@ -1,32 +1,51 @@
 import { makeAutoObservable } from 'mobx';
 import { paymentService } from '@src/infrastructure/payment/paymentService';
 import { FormRequestResponse, Token } from '@src/infrastructure/payment/types';
+import { eventService } from '../services/EventService/EventService';
+import { EVENT } from '../services/EventService/EventList';
 
-const style = {
-    base: {
-        fontFamily: 'Roboto',
-        fontSize: '16px',
-        fontWeight: 400,
-        backgroundColor: '#F3F4F6',
-        color: '#292C31',
+const baseStyle = {
+  base: {
+    fontFamily: 'Arial',
+    fontSize: '14px',
+    fontWeight: 400,
+    backgroundColor: '#F3F4F6',
+    color: '#292C31',
+  },
+  empty: {
+    fontFamily: 'Arial',
+    padding: '14px 14px 0',
+
+    '::placeholder': {
+      color: 'transparent',
     },
-    empty: {
-        padding: '6px 15px 15px',
-    },
-    complete: {
-        padding: '6px 15px 15px',
-    },
-    invalid: {
-        padding: '6px 15px 15px',
-    }
-};
+  },
+  complete: {
+    padding: '14px 14px 0',
+  },
+  invalid: {
+    padding: '14px 14px 0',
+  }
+}
+
+const cardNumberStyle = {
+  ...baseStyle,
+  empty: {
+    ...baseStyle.empty,
+    padding: '0',
+  },
+  complete: {
+    ...baseStyle.complete,
+    padding: '0',
+  },
+  invalid: {
+    ...baseStyle.invalid,
+    padding: '0',
+  }
+}
 
 export class PaymentStore {
-  static placeholders = {
-    cardNumber: '1234 1234 1234 1234',
-    expDate: 'MM / YY',
-    cvv: '123'
-  }
+  static placeholders = {}
   formElements: any;
   cardNumber: any;
   expiry: any;
@@ -34,6 +53,7 @@ export class PaymentStore {
   userAgreement: any;
   sessionId: string | null = null;
   tokens: Token[] = [];
+  isAddingNewCard = false;
   isLoadingTokens = false;
   isLoadingProcessPayment = false;
 
@@ -56,19 +76,19 @@ export class PaymentStore {
 
   async init() {
     try {
-        const session = await paymentService.getSession();
-        this.sessionId = session.session_id;
+      const session = await paymentService.getSession();
+      this.sessionId = session.session_id;
 
-        const auth = {
-            merchantCode: session.merchant_id,
-            sessionId: session.session_id,
-        };
-        const fonts = [{ src: 'https://fonts.googleapis.com/css?family=Source+Code+Pro' }];
+      const auth = {
+        merchantCode: session.merchant_id,
+        sessionId: session.session_id,
+      };
+      const fonts = [{ src: 'https://fonts.googleapis.com/css?family=Source+Code+Pro' }];
 
-        // @ts-ignore
-        this.formElements = new window.PayUSecureFields.Init(auth, { fonts })
-        console.log(this.formElements);
-        this.makeFormElements();
+      // @ts-ignore
+      this.formElements = new window.PayUSecureFields.Init(auth, { fonts })
+      console.log(this.formElements);
+      this.makeFormElements();
     } catch (error) {
         console.error(error);
     }
@@ -76,50 +96,60 @@ export class PaymentStore {
 
   async addNewCard(additionalData: { holder_name: string }) {
     if (!this.sessionId) {
-        return;
+      return;
     }
 
     try {
-        // @ts-ignore
-        const result: FormRequestResponse = await window.PayUSecureFields.createToken(this.cardNumber, {
-            additionalData
-        });
+      this.isAddingNewCard = true;
+      // @ts-ignore
+      const result: FormRequestResponse = await window.PayUSecureFields.createToken(this.cardNumber, {
+        additionalData
+      });
 
-        if (result.statusCode === 'SUCCESS') {
-            await paymentService.addNewCard(result.token, this.sessionId);
-        }
+      if (result.statusCode === 'SUCCESS') {
+        await paymentService.addNewCard(result.token, this.sessionId);
+        await this.getTokens();
+        return;
+      }
+
+      const message = Object.values(result.errors);
+
+      eventService.emit(EVENT.MODAL_ERROR, {
+        isActive: true,
+        message: 'Ошибка при добавлении карты',
+        text: message,
+      });
     } catch (error) {
-        console.error(error);
+      console.error(error);
+    } finally {
+      this.isAddingNewCard = false;
     }
   }
 
   async processPayment(bookingId: number, tokenId: number) {
     try {
-        this.isLoadingProcessPayment = true;
-        await paymentService.processPayment(bookingId, tokenId);
+      this.isLoadingProcessPayment = true;
+      await paymentService.processPayment(bookingId, tokenId);
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
   }
 
   makeFormElements() {
     if (!this.formElements) {
-        return;
+      return;
     }
 
     const cardNumber = this.formElements.create('cardNumber', {
-        placeholders: PaymentStore.placeholders,
-        style,
+      style: cardNumberStyle,
     });
 
     const expiry = this.formElements.create('creditCardExpiry', {
-        placeholders: PaymentStore.placeholders,
-        style,
+      style: baseStyle,
     });
 
     const cvv = this.formElements.create('cvv', {
-        placeholder: '',
-        style,
+      style: baseStyle,
     });
 
     const userAgreement = this.formElements.create('userAgreement', {});

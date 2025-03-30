@@ -19,10 +19,6 @@ export const Locations = observer(() => {
   const snapTo = (i: number) => ref.current?.snapTo(i);
 
   useEffect(() => {
-    locationsStore.init();
-  }, []);
-
-  useEffect(() => {
     setTimeout(() => {
       snapTo(2);
     }, 1000);

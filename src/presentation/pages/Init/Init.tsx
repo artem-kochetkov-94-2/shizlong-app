@@ -11,11 +11,13 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { geoStore } from '@src/application/store/geoStore';
 import { observer } from 'mobx-react-lite';
+import { verificationStore } from '@src/application/store/verificationStore';
 
 export const Init = observer(() => {
     const [showWelcome, setShowWelcome] = useState(true);
     const navigate = useNavigate();
     const { permissionStatus } = geoStore;
+    const { isVerified } = verificationStore;
 
     useEffect(() => {
         setTimeout(() => {
@@ -24,9 +26,14 @@ export const Init = observer(() => {
     }, []);
 
     if (permissionStatus === 'granted') {
+        if (isVerified) {
+            return <Navigate to={Routes.Locations} />
+        }
+
         return <Navigate to={Routes.Auth} />
     }
 
+    // @todo
     // if (permissionStatus === 'denied') {
     //     return <Navigate to={Routes.Cities} />
     // }

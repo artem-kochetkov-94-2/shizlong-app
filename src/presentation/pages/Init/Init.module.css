@@ -1,6 +1,6 @@
 .welcome {
     position: absolute;
-    z-index: 10;
+    z-index: 101;
     top: 0;
     left: 0;
     width: 100%;
@@ -19,6 +19,7 @@
 
 .geo {
     position: absolute;
+    z-index: 100;
     bottom: 0;
     left: 0;
     right: 0;
@@ -81,6 +82,7 @@
 
 .iconClose {
     position: absolute;
+    z-index: 100;
     top: 20px;
     right: 20px;
     background: #161D25;

@@ -4,16 +4,12 @@ import { Button } from '@src/presentation/ui-kit/Button';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { Routes } from '@src/routes';
 import { useNavigate } from 'react-router-dom';
-import { paymentStore } from '@src/application/store/paymentStore';
-import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
+import { userStore } from '@src/application/store/userStore';
 
 export const PaymentMethods = observer(() => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    paymentStore.getTokens();
-  }, []);
+  const { tokens } = userStore.paymentStore;
 
   return (
     <>
@@ -28,14 +24,27 @@ export const PaymentMethods = observer(() => {
             size={'small'}
           />
         </div>
-        <div className={styles.empty}>
-          <div className={styles.info}>Вы ещё не добавили ни одной карты</div>
-          <Icon
-            name={'card2'}
-            size={'medium'}
-            className={styles.icon}
-          />
-        </div>
+
+        {tokens.length > 0 && (
+          <div className={styles.tokens}>
+            {tokens.map((token) => (
+              <div className={styles.token}>
+                **** **** **** {token.card_number}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tokens.length === 0 && (
+          <div className={styles.empty}>
+            <div className={styles.info}>Вы ещё не добавили ни одной карты</div>
+            <Icon
+              name={'card2'}
+              size={'medium'}
+              className={styles.icon}
+            />
+          </div>
+        )}
 
         <Button
           variant={'yellow'}

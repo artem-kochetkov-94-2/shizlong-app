@@ -6,7 +6,7 @@ import { Tabs, useTabs } from '@src/presentation/ui-kit/Tabs';
 import { Tab } from '@src/presentation/ui-kit/Tabs/Tabs';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Loader } from '@src/presentation/ui-kit/Loader';
 
 export const tabs: Tab[] = [
   {
@@ -16,13 +16,9 @@ export const tabs: Tab[] = [
 ];
 
 export const Favorites = observer(() => {
-  const { favoriteLocations } = locationsStore;
+  const { favoriteLocations, isLoadingFavorite } = locationsStore;
   const { currentTab, setCurrentTab } = useTabs(tabs[0].value);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    locationsStore.fetchfavoriteLocations();
-  }, []);
 
   return (
     <div className={styles.favorites}>
@@ -43,6 +39,9 @@ export const Favorites = observer(() => {
         <Tabs tabs={tabs} activeTab={currentTab} onTabChange={setCurrentTab} />
       </div>
       <div className={styles.content}>
+        <div className={styles.loader}>
+          {isLoadingFavorite && <Loader />}
+        </div>
         <CardList items={favoriteLocations} />
       </div>
     </div>
