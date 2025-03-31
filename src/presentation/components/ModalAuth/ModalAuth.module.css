@@ -83,6 +83,7 @@
     color: #292c31;
     transform: translateY(-50%);
     outline: none;
+    background-color: transparent;
 
     &::placeholder {
       color: #a0a7b1;
