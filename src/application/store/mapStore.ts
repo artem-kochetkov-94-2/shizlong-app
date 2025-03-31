@@ -49,8 +49,8 @@ class MapStore {
   }
 
   setMapInstance(map: any, mapglAPI: any) {
-    this.map = map;
     this.mapglAPI = mapglAPI;
+    this.map = map;
   }
 
   init() {
