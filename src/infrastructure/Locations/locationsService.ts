@@ -45,6 +45,7 @@ class LocationsService {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
     });
 
@@ -121,6 +122,7 @@ class LocationsService {
       }),
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
     });
 
@@ -141,6 +143,7 @@ class LocationsService {
       }),
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
     });
 
@@ -161,6 +164,7 @@ class LocationsService {
       }),
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
     });
 
@@ -181,6 +185,7 @@ class LocationsService {
       }),
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
     });
 
@@ -201,6 +206,7 @@ class LocationsService {
       }),
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
     });
 
@@ -221,6 +227,7 @@ class LocationsService {
       }),
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
     });
 
@@ -243,6 +250,7 @@ class LocationsService {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
       body: JSON.stringify(body),
     });
