@@ -101,6 +101,7 @@
     }
 
     svg {
+        margin-top: 3px;
         color: #F95E5E;
     }
 }

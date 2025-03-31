@@ -15,21 +15,21 @@ import { bookStore } from '@src/application/store/bookStore';
 import { RawModule, RawSector } from '@src/infrastructure/Locations/types';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 
-// function isModuleAvailable(module: RawModule, date: Date, hours: number, startTime: string) {
-//     const bookingDate = new Date(date);
-//     const [startHour, startMinute] = startTime.split(':').map(Number);
-//     const bookingStartTime = new Date(bookingDate.setHours(startHour, startMinute, 0, 0));
-//     const bookingEndTime = new Date(bookingStartTime.getTime() + hours * 60 * 60 * 1000);
+function isModuleAvailable(module: RawModule, date: Date, hours: number, startTime: string) {
+    const bookingDate = new Date(date);
+    const [startHour, startMinute] = startTime.split(':').map(Number);
+    const bookingStartTime = new Date(bookingDate.setHours(startHour, startMinute, 0, 0));
+    const bookingEndTime = new Date(bookingStartTime.getTime() + hours * 60 * 60 * 1000);
 
-//     return module.slots.some(slot => {
-//         if (slot.is_busy) return false;
+    return module.slots.some(slot => {
+        if (slot.is_busy) return false;
 
-//         const slotStartTime = new Date(slot.start_hour);
-//         const slotEndTime = new Date(slot.end_hour);
+        const slotStartTime = new Date(slot.start_hour);
+        const slotEndTime = new Date(slot.end_hour);
 
-//         return bookingStartTime >= slotStartTime && bookingEndTime <= slotEndTime;
-//     });
-// }
+        return bookingStartTime >= slotStartTime && bookingEndTime <= slotEndTime;
+    });
+}
 
 export const Plan = observer(({
     onNext,
@@ -93,7 +93,7 @@ export const Plan = observer(({
 
     sectorModules.forEach((m) => {
         const module = m.module;
-        // const isAvailable = isModuleAvailable(m, bookStore.date as Date, bookStore.hours, bookStore.startTime);
+        const isAvailable = isModuleAvailable(m, bookStore.date as Date, bookStore.hours, bookStore.startTime);
         // const inlineStyles = m.module.placed_icon.style?.split(';');
         // const width = inlineStyles?.find(style => style.includes('width'))?.split(':')[1];
         // const height = inlineStyles?.find(style => style.includes('height'))?.split(':')[1];
@@ -105,8 +105,8 @@ export const Plan = observer(({
                 label: (
                     <div className={styles.module}>
                         <span className={cn(styles.moduleId, {
-                            [styles.available]: m.module.status === 'available',
-                            [styles.booked]: m.module.status === 'booked',
+                            [styles.available]: isAvailable,
+                            [styles.booked]: !isAvailable,
                         })}>
                             <span>{m.module.number}</span>
                         </span>

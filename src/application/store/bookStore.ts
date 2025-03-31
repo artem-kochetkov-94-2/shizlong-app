@@ -181,8 +181,8 @@ class BookStore {
       }
 
       const result = await bookingsService.createBooking(booking);
+      await bookingsStore.getMyBookings();
       onCreated(result.id);
-      bookingsStore.getMyBookings();
       this.paymentStore.processPayment(result.id);
     } catch (error) {
       console.log('createBooking error', error);
