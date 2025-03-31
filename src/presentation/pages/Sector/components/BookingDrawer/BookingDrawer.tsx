@@ -21,6 +21,8 @@ import { ChooseTime } from "./components/ChooseTime";
 //@ts-ignore
 import { ChooseStartTime } from "./components/ChooseStartTime/ChooseStartTIme";
 // import { TimeSlider } from "@src/presentation/components/TimeSlider";
+import { useNavigate } from "react-router-dom";
+import { Routes } from "@src/routes";
 
 const SNAP_POINTS = [758, 309, 79];
 const INITIAL_SNAP_POINT = 1;
@@ -29,6 +31,7 @@ export const BookingDrawer = observer(() => {
     const { activeTab } = bookStore;
     const { activeBookingsTab } = bookStore;
     const { activeScheme, schemes } = sectorStore;
+    const navigate = useNavigate();
 
     const [isOpen, setIsOpen] = useState(true);
 
@@ -73,7 +76,11 @@ export const BookingDrawer = observer(() => {
                             tabs={sectorTabs}
                             onTabChange={(tab) => bookStore.setActiveTab(tab as SectorTab)}
                         />
-                        <IconButton iconName="profile" size="large" />
+                        <IconButton
+                            iconName="profile"
+                            size="large"
+                            onClick={() => navigate(Routes.Profile)}
+                        />
                     </div>
 
                     {activeTab === 'bookings' && (

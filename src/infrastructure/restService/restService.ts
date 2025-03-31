@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { RequestArgs, StatusData } from './types';
 import { axiosInstance } from '../axiosService/axiosService';
+import { validateResponse } from '../validateResponse';
 
 export class RestService {
   private async request<R>(
@@ -9,11 +10,20 @@ export class RestService {
     try {
       const response = await requestConfig;
 
+      validateResponse(response.data);
+
       return {
         response: response.data as R,
         originalResponse: response,
       };
     } catch (error) {
+      validateResponse(error);
+      // @ts-ignore
+      if (error?.response?.data?.message) {
+        // @ts-ignore
+        throw new Error(error.response.data.message);
+      }
+
       if (axios.isAxiosError(error)) {
         throw new Error(error.message);
       } else {

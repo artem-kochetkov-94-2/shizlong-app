@@ -6,6 +6,31 @@ export interface BookingRequest {
     accessories: Accessory[];
 }
 
+interface Card {
+    id: number;
+    token: Token;
+    created_at: string | null;
+    updated_at: string;
+}
+
+interface Token {
+    id: number;
+    expiration_date: string;
+    card_holder_name: string;
+    last_four_digits: string;
+}
+
+export interface BookingResponse {
+    id: number;
+    message: string;
+    reserve_seconds: number;
+    module_id: number;
+    booking_id: number;
+    total_price: number;
+    qr: string;
+    cards: Card[];
+}
+
 interface Accessory {
     id: string;
     type: string;

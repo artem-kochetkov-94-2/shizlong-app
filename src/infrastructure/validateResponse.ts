@@ -27,5 +27,3 @@ export const validateResponse = (response: unknown) => {
     throw new ApiError(response.errors[0] || response.message);
   }
 };
-
-

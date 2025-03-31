@@ -37,7 +37,6 @@ export const colorByStatus = {
 
 export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
     const navigate = useNavigate();
-    const { tokens } = paymentStore;
     const isFavorite = locationsStore.getFavoriteStatus(booking.module.sector.location.id);
 
     return (
@@ -142,12 +141,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
                         <Button
                             size="medium"
                             variant="yellow"
-                            onClick={() => {
-                                console.log('click', JSON.stringify(tokens));
-                                if (tokens.length > 0) {
-                                    paymentStore.processPayment(booking.id, tokens[0].id);
-                                }
-                            }}
+                            onClick={() => paymentStore.processPayment(booking.id)}
                         >
                             <span>Оплатить</span>
                         </Button>

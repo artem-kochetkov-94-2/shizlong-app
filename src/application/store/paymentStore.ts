@@ -126,12 +126,16 @@ export class PaymentStore {
     }
   }
 
-  async processPayment(bookingId: number, tokenId: number) {
+  async processPayment(bookingId: number) {
     try {
-      this.isLoadingProcessPayment = true;
-      await paymentService.processPayment(bookingId, tokenId);
+      if (this.tokens.length > 0) {
+        this.isLoadingProcessPayment = true;
+        await paymentService.processPayment(bookingId, this.tokens[0].id);
+      }
     } catch (error) {
       console.error(error);
+    } finally {
+      this.isLoadingProcessPayment = false;
     }
   }
 

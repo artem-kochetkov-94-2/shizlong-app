@@ -6,7 +6,6 @@ import { RawLocation, RawSector } from '@src/infrastructure/Locations/types';
 import { GeoStore, geoStore } from './geoStore';
 import mapTooltip from '@src/assets/mapTooltip.svg';
 import mapTooltipFavorite from '@src/assets/mapTooltipFavorite.svg';
-import { locationsStore, LocationsStore } from './locationsStore';
 
 const labelParams = {
   color: '#ffffff',
@@ -40,14 +39,13 @@ class MapStore {
   markerClickCb: ((location: RawLocation) => void) | null = null;
   sectorClickCb: ((sector: RawSector) => void) | null = null;
   locationMarkers: Map<number, unknown> = new Map();
+  plan: Map<number, unknown> = new Map();
   userMarker: unknown | null = null;
   private geoStore: GeoStore;
-  locationStore: LocationsStore;
 
   constructor() {
     makeAutoObservable(this);
     this.geoStore = geoStore;
-    this.locationStore = locationsStore;
   }
 
   setMapInstance(map: any, mapglAPI: any) {
@@ -147,15 +145,32 @@ class MapStore {
     this.sectorClickCb = cb;
   }
 
+  clearPlan() {
+    this.plan.forEach((polygon) => {
+      // @ts-ignore
+      polygon.destroy();
+    });
+
+    this.plan.clear();
+  }
+
   drawPlan(sectors: RawSector[]) {
     if (!this.map || !this.mapglAPI) return;
+
+    this.clearPlan();
+
+    const plan = new Map();
 
     sectors.forEach((sector) => {
       const polygon = this.addPolygon(sector.poligon);
       polygon.on('click', () => {
         this.sectorClickCb?.(sector);
       });
+
+      plan.set(sector.id, polygon);
     });
+
+    this.plan = plan;
   }
 
   fitBounds(polygon: [number, number][]) {

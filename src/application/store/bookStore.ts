@@ -13,7 +13,8 @@ import { RawBeachAccessory } from '@src/infrastructure/Locations/types';
 import { eventService } from '../services/EventService/EventService';
 import { EVENT } from '../services/EventService/EventList';
 import { ApiError } from '@src/infrastructure/validateResponse';
-
+import { PaymentStore, paymentStore } from './paymentStore';
+import { BookingsStore, bookingsStore } from './bookingsStore';
 
 export const modulesSelectOptions = [
   {
@@ -71,9 +72,13 @@ class BookStore {
     accessory: RawBeachAccessory;
     quantity: number;
   }> = {};
+  paymentStore: PaymentStore;
+  bookingsStore: BookingsStore;
 
   constructor() {
     makeAutoObservable(this);
+    this.paymentStore = paymentStore;
+    this.bookingsStore = bookingsStore;
   }
 
   get startDate() {
@@ -157,7 +162,7 @@ class BookStore {
     this.selectedModule = module;
   }
 
-  async createBooking() {
+  async createBooking(onCreated: (id: number) => void) {
     if (!this.selectedModule) return;
 
     try {
@@ -175,17 +180,24 @@ class BookStore {
         })),
       }
 
-      console.log(booking);
-  
       const result = await bookingsService.createBooking(booking);
-      console.log(result);
+      onCreated(result.id);
+      bookingsStore.getMyBookings();
+      this.paymentStore.processPayment(result.id);
     } catch (error) {
+      console.log('createBooking error', error);
       if (error instanceof ApiError) {
         eventService.emit(EVENT.MODAL_ERROR, {
           isActive: true,
           message: error.message,
         });
       }
+      eventService.emit(EVENT.MODAL_ERROR, {
+        isActive: true,
+        // @todo
+        // @ts-ignore
+        message: error.message || 'Ошибка при создании бронирования',
+      });
     } finally {
       this.isCreatingBooking = false;
     }

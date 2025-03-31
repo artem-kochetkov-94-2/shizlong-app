@@ -14,6 +14,7 @@ import waves from "@src/assets/waves.png";
 import styles from "./BookingDetails.module.css";
 import { bookingCardStore } from "@src/application/store/bookingCardStore";
 import { useEffect } from "react";
+import { paymentStore } from "@src/application/store/paymentStore";
 
 const bookingStatuses = {
     pending: 'активна',
@@ -31,6 +32,7 @@ export const BookingDetails = observer(() => {
     }, [id]);
 
     const { booking } = bookingCardStore;
+    const { isLoadingProcessPayment } = paymentStore;
 
     if (!booking) {
         return <div>Бронь не найдена</div>;
@@ -152,7 +154,12 @@ export const BookingDetails = observer(() => {
 
                         <div className={styles.actions}>
                             {booking.status === 'reserved' && (
-                                <Button variant={'yellow'}>
+                                <Button
+                                    variant={'yellow'}
+                                    onClick={() => paymentStore.processPayment(booking.id)}
+                                    isLoading={isLoadingProcessPayment}
+                                    disabled={isLoadingProcessPayment}
+                                >
                                     <span>Оплатить</span>
                                 </Button>
                             )}

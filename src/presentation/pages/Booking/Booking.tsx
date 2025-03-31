@@ -17,13 +17,14 @@ import { SERVER_URL } from "@src/const";
 import { locationStore } from "@src/application/store/locationStore";
 import { sectorStore } from "@src/application/store/sectorStore";
 import { Counter } from '@src/presentation/ui-kit/Counter';
+import { Routes } from "@src/routes";
 
 export const Booking = observer(() => {
     const navigate = useNavigate();
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [isTimeOpen, setIsTimeOpen] = useState(false);
 
-    const { selectedModule, formattedDate, formattedTime, formattedDuration } = bookStore;
+    const { selectedModule, formattedDate, formattedTime, formattedDuration, isCreatingBooking } = bookStore;
     const { location, beachAccessories } = locationStore;
     const { sector } = sectorStore;
 
@@ -34,7 +35,11 @@ export const Booking = observer(() => {
 
     console.log('accessories', JSON.parse(JSON.stringify(bookStore.accessories)));
 
-    // const onSuccess = () => {}
+    const onCreated = (id: number) => {
+        navigate(Routes.BookingDetails.replace(':id', id.toString()));
+    }
+
+    console.log('isTimeOpen', isTimeOpen);
 
     return (
         <>
@@ -163,8 +168,17 @@ export const Booking = observer(() => {
                             </div>
                         </div>
 
-                        <div className={styles.footer} onClick={() => bookStore.createBooking()}>
-                            <Button size="medium" variant="yellow">Оплатить</Button>
+                        <div className={styles.footer}>
+                            <Button
+                                size="medium"
+                                variant="yellow"
+                                disabled={isCreatingBooking}
+                                isLoading={isCreatingBooking}
+                                onClick={() => bookStore.createBooking(onCreated)}
+                            >
+                                Оплатить
+                            </Button>
+                            {/* @todo */}
                             <span>1 550 ₽</span>
                         </div>
                     </Sheet.Content>

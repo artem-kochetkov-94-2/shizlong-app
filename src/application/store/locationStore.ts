@@ -100,12 +100,15 @@ class LocationStore {
     try {
       mapStore.drawPlan(this.sectors);
 
-      if (this.location?.poligon) {
-        mapStore.fitBounds(this.location.poligon);
-      }
-
       if (this.location?.rotation) {
         mapStore.setRotation(this.location.rotation);
+      }
+
+      if (this.location?.poligon) {
+        setTimeout(() => {
+          // @ts-ignore
+          mapStore.fitBounds(this.location.poligon);
+        }, 500);
       }
     } catch (e) {
       console.error(e);

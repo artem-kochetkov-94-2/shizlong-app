@@ -1,16 +1,15 @@
-import { PropsWithChildren, useEffect } from "react"
+import { PropsWithChildren, use, useEffect } from "react"
 import { Outlet } from "react-router-dom"
 import { useGeo } from "@src/application/hooks/useGeo"
-import { useMyBookings } from "@src/application/hooks/useMyBookings";
 import { Modals } from "./components/Modals";
 import { userStore } from "@src/application/store/userStore";
 import { verificationStore } from "@src/application/store/verificationStore";
 import { observer } from "mobx-react-lite";
 import { locationsStore } from "@src/application/store/locationsStore";
+import { bookingsStore } from "@src/application/store/bookingsStore";
 
 export const Layout = observer(({ children }: PropsWithChildren) => {
     useGeo();
-    useMyBookings();
 
     useEffect(() => {
         userStore.init();
@@ -18,6 +17,11 @@ export const Layout = observer(({ children }: PropsWithChildren) => {
 
     useEffect(() => {
         locationsStore.init();
+    }, [verificationStore.isVerified]);
+
+    useEffect(() => {
+        if (!verificationStore.isVerified) return;
+        bookingsStore.getMyBookings();
     }, [verificationStore.isVerified]);
 
     return (
