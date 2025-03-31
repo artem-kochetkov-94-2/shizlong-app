@@ -22,6 +22,7 @@ class PaymentService {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': `Bearer ${this.verificationStore.accessToken}`,
             },
         });
@@ -40,6 +41,7 @@ class PaymentService {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': `Bearer ${this.verificationStore.accessToken}`,
             },
             body: JSON.stringify({
@@ -56,6 +58,7 @@ class PaymentService {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': `Bearer ${this.verificationStore.accessToken}`,
             },
         });
@@ -68,6 +71,7 @@ class PaymentService {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': `Bearer ${this.verificationStore.accessToken}`,
             },
             body: JSON.stringify({

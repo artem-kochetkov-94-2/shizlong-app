@@ -20,6 +20,7 @@ class AuthorizationService {
             }),
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
         });
 
@@ -40,6 +41,7 @@ class AuthorizationService {
             }),
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
         });
 
@@ -61,6 +63,7 @@ class AuthorizationService {
             }),
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
             credentials: 'include',
         });
@@ -83,6 +86,7 @@ class AuthorizationService {
             }),
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
         });
 
