@@ -157,8 +157,8 @@ export const BookingDetails = observer(() => {
                                 <Button
                                     variant={'yellow'}
                                     onClick={() => paymentStore.processPayment(booking.id)}
-                                    isLoading={isLoadingProcessPayment}
-                                    disabled={isLoadingProcessPayment}
+                                    isLoading={isLoadingProcessPayment.get(booking.id)}
+                                    disabled={isLoadingProcessPayment.get(booking.id)}
                                 >
                                     <span>Оплатить</span>
                                 </Button>

@@ -16,6 +16,10 @@
   line-height: 19.2px;
   color: #A0A7B1;
   outline: none;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .tabButton:hover {

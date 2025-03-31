@@ -32,7 +32,7 @@ const formatShortDateWithoutYear = (date: Date) => {
 };
 
 function formatTimeRange(startHour: Date, endHour: Date) {
-    const options = { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' };
+    const options = { hour: '2-digit', minute: '2-digit' };
 
     console.log('startHour', startHour);
     console.log('endHour', endHour);

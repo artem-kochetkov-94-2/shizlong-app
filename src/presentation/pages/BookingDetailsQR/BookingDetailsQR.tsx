@@ -2,7 +2,7 @@ import { IconButton } from "@src/presentation/ui-kit/IconButton";
 import { Routes } from "@src/routes";
 import { Sheet } from "react-modal-sheet";
 import { useNavigate, useParams } from "react-router-dom";
-import styles from "./BookingDetailsQr.module.css";
+import styles from "./BookingDetailsQR.module.css";
 import { Card } from "@src/presentation/ui-kit/Card";
 import { bookingsStore } from "@src/application/store/bookingsStore";
 import { observer } from "mobx-react-lite";
