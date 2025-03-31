@@ -49,10 +49,10 @@ export const Map = observer(() => {
   useEffect(() => {
     // 2gis first - latitude
     // 2gis second - longitude
-    if (!mapStore.map || !geoStore.location) return;
+    if (!mapStore.map || !geoStore.location || geoStore.permissionStatus === null) return;
 
     mapStore.init();
-  }, [geoStore.location, mapStore.map]);
+  }, [geoStore.location, mapStore.map, geoStore.permissionStatus]);
 
   return <div id={MAP_CONTAINER_ID} className={styles.map} />;
 });
