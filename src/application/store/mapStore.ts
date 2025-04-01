@@ -178,13 +178,13 @@ class MapStore {
 
     sectors.forEach((sector) => {
       const polygon = this.addPolygon(sector.poligon);
-      const circle = this.addLabel(sector.poligon, sector.name);
+      const label = this.addLabel(sector.poligon, sector.name);
 
       polygon.on('click', () => {
         this.sectorClickCb?.(sector);
       });
 
-      plan.set(sector.id, { polygon, circle });
+      plan.set(sector.id, { polygon, label });
     });
 
     this.plan = plan;
