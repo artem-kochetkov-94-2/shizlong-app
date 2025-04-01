@@ -40,7 +40,7 @@ class MapStore {
   markerClickCb: ((location: RawLocation) => void) | null = null;
   sectorClickCb: ((sector: RawSector) => void) | null = null;
   locationMarkers: Map<number, any> = new Map();
-  plan: Map<number, unknown> = new Map();
+  plan: Map<number, { polygon: any; label: any }> = new Map();
   userMarker: unknown | null = null;
   private geoStore: GeoStore;
 
@@ -161,9 +161,10 @@ class MapStore {
   }
 
   clearPlan() {
-    this.plan.forEach((polygon) => {
+    this.plan.forEach(({ polygon, label }) => {
       // @ts-ignore
       polygon.destroy();
+      label.destroy();
     });
 
     this.plan.clear();
