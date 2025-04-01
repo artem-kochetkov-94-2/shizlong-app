@@ -17,10 +17,10 @@ export const Layout = observer(({ children }: PropsWithChildren) => {
     }, [verificationStore.isVerified]);
 
     useEffect(() => {
-        if (!mapStore.map) return;
+        if (!mapStore.map || !mapStore.mapglAPI) return;
 
         locationsStore.init();
-    }, [verificationStore.isVerified, mapStore.map]);
+    }, [verificationStore.isVerified, mapStore.map, mapStore.mapglAPI]);
 
     useEffect(() => {
         if (!verificationStore.isVerified) return;

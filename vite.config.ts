@@ -19,8 +19,8 @@ export default defineConfig({
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
     },
     manifest: {
-      name: 'My PWA App',
-      short_name: 'PWA App',
+      name: 'Шезлонгер',
+      short_name: 'Шезлонгер',
       start_url: '/',
       display: 'standalone',
       background_color: '#ffffff',

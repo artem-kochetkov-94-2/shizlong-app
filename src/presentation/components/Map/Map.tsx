@@ -20,6 +20,7 @@ export const Map = observer(() => {
         zoom: 13,
         key: '1235a1dd-c965-44d9-b210-f52fb60b1e89',
         zoomControl: 'centerRight',
+        style: 'caf7e397-ebea-4d36-8d7d-0822abf9c817',
       });
 
       mapStore.setMapInstance(map, mapglAPI);

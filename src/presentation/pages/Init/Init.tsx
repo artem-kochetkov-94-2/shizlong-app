@@ -33,6 +33,14 @@ export const Init = observer(() => {
         return <Navigate to={Routes.Auth} />
     }
 
+    const closePage = () => {
+        if (isVerified) {
+            navigate(Routes.Locations);
+        } else {
+            navigate(Routes.Auth);
+        }
+    };
+
     // @todo
     // if (permissionStatus === 'denied') {
     //     return <Navigate to={Routes.Cities} />
@@ -69,7 +77,7 @@ export const Init = observer(() => {
                 size="large"
                 className={styles.iconClose}
                 shape="rounded"
-                onClick={() => navigate(Routes.Locations)}
+                onClick={closePage}
             />
         </div>
     );
