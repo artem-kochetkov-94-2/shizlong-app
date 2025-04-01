@@ -2,7 +2,7 @@ import { locationStore } from '@src/application/store/locationStore';
 import { observer } from 'mobx-react-lite';
 import { Contacts } from './components/Contacts';
 import { Features } from '@src/presentation/components/Features/Features';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
@@ -15,6 +15,7 @@ import { Sheet, SheetRef } from 'react-modal-sheet';
 import { DRAG_VELOCITY_THRESHOLD, SERVER_URL } from '@src/const';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import classNames from 'classnames';
+import { Routes } from '@src/routes';
 
 const SNAP_POINTS = [1, 483, 150];
 const INITIAL_SNAP_POINT = 1;
@@ -24,7 +25,8 @@ export const Location = observer(() => {
   const [snap, setSnap] = useState(INITIAL_SNAP_POINT);
   const ref = useRef<SheetRef>(null);
   const { id } = useParams<{ id: string }>();
-  const { location, additionalServicesAsFeatures, modules } = locationStore;
+  const navigate = useNavigate();
+  const { location, additionalServicesAsFeatures, modules, sectors } = locationStore;
 
   useEffect(() => {
     if (!id) return;
@@ -80,7 +82,12 @@ export const Location = observer(() => {
             <div
               className={classNames(styles.footer, { [styles.shortFooter]: snap === 2 })}
             >
-              <Button variant='yellow' onClick={() => locationStore.choosePlace()}>
+              <Button variant='yellow' onClick={() => {
+                locationStore.choosePlace();
+                if (sectors.length === 1) {
+                  navigate(Routes.Sector.replace(':id', sectors[0].id.toString()));
+                }
+              }}>
                 Выбрать место
               </Button>
               {snap === 0 ? (
