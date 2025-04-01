@@ -24,9 +24,9 @@ export class GeoStore {
   init = () => {
     if ("permissions" in navigator) {
       navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-        geoStore.setPermissionStatus(result.state);
+        this.setPermissionStatus(result.state);
         result.onchange = () => {
-            geoStore.setPermissionStatus(result.state);
+          this.setPermissionStatus(result.state);
         };
       });
     }
@@ -36,38 +36,38 @@ export class GeoStore {
 
   getLocation = () => {
     if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                geoStore.setLocation({ latitude, longitude });
-            },
-            (error) => {
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        geoStore.setError("Пользователь отклонил запрос на геолокацию.");
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        geoStore.setError("Информация о местоположении недоступна.");
-                        break;
-                    case error.TIMEOUT:
-                        geoStore.setError("Время ожидания запроса истекло.");
-                        break;
-                    default:
-                        geoStore.setError("Произошла неизвестная ошибка.");
-                        break;
-                }
-            }
-        );
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          this.setLocation({ latitude, longitude });
+        },
+        (error) => {
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              this.setError("Пользователь отклонил запрос на геолокацию.");
+              break;
+            case error.POSITION_UNAVAILABLE:
+              this.setError("Информация о местоположении недоступна.");
+              break;
+            case error.TIMEOUT:
+              this.setError("Время ожидания запроса истекло.");
+              break;
+            default:
+              this.setError("Произошла неизвестная ошибка.");
+              break;
+          }
+        }
+      );
     } else {
-        this.setError("Геолокация не поддерживается этим браузером.");
+      this.setError("Геолокация не поддерживается этим браузером.");
     }
   };
 
   requestLocation = () => {
     if (this.permissionStatus === 'granted' || this.permissionStatus === 'prompt') {
-        this.getLocation();
+      this.getLocation();
     } else if (this.permissionStatus === 'denied') {
-        this.setError("Геолокация была отклонена ранее. Пожалуйста, измените настройки браузера.");
+      this.setError("Геолокация была отклонена ранее. Пожалуйста, измените настройки браузера.");
     }
   };
 }

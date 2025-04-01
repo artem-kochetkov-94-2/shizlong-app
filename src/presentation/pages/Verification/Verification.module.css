@@ -63,6 +63,7 @@
         line-height: 26.4px;
         text-align: center;
         outline: none;
+        background-color: transparent;
 
         &:focus {
             border-color: #41BECE;

@@ -55,7 +55,7 @@ export class PaymentStore {
   tokens: Token[] = [];
   isAddingNewCard = false;
   isLoadingTokens = false;
-  isLoadingProcessPayment = false;
+  isLoadingProcessPayment = new Map<number, boolean>();
 
   constructor() {
     makeAutoObservable(this);
@@ -129,13 +129,18 @@ export class PaymentStore {
   async processPayment(bookingId: number) {
     try {
       if (this.tokens.length > 0) {
-        this.isLoadingProcessPayment = true;
+        const newLoadingMap = new Map(this.isLoadingProcessPayment);
+        newLoadingMap.set(bookingId, true);
+        this.isLoadingProcessPayment = newLoadingMap;
+
         await paymentService.processPayment(bookingId, this.tokens[0].id);
       }
     } catch (error) {
       console.error(error);
     } finally {
-      this.isLoadingProcessPayment = false;
+      const newLoadingMap = new Map(this.isLoadingProcessPayment);
+      newLoadingMap.set(bookingId, false);
+      this.isLoadingProcessPayment = newLoadingMap;
     }
   }
 

@@ -35,7 +35,7 @@ export const Profile = observer(() => {
   const { iosEmptyBookings } = bookingsStore;
   const { currentTab, setCurrentTab } = useTabs(bookingsTabs[0].value);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { currentBookings } = bookingsStore;
+  const { currentBookings, completedBookings } = bookingsStore;
   const { isSubscribedToTelegram } = notificationsStore;
   const { tokens } = paymentStore;
 
@@ -170,14 +170,12 @@ export const Profile = observer(() => {
             <>
               <Tabs
                 tabs={bookingsTabs.map((t) => {
-                  if (t.value === 'current') {
-                    return {
-                      ...t,
-                      label: `Актуальные ${currentBookings.length}`,
-                    };
-                  }
-
-                  return t;
+                  return {
+                    ...t,
+                    label: t.value === 'current'
+                      ? `Актуальные ${currentBookings.length}`
+                      : `Завершённые ${completedBookings.length}`,
+                  };
                 })}
                 activeTab={currentTab}
                 onTabChange={setCurrentTab}

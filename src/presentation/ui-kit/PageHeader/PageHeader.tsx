@@ -10,7 +10,11 @@ interface PageHeaderProps {
   topPadding?: boolean;
 }
 
-export const PageHeader: React.FC<PageHeaderProps> = ({ children, subHeader, topPadding }) => {
+export const PageHeader: React.FC<PageHeaderProps> = ({
+  children,
+  subHeader,
+  topPadding,
+}) => {
   const navigate = useNavigate();
 
   return (

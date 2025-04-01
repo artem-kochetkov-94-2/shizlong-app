@@ -6,6 +6,7 @@ export class BookingsStore {
   private bookingsService = bookingsService;
   isLoading: boolean = false;
   bookings: RawBooking[] = [];
+  isLoadingCancelBooking: Map<number, boolean> = new Map();
 
   constructor() {
     makeAutoObservable(this);
@@ -33,6 +34,18 @@ export class BookingsStore {
 
   get iosEmptyBookings() {
     return this.currentBookings.length === 0 && this.completedBookings.length === 0;
+  }
+
+  async cancelBooking(bookingId: number) {
+    try {
+      this.isLoadingCancelBooking.set(bookingId, true);
+      await this.bookingsService.cancelBooking(bookingId);
+      await this.getMyBookings();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.isLoadingCancelBooking.set(bookingId, false);
+    }
   }
 }
 
