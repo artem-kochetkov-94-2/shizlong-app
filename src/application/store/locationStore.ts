@@ -1,5 +1,11 @@
 import { makeAutoObservable, autorun } from 'mobx';
-import { RawLocation, RawSector, RawAdditionalService, RawModule, RawBeachAccessory } from '@src/infrastructure/Locations/types';
+import {
+  RawLocation,
+  RawSector,
+  RawAdditionalService,
+  RawModule,
+  RawBeachAccessory,
+} from '@src/infrastructure/Locations/types';
 import { Tab } from '@src/presentation/ui-kit/Tabs/Tabs';
 import { locationsService } from '@src/infrastructure/Locations/locationsService';
 import { mapStore } from './mapStore';
@@ -65,7 +71,7 @@ class LocationStore {
   get minModulePrice() {
     const sortedModules = this.modules
       .slice()
-      .filter(m => m.module.price_per_hour !== null)
+      .filter((m) => m.module.price_per_hour !== null)
       .sort((a, b) => a.module.price_per_hour! - b.module.price_per_hour!);
     return sortedModules[0]?.module.price_per_hour || 0;
   }
