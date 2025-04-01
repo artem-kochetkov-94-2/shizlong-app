@@ -6,6 +6,7 @@ import { RawLocation, RawSector } from '@src/infrastructure/Locations/types';
 import { GeoStore, geoStore } from './geoStore';
 import mapTooltip from '@src/assets/mapTooltip.svg';
 import mapTooltipFavorite from '@src/assets/mapTooltipFavorite.svg';
+import { getPolygonCenter } from '../utils/getPolygonCenter';
 
 const labelParams = {
   color: '#ffffff',
@@ -177,11 +178,13 @@ class MapStore {
 
     sectors.forEach((sector) => {
       const polygon = this.addPolygon(sector.poligon);
+      const circle = this.addLabel(sector.poligon, sector.name);
+
       polygon.on('click', () => {
         this.sectorClickCb?.(sector);
       });
 
-      plan.set(sector.id, polygon);
+      plan.set(sector.id, { polygon, circle });
     });
 
     this.plan = plan;
@@ -236,6 +239,21 @@ class MapStore {
     });
 
     return polygon;
+  }
+
+  addLabel(polygon: [number, number][], text: string) {
+    if (!this.map || !this.mapglAPI) return;
+
+    const center = getPolygonCenter(polygon);
+
+    const label = new this.mapglAPI.Label(this.map, {
+      coordinates: center,
+      text: text,
+      color: '#161D25CC',
+      fontSize: 14,
+    });
+
+    return label;
   }
 }
 
