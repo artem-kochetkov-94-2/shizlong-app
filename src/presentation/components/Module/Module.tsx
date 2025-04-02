@@ -23,7 +23,7 @@ const labels: Record<ModuleStatus, string> = {
     inactive: 'неактивен',
 }
 
-export const Module = observer(({ onClose }: { onClose?: () => void }) => {
+export const Module = observer(() => {
     const { selectedModule } = bookStore;
     const { beachAccessories, location } = locationStore;
     const { formattedTime, formattedDate } = bookStore;
@@ -37,20 +37,22 @@ export const Module = observer(({ onClose }: { onClose?: () => void }) => {
     // @todo: добавить проверку на мою бронь
     const isMyBooking = false;
 
+    const handleClose = () => {
+        navigate(Routes.Sector.replace(':id', selectedModule?.module.sector_id.toString() || ''));
+    };
+
     const handleShowSchema = () => {
         navigate(Routes.Sector.replace(':id', selectedModule?.module.sector_id.toString() || ''));
-        onClose?.();
     };
 
     const goToLocation = () => {
         navigate(Routes.Location.replace(':id', location?.id.toString() || ''));
-        onClose?.();
     };
 
     return (
         <Sheet
             isOpen={true}
-            onClose={() => bookStore.setSelectedModule(null)}
+            onClose={handleClose}
             detent="content-height"
         >
             <Sheet.Container>
