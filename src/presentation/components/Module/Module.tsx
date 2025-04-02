@@ -39,6 +39,7 @@ export const Module = observer(() => {
 
     const handleClose = () => {
         navigate(Routes.Sector.replace(':id', selectedModule?.module.sector_id.toString() || ''));
+        bookStore.setSelectedModule(null);
     };
 
     const handleShowSchema = () => {
