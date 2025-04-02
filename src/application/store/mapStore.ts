@@ -62,6 +62,9 @@ class MapStore {
     if (!this.map) return;
     this.map.destroy();
     this.map = null;
+    this.locationMarkers.clear();
+    this.userMarker = null;
+    this.plan.clear();
   }
 
   setCenter(longitude: number, latitude: number) {
