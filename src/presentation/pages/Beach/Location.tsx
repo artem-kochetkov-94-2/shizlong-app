@@ -12,7 +12,7 @@ import styles from './Location.module.css';
 import { useState } from 'react';
 import { mapStore } from '@src/application/store/mapStore';
 import { Sheet, SheetRef } from 'react-modal-sheet';
-import { DRAG_VELOCITY_THRESHOLD, SERVER_URL } from '@src/const';
+import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import classNames from 'classnames';
 import { Routes } from '@src/routes';
@@ -24,6 +24,7 @@ export const Location = observer(() => {
   const [isOpen, setIsOpen] = useState(true);
   const [snap, setSnap] = useState(INITIAL_SNAP_POINT);
   const ref = useRef<SheetRef>(null);
+  const snapTo = (i: number) => ref.current?.snapTo(i);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { location, additionalServicesAsFeatures, services, sectors } = locationStore;
@@ -88,6 +89,8 @@ export const Location = observer(() => {
                 locationStore.choosePlace();
                 if (sectors.length === 1) {
                   navigate(Routes.Sector.replace(':id', sectors[0].id.toString()));
+                } else if (snap === 0) {
+                  snapTo(1);
                 }
               }}>
                 Выбрать место
