@@ -8,19 +8,29 @@ interface PageHeaderProps {
   children: ReactNode;
   subHeader?: string;
   topPadding?: boolean;
+  onClose?: () => void;
 }
 
 export const PageHeader: React.FC<PageHeaderProps> = ({
   children,
   subHeader,
   topPadding,
+  onClose,
 }) => {
   const navigate = useNavigate();
+
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      navigate(-1);
+    }
+  }
 
   return (
     <div className={cn(styles.pageHeader, { [styles.topPadding]: topPadding })}>
       <IconButton
-        onClick={() => navigate(-1)}
+        onClick={handleClose}
         iconName='arrow-left'
         size='medium'
         shape='rounded'
