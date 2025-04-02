@@ -5,6 +5,7 @@ import {
   RawAdditionalService,
   RawModule,
   RawBeachAccessory,
+  RawService,
 } from '@src/infrastructure/Locations/types';
 import { Tab } from '@src/presentation/ui-kit/Tabs/Tabs';
 import { locationsService } from '@src/infrastructure/Locations/locationsService';
@@ -42,7 +43,9 @@ class LocationStore {
   additionalServices: RawAdditionalService[] = [];
   beachAccessories: RawBeachAccessory[] = [];
   isModulesLoading = false;
+  isServicesLoading = false;
   modules: RawModule[] = [];
+  services: RawService[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -90,6 +93,7 @@ class LocationStore {
     this.isSectorsLoading = false;
     this.isAdditionalServicesLoading = false;
     this.isBeachAccessoriesLoading = false;
+    this.isServicesLoading = false;
   }
 
   init(locationId: number) {
@@ -98,6 +102,7 @@ class LocationStore {
     this.fetchAdditionalServices(locationId);
     this.fetchBeachAccessories(locationId);
     this.fetchModules(locationId);
+    this.fetchServices(locationId);
   }
 
   async choosePlace() {
@@ -133,6 +138,20 @@ class LocationStore {
       this.isLoading = false;
     }
   }
+
+  async fetchServices(id: number) {
+    try {
+      this.isServicesLoading = true;
+      const services = await locationsService.getServices(id);
+      console.log('services', services);
+      this.services = services;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.isServicesLoading = false;
+    }
+  }
+
 
   async fetchAdditionalServices(id: number) {
     try {

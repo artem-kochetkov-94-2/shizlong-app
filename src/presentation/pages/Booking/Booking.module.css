@@ -318,6 +318,7 @@
     gap: 10px;
     margin-top: auto;
     padding: 15px;
+    border-top: 1px solid #E3E5EA;
 
     button {
         max-width: 246px;

@@ -55,7 +55,6 @@ class MapStore {
   }
 
   init() {
-    this.setCenter(geoStore.location.longitude, geoStore.location.latitude);
     this.addUserMarker();
   }
 
