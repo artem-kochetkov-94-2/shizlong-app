@@ -7,6 +7,7 @@ import {
   RawModule,
   RawSector,
   RawSectorSchema,
+  RawService,
 } from './types';
 import { ApiResponse } from '@src/infrastructure/types';
 import {
@@ -27,6 +28,7 @@ const routes = {
   additionalServices: '/get-additional-services',
   getBeachAccessories: '/get-beach-accessories',
   schemes: '/get-schemes',
+  getServices: '/get-services',
 };
 
 class LocationsService {
@@ -196,6 +198,27 @@ class LocationsService {
     }
 
     return result.data as RawSectorSchema[];
+  }
+
+  async getServices(id: number) {
+    const response = await fetch(`${this.apiUrl}${routes.getServices}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        location_id: id,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    });
+
+    const result: ApiResponse<RawService[]> = await response.json();
+
+    if (!result.success) {
+      throw new Error('Fetch error');
+    }
+
+    return result.data as RawService[];
   }
 
   async getAdditionalServices(id: number) {

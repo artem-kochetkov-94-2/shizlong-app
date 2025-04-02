@@ -18,10 +18,15 @@ const isModuleAvailable = (module: RawModule, date: Date, hours: number, startTi
 
         return bookingStartTime >= slotStartTime && bookingEndTime <= slotEndTime;
     });
-}
+};
+
+const baseWidth = 16.14;
 
 export const ModuleNode = ({ data: { module } }: { data: { module: RawModule } }) => {
     const isAvailable = isModuleAvailable(module, bookStore.date as Date, bookStore.hours, bookStore.startTime);
+
+    const width = Number(module.module.placed_icon.width_icon) * baseWidth;
+    const height = Number(module.module.placed_icon.height_icon) * baseWidth;
 
     return (
         <div className={styles.module}>
@@ -34,8 +39,9 @@ export const ModuleNode = ({ data: { module } }: { data: { module: RawModule } }
             <img
                 src={`${SERVER_URL}${module.module.placed_icon.link_icon}`}
                 alt={module.module.placed_icon.name_icon}
-                // style={{ width, height }}
                 onClick={() => bookStore.setSelectedModule(module)}
+                width={width}
+                height={height}
             />
         </div>
     );

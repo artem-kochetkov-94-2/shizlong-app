@@ -23,6 +23,12 @@ export const Layout = observer(({ children }: PropsWithChildren) => {
     }, [verificationStore.isVerified, mapStore.map, mapStore.mapglAPI]);
 
     useEffect(() => {
+        if (!mapStore.map || !mapStore.mapglAPI) return;
+
+        mapStore.setMarkers(locationsStore.locations);
+    }, [locationsStore.locations, mapStore.map, mapStore.mapglAPI]);
+
+    useEffect(() => {
         if (!verificationStore.isVerified) return;
         bookingsStore.getMyBookings();
     }, [verificationStore.isVerified]);

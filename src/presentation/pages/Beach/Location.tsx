@@ -12,7 +12,7 @@ import styles from './Location.module.css';
 import { useState } from 'react';
 import { mapStore } from '@src/application/store/mapStore';
 import { Sheet, SheetRef } from 'react-modal-sheet';
-import { DRAG_VELOCITY_THRESHOLD, SERVER_URL } from '@src/const';
+import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import classNames from 'classnames';
 import { Routes } from '@src/routes';
@@ -24,9 +24,10 @@ export const Location = observer(() => {
   const [isOpen, setIsOpen] = useState(true);
   const [snap, setSnap] = useState(INITIAL_SNAP_POINT);
   const ref = useRef<SheetRef>(null);
+  const snapTo = (i: number) => ref.current?.snapTo(i);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { location, additionalServicesAsFeatures, modules, sectors } = locationStore;
+  const { location, additionalServicesAsFeatures, services, sectors } = locationStore;
 
   useEffect(() => {
     if (!id) return;
@@ -41,9 +42,11 @@ export const Location = observer(() => {
 
   if (!location) return null;
 
-  const services = modules.map((m) => ({
-    name: m.module.name,
-    icon: `${SERVER_URL}${m.module.placed_icon.link_icon}`,
+  const servicesFeatures = services.map((s) => ({
+    name: s.name,
+    icon: s.placed_icon.link_icon,
+    extraTitle: `${s.price_per_hour} ₽ `,
+    extraDescription: `в час`,
   }));
 
   console.log('snap', snap);
@@ -70,7 +73,7 @@ export const Location = observer(() => {
                 <div className={styles.content}>
                   <Contacts location={location} />
                   <About title='Описание' description={location.description ?? ''} />
-                  <Features title='Услуги' items={services} />
+                  <Features title='Услуги' items={servicesFeatures} />
                   <Features
                     title='Пляжная инфраструктура'
                     items={additionalServicesAsFeatures}
@@ -86,6 +89,8 @@ export const Location = observer(() => {
                 locationStore.choosePlace();
                 if (sectors.length === 1) {
                   navigate(Routes.Sector.replace(':id', sectors[0].id.toString()));
+                } else if (snap === 0) {
+                  snapTo(1);
                 }
               }}>
                 Выбрать место
