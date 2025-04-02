@@ -49,8 +49,6 @@ export const Location = observer(() => {
     extraDescription: `в час`,
   }));
 
-  console.log('snap', snap);
-
   return (
     <>
       <Header />
