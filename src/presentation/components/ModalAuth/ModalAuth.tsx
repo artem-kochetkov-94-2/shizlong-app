@@ -1,18 +1,37 @@
 import PhoneInput from 'react-phone-input-2';
-import styles from './ModalAuth.module.css';
 import { useState } from 'react';
 import { Button } from '@src/presentation/ui-kit/Button';
+import { verificationStore } from '@src/application/store/verificationStore';
+import { useNavigate } from 'react-router-dom';
+import { Routes } from '@src/routes';
+import styles from './ModalAuth.module.css';
+import { Icon } from '@src/presentation/ui-kit/Icon';
 
 interface ModalProps {
   onClose: () => void;
 }
 
 export const ModalAuth = ({ onClose }: ModalProps) => {
+  const navigate = useNavigate();
   const [value, setValue] = useState('');
+
+  const submit = () => {
+    verificationStore.reset();
+    verificationStore.setPhoneNumber(value);
+    verificationStore.startVerification();
+    onClose();
+    navigate(Routes.Verification);
+  };
 
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
+        <Icon
+          name='cross'
+          className={styles.closeButton}
+          onClick={onClose}
+          size='medium'
+        />
         <div className={styles.header}>
           Пожалуйста, авторизуйтесь, для дальнейшего использования приложения
         </div>
@@ -32,7 +51,7 @@ export const ModalAuth = ({ onClose }: ModalProps) => {
             size='large'
             disabled={value.length !== 11}
             withShadow={true}
-            onClick={onClose}
+            onClick={submit}
           >
             Авторизация
           </Button>

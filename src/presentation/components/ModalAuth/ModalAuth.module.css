@@ -122,3 +122,10 @@
   color: #6b7280;
   margin-bottom: 15px;
 }
+
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #e7faff;
+}
