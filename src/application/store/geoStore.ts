@@ -22,10 +22,13 @@ export class GeoStore {
   }
 
   init = () => {
+    console.log('GeoStore init');
     if ("permissions" in navigator) {
       navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+        console.log('GeoStore init then');
         this.setPermissionStatus(result.state);
         result.onchange = () => {
+          console.log('GeoStore init onchange');
           this.setPermissionStatus(result.state);
         };
       });
@@ -35,13 +38,16 @@ export class GeoStore {
   }
 
   getLocation = () => {
+    console.log('GeoStore getLocation');
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          console.log('GeoStore getLocation then');
           const { latitude, longitude } = position.coords;
           this.setLocation({ latitude, longitude });
         },
         (error) => {
+          console.log('GeoStore getLocation error', error.code);
           switch (error.code) {
             case error.PERMISSION_DENIED:
               this.setError("Пользователь отклонил запрос на геолокацию.");

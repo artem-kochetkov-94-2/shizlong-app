@@ -7,7 +7,7 @@ import styles from './Init.module.css';
 import { Routes } from '@src/routes';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { geoStore } from '@src/application/store/geoStore';
 import { observer } from 'mobx-react-lite';
 import { verificationStore } from '@src/application/store/verificationStore';
@@ -24,15 +24,21 @@ export const Init = observer(() => {
         }, 1000);
     }, []);
 
-    const closePage = () => {
+    const closePage = useCallback(() => {
         if (isVerified) {
             navigate(Routes.Locations);
         } else {
             navigate(Routes.Auth);
         }
-    };
+    }, [isVerified, navigate]);
 
     useEffect(() => {
+        if (error) {
+            console.log('Init error', error);
+            closePage();
+            return;
+        }
+
         if (permissionStatus === 'denied') {
             closePage();
             return;
@@ -41,7 +47,7 @@ export const Init = observer(() => {
         if (permissionStatus === 'granted') {
             closePage();
         }
-    }, [permissionStatus]);
+    }, [permissionStatus, closePage, error]);
 
     return (
         <div>
@@ -64,8 +70,6 @@ export const Init = observer(() => {
                     <Button variant="primary" size="large" onClick={geoStore.requestLocation}>
                         Разрешить геолокацию
                     </Button>
-                    <div>{permissionStatus}</div>
-                    <div>{error}</div>
 
                     <div className={styles.geoLicense}>Используя приложение, вы соглашаетесь с <a href="">Лицензионным соглашением</a></div>
                 </div>
