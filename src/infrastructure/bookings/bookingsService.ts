@@ -25,13 +25,8 @@ class BookingsService {
       return [];
     }
 
-    const response = await fetch(`${this.apiUrlV1}${routes.myBookings}`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${this.verificationStore.accessToken}`,
-        'Content-Type': 'application/json',
-      },
+    const response = await this.restService.post({
+      url: `${this.apiUrlV1}${routes.myBookings}`,
     });
 
     const result: MyBookingsResponse = await response.json();

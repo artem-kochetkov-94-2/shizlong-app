@@ -64,6 +64,7 @@
     text-align: center;
     outline: none;
     background-color: transparent;
+    color: #292c31;
 
     &:focus {
       border-color: #41bece;
