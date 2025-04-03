@@ -25,13 +25,11 @@ class BookingsService {
       return [];
     }
 
-    const response = await this.restService.post({
+    const response = await this.restService.post<MyBookingsResponse>({
       url: `${this.apiUrlV1}${routes.myBookings}`,
     });
 
-    const result: MyBookingsResponse = await response.json();
-
-    return result.bookings;
+    return response.response.bookings;
   }
 
   getCurrentBookings() {

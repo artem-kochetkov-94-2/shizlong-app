@@ -4,7 +4,6 @@ import logoImg from './assets/logo.svg';
 import backgroundGeoImg from './assets/bg-geo.png';
 import mapImg from './assets/map.svg';
 import styles from './Init.module.css';
-import { Navigate } from 'react-router-dom';
 import { Routes } from '@src/routes';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import { useNavigate } from 'react-router-dom';
@@ -25,14 +24,6 @@ export const Init = observer(() => {
         }, 1000);
     }, []);
 
-    if (permissionStatus === 'granted') {
-        if (isVerified) {
-            return <Navigate to={Routes.Locations} />
-        }
-
-        return <Navigate to={Routes.Auth} />
-    }
-
     const closePage = () => {
         if (isVerified) {
             navigate(Routes.Locations);
@@ -41,10 +32,16 @@ export const Init = observer(() => {
         }
     };
 
-    // @todo
-    // if (permissionStatus === 'denied') {
-    //     return <Navigate to={Routes.Cities} />
-    // }
+    useEffect(() => {
+        if (permissionStatus === 'denied') {
+            closePage();
+            return;
+        }
+
+        if (permissionStatus === 'granted') {
+            closePage();
+        }
+    }, [permissionStatus]);
 
     return (
         <div>
