@@ -4,6 +4,7 @@ export class GeoStore {
   location: { latitude: number; longitude: number } = { latitude: 0, longitude: 0 };
   error: string | null = null;
   permissionStatus: PermissionState | null = null;
+  locationSetted: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -15,6 +16,7 @@ export class GeoStore {
 
   setLocation(location: { latitude: number; longitude: number }) {
     this.location = location;
+    this.locationSetted = true;
   }
 
   setError(error: string) {

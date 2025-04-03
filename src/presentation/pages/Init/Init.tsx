@@ -15,7 +15,7 @@ import { verificationStore } from '@src/application/store/verificationStore';
 export const Init = observer(() => {
     const [showWelcome, setShowWelcome] = useState(true);
     const navigate = useNavigate();
-    const { permissionStatus, error } = geoStore;
+    const { permissionStatus, error, locationSetted } = geoStore;
     const { isVerified } = verificationStore;
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export const Init = observer(() => {
     }, [isVerified, navigate]);
 
     useEffect(() => {
-        if (error) {
+        if (locationSetted || error) {
             console.log('Init error', error);
             closePage();
             return;
@@ -47,7 +47,7 @@ export const Init = observer(() => {
         if (permissionStatus === 'granted') {
             closePage();
         }
-    }, [permissionStatus, closePage, error]);
+    }, [permissionStatus, closePage, error, locationSetted]);
 
     return (
         <div>
