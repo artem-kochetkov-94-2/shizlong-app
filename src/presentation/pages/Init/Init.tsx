@@ -15,7 +15,7 @@ import { verificationStore } from '@src/application/store/verificationStore';
 export const Init = observer(() => {
     const [showWelcome, setShowWelcome] = useState(true);
     const navigate = useNavigate();
-    const { permissionStatus } = geoStore;
+    const { permissionStatus, error } = geoStore;
     const { isVerified } = verificationStore;
 
     useEffect(() => {
@@ -64,6 +64,8 @@ export const Init = observer(() => {
                     <Button variant="primary" size="large" onClick={geoStore.requestLocation}>
                         Разрешить геолокацию
                     </Button>
+                    <div>{permissionStatus}</div>
+                    <div>{error}</div>
 
                     <div className={styles.geoLicense}>Используя приложение, вы соглашаетесь с <a href="">Лицензионным соглашением</a></div>
                 </div>
