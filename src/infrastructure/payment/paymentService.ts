@@ -7,6 +7,7 @@ const routes = {
   addNewCard: '/payments/add_card',
   tokens: '/payments/customer/tokens',
   processPayment: '/payments/process_payment',
+  deleteToken: '/payments/tokens',
 };
 
 class PaymentService {
@@ -48,6 +49,13 @@ class PaymentService {
       url: `${this.apiUrl}${routes.processPayment}`,
       data: { booking_id: bookingId, token_id: tokenId },
     });
+    console.log(response);
+  }
+  async deleteToken(tokenId: number) {
+    const { response } = await this.restService.delete({
+      url: `${this.apiUrl}${routes.deleteToken}/${tokenId}`,
+    });
+
     console.log(response);
   }
 }
