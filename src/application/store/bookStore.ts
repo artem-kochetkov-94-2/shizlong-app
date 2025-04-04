@@ -81,6 +81,13 @@ class BookStore {
     this.bookingsStore = bookingsStore;
   }
 
+  get bookPrice() {
+    const priceForModule = (this.selectedModule?.module.price_per_hour || 0) * this.hours;
+    const priceForAccessories = Object.values(this.accessories).reduce((acc, a) => acc + (a.accessory.price || 0) * a.quantity, 0);
+
+    return priceForModule + priceForAccessories;
+  }
+
   get startDate() {
     const [hours, minutes] = this.startTime.split(':').map(Number);
     const startDate = new Date(this.date as Date);

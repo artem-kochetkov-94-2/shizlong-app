@@ -5,10 +5,12 @@ import { verificationStore } from '@src/application/store/verificationStore';
 import { Sheet } from 'react-modal-sheet';
 import { useEffect } from 'react';
 import { VerificationInput } from '@src/presentation/components/VerificationInput';
+import useKeyboardVisibility from '@src/application/hooks/useKeyboardVisibility';
 
 export const Verification = observer(() => {
   const navigate = useNavigate();
   const { phoneNumber } = verificationStore;
+  const { isKeyboardVisible, setIsKeyboardVisible } = useKeyboardVisibility();
 
   useEffect(() => {
     if (!phoneNumber) {
@@ -16,6 +18,16 @@ export const Verification = observer(() => {
       return;
     }
   }, [phoneNumber]);
+
+  const handleFocus = () => {
+    setTimeout(() => {
+      setIsKeyboardVisible(true);
+    }, 0);
+  };
+
+  const handleBlur = () => {
+    setIsKeyboardVisible(false);
+  };
 
   return (
     <Sheet
@@ -26,7 +38,14 @@ export const Verification = observer(() => {
       <Sheet.Container>
         <Sheet.Header />
         <Sheet.Content>
-          <VerificationInput onExit={() => navigate(Routes.Locations)} />
+        <Sheet.Scroller>
+          <VerificationInput
+            onExit={() => navigate(Routes.Locations)}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            isKeyboardVisible={isKeyboardVisible}
+          />
+          </Sheet.Scroller>
         </Sheet.Content>
       </Sheet.Container>
       <Sheet.Backdrop />

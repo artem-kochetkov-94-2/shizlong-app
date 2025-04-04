@@ -10,16 +10,21 @@ import { Button } from '@src/presentation/ui-kit/Button';
 import { useTimer } from '@src/application/hooks/useTimer';
 import ReactCodeInput from 'react-code-input';
 import { useNavigate } from 'react-router-dom';
+import { useRef, useEffect } from 'react';
+import cn from 'classnames';
 
 interface VerificationInputProps {
   onExit: () => void;
   showNavigateBtn?: boolean;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  isKeyboardVisible: boolean;
 }
 
 const RESEND_INTERVAL_SECONDS = 60;
 
 export const VerificationInput = observer(
-  ({ onExit, showNavigateBtn = true }: VerificationInputProps) => {
+  ({ onExit, showNavigateBtn = true, onFocus, onBlur, isKeyboardVisible }: VerificationInputProps) => {
     const { phoneNumber, verificationError, strategy } = verificationStore;
     const navigate = useNavigate();
 
@@ -28,8 +33,25 @@ export const VerificationInput = observer(
 
     const { timeLeft, setTimeLeft } = useTimer(RESEND_INTERVAL_SECONDS);
 
+    const inputWrapperRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      const inputs = inputWrapperRef.current?.querySelectorAll('input');
+      inputs?.forEach(input => {
+        input.addEventListener('focus', onFocus);
+        input.addEventListener('blur', onBlur);
+      });
+
+      return () => {
+        inputs?.forEach(input => {
+          input.removeEventListener('focus', onFocus);
+          input.removeEventListener('blur', onBlur);
+        });
+      };
+    }, [onFocus, onBlur]);
+
     return (
-      <div className={styles.wrapper}>
+      <div className={cn(styles.wrapper, isKeyboardVisible && styles.wrapperKeyboardVisible)}>
         <div className={styles.title}>Введите код</div>
 
         <img src={isCallStrategy ? smartphoneImg : messageImg} alt='smartphone' />
@@ -73,7 +95,7 @@ export const VerificationInput = observer(
             )}
           </div>
 
-          <div className={styles.codeInputWrapper}>
+          <div className={styles.codeInputWrapper} ref={inputWrapperRef}>
             <ReactCodeInput
               className={styles.codeInput}
               type='number'

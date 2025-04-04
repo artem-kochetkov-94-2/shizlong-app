@@ -1,6 +1,5 @@
-// import { IconButton } from "@presentation/ui-kit/IconButton";
 import { RawLocation } from '@src/infrastructure/Locations/types';
-// import { Tag } from "@presentation/ui-kit/Tag";
+import { Tag } from "@presentation/ui-kit/Tag";
 import { Icon } from '@presentation/ui-kit/Icon';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import styles from './CardItem.module.css';
@@ -20,10 +19,12 @@ const MAX_OPTIONS_TO_VIEW = 4;
 
 export const CardItem = observer(
   ({ data, optionsToView = MAX_OPTIONS_TO_VIEW, category }: CardItemProps) => {
-    const { id, name, link_space, working_hours } = data;
+    const { id, name, link_space, working_hours, additional_services } = data;
     const maxOptionsToView = Math.min(optionsToView, MAX_OPTIONS_TO_VIEW);
     const isFavorite = locationsStore.getFavoriteStatus(id);
-    console.log(maxOptionsToView);
+
+    // @TODO: цена
+    const price = 0;
 
     return (
       <Link to={Routes.Location.replace(':id', `${id}`)}>
@@ -31,17 +32,20 @@ export const CardItem = observer(
           <div className={styles.content}>
             <div className={styles.category}>{category}</div>
             <div className={styles.name}>{name}</div>
-            {/* <div className={styles.row}>
-          <Tag text={`от ${price} ₽`} />
-          <div className={styles.options}>
-            <div className={styles.optionsItems}>
-              {options.slice(0, maxOptionsToView).map((o, i) => (
-                <Icon size="extra-small" key={i} name={o as IconName} />
-              ))}
+            {/* @TODO - цена */}
+            <div className={styles.row}>
+              <Tag text={`от ${price} ₽`} />
+              <div className={styles.options}>
+                <div className={styles.optionsItems}>
+                  {additional_services.slice(0, maxOptionsToView).map((s, i) => (
+                    <div className={styles.optionsItem} key={i}>
+                      <img src={s.link_icon} />
+                    </div>
+                  ))}
+                </div>
+                {additional_services.length > maxOptionsToView && <span>+{additional_services.length - maxOptionsToView}</span>}
+              </div>
             </div>
-            {options.length > maxOptionsToView && <span>+{options.length - maxOptionsToView}</span>}
-          </div>
-        </div> */}
             <div className={styles.range}>
               <Icon name='time' size='extra-small' />
               <span>{working_hours}</span>

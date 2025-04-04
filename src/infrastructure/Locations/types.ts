@@ -30,7 +30,9 @@ export interface RawLocation {
   services: null;
   created_at: Date;
   updated_at: Date;
+  additional_services: RawAdditionalService[];
 }
+
 export interface RawSector {
   id: number;
   name: string;

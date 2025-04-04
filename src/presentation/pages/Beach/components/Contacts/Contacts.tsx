@@ -22,13 +22,13 @@ export const Contacts: React.FC<{ location: RawLocation }> = ({ location }) => {
             <div className={styles.text}>{location.working_hours}</div>
           </div>
         </div>
-        {/* <div className={styles.contactItem}>
+        <div className={styles.contactItem}>
           <Icon name="calendar" size="extra-small" className={styles.icon} />
           <div>
             <div className={styles.label}>Период работы</div>
             <div className={styles.text}>{location.season}</div>
           </div>
-        </div> */}
+        </div>
       </div>
     </Card>
   );
