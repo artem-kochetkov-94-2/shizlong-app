@@ -159,7 +159,12 @@ class BookStore {
   }
 
   setSelectedModule(module: RawModule | null) {
+    this.clear();
     this.selectedModule = module;
+  }
+
+  clear() {
+    this.accessories = {};
   }
 
   async createBooking(onCreated: (id: number) => void) {

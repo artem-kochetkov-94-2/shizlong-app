@@ -5,7 +5,8 @@ import { RawSector } from "@src/infrastructure/Locations/types";
 import { observer } from "mobx-react-lite";
 import { locationStore } from "@src/application/store/locationStore";
 import classNames from "classnames";
-                                                                                                               
+import { Routes } from '@src/routes';
+
 export const Header = observer(({
     name,
     sector,
@@ -21,7 +22,7 @@ export const Header = observer(({
             <IconButton
                 iconName="arrow-left"
                 size="medium"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate(Routes.Location.replace(':id', sector.location_id.toString()))}
                 className={styles.backButton}
                 shape="rounded"
                 color="white"

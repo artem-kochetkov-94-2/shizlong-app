@@ -2,7 +2,7 @@ import { locationStore } from '@src/application/store/locationStore';
 import { observer } from 'mobx-react-lite';
 import { Contacts } from './components/Contacts';
 import { Features } from '@src/presentation/components/Features/Features';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
@@ -12,9 +12,10 @@ import styles from './Location.module.css';
 import { useState } from 'react';
 import { mapStore } from '@src/application/store/mapStore';
 import { Sheet, SheetRef } from 'react-modal-sheet';
-import { DRAG_VELOCITY_THRESHOLD, SERVER_URL } from '@src/const';
+import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import classNames from 'classnames';
+import { Routes } from '@src/routes';
 
 const SNAP_POINTS = [1, 483, 150];
 const INITIAL_SNAP_POINT = 1;
@@ -23,8 +24,10 @@ export const Location = observer(() => {
   const [isOpen, setIsOpen] = useState(true);
   const [snap, setSnap] = useState(INITIAL_SNAP_POINT);
   const ref = useRef<SheetRef>(null);
+  const snapTo = (i: number) => ref.current?.snapTo(i);
   const { id } = useParams<{ id: string }>();
-  const { location, additionalServicesAsFeatures, modules } = locationStore;
+  const navigate = useNavigate();
+  const { location, additionalServicesAsFeatures, services, sectors } = locationStore;
 
   useEffect(() => {
     if (!id) return;
@@ -39,12 +42,12 @@ export const Location = observer(() => {
 
   if (!location) return null;
 
-  const services = modules.map((m) => ({
-    name: m.module.name,
-    icon: `${SERVER_URL}${m.module.placed_icon.link_icon}`,
+  const servicesFeatures = services.map((s) => ({
+    name: s.name,
+    icon: s.placed_icon.link_icon,
+    extraTitle: `${s.price_per_hour} ₽ `,
+    extraDescription: `в час`,
   }));
-
-  console.log('snap', snap);
 
   return (
     <>
@@ -68,7 +71,7 @@ export const Location = observer(() => {
                 <div className={styles.content}>
                   <Contacts location={location} />
                   <About title='Описание' description={location.description ?? ''} />
-                  <Features title='Услуги' items={services} />
+                  <Features title='Услуги' items={servicesFeatures} />
                   <Features
                     title='Пляжная инфраструктура'
                     items={additionalServicesAsFeatures}
@@ -80,7 +83,14 @@ export const Location = observer(() => {
             <div
               className={classNames(styles.footer, { [styles.shortFooter]: snap === 2 })}
             >
-              <Button variant='yellow' onClick={() => locationStore.choosePlace()}>
+              <Button variant='yellow' onClick={() => {
+                locationStore.choosePlace();
+                if (sectors.length === 1) {
+                  navigate(Routes.Sector.replace(':id', sectors[0].id.toString()));
+                } else if (snap === 0) {
+                  snapTo(1);
+                }
+              }}>
                 Выбрать место
               </Button>
               {snap === 0 ? (

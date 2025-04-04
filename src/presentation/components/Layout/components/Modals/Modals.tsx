@@ -5,10 +5,12 @@ import { useCallback } from "react";
 import { eventService } from "@src/application/services/EventService/EventService";
 import { ModalAuth } from "@src/presentation/components/ModalAuth";
 import { ErrorModal } from "@src/presentation/components/Modals/ErrorModal";
+import { ScanModal } from "@src/presentation/components/Modals/ScanModal";
 
 export const Modals = observer(() => {
     const [authState] = useEventServiceData(EVENT.MODAL_AUTH);
     const [errorState] = useEventServiceData(EVENT.MODAL_ERROR);
+    const [scanState] = useEventServiceData(EVENT.MODAL_SCAN);
     
     const onClose = useCallback((modal: EVENT) => {
         eventService.emit(modal, { isActive: false });
@@ -28,6 +30,12 @@ export const Modals = observer(() => {
                     message={errorState.message}
                     text={errorState.text}
                     onClose={() => onClose(EVENT.MODAL_ERROR)}
+                />
+            )}
+            {scanState?.isActive && (
+                <ScanModal
+                    key={EVENT.MODAL_SCAN}
+                    onClose={() => onClose(EVENT.MODAL_SCAN)}
                 />
             )}
         </>

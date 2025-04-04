@@ -4,11 +4,10 @@ import logoImg from './assets/logo.svg';
 import backgroundGeoImg from './assets/bg-geo.png';
 import mapImg from './assets/map.svg';
 import styles from './Init.module.css';
-import { Navigate } from 'react-router-dom';
 import { Routes } from '@src/routes';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { geoStore } from '@src/application/store/geoStore';
 import { observer } from 'mobx-react-lite';
 import { verificationStore } from '@src/application/store/verificationStore';
@@ -16,7 +15,7 @@ import { verificationStore } from '@src/application/store/verificationStore';
 export const Init = observer(() => {
     const [showWelcome, setShowWelcome] = useState(true);
     const navigate = useNavigate();
-    const { permissionStatus } = geoStore;
+    const { permissionStatus, error, locationSetted } = geoStore;
     const { isVerified } = verificationStore;
 
     useEffect(() => {
@@ -25,18 +24,30 @@ export const Init = observer(() => {
         }, 1000);
     }, []);
 
-    if (permissionStatus === 'granted') {
+    const closePage = useCallback(() => {
         if (isVerified) {
-            return <Navigate to={Routes.Locations} />
+            navigate(Routes.Locations);
+        } else {
+            navigate(Routes.Auth);
+        }
+    }, [isVerified, navigate]);
+
+    useEffect(() => {
+        if (locationSetted || error) {
+            console.log('Init error', error);
+            closePage();
+            return;
         }
 
-        return <Navigate to={Routes.Auth} />
-    }
+        if (permissionStatus === 'denied') {
+            closePage();
+            return;
+        }
 
-    // @todo
-    // if (permissionStatus === 'denied') {
-    //     return <Navigate to={Routes.Cities} />
-    // }
+        if (permissionStatus === 'granted') {
+            closePage();
+        }
+    }, [permissionStatus, closePage, error, locationSetted]);
 
     return (
         <div>
@@ -69,7 +80,7 @@ export const Init = observer(() => {
                 size="large"
                 className={styles.iconClose}
                 shape="rounded"
-                onClick={() => navigate(Routes.Locations)}
+                onClick={closePage}
             />
         </div>
     );

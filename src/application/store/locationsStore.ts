@@ -40,7 +40,6 @@ export class LocationsStore {
     } else {
       await this.fetchLocations();
     }
-    this.mapStore.setMarkers(this.locations);
   }
 
   async toggleFavoriteLocation(id: number, add: boolean) {

@@ -35,7 +35,6 @@ class SectorStore {
     try {
       this.isSchemesLoading = true;
       const schemes = await locationsService.getSchemes(sectorId);
-      console.log('schemes', schemes);
       this.schemes = schemes;
     } catch (error) {
       console.error(error);
@@ -48,7 +47,6 @@ class SectorStore {
     try {
       this.isSectorLoading = true;
       const sector = await locationsService.getSector(sectorId);
-      console.log('sector', sector);
       this.sector = sector;
     } catch (error) {
       console.error(error);

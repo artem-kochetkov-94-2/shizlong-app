@@ -1,15 +1,22 @@
 import { useNavigate } from 'react-router-dom';
-import { IconButton } from '@presentation/ui-kit/IconButton';
+import { observer } from 'mobx-react-lite';
+import { verificationStore } from '@src/application/store/verificationStore';
 import { Routes } from '@src/routes';
+import { IconButton } from '@presentation/ui-kit/IconButton';
 
-export const ProfileButton = () => {
+export const ProfileButton = observer(() => {
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
-    navigate(Routes.Profile);
+    navigate(verificationStore.isVerified ? Routes.Profile : Routes.Auth);
   };
 
   return (
-    <IconButton iconName="profile" size="large" iconSize="small" onClick={handleProfileClick} />
+    <IconButton
+      iconName='profile'
+      size='large'
+      iconSize='small'
+      onClick={handleProfileClick}
+    />
   );
-}; 
+});

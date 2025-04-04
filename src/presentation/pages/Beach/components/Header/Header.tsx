@@ -5,6 +5,7 @@ import { locationStore } from '@src/application/store/locationStore';
 import styles from './Header.module.css';
 import cn from 'classnames';
 import { observer } from 'mobx-react-lite';
+import { Routes } from '@src/routes';
 
 export const Header = observer(() => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export const Header = observer(() => {
       <IconButton
         iconName='arrow-left'
         size='medium'
-        onClick={() => navigate(-1)}
+        onClick={() => navigate(Routes.Locations)}
         className={styles.backButton}
         shape='rounded'
         color='white'

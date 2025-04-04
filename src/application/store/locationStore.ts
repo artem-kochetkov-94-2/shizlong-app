@@ -1,5 +1,12 @@
 import { makeAutoObservable, autorun } from 'mobx';
-import { RawLocation, RawSector, RawAdditionalService, RawModule, RawBeachAccessory } from '@src/infrastructure/Locations/types';
+import {
+  RawLocation,
+  RawSector,
+  RawAdditionalService,
+  RawModule,
+  RawBeachAccessory,
+  RawService,
+} from '@src/infrastructure/Locations/types';
 import { Tab } from '@src/presentation/ui-kit/Tabs/Tabs';
 import { locationsService } from '@src/infrastructure/Locations/locationsService';
 import { mapStore } from './mapStore';
@@ -36,7 +43,9 @@ class LocationStore {
   additionalServices: RawAdditionalService[] = [];
   beachAccessories: RawBeachAccessory[] = [];
   isModulesLoading = false;
+  isServicesLoading = false;
   modules: RawModule[] = [];
+  services: RawService[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -65,7 +74,7 @@ class LocationStore {
   get minModulePrice() {
     const sortedModules = this.modules
       .slice()
-      .filter(m => m.module.price_per_hour !== null)
+      .filter((m) => m.module.price_per_hour !== null)
       .sort((a, b) => a.module.price_per_hour! - b.module.price_per_hour!);
     return sortedModules[0]?.module.price_per_hour || 0;
   }
@@ -84,6 +93,7 @@ class LocationStore {
     this.isSectorsLoading = false;
     this.isAdditionalServicesLoading = false;
     this.isBeachAccessoriesLoading = false;
+    this.isServicesLoading = false;
   }
 
   init(locationId: number) {
@@ -92,6 +102,7 @@ class LocationStore {
     this.fetchAdditionalServices(locationId);
     this.fetchBeachAccessories(locationId);
     this.fetchModules(locationId);
+    this.fetchServices(locationId);
   }
 
   async choosePlace() {
@@ -127,6 +138,20 @@ class LocationStore {
       this.isLoading = false;
     }
   }
+
+  async fetchServices(id: number) {
+    try {
+      this.isServicesLoading = true;
+      const services = await locationsService.getServices(id);
+      console.log('services', services);
+      this.services = services;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.isServicesLoading = false;
+    }
+  }
+
 
   async fetchAdditionalServices(id: number) {
     try {

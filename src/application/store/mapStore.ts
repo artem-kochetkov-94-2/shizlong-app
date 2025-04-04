@@ -6,6 +6,7 @@ import { RawLocation, RawSector } from '@src/infrastructure/Locations/types';
 import { GeoStore, geoStore } from './geoStore';
 import mapTooltip from '@src/assets/mapTooltip.svg';
 import mapTooltipFavorite from '@src/assets/mapTooltipFavorite.svg';
+import { getPolygonCenter } from '../utils/getPolygonCenter';
 
 const labelParams = {
   color: '#ffffff',
@@ -18,7 +19,7 @@ const labelParams = {
       [20, 30],
     ],
     stretchY: [[0, 22]],
-  }
+  },
 };
 
 const labelFavoriteParams = {
@@ -28,8 +29,8 @@ const labelFavoriteParams = {
     ...labelParams.image,
     url: mapTooltipFavorite,
     padding: [7, 15, 7, 15],
-  }
-}
+  },
+};
 
 class MapStore {
   // @ts-ignore
@@ -38,8 +39,8 @@ class MapStore {
   center: [number, number] | null = null;
   markerClickCb: ((location: RawLocation) => void) | null = null;
   sectorClickCb: ((sector: RawSector) => void) | null = null;
-  locationMarkers: Map<number, unknown> = new Map();
-  plan: Map<number, unknown> = new Map();
+  locationMarkers: Map<number, any> = new Map();
+  plan: Map<number, { polygon: any; label: any }> = new Map();
   userMarker: unknown | null = null;
   private geoStore: GeoStore;
 
@@ -49,12 +50,11 @@ class MapStore {
   }
 
   setMapInstance(map: any, mapglAPI: any) {
-    this.map = map;
     this.mapglAPI = mapglAPI;
+    this.map = map;
   }
 
   init() {
-    this.setCenter(geoStore.location.longitude, geoStore.location.latitude);
     this.addUserMarker();
   }
 
@@ -62,6 +62,9 @@ class MapStore {
     if (!this.map) return;
     this.map.destroy();
     this.map = null;
+    this.locationMarkers.clear();
+    this.userMarker = null;
+    this.plan.clear();
   }
 
   setCenter(longitude: number, latitude: number) {
@@ -97,18 +100,32 @@ class MapStore {
       });
     } else {
       // @ts-ignore
-      this.userMarker.setCoordinates([this.geoStore.location.longitude, this.geoStore.location.latitude]);
+      this.userMarker.setCoordinates([
+        this.geoStore.location.longitude,
+        this.geoStore.location.latitude,
+      ]);
     }
-  } 
+  }
 
   setLocationMarker(location: RawLocation) {
+    const existingMarker = this.locationMarkers.get(location.id);
+
+    if (existingMarker) {
+      existingMarker.setLabel({
+        ...(location.favorite ? labelFavoriteParams : labelParams),
+        text: location.name,
+      });
+
+      return existingMarker;
+    }
+
     const marker = new this.mapglAPI.Marker(this.map, {
       coordinates: location.coordinates,
       icon: markerIcon,
       label: {
-        ...labelParams,
+        ...(location.favorite ? labelFavoriteParams : labelParams),
         text: location.name,
-      }
+      },
     });
 
     marker.on('click', () => {
@@ -122,7 +139,7 @@ class MapStore {
     if (!this.map) return;
 
     const markers = new Map();
-    
+
     locations.forEach((location) => {
       markers.set(location.id, this.setLocationMarker(location));
     });
@@ -133,7 +150,7 @@ class MapStore {
   toggleSelectionLocationMarker(id: number, selected: boolean) {
     // @ts-ignore
     this.locationMarkers.get(id)?.setIcon({
-      icon: selected ? markerActiveIcon : markerIcon
+      icon: selected ? markerActiveIcon : markerIcon,
     });
   }
 
@@ -146,9 +163,10 @@ class MapStore {
   }
 
   clearPlan() {
-    this.plan.forEach((polygon) => {
+    this.plan.forEach(({ polygon, label }) => {
       // @ts-ignore
       polygon.destroy();
+      label.destroy();
     });
 
     this.plan.clear();
@@ -163,11 +181,13 @@ class MapStore {
 
     sectors.forEach((sector) => {
       const polygon = this.addPolygon(sector.poligon);
+      const label = this.addLabel(sector.poligon, sector.name);
+
       polygon.on('click', () => {
         this.sectorClickCb?.(sector);
       });
 
-      plan.set(sector.id, polygon);
+      plan.set(sector.id, { polygon, label });
     });
 
     this.plan = plan;
@@ -182,10 +202,16 @@ class MapStore {
     let southWest = polygon[0];
 
     polygon.forEach(([longitude, latitude]) => {
-      if (latitude > northEast[1] || (latitude === northEast[1] && longitude > northEast[0])) {
+      if (
+        latitude > northEast[1] ||
+        (latitude === northEast[1] && longitude > northEast[0])
+      ) {
         northEast = [longitude, latitude];
       }
-      if (latitude < southWest[1] || (latitude === southWest[1] && longitude < southWest[0])) {
+      if (
+        latitude < southWest[1] ||
+        (latitude === southWest[1] && longitude < southWest[0])
+      ) {
         southWest = [longitude, latitude];
       }
     });
@@ -202,7 +228,7 @@ class MapStore {
           bottom: 400,
           right: 10,
         },
-      },
+      }
     );
   }
 
@@ -216,6 +242,21 @@ class MapStore {
     });
 
     return polygon;
+  }
+
+  addLabel(polygon: [number, number][], text: string) {
+    if (!this.map || !this.mapglAPI) return;
+
+    const center = getPolygonCenter(polygon);
+
+    const label = new this.mapglAPI.Label(this.map, {
+      coordinates: center,
+      text: text,
+      color: '#161D25CC',
+      fontSize: 14,
+    });
+
+    return label;
   }
 }
 

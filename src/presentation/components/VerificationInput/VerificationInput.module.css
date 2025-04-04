@@ -1,0 +1,118 @@
+.wrapper {
+  padding-bottom: 15px;
+  text-align: center;
+
+  img {
+    width: 90px;
+    margin-bottom: 23px;
+  }
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 47px;
+}
+
+.backButton {
+  position: absolute;
+  top: -4px;
+  left: 16px;
+}
+
+.closeButton {
+  position: absolute;
+  top: -4px;
+  right: 16px;
+}
+
+.description {
+  max-width: 340px;
+  margin: 0 auto;
+  margin-bottom: 28px;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18.75px;
+  text-align: center;
+  color: #6b7280;
+
+  span {
+    font-weight: 500;
+    color: #292c31;
+  }
+}
+
+.codeInputWrapper {
+  position: relative;
+}
+
+.codeInput {
+  display: flex !important;
+  justify-content: center;
+  gap: 7px;
+
+  input {
+    width: 44px;
+    height: 50px;
+    border: 1.5px solid #bec5cf;
+    border-radius: 8px;
+    font-family: Roboto;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 26.4px;
+    text-align: center;
+    outline: none;
+    background-color: transparent;
+    color: #292c31;
+
+    &:focus {
+      border-color: #41bece;
+    }
+  }
+}
+
+.error {
+  position: absolute;
+  top: 61px;
+  left: 0;
+  width: 100%;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.8px;
+  text-align: center;
+  color: red;
+}
+
+.digitInput {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 91px;
+}
+
+.hint {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.8px;
+
+  span {
+    font-weight: 500;
+    color: #292c31;
+  }
+}
+
+.button {
+}
