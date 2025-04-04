@@ -51,4 +51,12 @@ export class RestService {
 
     return this.request<R>(requestConfig);
   }
+
+  async delete<R>({ url, params }: RequestArgs): Promise<StatusData<R>> {
+    const requestConfig = axiosInstance.delete<R>(url, {
+      params,
+    });
+
+    return this.request<R>(requestConfig);
+  }
 }

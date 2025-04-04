@@ -25,8 +25,8 @@ const baseStyle = {
   },
   invalid: {
     padding: '14px 14px 0',
-  }
-}
+  },
+};
 
 const cardNumberStyle = {
   ...baseStyle,
@@ -41,11 +41,11 @@ const cardNumberStyle = {
   invalid: {
     ...baseStyle.invalid,
     padding: '0',
-  }
-}
+  },
+};
 
 export class PaymentStore {
-  static placeholders = {}
+  static placeholders = {};
   formElements: any;
   cardNumber: any;
   expiry: any;
@@ -86,11 +86,11 @@ export class PaymentStore {
       const fonts = [{ src: 'https://fonts.googleapis.com/css?family=Source+Code+Pro' }];
 
       // @ts-ignore
-      this.formElements = new window.PayUSecureFields.Init(auth, { fonts })
+      this.formElements = new window.PayUSecureFields.Init(auth, { fonts });
       console.log(this.formElements);
       this.makeFormElements();
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
   }
 
@@ -102,9 +102,12 @@ export class PaymentStore {
     try {
       this.isAddingNewCard = true;
       // @ts-ignore
-      const result: FormRequestResponse = await window.PayUSecureFields.createToken(this.cardNumber, {
-        additionalData
-      });
+      const result: FormRequestResponse = await window.PayUSecureFields.createToken(
+        this.cardNumber,
+        {
+          additionalData,
+        }
+      );
 
       if (result.statusCode === 'SUCCESS') {
         await paymentService.addNewCard(result.token, this.sessionId);
@@ -141,6 +144,14 @@ export class PaymentStore {
       const newLoadingMap = new Map(this.isLoadingProcessPayment);
       newLoadingMap.set(bookingId, false);
       this.isLoadingProcessPayment = newLoadingMap;
+    }
+  }
+
+  async deleteToken(tokenId: number) {
+    try {
+      await paymentService.deleteToken(tokenId);
+    } catch (error) {
+      console.error(error);
     }
   }
 
