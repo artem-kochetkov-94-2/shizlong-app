@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 export const Support = () => {
   return (
     <div className={styles.support}>
-      <PageHeader>Помощь</PageHeader>
+      <PageHeader topPadding>Помощь</PageHeader>
       <div className={styles.wrapper}>
         <div className={styles.badge}>
           <div className={styles.badgeIcon}>

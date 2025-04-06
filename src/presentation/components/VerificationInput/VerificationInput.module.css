@@ -1,11 +1,17 @@
 .wrapper {
   padding-bottom: 15px;
   text-align: center;
+  transition: padding-bottom 0.3s ease;
 
   img {
     width: 90px;
     margin-bottom: 23px;
   }
+}
+
+.wrapperKeyboardVisible {
+  padding-bottom: 200px;
+  transition: padding-bottom 0.3s ease;
 }
 
 .title {

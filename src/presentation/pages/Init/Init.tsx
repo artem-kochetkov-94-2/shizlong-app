@@ -7,7 +7,7 @@ import styles from './Init.module.css';
 import { Routes } from '@src/routes';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { geoStore } from '@src/application/store/geoStore';
 import { observer } from 'mobx-react-lite';
 import { verificationStore } from '@src/application/store/verificationStore';
@@ -15,7 +15,7 @@ import { verificationStore } from '@src/application/store/verificationStore';
 export const Init = observer(() => {
     const [showWelcome, setShowWelcome] = useState(true);
     const navigate = useNavigate();
-    const { permissionStatus } = geoStore;
+    const { permissionStatus, error, locationSetted } = geoStore;
     const { isVerified } = verificationStore;
 
     useEffect(() => {
@@ -24,15 +24,21 @@ export const Init = observer(() => {
         }, 1000);
     }, []);
 
-    const closePage = () => {
+    const closePage = useCallback(() => {
         if (isVerified) {
             navigate(Routes.Locations);
         } else {
             navigate(Routes.Auth);
         }
-    };
+    }, [isVerified, navigate]);
 
     useEffect(() => {
+        if (locationSetted || error) {
+            console.log('Init error', error);
+            closePage();
+            return;
+        }
+
         if (permissionStatus === 'denied') {
             closePage();
             return;
@@ -41,7 +47,7 @@ export const Init = observer(() => {
         if (permissionStatus === 'granted') {
             closePage();
         }
-    }, [permissionStatus]);
+    }, [permissionStatus, closePage, error, locationSetted]);
 
     return (
         <div>

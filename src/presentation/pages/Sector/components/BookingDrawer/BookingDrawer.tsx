@@ -107,12 +107,13 @@ export const BookingDrawer = observer(() => {
                   <ChooseDate />
                 </div>
               </div>
+              {/* @TODO - слайдер времени */}
               {/* {activeScheme && (
-                                <TimeSlider
-                                    timeStart={activeScheme.time_start}
-                                    timeEnd={activeScheme.time_end}
-                                />
-                            )} */}
+                <TimeSlider
+                    timeStart={activeScheme.time_start}
+                    timeEnd={activeScheme.time_end}
+                />
+              )} */}
             </>
           )}
         </Sheet.Content>

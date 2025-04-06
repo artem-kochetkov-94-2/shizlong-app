@@ -3,6 +3,12 @@
     flex-direction: column;
     padding: 0 15px 28px;
     text-align: center;
+    transition: padding-bottom 0.3s ease;
+}
+
+.wrapperKeyboardVisible {
+    padding-bottom: 200px;
+    transition: padding-bottom 0.3s ease;
 }
 
 .title {

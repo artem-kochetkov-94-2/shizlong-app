@@ -14,6 +14,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
 }
+
 .favorite {
   svg {
     fill: #f95e5e;
