@@ -1,3 +1,5 @@
+import { cacheService } from '@src/application/services/cacheService/cacheService';
+import { KEY } from '@src/application/services/cacheService/types';
 import { EVENT } from '@src/application/services/EventService/EventList';
 import { eventService } from '@src/application/services/EventService/EventService';
 import { verificationStore } from '@src/application/store/verificationStore';
@@ -6,6 +8,10 @@ import axios from 'axios';
 
 export const axiosInstance = axios.create({
   headers: {
+<<<<<<< HEAD
+=======
+    'Content-Type': 'application/json',
+>>>>>>> origin/main
     Accept: 'application/json',
   },
   withCredentials: true,
@@ -33,6 +39,7 @@ axiosInstance.interceptors.response.use(
     }
 
     if (error.response.status === 401) {
+      cacheService.delete(KEY.Token);
       console.warn('Сессия истекла');
       eventService.emit(EVENT.MODAL_AUTH, { isActive: true });
     }

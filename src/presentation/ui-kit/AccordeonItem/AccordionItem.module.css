@@ -32,6 +32,7 @@ button:focus-visible {
   border: none;
   outline: none;
   cursor: pointer;
+  color: #161D25;
 }
 
 .icon {
