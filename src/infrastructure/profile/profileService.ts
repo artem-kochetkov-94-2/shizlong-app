@@ -1,6 +1,6 @@
 import { API_URL_V2 } from '@src/const';
 import { RestService } from '../restService/restService';
-import { ProfileData, UpdateProfile } from './types';
+import { ProfileData, UpdateProfile, UpdateProfileResponse } from './types';
 
 const routes = {
   getProfile: '/profile/show',
@@ -30,7 +30,7 @@ class ProfileService {
     if (data.phone) formData.append('phone', data.phone);
     if (data.file) formData.append('file', data.file);
 
-    const { response } = await this.restService.post({
+    const { response } = await this.restService.post<UpdateProfileResponse>({
       url: `${this.apiUrl}${routes.updateProfile}`,
       data: formData,
     });

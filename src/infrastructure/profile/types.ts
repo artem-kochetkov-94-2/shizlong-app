@@ -4,7 +4,7 @@ export interface ApiResponse<T> {
 }
 
 export interface ProfileData {
-  first_name?: string;
+  name?: string;
   last_name?: string;
   email?: string;
   phone?: string;
@@ -16,3 +16,5 @@ export interface UpdateProfile {
   phone: string;
   file?: File | null;
 }
+
+export type UpdateProfileResponse = ProfileData;

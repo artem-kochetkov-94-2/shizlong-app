@@ -23,10 +23,15 @@ export class ProfileStore {
   async updateProfile(data: UpdateProfile) {
     try {
       const response = await profileService.updateProfile(data);
+      this.profile = response;
       console.log(response);
     } catch (error) {
       console.log(error);
     }
+  }
+
+  clear() {
+    this.profile = {};
   }
 }
 

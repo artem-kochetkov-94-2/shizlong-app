@@ -4,17 +4,23 @@ import { Button } from '@src/presentation/ui-kit/Button';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { StyledInput } from '@src/presentation/ui-kit/StyledInput';
 import PhoneInput from 'react-phone-input-2';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { profileStore } from '@src/application/store/profileStore';
 import { observer } from 'mobx-react-lite';
 
 export const ProfileEdit = observer(() => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [firstName, setFirstName] = useState(profileStore.profile.name ?? '');
+  const [lastName, setLastName] = useState(profileStore.profile.last_name ?? '');
+  const [phone, setPhone] = useState(profileStore.profile.phone ?? '');
   const [file, setFile] = useState<File | null>(null);
 
-  const handleSaveName = () => {
+  useEffect(() => {
+    setFirstName(profileStore.profile.name ?? '');
+    setLastName(profileStore.profile.last_name ?? '');
+    setPhone(profileStore.profile.phone ?? '');
+  }, [profileStore.profile]);
+
+  const handleSubmit = () => {
     profileStore.updateProfile({
       name: firstName,
       last_name: lastName,
@@ -47,7 +53,9 @@ export const ProfileEdit = observer(() => {
             type={'text'}
             placeholder={'Фамилия'}
           />
-          <Button variant={'yellow'}>Сохранить</Button>
+          <Button variant={'yellow'} onClick={handleSubmit}>
+            Сохранить
+          </Button>
         </div>
         <div className={styles.editorCard1}>
           <div className={styles.h2}>Телефон</div>

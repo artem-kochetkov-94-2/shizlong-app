@@ -1,24 +1,29 @@
 import { makeAutoObservable } from 'mobx';
 import { NotificationsStore, notificationsStore } from './notificationsStore';
 import { PaymentStore, paymentStore } from './paymentStore';
-import { verificationStore } from './verificationStore';
-
+import { VerificationStore, verificationStore } from './verificationStore';
 import { authorizationService } from '@src/infrastructure/authorization/authorizationService';
+import { ProfileStore, profileStore } from './profileStore';
 
 export class UserStore {
   notificationsStore: NotificationsStore;
   paymentStore: PaymentStore;
+  profileStore: ProfileStore;
+  verificationStore: VerificationStore;
 
   constructor() {
     makeAutoObservable(this);
     this.notificationsStore = notificationsStore;
     this.paymentStore = paymentStore;
+    this.profileStore = profileStore;
+    this.verificationStore = verificationStore;
   }
 
   async init() {
     if (verificationStore.isVerified) {
       this.notificationsStore.checkTelegramStatus();
       this.paymentStore.getTokens();
+      this.profileStore.getProfile();
     }
   }
 
@@ -29,7 +34,8 @@ export class UserStore {
     } catch (error) {
       console.log(error);
     } finally {
-      verificationStore.clear();
+      this.verificationStore.clear();
+      this.profileStore.clear();
       cb();
     }
   }

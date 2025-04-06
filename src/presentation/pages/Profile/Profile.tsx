@@ -84,12 +84,13 @@ export const Profile = observer(() => {
           </div>
           <div>
             <div className={styles.userName}>
-              {profile.first_name} {profile.last_name}
+              {profile.name} {profile.last_name}
             </div>
             <div className={styles.userPhone}>
               {formatPhoneNumber(profile.phone || '')}
             </div>
-            <Rating value={4.8} count={5} showCount={false} />
+            {/* @todo */}
+            {/* <Rating value={4.8} count={5} showCount={false} /> */}
           </div>
         </div>
 

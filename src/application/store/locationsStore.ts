@@ -3,7 +3,6 @@ import { locationsService } from '@src/infrastructure/Locations/locationsService
 import { makeAutoObservable } from 'mobx';
 import { mapStore } from './mapStore';
 import { verificationStore } from './verificationStore';
-import { profileStore } from './profileStore';
 
 export class LocationsStore {
   locations: RawLocation[] = [];
@@ -38,7 +37,6 @@ export class LocationsStore {
     if (verificationStore.isVerified) {
       await this.fetchLocationsWhithFavorite();
       await this.fetchfavoriteLocations();
-      await profileStore.getProfile();
     } else {
       await this.fetchLocations();
     }

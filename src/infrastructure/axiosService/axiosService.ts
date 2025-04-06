@@ -8,10 +8,6 @@ import axios from 'axios';
 
 export const axiosInstance = axios.create({
   headers: {
-<<<<<<< HEAD
-=======
-    'Content-Type': 'application/json',
->>>>>>> origin/main
     Accept: 'application/json',
   },
   withCredentials: true,
