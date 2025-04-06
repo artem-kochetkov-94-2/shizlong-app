@@ -1,5 +1,6 @@
 .support {
   max-height: 100vh;
+  padding-bottom: 80px;
   overflow-y: auto;
 }
 
