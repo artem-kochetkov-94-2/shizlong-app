@@ -9,6 +9,7 @@ import { smsStrategy } from '@src/domain/common/verification/smsStrategy';
 import { cacheService } from '@src/application/services/cacheService/cacheService';
 import { KEY } from '@src/application/services/cacheService/types';
 
+
 export class VerificationStore {
   private verificationController: VerificationController;
   private _phoneNumber: string = '';
@@ -101,6 +102,16 @@ export class VerificationStore {
 
   reset() {
     this._verificationError = null;
+  }
+
+  clear() {
+    this._phoneNumber = '';
+    this._verificationError = null;
+    this._strategy = null;
+    this._isFetchingCode = false;
+    this._isSendingCode = false;
+    this._accessToken = null;
+    cacheService.delete(KEY.Token);
   }
 }
 

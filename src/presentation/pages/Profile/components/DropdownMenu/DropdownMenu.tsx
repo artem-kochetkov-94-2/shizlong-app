@@ -3,11 +3,15 @@ import { Icon } from '@src/presentation/ui-kit/Icon';
 import { Link } from 'react-router-dom';
 import { Routes } from '@src/routes';
 import { userStore } from '@src/application/store/userStore';
+import { useNavigate } from 'react-router-dom';
 
 export const DropdownMenu = () => {
+  const navigate = useNavigate();
   const handleLogout = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    userStore.logout();
+    userStore.logout(() => {
+      navigate(Routes.Locations);
+    });
   };
 
   return (

@@ -2,8 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import { NotificationsStore, notificationsStore } from './notificationsStore';
 import { PaymentStore, paymentStore } from './paymentStore';
 import { verificationStore } from './verificationStore';
-import { cacheService } from '../services/cacheService/cacheService';
-import { KEY } from '../services/cacheService/types';
+
 import { authorizationService } from '@src/infrastructure/authorization/authorizationService';
 
 export class UserStore {
@@ -23,13 +22,15 @@ export class UserStore {
     }
   }
 
-  async logout() {
+  async logout(cb: () => void) {
     try {
       const result = await authorizationService.logout();
       console.log(result);
-      cacheService.delete(KEY.Token);
     } catch (error) {
       console.log(error);
+    } finally {
+      verificationStore.clear();
+      cb();
     }
   }
 }
