@@ -4,14 +4,34 @@ import { Button } from '@src/presentation/ui-kit/Button';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { StyledInput } from '@src/presentation/ui-kit/StyledInput';
 import PhoneInput from 'react-phone-input-2';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { profileStore } from '@src/application/store/profileStore';
+import { observer } from 'mobx-react-lite';
 
-export const ProfileEdit = () => {
-  const [value, setValue] = useState('');
+export const ProfileEdit = observer(() => {
+  const [firstName, setFirstName] = useState(profileStore.profile.name ?? '');
+  const [lastName, setLastName] = useState(profileStore.profile.last_name ?? '');
+  const [phone, setPhone] = useState(profileStore.profile.phone ?? '');
+  const [file, setFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    setFirstName(profileStore.profile.name ?? '');
+    setLastName(profileStore.profile.last_name ?? '');
+    setPhone(profileStore.profile.phone ?? '');
+  }, [profileStore.profile]);
+
+  const handleSubmit = () => {
+    profileStore.updateProfile({
+      name: firstName,
+      last_name: lastName,
+      phone: phone,
+      file: file,
+    });
+  };
 
   return (
     <div className={styles.container}>
-      <PageHeader>Изменить информацию</PageHeader>
+      <PageHeader topPadding>Изменить информацию</PageHeader>
       <div className={styles.profileEditor}>
         <div className={styles.editorCard2}>
           <div className={styles.profilePhoto}>
@@ -21,16 +41,28 @@ export const ProfileEdit = () => {
         </div>
         <div className={styles.editorCard1}>
           <div className={styles.h2}>Ваше имя</div>
-          <StyledInput type={'text'} placeholder={'Имя'} />
-          <StyledInput type={'text'} placeholder={'Фамилия'} />
-          <Button variant={'yellow'}>Сохранить</Button>
+          <StyledInput
+            value={firstName}
+            onChange={(v) => setFirstName(v)}
+            type={'text'}
+            placeholder={'Имя'}
+          />
+          <StyledInput
+            value={lastName}
+            onChange={(v) => setLastName(v)}
+            type={'text'}
+            placeholder={'Фамилия'}
+          />
+          <Button variant={'yellow'} onClick={handleSubmit}>
+            Сохранить
+          </Button>
         </div>
         <div className={styles.editorCard1}>
           <div className={styles.h2}>Телефон</div>
           <PhoneInput
             country={'ru'}
-            value={value}
-            onChange={(v) => setValue(v)}
+            value={phone}
+            onChange={(v) => setPhone(v)}
             specialLabel={'Номер телефона'}
             placeholder={'000 000 0000'}
             containerClass={styles.input}
@@ -40,4 +72,4 @@ export const ProfileEdit = () => {
       </div>
     </div>
   );
-};
+});
