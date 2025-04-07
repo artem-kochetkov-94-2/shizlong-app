@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import { formatFullDate } from '@src/application/utils/formatDate';
 import { RawBooking } from '@src/infrastructure/bookings/types';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Routes } from '@src/routes';
-import styles from './BookingCard.module.css';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@src/presentation/ui-kit/Button';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
@@ -11,9 +11,8 @@ import { paymentStore } from '@src/application/store/paymentStore';
 import { observer } from 'mobx-react-lite';
 import { locationsStore } from '@src/application/store/locationsStore';
 import { bookingsStore } from '@src/application/store/bookingsStore';
-import { Sheet, SheetRef } from 'react-modal-sheet';
-import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
-import { useRef, useState } from 'react';
+import { CancelBookingPanel } from '../CancelBookingPanel';
+import styles from './BookingCard.module.css';
 
 const bookingStatusMap = {
   reserved: 'Не оплачена',
@@ -39,64 +38,20 @@ export const colorByStatus = {
   confirmed: '#ffffff',
 };
 
-const SNAP_POINTS = [758, 309, 79];
-const INITIAL_SNAP_POINT = 1;
-
 export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
+  const [isCancelOpen, setCancelOpen] = useState(false);
   const navigate = useNavigate();
   const isFavorite = locationsStore.getFavoriteStatus(booking.module.sector.location.id);
   const { isLoadingProcessPayment } = paymentStore;
   const { isLoadingCancelBooking } = bookingsStore;
 
-  const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef<SheetRef>(null);
-
-  const snapTo = (i: number) => ref.current?.snapTo(i);
-
-  const handleOpen = (status: boolean) => {
-    setIsOpen(status);
-    setTimeout(() => {
-      snapTo(1);
-    }, 300);
-  };
-
   return (
     <>
-      <Sheet
-        ref={ref}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        detent='content-height'
-        snapPoints={SNAP_POINTS}
-        initialSnap={INITIAL_SNAP_POINT}
-        dragVelocityThreshold={DRAG_VELOCITY_THRESHOLD}
-      >
-        <Sheet.Container>
-          <Sheet.Header />
-          <Sheet.Content>
-            <div className={styles.header}>
-              Вы уверены, что хотите отменить эту бронь?
-            </div>
-            <div className={styles.buttons}>
-              <Button
-                variant={'yellow'}
-                onClick={() => bookingsStore.cancelBooking(booking.id)}
-              >
-                <span>Да</span>
-              </Button>
-              <Button variant={'gray2'} onClick={() => setIsOpen(false)}>
-                <span>Нет</span>
-              </Button>
-            </div>
-          </Sheet.Content>
-        </Sheet.Container>
-        <Sheet.Backdrop
-          onTap={() => {
-            setIsOpen(false);
-          }}
-        />
-      </Sheet>
-
+      <CancelBookingPanel
+        isOpen={isCancelOpen}
+        onClose={() => setCancelOpen(false)}
+        bookingId={booking.id}
+      />
       <div className={styles.item} key={booking.id}>
         <div className={styles.wrapper}>
           <div className={styles.content}>
@@ -221,7 +176,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
                 <Button
                   size='medium'
                   variant='tertiary'
-                  onClick={() => handleOpen(true)}
+                  onClick={() => setCancelOpen(true)}
                   isLoading={isLoadingCancelBooking.get(booking.id)}
                   disabled={isLoadingCancelBooking.get(booking.id)}
                 >

@@ -1,8 +1,11 @@
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import { Routes } from '@src/routes';
-import { Sheet, SheetRef } from 'react-modal-sheet';
+import { Sheet } from 'react-modal-sheet';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { bookingCardStore } from '@src/application/store/bookingCardStore';
+import { paymentStore } from '@src/application/store/paymentStore';
 import {
   formatFullDate,
   formatTimeRange,
@@ -15,13 +18,9 @@ import { Card } from '@src/presentation/ui-kit/Card';
 import { Features } from '@src/presentation/components/Features';
 import { Button } from '@src/presentation/ui-kit/Button';
 import { DecorateButton } from '@src/presentation/components/DecorateButton';
+import { CancelBookingPanel } from '@src/presentation/components/CancelBookingPanel';
 import waves from '@src/assets/waves.png';
 import styles from './BookingDetails.module.css';
-import { bookingCardStore } from '@src/application/store/bookingCardStore';
-import { useEffect, useRef, useState } from 'react';
-import { paymentStore } from '@src/application/store/paymentStore';
-import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
-import { bookingsStore } from '@src/application/store/bookingsStore';
 
 const bookingStatuses = {
   pending: 'активна',
@@ -30,13 +29,9 @@ const bookingStatuses = {
   completed: 'отдых состоялся',
 };
 
-const SNAP_POINTS = [758, 309, 79];
-const INITIAL_SNAP_POINT = 1;
-
 export const BookingDetails = observer(() => {
   const { id } = useParams();
-  const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef<SheetRef>(null);
+  const [isCancelOpen, setCancelOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -53,51 +48,13 @@ export const BookingDetails = observer(() => {
 
   // booking.status = 'pending';
 
-  const snapTo = (i: number) => ref.current?.snapTo(i);
-  const handleOpen = (status: boolean) => {
-    setIsOpen(status);
-    setTimeout(() => {
-      snapTo(1);
-    }, 300);
-  };
-
   return (
     <>
-      <Sheet
-        ref={ref}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        detent='content-height'
-        snapPoints={SNAP_POINTS}
-        initialSnap={INITIAL_SNAP_POINT}
-        dragVelocityThreshold={DRAG_VELOCITY_THRESHOLD}
-        style={{ zIndex: 9999 }}
-      >
-        <Sheet.Container>
-          <Sheet.Header />
-          <Sheet.Content>
-            <div className={styles.headerDrawer}>
-              Вы уверены, что хотите отменить эту бронь?
-            </div>
-            <div className={styles.buttons}>
-              <Button
-                variant={'yellow'}
-                onClick={() => bookingsStore.cancelBooking(booking.id)}
-              >
-                <span>Да</span>
-              </Button>
-              <Button variant={'gray2'} onClick={() => setIsOpen(false)}>
-                <span>Нет</span>
-              </Button>
-            </div>
-          </Sheet.Content>
-        </Sheet.Container>
-        <Sheet.Backdrop
-          onTap={() => {
-            setIsOpen(false);
-          }}
-        />
-      </Sheet>
+      <CancelBookingPanel
+        isOpen={isCancelOpen}
+        onClose={() => setCancelOpen(false)}
+        bookingId={booking.id}
+      />
       <Sheet
         isOpen={true}
         onClose={() => navigate(Routes.Locations)}
@@ -265,7 +222,7 @@ export const BookingDetails = observer(() => {
                     <Button
                       variant={'gray2'}
                       onClick={() => {
-                        handleOpen(true);
+                        setCancelOpen(true);
                       }}
                     >
                       <Icon name={'cancel'} size='extra-small' />
