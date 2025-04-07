@@ -10,7 +10,7 @@ import { Tab } from '@src/presentation/ui-kit/Tabs/Tabs';
 import { CompletedBookings } from './components/CompletedBookings/CompletedBookings';
 import { CurrentBookings } from './components/CurrentBookings/CurrentBookings';
 import { observer } from 'mobx-react-lite';
-import { Rating } from '@src/presentation/components/Rating';
+// import { Rating } from '@src/presentation/components/Rating';
 import { useNavigate } from 'react-router-dom';
 import { ChangeEvent, useRef, useState } from 'react';
 import { DropdownMenu } from './components/DropdownMenu/DropdownMenu';
