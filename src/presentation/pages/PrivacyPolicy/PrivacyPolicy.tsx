@@ -4,7 +4,7 @@ import styles from './PrivacyPolicy.module.css';
 export const PrivacyPolicy = () => {
   return (
     <>
-      <PageHeader>Политика конфеденциальности</PageHeader>
+      <PageHeader topPadding>Политика конфеденциальности</PageHeader>
       <div className={styles.wrapper}>
         <div className={styles.description}>
           <div className={styles.header}>

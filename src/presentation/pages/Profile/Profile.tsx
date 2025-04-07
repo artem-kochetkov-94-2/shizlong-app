@@ -10,13 +10,15 @@ import { Tab } from '@src/presentation/ui-kit/Tabs/Tabs';
 import { CompletedBookings } from './components/CompletedBookings/CompletedBookings';
 import { CurrentBookings } from './components/CurrentBookings/CurrentBookings';
 import { observer } from 'mobx-react-lite';
-import { Rating } from '@src/presentation/components/Rating';
+// import { Rating } from '@src/presentation/components/Rating';
 import { useNavigate } from 'react-router-dom';
 import { ChangeEvent, useRef, useState } from 'react';
 import { DropdownMenu } from './components/DropdownMenu/DropdownMenu';
 import { Routes } from '@src/routes';
 import { notificationsStore } from '@src/application/store/notificationsStore';
 import { paymentStore } from '@src/application/store/paymentStore';
+import { profileStore } from '@src/application/store/profileStore';
+import { formatPhoneNumber } from '@src/application/utils/formatPhone';
 
 export const bookingsTabs: Tab[] = [
   {
@@ -38,6 +40,7 @@ export const Profile = observer(() => {
   const { currentBookings, completedBookings } = bookingsStore;
   const { isSubscribedToTelegram } = notificationsStore;
   const { tokens } = paymentStore;
+  const { profile } = profileStore;
 
   const navigate = useNavigate();
 
@@ -80,9 +83,14 @@ export const Profile = observer(() => {
             {selectedAvatar && <img src={URL.createObjectURL(selectedAvatar)} alt='' />}
           </div>
           <div>
-            <div className={styles.userName}>User 2458</div>
-            <div className={styles.userPhone}>+7 (925) 222-33-44</div>
-            <Rating value={4.8} count={5} showCount={false} />
+            <div className={styles.userName}>
+              {profile.name} {profile.last_name}
+            </div>
+            <div className={styles.userPhone}>
+              {formatPhoneNumber(profile.phone || '')}
+            </div>
+            {/* @todo */}
+            {/* <Rating value={4.8} count={5} showCount={false} /> */}
           </div>
         </div>
 
@@ -100,7 +108,11 @@ export const Profile = observer(() => {
         <div className={styles.actions}>
           {/* @todo */}
           <div
-            className={classNames(styles.actionItem, styles.notifications, styles.actionItemDisabled)}
+            className={classNames(
+              styles.actionItem,
+              styles.notifications,
+              styles.actionItemDisabled
+            )}
             // onClick={() => navigate(Routes.Notifications)}
           >
             <IconButton iconName='bell' size='large' withBorder withBlur />
@@ -172,9 +184,10 @@ export const Profile = observer(() => {
                 tabs={bookingsTabs.map((t) => {
                   return {
                     ...t,
-                    label: t.value === 'current'
-                      ? `Актуальные ${currentBookings.length}`
-                      : `Завершённые ${completedBookings.length}`,
+                    label:
+                      t.value === 'current'
+                        ? `Актуальные ${currentBookings.length}`
+                        : `Завершённые ${completedBookings.length}`,
                   };
                 })}
                 activeTab={currentTab}
@@ -182,7 +195,6 @@ export const Profile = observer(() => {
               />
 
               {currentTab === 'current' && <CurrentBookings />}
-
               {currentTab === 'completed' && <CompletedBookings />}
             </>
           )}

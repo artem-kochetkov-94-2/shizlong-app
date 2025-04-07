@@ -94,7 +94,7 @@ export const BookingDrawer = observer(() => {
           {activeTab === 'order' && (
             <>
               <div className={styles.content}>
-                <div className={styles.divider}></div>
+                <div className={styles.divider} />
 
                 <div className={styles.modulesRow}>
                   <div className={styles.modulesRowTitle}>Заказать</div>
@@ -107,12 +107,13 @@ export const BookingDrawer = observer(() => {
                   <ChooseDate />
                 </div>
               </div>
+              {/* @TODO - слайдер времени */}
               {/* {activeScheme && (
-                                <TimeSlider
-                                    timeStart={activeScheme.time_start}
-                                    timeEnd={activeScheme.time_end}
-                                />
-                            )} */}
+                <TimeSlider
+                    timeStart={activeScheme.time_start}
+                    timeEnd={activeScheme.time_end}
+                />
+              )} */}
             </>
           )}
         </Sheet.Content>

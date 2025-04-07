@@ -30,6 +30,7 @@ export const Navigation = ({ location, snap }: { location: RawLocation; snap: nu
       <div className={styles.category}>пляж</div>
       <div className={styles.name}>{location.name}</div>
       <div className={styles.row}>
+        {/* @TODO - рейтинг */}
         {/* <Rating value={4.2} count={1300} /> */}
         <Tag size="medium" text={`от ${minModulePrice.toLocaleString('ru-RU')} ₽`} />
       </div>

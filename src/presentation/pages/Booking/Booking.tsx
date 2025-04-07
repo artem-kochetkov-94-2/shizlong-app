@@ -24,7 +24,7 @@ export const Booking = observer(() => {
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [isTimeOpen, setIsTimeOpen] = useState(false);
 
-    const { selectedModule, formattedDate, formattedTime, formattedDuration, isCreatingBooking } = bookStore;
+    const { selectedModule, formattedDate, formattedTime, formattedDuration, isCreatingBooking, bookPrice } = bookStore;
     const { location, beachAccessories } = locationStore;
     const { sector } = sectorStore;
 
@@ -109,6 +109,7 @@ export const Booking = observer(() => {
                                     </div>
                                 </Card>
 
+                                {/* @TODO: количество гостей */}
                                 {/* <Card className={styles.card}>
                                     <div className={styles.people}>
                                         <div className={styles.cardTitle}>
@@ -147,6 +148,7 @@ export const Booking = observer(() => {
                                     </div>
                                 </Card>
 
+                                {/* @TODO */}
                                 {/* <Card className={styles.promocode}>
                                     <div className={styles.promocodeTitle}>Есть промокод?</div>
                                     <div className={styles.promocodeRow}>
@@ -178,8 +180,7 @@ export const Booking = observer(() => {
                             >
                                 Оплатить
                             </Button>
-                            {/* @todo */}
-                            <span>1 550 ₽</span>
+                            <span>{bookPrice.toLocaleString()} ₽</span>
                         </div>
                     </Sheet.Content>
                 </Sheet.Container>

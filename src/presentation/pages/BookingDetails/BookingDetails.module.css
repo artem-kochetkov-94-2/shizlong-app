@@ -184,11 +184,12 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    gap: 4px;
 }
 
 .accessory {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     width: 100%;
 

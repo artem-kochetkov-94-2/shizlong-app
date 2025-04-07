@@ -4,6 +4,7 @@ import {
   VerificationStore,
   verificationStore,
 } from '@src/application/store/verificationStore';
+import { RestService } from '../restService/restService';
 
 const routes = {
   telegram: '/telegram/get-subscription-code',
@@ -13,9 +14,11 @@ const routes = {
 class NotificationsService {
   private readonly apiUrlV1 = API_URL;
   private readonly verificationStore: VerificationStore;
+  private readonly restService: RestService;
 
   constructor() {
     this.verificationStore = verificationStore;
+    this.restService = new RestService();
   }
 
   async getTelegramCode() {
@@ -23,22 +26,11 @@ class NotificationsService {
       throw new Error('Нет токена');
     }
 
-    const response = await fetch(`${this.apiUrlV1}${routes.telegram}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${this.verificationStore.accessToken}`,
-        'Content-Type': 'application/json',
-      },
+    const { response } = await this.restService.post<getTelegramCodeResponse>({
+      url: `${this.apiUrlV1}${routes.telegram}`,
     });
 
-    const result: getTelegramCodeResponse = await response.json();
-
-    if (!result.success) {
-      throw new Error(`Ошибка`);
-    }
-
-    return result.code;
+    return response.code;
   }
 
   async checkTelegramStatus() {
@@ -46,18 +38,11 @@ class NotificationsService {
       throw new Error('Нет токена');
     }
 
-    const response = await fetch(`${this.apiUrlV1}${routes.telegramCheckStatus}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${this.verificationStore.accessToken}`,
-        'Content-Type': 'application/json',
-      },
+    const { response } = await this.restService.post<CheckTelegramStatusResponse>({
+      url: `${this.apiUrlV1}${routes.telegramCheckStatus}`,
     });
 
-    const result = await response.json() as CheckTelegramStatusResponse;
-
-    return result;
+    return response;
   }
 }
 

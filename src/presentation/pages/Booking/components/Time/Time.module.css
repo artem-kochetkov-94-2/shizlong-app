@@ -168,6 +168,16 @@ second, second and am/pm */
     color: #F95E5E;
 }
 
+.error {
+    margin-top: 16px;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16.8px;
+    text-align: center;
+    color: #F95E5E;
+}
+
 /*  footer */
 
 .footer {

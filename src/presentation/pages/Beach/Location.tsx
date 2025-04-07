@@ -16,6 +16,8 @@ import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import classNames from 'classnames';
 import { Routes } from '@src/routes';
+import { locationsStore } from '@src/application/store/locationsStore';
+import cn from 'classnames';
 
 const SNAP_POINTS = [1, 483, 150];
 const INITIAL_SNAP_POINT = 1;
@@ -27,7 +29,13 @@ export const Location = observer(() => {
   const snapTo = (i: number) => ref.current?.snapTo(i);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+
   const { location, additionalServicesAsFeatures, services, sectors } = locationStore;
+  const isFavorite = locationsStore.getFavoriteStatus(Number(id));
+
+  const handleToggleFavorite = (): void => {
+    locationsStore.toggleFavoriteLocation(Number(id), !isFavorite);
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -42,6 +50,7 @@ export const Location = observer(() => {
 
   if (!location) return null;
 
+  // @TODO - если не в час
   const servicesFeatures = services.map((s) => ({
     name: s.name,
     icon: s.placed_icon.link_icon,
@@ -51,7 +60,7 @@ export const Location = observer(() => {
 
   return (
     <>
-      <Header />
+      <Header handleToggleFavorite={handleToggleFavorite} />
 
       <Sheet
         ref={ref}
@@ -76,6 +85,7 @@ export const Location = observer(() => {
                     title='Пляжная инфраструктура'
                     items={additionalServicesAsFeatures}
                   />
+                  {/* @TODO - особенности */}
                   {/* <Features title="Особенности" items={peculiarities} /> */}
                 </div>
               )}
@@ -83,14 +93,17 @@ export const Location = observer(() => {
             <div
               className={classNames(styles.footer, { [styles.shortFooter]: snap === 2 })}
             >
-              <Button variant='yellow' onClick={() => {
-                locationStore.choosePlace();
-                if (sectors.length === 1) {
-                  navigate(Routes.Sector.replace(':id', sectors[0].id.toString()));
-                } else if (snap === 0) {
-                  snapTo(1);
-                }
-              }}>
+              <Button
+                variant='yellow'
+                onClick={() => {
+                  locationStore.choosePlace();
+                  if (sectors.length === 1) {
+                    navigate(Routes.Sector.replace(':id', sectors[0].id.toString()));
+                  } else if (snap === 0) {
+                    snapTo(1);
+                  }
+                }}
+              >
                 Выбрать место
               </Button>
               {snap === 0 ? (
@@ -100,6 +113,8 @@ export const Location = observer(() => {
                     size='large'
                     shape='rounded'
                     color='white'
+                    onClick={handleToggleFavorite}
+                    className={cn({ [styles.favorite]: isFavorite })}
                   />
                   <IconButton
                     iconName='route'

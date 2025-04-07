@@ -1,11 +1,17 @@
 .wrapper {
   padding-bottom: 15px;
   text-align: center;
+  transition: padding-bottom 0.3s ease;
 
   img {
     width: 90px;
     margin-bottom: 23px;
   }
+}
+
+.wrapperKeyboardVisible {
+  padding-bottom: 200px;
+  transition: padding-bottom 0.3s ease;
 }
 
 .title {
@@ -68,6 +74,16 @@
 
     &:focus {
       border-color: #41bece;
+    }
+
+    &[type="number"]::-webkit-inner-spin-button,
+    &[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &[type="number"] {
+      -moz-appearance: textfield; /* Убирает стрелки в Firefox */
     }
   }
 }

@@ -34,7 +34,7 @@ export const Layout = observer(({ children }: PropsWithChildren) => {
     }, [verificationStore.isVerified]);
 
     return (
-        <div>
+        <div className="layout">
             {children}
             <Outlet />
             <Modals />
