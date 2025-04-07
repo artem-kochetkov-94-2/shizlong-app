@@ -28,18 +28,20 @@ export const Contacts: React.FC<{ location: RawLocation }> = observer(({ locatio
               <div className={styles.text}>{location.working_hours}</div>
             </div>
           </div>
-          <div className={styles.options}>
-            <div className={styles.optionsItems}>
-              {additionalServices.length > 0 && (
-                additionalServices.slice(0, maxOptionsToView).map((s, i) => (
-                  <div className={styles.optionsItem} key={i}>
-                    <img src={s.link_icon} />
-                  </div>
-                )))
-              }
-              {additionalServices.length > maxOptionsToView && <span>+{additionalServices.length - maxOptionsToView}</span>}
+          {additionalServices.length > 0 && (
+            <div className={styles.options}>
+              <div className={styles.optionsItems}>
+                {additionalServices.length > 0 && (
+                  additionalServices.slice(0, maxOptionsToView).map((s, i) => (
+                    <div className={styles.optionsItem} key={i}>
+                      <img src={s.link_icon} />
+                    </div>
+                  )))
+                }
+                {additionalServices.length > maxOptionsToView && <span>+{additionalServices.length - maxOptionsToView}</span>}
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div className={styles.contactItem}>
           <Icon name="calendar" size="extra-small" className={styles.icon} />
