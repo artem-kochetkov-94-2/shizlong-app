@@ -11,18 +11,18 @@ export const useOpenModule = () => {
     const { schemes } = sectorStore;
 
     useEffect(() => {
-        if (!moduleId) {
-          bookStore.setSelectedModule(null);
-          return;
-        }
-    
-        const module = modules.find((m) => m.module.id === Number(moduleId));
-        if (!module) return;
-    
-        const scheme = schemes.find((s) => s.id === module.module.sector_scheme_id);
-        if (!scheme) return;
-    
-        bookStore.setSelectedModule(module);
-        sectorStore.setActiveScheme(scheme);
+      if (!moduleId) {
+        bookStore.setSelectedModule(null);
+        return;
+      }
+  
+      const module = modules.find((m) => m.module.id === Number(moduleId));
+      if (!module) return;
+  
+      const scheme = schemes.find((s) => s.id === module.module.sector_scheme_id);
+      if (!scheme) return;
+  
+      bookStore.setSelectedModule(module);
+      sectorStore.setActiveScheme(scheme);
     }, [moduleId, modules, schemes]);
 };

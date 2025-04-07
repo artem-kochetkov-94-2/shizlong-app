@@ -145,7 +145,7 @@ class LocationsService {
 
     const { response } = await this.restService.post<RawModule[]>({
       url: `${this.apiUrlV2}/location/${locationId}/modules`,
-      data: { body },
+      data: { ...body },
     });
 
     return response;

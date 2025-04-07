@@ -83,7 +83,7 @@ export const BookingDetails = observer(() => {
                                         {booking.status === 'completed' && (
                                             <Icon size="medium" name="check4" />
                                         )}
-                                        {(booking.status === 'pending' || booking.status === 'confirmed') && (
+                                        {(booking.status === 'pending' || booking.status === 'confirmed' || booking.status === 'reserved') && (
                                             <IconButton
                                                 size="medium"
                                                 shape="rounded"
