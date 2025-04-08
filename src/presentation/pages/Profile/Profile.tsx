@@ -195,7 +195,6 @@ export const Profile = observer(() => {
               />
 
               {currentTab === 'current' && <CurrentBookings />}
-
               {currentTab === 'completed' && <CompletedBookings />}
             </>
           )}

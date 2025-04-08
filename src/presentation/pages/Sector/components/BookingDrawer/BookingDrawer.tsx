@@ -94,7 +94,7 @@ export const BookingDrawer = observer(() => {
           {activeTab === 'order' && (
             <>
               <div className={styles.content}>
-                <div className={styles.divider}></div>
+                <div className={styles.divider} />
 
                 <div className={styles.modulesRow}>
                   <div className={styles.modulesRowTitle}>Заказать</div>

@@ -30,8 +30,6 @@ export const Plan = observer(({
   const { modules } = locationStore;
   const { sector, activeScheme } = sectorStore;
 
-
-
   const getNodes = (sector: RawSector, sectorModules: RawModule[]) => {
     const nodes: Node[] = [{
         id: 'sector_scheme',

@@ -74,26 +74,28 @@ export const BookingDetailsQR = observer(() => {
                                 />
                             </div>
 
-                            <Card>
-                                <div className={styles.accessories}>
-                                    {booking.booking_accessories.map(accessory => (
-                                        <Tag
-                                            size='medium'
-                                            color='gray'
-                                            text={accessory.beach_accessory.name}
-                                            leftContent={
-                                                <img
-                                                    src={accessory.beach_accessory.link_icon}
-                                                    alt={accessory.beach_accessory.name}
-                                                    className={styles.accessoryImage}
-                                                />
-                                            }
-                                            rightContent={`${accessory.quantity} ед.`}
-                                            shadow
-                                        />
-                                    ))}
-                                </div>
-                            </Card>
+                            {booking.booking_accessories.length > 0 && (
+                                <Card>
+                                    <div className={styles.accessories}>
+                                        {booking.booking_accessories.map(accessory => (
+                                            <Tag
+                                                size='medium'
+                                                color='gray'
+                                                text={accessory.beach_accessory.name}
+                                                leftContent={
+                                                    <img
+                                                        src={accessory.beach_accessory.link_icon}
+                                                        alt={accessory.beach_accessory.name}
+                                                        className={styles.accessoryImage}
+                                                    />
+                                                }
+                                                rightContent={`${accessory.quantity} ед.`}
+                                                shadow
+                                            />
+                                        ))}
+                                    </div>
+                                </Card>
+                            )}
 
                             <Card>
                                 <div className={styles.contacts}>

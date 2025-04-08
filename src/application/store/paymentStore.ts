@@ -94,7 +94,7 @@ export class PaymentStore {
     }
   }
 
-  async addNewCard(additionalData: { holder_name: string }) {
+  async addNewCard(additionalData: { holder_name: string }, successCb?: (tokenId: number) => void) {
     if (!this.sessionId) {
       return;
     }
@@ -112,6 +112,8 @@ export class PaymentStore {
       if (result.statusCode === 'SUCCESS') {
         await paymentService.addNewCard(result.token, this.sessionId);
         await this.getTokens();
+        // @todo
+        // successCb?.(Number(result.token));
         return;
       }
 
@@ -129,14 +131,24 @@ export class PaymentStore {
     }
   }
 
-  async processPayment(bookingId: number) {
+  async processPayment(bookingId: number, tokenId?: number) {
     try {
+      if (tokenId) {
+        await paymentService.processPayment(bookingId, tokenId);
+        return;
+      }
+
       if (this.tokens.length > 0) {
         const newLoadingMap = new Map(this.isLoadingProcessPayment);
         newLoadingMap.set(bookingId, true);
         this.isLoadingProcessPayment = newLoadingMap;
 
         await paymentService.processPayment(bookingId, this.tokens[0].id);
+      } else {
+        eventService.emit(EVENT.MODAL_ADD_CARD, {
+          isActive: true,
+          successCb: (tokenId: number) => this.processPayment(bookingId, tokenId)
+        });
       }
     } catch (error) {
       console.error(error);
@@ -150,6 +162,7 @@ export class PaymentStore {
   async deleteToken(tokenId: number) {
     try {
       await paymentService.deleteToken(tokenId);
+      await this.getTokens();
     } catch (error) {
       console.error(error);
     }

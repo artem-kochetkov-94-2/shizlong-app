@@ -1,5 +1,5 @@
 import styles from './ChooseTime.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { bookStore } from '@src/application/store/bookStore';
 import { observer } from 'mobx-react-lite';
 import { declensionOfHours } from '@src/application/utils/formatDate';
@@ -7,6 +7,8 @@ import { declensionOfHours } from '@src/application/utils/formatDate';
 export const ChooseTime = observer(() => {
     const { hours } = bookStore;
     const [isOpen, setIsOpen] = useState(false);
+    const availableHours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Пример значений
+    const selectRef = useRef<HTMLSelectElement>(null);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -16,15 +18,19 @@ export const ChooseTime = observer(() => {
         };
 
         document.addEventListener('click', handleClickOutside);
+
+        if (isOpen) {
+            selectRef.current?.focus();
+        }
+
         return () => document.removeEventListener('click', handleClickOutside);
     }, [isOpen]);
 
-    const enterHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            setIsOpen(false);
-        }
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        bookStore.setHours(Number(e.target.value));
+        setIsOpen(false);
     }
-    
+
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         setIsOpen(!isOpen);
@@ -39,14 +45,18 @@ export const ChooseTime = observer(() => {
             )}
 
             {isOpen && (
-                <input
-                    type="number"
-                    value={hours.toString()}
-                    onChange={(e) => bookStore.setHours(Number(e.target.value))}
-                    // onChange={(e) => bookStore.setHours(Number(e.target.value))}
+                <select
+                    ref={selectRef}
+                    value={hours}
+                    onChange={handleSelectChange}
                     className={styles.modulesControlsItemInput}
-                    onKeyDown={enterHandler}
-                />
+                >
+                    {availableHours.map(hour => (
+                        <option key={hour} value={hour}>
+                            {hour} {declensionOfHours(hour)}
+                        </option>
+                    ))}
+                </select>
             )}
         </div>
     );
