@@ -17,6 +17,10 @@ const isModuleAvailable = (
   const bookingStartTime = new Date(bookingDate.setHours(startHour, startMinute, 0, 0));
   const bookingEndTime = new Date(bookingStartTime.getTime() + hours * 60 * 60 * 1000);
 
+  console.log('date', date);
+  console.log('bookingStartTime', bookingStartTime);
+  console.log('bookingEndTime', bookingEndTime);
+
   return module.slots.some((slot) => {
     if (slot.is_busy) return false;
 
@@ -26,6 +30,36 @@ const isModuleAvailable = (
     return bookingStartTime >= slotStartTime && bookingEndTime <= slotEndTime;
   });
 };
+
+// const isModuleAvailable = (module: RawModule, date: Date, hours: number, startTime: string): boolean => {
+//     console.log('date', date);
+//     // Преобразуем startTime и hours в Date объекты
+//     const [startHour, startMinute] = startTime.split(':').map(Number);
+//     const startDateTime = new Date(date);
+//     startDateTime.setHours(startHour, startMinute, 0, 0);
+
+//     const endDateTime = new Date(startDateTime);
+//     endDateTime.setHours(endDateTime.getHours() + hours);
+
+//     // Проверяем каждый слот
+//     for (const slot of module.slots) {
+//         if (slot.is_busy) {
+//             const slotStart = new Date(slot.start_hour);
+//             const slotEnd = new Date(slot.end_hour);
+
+//             // Проверяем пересечение времени
+//             if (
+//                 (startDateTime >= slotStart && startDateTime < slotEnd) ||
+//                 (endDateTime > slotStart && endDateTime <= slotEnd) ||
+//                 (startDateTime <= slotStart && endDateTime >= slotEnd)
+//             ) {
+//                 return false; // Модуль занят в это время
+//             }
+//         }
+//     }
+
+//     return true;
+// }
 
 const baseWidth = 16.14;
 
