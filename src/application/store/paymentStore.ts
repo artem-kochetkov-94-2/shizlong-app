@@ -94,7 +94,11 @@ export class PaymentStore {
     }
   }
 
-  async addNewCard(additionalData: { holder_name: string }, successCb?: (tokenId: number) => void) {
+  async addNewCard(
+    additionalData: { holder_name: string },
+    successCb?: (tokenId: number) => void,
+    errorCb?: () => void
+  ) {
     if (!this.sessionId) {
       return;
     }
@@ -113,7 +117,7 @@ export class PaymentStore {
         await paymentService.addNewCard(result.token, this.sessionId);
         await this.getTokens();
         // @todo
-        // successCb?.(Number(result.token));
+        successCb?.(Number(result.token));
         return;
       }
 
@@ -124,8 +128,11 @@ export class PaymentStore {
         message: 'Ошибка при добавлении карты',
         text: message,
       });
+
+      errorCb?.();
     } catch (error) {
       console.error(error);
+      errorCb?.();
     } finally {
       this.isAddingNewCard = false;
     }
