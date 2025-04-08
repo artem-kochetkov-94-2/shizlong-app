@@ -52,6 +52,8 @@ export const ModuleNode = ({ data: { module } }: { data: { module: RawModule } }
       >
         <span
           style={{
+            minWidth: width * 0.8,
+            minHeight: `${fontSize}px`,
             fontSize: `${fontSize}px`,
           }}
         >

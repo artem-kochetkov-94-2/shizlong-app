@@ -4,6 +4,9 @@
 
 .moduleId {
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 2px;
   bottom: calc(100% + 5px);
   left: 50%;
@@ -16,6 +19,7 @@
 }
 
 .moduleId span {
+  flex-shrink: 0;
   display: flex;
   padding: 1px 3px;
   justify-content: center;
