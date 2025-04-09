@@ -210,7 +210,7 @@ export const BookingDetails = observer(() => {
                                     </Button>
                                 )}
 
-                                {booking.status === 'confirmed' && (
+                                {(booking.status === 'confirmed' || booking.status === 'reserved') && (
                                     <Button variant={'gray2'}>
                                         <Icon name={'cancel'} size='extra-small' />
                                         <span>Отменить</span>
@@ -274,7 +274,7 @@ export const BookingDetails = observer(() => {
                                     nameAccent: booking.module.number,
                                     icon: booking.module.placed_icon.link_icon,
                                     onClick: () => {
-                                        navigate(Routes.Sector.replace(':id', booking.module.sector.id.toString()) + `?moduleId=${booking.module.id}`);
+                                        navigate(Routes.Sector.replace(':id', booking.module.sector.id.toString()) + `?module=${booking.module.id}`);
                                     }
                                 }]}
                             />

@@ -23,7 +23,7 @@ export const CardItem = observer(
     const maxOptionsToView = Math.min(optionsToView, MAX_OPTIONS_TO_VIEW);
     const isFavorite = locationsStore.getFavoriteStatus(id);
 
-    // @TODO: цена
+    // @todo: цена
     const price = 0;
 
     return (
@@ -32,7 +32,7 @@ export const CardItem = observer(
           <div className={styles.content}>
             <div className={styles.category}>{category}</div>
             <div className={styles.name}>{name}</div>
-            {/* @TODO - цена */}
+            {/* @todo - цена */}
             <div className={styles.row}>
               <Tag text={`от ${price} ₽`} />
               <div className={styles.options}>

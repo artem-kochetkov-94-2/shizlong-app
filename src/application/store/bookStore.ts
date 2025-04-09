@@ -206,7 +206,6 @@ class BookStore {
       }
       eventService.emit(EVENT.MODAL_ERROR, {
         isActive: true,
-        // @todo
         // @ts-ignore
         message: error.message || 'Ошибка при создании бронирования',
       });

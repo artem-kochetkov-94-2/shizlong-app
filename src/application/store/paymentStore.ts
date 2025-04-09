@@ -119,7 +119,6 @@ export class PaymentStore {
         await paymentService.addNewCard(result.token, this.sessionId);
         await delay(3000);
         await this.getTokens();
-        // @todo
         successCb?.();
         return;
       }

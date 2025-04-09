@@ -100,7 +100,7 @@ export const ModuleNode = ({ data: { module } }: { data: { module: RawModule } }
         onClick={() => {
           navigate(
             Routes.Sector.replace(':id', module.module.sector_id.toString()) +
-              `?moduleId=${module.module.id}`
+              `?module=${module.module.id}`
           );
         }}
         width={width}
