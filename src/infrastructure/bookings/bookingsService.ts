@@ -1,5 +1,10 @@
 import { API_URL, API_URL_V2 } from '@src/const';
-import { BookingRequest, BookingResponse, MyBookingsResponse } from './types';
+import {
+  BookingRequest,
+  BookingResponse,
+  MyBookingsResponse,
+  PaymentStatusResponse,
+} from './types';
 import {
   VerificationStore,
   verificationStore,
@@ -10,6 +15,7 @@ const routes = {
   create: '/booking/create',
   myBookings: '/booking/get-my-bookings',
   cancel: '/booking/cancel',
+  paymentStatus: '/booking/status/'
 };
 
 class BookingsService {
@@ -35,14 +41,6 @@ class BookingsService {
     return response.bookings;
   }
 
-  getCurrentBookings() {
-    return [{}, {}, {}, {}, {}];
-  }
-
-  getCompletedBookings() {
-    return [{}, {}, {}, {}, {}];
-  }
-
   async createBooking(booking: BookingRequest) {
     const { response } = await this.restService.post<BookingResponse>({
       url: `${this.apiUrlV2}${routes.create}`,
@@ -55,6 +53,14 @@ class BookingsService {
   async cancelBooking(bookingId: number) {
     const { response } = await this.restService.post<BookingResponse>({
       url: `${this.apiUrlV1}${routes.cancel}/${bookingId}`,
+    });
+
+    return response;
+  }
+
+  async getPaymentStatus(bookingId: number) {
+    const { response } = await this.restService.get<PaymentStatusResponse>({
+      url: `${this.apiUrlV2}${routes.paymentStatus}${bookingId}`,
     });
 
     return response;

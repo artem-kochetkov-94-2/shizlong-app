@@ -5,7 +5,7 @@ import { Icon } from "@src/presentation/ui-kit/Icon";
 
 interface AddCardModalProps {
   onClose: () => void;
-  successCb?: (tokenId: number) => void;
+  successCb?: (tokenId?: number) => void;
 }
 
 export const AddCardModal = ({ onClose, successCb }: AddCardModalProps) => {

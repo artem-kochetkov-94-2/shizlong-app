@@ -19,7 +19,7 @@ export const BookingDetailsQR = observer(() => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        bookingCardStore.fetchBooking(Number(id));
+        bookingCardStore.setBookingId(Number(id));
     }, [id]);
 
     const { bookings } = bookingsStore;

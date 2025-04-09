@@ -8,7 +8,7 @@ import { observer } from "mobx-react-lite"
 import { useFields } from "./useFields"
 
 interface AddCardProps {
-    successCb?: (tokenId: number) => void;
+    successCb?: (tokenId?: number) => void;
     errorCb?: () => void;
 }
 
