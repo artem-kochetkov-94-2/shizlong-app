@@ -2,7 +2,6 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Layout } from '@src/presentation/components/Layout/Layout';
 import { Routes as RoutesMap } from '@src/routes';
 import { Locations } from '@src/presentation/pages/Locations';
-// todo
 import { Location } from '@src/presentation/pages/Beach';
 import { Sector } from '@src/presentation/pages/Sector';
 import { Profile } from '@src/presentation/pages/Profile';

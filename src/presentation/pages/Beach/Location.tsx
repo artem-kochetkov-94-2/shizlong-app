@@ -50,7 +50,7 @@ export const Location = observer(() => {
 
   if (!location) return null;
 
-  // @TODO - если не в час
+  // @todo - если не в час
   const servicesFeatures = services.map((s) => ({
     name: s.name,
     icon: s.placed_icon.link_icon,
@@ -85,7 +85,7 @@ export const Location = observer(() => {
                     title='Пляжная инфраструктура'
                     items={additionalServicesAsFeatures}
                   />
-                  {/* @TODO - особенности */}
+                  {/* @todo - особенности */}
                   {/* <Features title="Особенности" items={peculiarities} /> */}
                 </div>
               )}

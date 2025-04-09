@@ -96,3 +96,14 @@ export interface RawBooking {
 }
 
 type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'reserved';
+
+export interface PaymentStatusResponse {
+    id: number;
+    start_time: string;
+    end_time: string;
+    total_price: number;
+    status: BookingStatus;
+    payment: {
+        status: 'processing' | 'complete' | 'cancel';
+    }
+}

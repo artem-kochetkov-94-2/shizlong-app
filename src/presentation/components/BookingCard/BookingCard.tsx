@@ -125,9 +125,9 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
         </div>
 
         {/* <TimeSlider
-                timeStart="10:00:00"
-                timeEnd="13:00:00"
-            /> */}
+          timeStart="10:00:00"
+          timeEnd="13:00:00"
+        /> */}
 
         <div className={styles.actions}>
           <div className={styles.actionItem}>
@@ -185,19 +185,19 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               </>
             )}
             {/* <IconButton
-                        iconName="stop"
-                        size="large"
-                        iconSize="small"
-                        shape="rounded"
-                        color="white"
-                    />
-                    <IconButton
-                        iconName="megaphone"
-                        size="large"
-                        iconSize="small"
-                        shape="rounded"
-                        color="white"
-                    /> */}
+                iconName="stop"
+                size="large"
+                iconSize="small"
+                shape="rounded"
+                color="white"
+            />
+            <IconButton
+                iconName="megaphone"
+                size="large"
+                iconSize="small"
+                shape="rounded"
+                color="white"
+            /> */}
           </div>
         </div>
       </div>

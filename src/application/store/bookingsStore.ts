@@ -32,19 +32,29 @@ export class BookingsStore {
     }
   }
 
-  get iosEmptyBookings() {
+  get isEmptyBookings() {
     return this.currentBookings.length === 0 && this.completedBookings.length === 0;
   }
 
-  async cancelBooking(bookingId: number) {
+  async cancelBooking(bookingId: number, successCb?: () => void) {
     try {
       this.isLoadingCancelBooking.set(bookingId, true);
       await this.bookingsService.cancelBooking(bookingId);
       await this.getMyBookings();
+      successCb?.();
     } catch (error) {
       console.error(error);
     } finally {
       this.isLoadingCancelBooking.set(bookingId, false);
+    }
+  }
+
+  async getPaymentStatus(bookingId: number) {
+    try {
+      const result = await this.bookingsService.getPaymentStatus(bookingId);
+      return result.payment.status;
+    } catch (error) {
+      console.error(error);
     }
   }
 }

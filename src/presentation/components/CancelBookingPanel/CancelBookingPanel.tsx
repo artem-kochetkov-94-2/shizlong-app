@@ -12,20 +12,10 @@ interface CancelBookingPanelProps {
   onClose: () => void;
 }
 
-const SNAP_POINTS = [758, 309, 79];
-const INITIAL_SNAP_POINT = 1;
-
 export const CancelBookingPanel = observer(
   ({ bookingId, isOpen, onClose }: CancelBookingPanelProps) => {
     const ref = useRef<SheetRef>(null);
-
-    useEffect(() => {
-      if (isOpen) {
-        setTimeout(() => {
-          ref.current?.snapTo(1);
-        }, 300);
-      }
-    }, [isOpen]);
+    const { isLoadingCancelBooking } = bookingsStore;
 
     return (
       <Sheet
@@ -33,10 +23,7 @@ export const CancelBookingPanel = observer(
         isOpen={isOpen}
         onClose={onClose}
         detent='content-height'
-        snapPoints={SNAP_POINTS}
-        initialSnap={INITIAL_SNAP_POINT}
         dragVelocityThreshold={DRAG_VELOCITY_THRESHOLD}
-        style={{ zIndex: 9999 }}
       >
         <Sheet.Container>
           <Sheet.Header />
@@ -47,7 +34,9 @@ export const CancelBookingPanel = observer(
             <div className={styles.buttons}>
               <Button
                 variant={'yellow'}
-                onClick={() => bookingsStore.cancelBooking(bookingId)}
+                onClick={() => bookingsStore.cancelBooking(bookingId, onClose)}
+                disabled={isLoadingCancelBooking.get(bookingId)}
+                isLoading={isLoadingCancelBooking.get(bookingId)}
               >
                 <span>Да</span>
               </Button>

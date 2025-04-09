@@ -71,7 +71,7 @@ class LocationStore {
     }));
   }
 
-  // @TODO - минимальная цена модуля
+  // @todo - минимальная цена модуля
   get minModulePrice() {
     const sortedModules = this.modules
       .slice()

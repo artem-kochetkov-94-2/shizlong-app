@@ -8,6 +8,7 @@ class SectorStore {
   activeScheme: RawSectorSchema | null = null;
   isSchemesLoading = false;
   isSectorLoading = false;
+  size: {width: number, height: number} | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -28,7 +29,9 @@ class SectorStore {
   async init(sectorId: number) {
     await this.fetchSector(sectorId);
     await this.fetchSchemes(sectorId);
-    this.setActiveScheme(this.schemes[0] || null);
+
+    const dayScheme = this.schemes.find((scheme) => scheme.time_of_day === 'day');
+    this.setActiveScheme(dayScheme || this.schemes[0] || null);
   }
 
   async fetchSchemes(sectorId: number) {
@@ -41,6 +44,10 @@ class SectorStore {
     } finally {
       this.isSchemesLoading = false;
     }
+  }
+
+  setSize(size: {width: number, height: number}) {
+    this.size = size;
   }
 
   async fetchSector(sectorId: number) {

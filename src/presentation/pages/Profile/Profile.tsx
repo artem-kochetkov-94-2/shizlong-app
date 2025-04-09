@@ -34,7 +34,7 @@ export const bookingsTabs: Tab[] = [
 export const Profile = observer(() => {
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { iosEmptyBookings } = bookingsStore;
+  const { isEmptyBookings } = bookingsStore;
   const { currentTab, setCurrentTab } = useTabs(bookingsTabs[0].value);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { currentBookings, completedBookings } = bookingsStore;
@@ -173,7 +173,7 @@ export const Profile = observer(() => {
         <div className={styles.bookings}>
           <div className={styles.bookingsTitle}>Бронирования</div>
 
-          {iosEmptyBookings ? (
+          {isEmptyBookings ? (
             <div className={styles.bookingsEmpty}>
               <div className={styles.bookingsEmptyTitle}>У вас пока нет броней</div>
               <img src={bookingsEmptyImg} />

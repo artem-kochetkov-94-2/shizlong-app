@@ -5,8 +5,9 @@ import {
     useNodesState,
     Controls,
     type Node,
+    Viewport,
 } from '@xyflow/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import styles from './Plan.module.css';
 import { RawModule, RawSector } from '@src/infrastructure/Locations/types';
@@ -19,16 +20,20 @@ const nodeTypes = {
     PlanImageNode,
 };
 
-export const Plan = observer(({
-    onNext,
-    onPrev,
-}: {
+interface PlanProps {
     onNext: () => void,
     onPrev: () => void,
-}) => {
+}
+
+export const Plan = observer(({ onNext, onPrev }: PlanProps) => {
   const [nodes, setNodes] = useNodesState<Node>([]);
+  const [viewport, setViewport] = useState<Viewport>({
+    x: 0,
+    y: 0,
+    zoom: 1,
+  });
   const { modules } = locationStore;
-  const { sector, activeScheme } = sectorStore;
+  const { sector, activeScheme, size } = sectorStore;
 
   const getNodes = (sector: RawSector, sectorModules: RawModule[]) => {
     const nodes: Node[] = [{
@@ -75,25 +80,67 @@ export const Plan = observer(({
     setNodes(nodes);
   }, [sector, modules, activeScheme]);
 
+  const onViewportChange = (newViewport: Viewport) => {
+    const screenWidth = window.innerWidth;
+    const canvasWidth = size?.width || 0;
+    const arrowWidth = 35;
+    const canvasWidthWithZoom = canvasWidth * newViewport.zoom;
+    const diff = screenWidth - canvasWidthWithZoom;
+
+    let isImageBiggestThanScreen = true;
+
+    let maxX = Math.max(0, canvasWidthWithZoom - screenWidth);
+    if (diff > 0) {
+        maxX = diff;
+        isImageBiggestThanScreen = false;
+    }
+
+    const rightCornerLargeFlow = Math.abs(maxX) + arrowWidth;
+    const rightCornerSmallFlow = Math.abs(maxX) - arrowWidth;
+
+    if (!isImageBiggestThanScreen && diff < arrowWidth * 2) {
+        setViewport({
+            x: arrowWidth,
+            y: newViewport.y,
+            zoom: newViewport.zoom,
+        });
+        return;
+    }
+
+    let newX = newViewport.x;
+    if (isImageBiggestThanScreen) {
+        if (newX >= arrowWidth) {
+            newX = arrowWidth;
+        } else if (Math.abs(newX) > rightCornerLargeFlow) {
+            newX = rightCornerLargeFlow * -1;
+        }
+    } else {
+        if (newX <= arrowWidth) {
+            newX = arrowWidth;
+        } else if (newX > rightCornerSmallFlow) {
+            newX = rightCornerSmallFlow;
+        }
+    }   
+
+    setViewport({
+      x: newX,
+      y: newViewport.y,
+      zoom: newViewport.zoom,
+    });
+  };
+
   return (
     <>
         <ReactFlow
             nodes={nodes}
             nodeTypes={nodeTypes}
             fitView={true}
-            // fitViewOptions={{ padding: 10 }}
             key={activeScheme?.id}
             nodesDraggable={false}
+            viewport={viewport}
+            onViewportChange={onViewportChange}
         >
-            <Controls
-                showInteractive={false}
-                orientation="horizontal"
-            />
-            {/* <img
-                src={sector?.link_plan}
-                alt={sector?.name}
-                className={styles.plan}
-            /> */}
+            <Controls showInteractive={false} orientation="horizontal" />
         </ReactFlow>
         <div className={styles.left} onClick={onPrev}>
             <Icon name="arrow-left" color="dark" size="small" />
