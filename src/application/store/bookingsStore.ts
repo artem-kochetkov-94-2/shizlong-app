@@ -36,11 +36,12 @@ export class BookingsStore {
     return this.currentBookings.length === 0 && this.completedBookings.length === 0;
   }
 
-  async cancelBooking(bookingId: number) {
+  async cancelBooking(bookingId: number, successCb?: () => void) {
     try {
       this.isLoadingCancelBooking.set(bookingId, true);
       await this.bookingsService.cancelBooking(bookingId);
       await this.getMyBookings();
+      successCb?.();
     } catch (error) {
       console.error(error);
     } finally {
