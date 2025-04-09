@@ -69,6 +69,28 @@
     gap: 10px;
 }
 
+/* paymentStatus */
+
+.paymentStatus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 16px;
+    text-align: center;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16.8px;
+}
+
+.paymentStatusError {
+    color: #F95E5E;
+}
+
+.paymentStatusSuccess {
+    color: #64B64B;
+}
+
 /* cardBody */
 
 .cardBodyHeader {

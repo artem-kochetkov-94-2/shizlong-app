@@ -13,33 +13,78 @@ import { DecorateButton } from "@src/presentation/components/DecorateButton";
 import waves from "@src/assets/waves.png";
 import styles from "./BookingDetails.module.css";
 import { bookingCardStore } from "@src/application/store/bookingCardStore";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { paymentStore } from "@src/application/store/paymentStore";
+import { bookingsStore } from "@src/application/store/bookingsStore";
+import classNames from "classnames";
 
 const bookingStatuses = {
-    pending: 'активна',
-    confirmed: 'оплачена',
-    cancelled: 'Отменена',
-    completed: 'отдых состоялся',
+  pending: 'активна',
+  confirmed: 'оплачена',
+  cancelled: 'Отменена',
+  completed: 'отдых состоялся',
 }
 
 export const BookingDetails = observer(() => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const timer = useRef<number | null>(null);
+    const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
+    const { startedProcessPayment } = paymentStore;
 
     useEffect(() => {
-        bookingCardStore.fetchBooking(Number(id));
+        bookingCardStore.setBookingId(Number(id));
     }, [id]);
 
     const { booking } = bookingCardStore;
     const { isLoadingProcessPayment } = paymentStore;
 
+    useEffect(() => {
+        if (!booking || booking.status !== 'reserved') {
+            return;
+        }
+
+        if (!startedProcessPayment.has(Number(booking?.id))) {
+            return;
+        }
+
+        const getStatus = async () => {
+            try {
+                setPaymentStatus('Ожидание оплаты...');
+                const status = await bookingsStore.getPaymentStatus(Number(booking.id));
+                console.log(status);
+    
+                if (status === 'processing') {
+                    timer.current = setTimeout(() => {
+                        getStatus();
+                    }, 2000);
+                    return;
+                }
+    
+                if (status === 'complete') {
+                    setPaymentStatus('Оплата прошла успешно');
+                    bookingsStore.getMyBookings();
+                }
+    
+                paymentStore.clearProcessPayment(Number(booking.id));
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        getStatus();
+
+        return () => {
+            if (timer.current) {
+                clearTimeout(timer.current);
+            }
+        }
+    }, [booking, startedProcessPayment]);
+
     if (!booking) {
         return <div>Бронь не найдена</div>;
     }
     
-    // booking.status = 'pending';
-
     return (
         <Sheet
             isOpen={true}
@@ -209,6 +254,18 @@ export const BookingDetails = observer(() => {
                                     color="white"
                                 />
                             </div>
+
+                            {paymentStatus && (
+                                <Card>
+                                    <div className={classNames(styles.paymentStatus, {
+                                        // @todo
+                                        [styles.paymentStatusError]: paymentStatus === 'Ожидание оплаты...',
+                                        [styles.paymentStatusSuccess]: paymentStatus === 'Оплата прошла успешно'
+                                    })}>
+                                        <div className={styles.paymentStatusText}>{paymentStatus}</div>
+                                    </div>
+                                </Card>
+                            )}
 
                             <Features
                                 title="Входящие модули"

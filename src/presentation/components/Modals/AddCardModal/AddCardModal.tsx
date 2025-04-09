@@ -5,14 +5,14 @@ import { Icon } from "@src/presentation/ui-kit/Icon";
 
 interface AddCardModalProps {
   onClose: () => void;
-  successCb?: (tokenId: number) => void;
+  successCb?: (tokenId?: number) => void;
 }
 
 export const AddCardModal = ({ onClose, successCb }: AddCardModalProps) => {
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <AddCard successCb={successCb} />
+        <AddCard successCb={successCb} errorCb={onClose} />
 
         <div className={styles.closeButton}>
           <IconButton onClick={onClose} shape="rounded">

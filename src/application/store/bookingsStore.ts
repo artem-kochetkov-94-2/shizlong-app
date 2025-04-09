@@ -32,7 +32,7 @@ export class BookingsStore {
     }
   }
 
-  get iosEmptyBookings() {
+  get isEmptyBookings() {
     return this.currentBookings.length === 0 && this.completedBookings.length === 0;
   }
 
@@ -45,6 +45,15 @@ export class BookingsStore {
       console.error(error);
     } finally {
       this.isLoadingCancelBooking.set(bookingId, false);
+    }
+  }
+
+  async getPaymentStatus(bookingId: number) {
+    try {
+      const result = await this.bookingsService.getPaymentStatus(bookingId);
+      return result.payment.status;
+    } catch (error) {
+      console.error(error);
     }
   }
 }

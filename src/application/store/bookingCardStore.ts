@@ -13,7 +13,7 @@ class BookingCardStore {
   }
 
   // @todo
-  async fetchBooking(id: number) {
+  async setBookingId(id: number) {
     this.bookingId = id;
 
     try {

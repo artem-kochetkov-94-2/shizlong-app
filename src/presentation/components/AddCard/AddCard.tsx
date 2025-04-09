@@ -8,10 +8,11 @@ import { observer } from "mobx-react-lite"
 import { useFields } from "./useFields"
 
 interface AddCardProps {
-    successCb?: (tokenId: number) => void;
+    successCb?: (tokenId?: number) => void;
+    errorCb?: () => void;
 }
 
-export const AddCard = observer(({ successCb }: AddCardProps) => {
+export const AddCard = observer(({ successCb, errorCb }: AddCardProps) => {
     const { isAddingNewCard } = paymentStore;
 
     const { focused, dirtyFields } = useFields();
@@ -35,7 +36,7 @@ export const AddCard = observer(({ successCb }: AddCardProps) => {
             holder_name: document.getElementById('cardholder-name')?.value,
           }
           
-          await paymentStore.addNewCard(additionalData, successCb);
+          await paymentStore.addNewCard(additionalData, successCb, errorCb);
         }
     
         formElement?.addEventListener('submit', listener);
