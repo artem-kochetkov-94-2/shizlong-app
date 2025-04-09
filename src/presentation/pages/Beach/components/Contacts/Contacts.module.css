@@ -29,3 +29,45 @@
   line-height: 16.8px;
   color: #A0A7B1;
 }
+
+.contactItemRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.options {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 15px;
+  border-radius: 12px;
+  background-color: #F3F4F6;
+}
+
+.optionsItems {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  span {
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 14px;
+    color: #a0a7b1;
+  }
+}
+
+.optionsItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 18px;
+  height: 18px;
+
+  img {
+    display: block;
+    max-width: 18px;
+    max-height: 18px;
+  }
+}

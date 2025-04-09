@@ -2,8 +2,18 @@ import styles from './DropdownMenu.module.css';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { Link } from 'react-router-dom';
 import { Routes } from '@src/routes';
+import { userStore } from '@src/application/store/userStore';
+import { useNavigate } from 'react-router-dom';
 
 export const DropdownMenu = () => {
+  const navigate = useNavigate();
+  const handleLogout = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    userStore.logout(() => {
+      navigate(Routes.Locations);
+    });
+  };
+
   return (
     <div className={styles.container}>
       <Link to={Routes.ProfileEdit} className={styles.link}>
@@ -22,7 +32,7 @@ export const DropdownMenu = () => {
         <Icon name={'help'} size={'small'} />
         <span>Помощь</span>
       </Link>
-      <Link to={''} className={styles.link}>
+      <Link to={'#'} className={styles.link} onClick={handleLogout}>
         <Icon name={'exit'} size={'small'} />
         <span>Выход</span>
       </Link>

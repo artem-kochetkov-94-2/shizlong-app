@@ -24,7 +24,7 @@ export const Booking = observer(() => {
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [isTimeOpen, setIsTimeOpen] = useState(false);
 
-    const { selectedModule, formattedDate, formattedTime, formattedDuration, isCreatingBooking } = bookStore;
+    const { selectedModule, formattedDate, formattedTime, formattedDuration, isCreatingBooking, bookPrice } = bookStore;
     const { location, beachAccessories } = locationStore;
     const { sector } = sectorStore;
 
@@ -66,108 +66,110 @@ export const Booking = observer(() => {
                                 <div className={styles.subtitle}>{sector?.name} пляжа {location?.name}</div>
                             </div>
                         </div>
-
-                        <div className={styles.content}>
-                            <div className={styles.modules}>
-                                <div className={styles.module}>
-                                    <img
-                                        src={`${SERVER_URL}${selectedModule?.module.placed_icon.link_icon}`}
-                                        alt={selectedModule?.module.placed_icon.name_icon}
-                                    />
-                                    <div className={styles.moduleName}>{selectedModule?.module.name}</div>
-                                    <div className={styles.moduleExtraContent}>
-                                        <div className={styles.modulePrice}>{selectedModule?.module.price_per_hour} ₽</div>
-                                        <div className={styles.modulePriceFor}>за 1 час</div>
+                        <Sheet.Scroller>
+                            <div className={styles.content}>
+                                <div className={styles.modules}>
+                                    <div className={styles.module}>
+                                        <img
+                                            src={`${SERVER_URL}${selectedModule?.module.placed_icon.link_icon}`}
+                                            alt={selectedModule?.module.placed_icon.name_icon}
+                                        />
+                                        <div className={styles.moduleName}>{selectedModule?.module.name}</div>
+                                        <div className={styles.moduleExtraContent}>
+                                            <div className={styles.modulePrice}>{selectedModule?.module.price_per_hour} ₽</div>
+                                            <div className={styles.modulePriceFor}>за 1 час</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <Card className={styles.card}>
-                                <div className={styles.date}>
-                                    <div className={styles.cardTitle}>
-                                        <span>Дата</span>
-                                        <span>{formattedDate}</span>
+                                <Card className={styles.card}>
+                                    <div className={styles.date}>
+                                        <div className={styles.cardTitle}>
+                                            <span>Дата</span>
+                                            <span>{formattedDate}</span>
+                                        </div>
+
+                                        <Icon
+                                            name="calendar"
+                                            size="small"
+                                            onClick={() => setIsCalendarOpen(true)}
+                                        />
                                     </div>
+                                </Card>
 
-                                    <Icon
-                                        name="calendar"
-                                        size="small"
-                                        onClick={() => setIsCalendarOpen(true)}
-                                    />
-                                </div>
-                            </Card>
+                                <Card className={styles.card}>
+                                    <div className={styles.time} onClick={() => setIsTimeOpen(true)}>
+                                        <div className={styles.cardTitle}>
+                                            <span>Часы</span    >
+                                            <span>{formattedTime}</span>
+                                        </div>
 
-                            <Card className={styles.card}>
-                                <div className={styles.time} onClick={() => setIsTimeOpen(true)}>
-                                    <div className={styles.cardTitle}>
-                                        <span>Часы</span    >
-                                        <span>{formattedTime}</span>
+                                        <Tag size="medium" text={formattedDuration} />
+                                        <Icon name="arrow-right" size="small" />
                                     </div>
+                                </Card>
 
-                                    <Tag size="medium" text={formattedDuration} />
-                                    <Icon name="arrow-right" size="small" />
-                                </div>
-                            </Card>
+                                {/* @TODO: количество гостей */}
+                                {/* <Card className={styles.card}>
+                                    <div className={styles.people}>
+                                        <div className={styles.cardTitle}>
+                                            <span>Количество гостей</span>
+                                            <span>1 человек</span>
+                                        </div>
 
-                            {/* <Card className={styles.card}>
-                                <div className={styles.people}>
-                                    <div className={styles.cardTitle}>
-                                        <span>Количество гостей</span>
-                                        <span>1 человек</span>
+                                        <Icon name="arrow-right" size="small" />
                                     </div>
+                                </Card> */}
 
-                                    <Icon name="arrow-right" size="small" />
-                                </div>
-                            </Card> */}
+                                <Card>
+                                    <div className={styles.accessories}>
+                                        <div className={styles.accessoriesTitle}>Пляжные аксессуары</div>
 
-                            <Card>
-                                <div className={styles.accessories}>
-                                    <div className={styles.accessoriesTitle}>Пляжные аксессуары</div>
-
-                                    <div className={styles.accessoriesContent}>
-                                        {beachAccessories.map((accessory) => (
-                                            <div className={styles.accessoryWrapper}>
-                                                <div className={styles.accessory}>
-                                                    <img src={accessory.link_icon} alt={accessory.name} />
-                                                    <div className={styles.accessoryName}>{accessory.name}</div>
-                                                    <div className={styles.accessoryPrice}>от {accessory.price} ₽</div>
-                                                    <div className={styles.accessoryToggle}>
-                                                        <Toggle onToggle={() => bookStore.toggleAccessory(accessory, !bookStore.accessories[accessory.id])} />
+                                        <div className={styles.accessoriesContent}>
+                                            {beachAccessories.map((accessory) => (
+                                                <div className={styles.accessoryWrapper}>
+                                                    <div className={styles.accessory}>
+                                                        <img src={accessory.link_icon} alt={accessory.name} />
+                                                        <div className={styles.accessoryName}>{accessory.name}</div>
+                                                        <div className={styles.accessoryPrice}>от {accessory.price} ₽</div>
+                                                        <div className={styles.accessoryToggle}>
+                                                            <Toggle onToggle={() => bookStore.toggleAccessory(accessory, !bookStore.accessories[accessory.id])} />
+                                                        </div>
                                                     </div>
+                                                    {bookStore.accessories[accessory.id] && (
+                                                        <Counter
+                                                            count={bookStore.accessories[accessory.id].quantity}
+                                                            onChange={(count) => bookStore.setAccessoryQuantity(accessory.id, count)}
+                                                        />
+                                                    )}
                                                 </div>
-                                                {bookStore.accessories[accessory.id] && (
-                                                    <Counter
-                                                        count={bookStore.accessories[accessory.id].quantity}
-                                                        onChange={(count) => bookStore.setAccessoryQuantity(accessory.id, count)}
-                                                    />
-                                                )}
-                                            </div>
-                                        ))}
+                                            ))}
+                                        </div>
                                     </div>
+                                </Card>
+
+                                {/* @TODO */}
+                                {/* <Card className={styles.promocode}>
+                                    <div className={styles.promocodeTitle}>Есть промокод?</div>
+                                    <div className={styles.promocodeRow}>
+                                        <input
+                                            className={styles.promocodeInput}
+                                            placeholder="введите код"
+                                        />
+                                        <Button size="medium" variant="gray">Применить</Button>
+                                    </div>
+                                </Card> */}
+
+                                {/* <div className={styles.promocodeAccepted}>
+                                    <Icon name="check3" size="small" />
+                                    <div className={styles.promocodeAcceptedTitle}>Промокод применён</div>
+                                </div> */}
+
+                                <div className={styles.rules}>
+                                    Оформляя заказ, вы соглашаетесь с <span>Правилами пляжа</span>
                                 </div>
-                            </Card>
-
-                            {/* <Card className={styles.promocode}>
-                                <div className={styles.promocodeTitle}>Есть промокод?</div>
-                                <div className={styles.promocodeRow}>
-                                    <input
-                                        className={styles.promocodeInput}
-                                        placeholder="введите код"
-                                    />
-                                    <Button size="medium" variant="gray">Применить</Button>
-                                </div>
-                            </Card> */}
-
-                            {/* <div className={styles.promocodeAccepted}>
-                                <Icon name="check3" size="small" />
-                                <div className={styles.promocodeAcceptedTitle}>Промокод применён</div>
-                            </div> */}
-
-                            <div className={styles.rules}>
-                                Оформляя заказ, вы соглашаетесь с <span>Правилами пляжа</span>
                             </div>
-                        </div>
-
+                        </Sheet.Scroller>
                         <div className={styles.footer}>
                             <Button
                                 size="medium"
@@ -178,8 +180,7 @@ export const Booking = observer(() => {
                             >
                                 Оплатить
                             </Button>
-                            {/* @todo */}
-                            <span>1 550 ₽</span>
+                            <span>{bookPrice.toLocaleString()} ₽</span>
                         </div>
                     </Sheet.Content>
                 </Sheet.Container>

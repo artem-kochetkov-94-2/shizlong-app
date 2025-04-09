@@ -10,6 +10,7 @@ import { IconButton } from "@src/presentation/ui-kit/IconButton";
 import { paymentStore } from "@src/application/store/paymentStore";
 import { observer } from "mobx-react-lite";
 import { locationsStore } from "@src/application/store/locationsStore";
+import { bookingsStore } from "@src/application/store/bookingsStore";
 
 const bookingStatusMap = {
     'reserved': 'Не оплачена',
@@ -38,6 +39,8 @@ export const colorByStatus = {
 export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
     const navigate = useNavigate();
     const isFavorite = locationsStore.getFavoriteStatus(booking.module.sector.location.id);
+    const { isLoadingProcessPayment } = paymentStore;
+    const { isLoadingCancelBooking } = bookingsStore;
 
     return (
         <div className={styles.item} key={booking.id}>
@@ -96,6 +99,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
                             iconName="favorite"
                             size="medium"
                             iconSize="extra-small"
+                            color="white"
                         />
                     </div>
                 )}
@@ -138,13 +142,26 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
 
                 <div className={styles.actionItem}>
                     {booking.status === 'reserved' && (
-                        <Button
-                            size="medium"
-                            variant="yellow"
-                            onClick={() => paymentStore.processPayment(booking.id)}
-                        >
-                            <span>Оплатить</span>
-                        </Button>
+                        <>
+                            <Button
+                                size="medium"
+                                variant="yellow"
+                                onClick={() => paymentStore.processPayment(booking.id)}
+                                isLoading={isLoadingProcessPayment.get(booking.id)}
+                                disabled={isLoadingProcessPayment.get(booking.id)}
+                            >
+                                <span>Оплатить</span>
+                            </Button>
+                            <Button
+                                size="medium"
+                                variant="tertiary"
+                                onClick={() => bookingsStore.cancelBooking(booking.id)}
+                                isLoading={isLoadingCancelBooking.get(booking.id)}
+                                disabled={isLoadingCancelBooking.get(booking.id)}
+                            >
+                                <span>Отменить</span>
+                            </Button>
+                        </>
                     )}
                     {/* <IconButton
                         iconName="stop"

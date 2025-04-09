@@ -5,6 +5,7 @@
   border-radius: 20px;
   font-family: 'Roboto';
   font-weight: 500;
+  line-height: 1;
   color: #292c31;
 }
 
@@ -51,10 +52,15 @@
   margin-left: 10px;
   line-height: 25px;
   color: #a0a7b1;
+  white-space: nowrap;
 }
 
 .text {
-  line-height: 25px;
+  max-width: 200px;
+  line-height: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .shadow {

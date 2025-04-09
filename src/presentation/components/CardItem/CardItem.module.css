@@ -94,6 +94,20 @@
   gap: 2px;
 }
 
+.optionsItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 18px;
+  height: 18px;
+
+  img {
+    display: block;
+    max-width: 18px;
+    max-height: 18px;
+  }
+}
+
 .favorite {
   position: absolute;
   z-index: 1;
@@ -108,6 +122,7 @@
   }
 
   svg {
+    margin-top: 3px;
     color: #f95e5e;
   }
 }

@@ -34,6 +34,7 @@
     "react-dom": "^19.0.0",
     "react-modal-sheet": "^4.0.1",
     "react-phone-input-2": "^2.15.1",
+    "react-qr-reader": "^3.0.0-beta-1",
     "react-router-dom": "^7.2.0",
     "react-swipeable-bottom-sheet": "^1.1.2",
     "react-time-picker": "^7.0.0",

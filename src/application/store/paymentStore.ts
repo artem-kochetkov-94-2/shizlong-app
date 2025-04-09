@@ -25,8 +25,8 @@ const baseStyle = {
   },
   invalid: {
     padding: '14px 14px 0',
-  }
-}
+  },
+};
 
 const cardNumberStyle = {
   ...baseStyle,
@@ -41,11 +41,11 @@ const cardNumberStyle = {
   invalid: {
     ...baseStyle.invalid,
     padding: '0',
-  }
-}
+  },
+};
 
 export class PaymentStore {
-  static placeholders = {}
+  static placeholders = {};
   formElements: any;
   cardNumber: any;
   expiry: any;
@@ -55,7 +55,7 @@ export class PaymentStore {
   tokens: Token[] = [];
   isAddingNewCard = false;
   isLoadingTokens = false;
-  isLoadingProcessPayment = false;
+  isLoadingProcessPayment = new Map<number, boolean>();
 
   constructor() {
     makeAutoObservable(this);
@@ -86,15 +86,15 @@ export class PaymentStore {
       const fonts = [{ src: 'https://fonts.googleapis.com/css?family=Source+Code+Pro' }];
 
       // @ts-ignore
-      this.formElements = new window.PayUSecureFields.Init(auth, { fonts })
+      this.formElements = new window.PayUSecureFields.Init(auth, { fonts });
       console.log(this.formElements);
       this.makeFormElements();
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
   }
 
-  async addNewCard(additionalData: { holder_name: string }) {
+  async addNewCard(additionalData: { holder_name: string }, successCb?: (tokenId: number) => void) {
     if (!this.sessionId) {
       return;
     }
@@ -102,13 +102,18 @@ export class PaymentStore {
     try {
       this.isAddingNewCard = true;
       // @ts-ignore
-      const result: FormRequestResponse = await window.PayUSecureFields.createToken(this.cardNumber, {
-        additionalData
-      });
+      const result: FormRequestResponse = await window.PayUSecureFields.createToken(
+        this.cardNumber,
+        {
+          additionalData,
+        }
+      );
 
       if (result.statusCode === 'SUCCESS') {
         await paymentService.addNewCard(result.token, this.sessionId);
         await this.getTokens();
+        // @todo
+        // successCb?.(Number(result.token));
         return;
       }
 
@@ -126,16 +131,40 @@ export class PaymentStore {
     }
   }
 
-  async processPayment(bookingId: number) {
+  async processPayment(bookingId: number, tokenId?: number) {
     try {
+      if (tokenId) {
+        await paymentService.processPayment(bookingId, tokenId);
+        return;
+      }
+
       if (this.tokens.length > 0) {
-        this.isLoadingProcessPayment = true;
+        const newLoadingMap = new Map(this.isLoadingProcessPayment);
+        newLoadingMap.set(bookingId, true);
+        this.isLoadingProcessPayment = newLoadingMap;
+
         await paymentService.processPayment(bookingId, this.tokens[0].id);
+      } else {
+        eventService.emit(EVENT.MODAL_ADD_CARD, {
+          isActive: true,
+          successCb: (tokenId: number) => this.processPayment(bookingId, tokenId)
+        });
       }
     } catch (error) {
       console.error(error);
     } finally {
-      this.isLoadingProcessPayment = false;
+      const newLoadingMap = new Map(this.isLoadingProcessPayment);
+      newLoadingMap.set(bookingId, false);
+      this.isLoadingProcessPayment = newLoadingMap;
+    }
+  }
+
+  async deleteToken(tokenId: number) {
+    try {
+      await paymentService.deleteToken(tokenId);
+      await this.getTokens();
+    } catch (error) {
+      console.error(error);
     }
   }
 

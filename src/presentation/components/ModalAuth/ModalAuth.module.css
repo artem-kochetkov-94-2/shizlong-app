@@ -83,6 +83,7 @@
     color: #292c31;
     transform: translateY(-50%);
     outline: none;
+    background-color: transparent;
 
     &::placeholder {
       color: #a0a7b1;
@@ -120,4 +121,11 @@
   text-align: center;
   color: #6b7280;
   margin-bottom: 15px;
+}
+
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #e7faff;
 }

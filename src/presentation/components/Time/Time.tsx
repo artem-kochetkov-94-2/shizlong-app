@@ -3,9 +3,10 @@ import styles from "./Time.module.css";
 interface TimeProps {
     value: string;
     onChange: (value: string) => void;
+    onBlur?: () => void;
 }
 
-export const Time = ({ value, onChange }: TimeProps) => {
+export const Time = ({ value, onChange, onBlur }: TimeProps) => {
     return (
         <input
             aria-label="Time"
@@ -13,6 +14,7 @@ export const Time = ({ value, onChange }: TimeProps) => {
             className={styles.input}
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            onBlur={onBlur}
         />
     );
 };

@@ -24,9 +24,11 @@
     border-radius: 100px;
     white-space: nowrap;
     background-color: #F3F4F6;
+    color: #6B7280;
 }
 
 .active {
     box-shadow: 0px 3px 1px 0px #0000000A, 0px 3px 8px 0px #0000001F;
     background-color: #FFFFFF;
+    color: #161D25;
 }

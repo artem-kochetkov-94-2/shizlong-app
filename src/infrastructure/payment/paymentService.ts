@@ -1,83 +1,63 @@
-import { API_URL_V2 } from "@src/const";
-import { SessionResponse, TokenResponse } from "./types";
-import { VerificationStore, verificationStore } from "@src/application/store/verificationStore";
+import { API_URL_V2 } from '@src/const';
+import { SessionResponse, TokenResponse } from './types';
+import { RestService } from '../restService/restService';
 
 const routes = {
-    getSession: '/payments/get_session',
-    addNewCard: '/payments/add_card',
-    tokens: '/payments/customer/tokens',
-    processPayment: '/payments/process_payment',
+  getSession: '/payments/get_session',
+  addNewCard: '/payments/add_card',
+  tokens: '/payments/customer/tokens',
+  processPayment: '/payments/process_payment',
+  deleteToken: '/payments/tokens',
 };
 
 class PaymentService {
-    private readonly apiUrl = API_URL_V2;
-    private readonly verificationStore: VerificationStore;
+  private readonly apiUrl = API_URL_V2;
+  private readonly restService: RestService;
 
-    constructor() {
-        this.verificationStore = verificationStore;
-    }
+  constructor() {
+    this.restService = new RestService();
+  }
 
-    async getSession() {
-        const response = await fetch(`${this.apiUrl}${routes.getSession}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.verificationStore.accessToken}`,
-            },
-        });
+  async getSession() {
+    const { response } = await this.restService.get<SessionResponse>({
+      url: `${this.apiUrl}${routes.getSession}`,
+    });
+    return response;
+  }
 
-        const result: SessionResponse = await response.json();
+  async addNewCard(token: string, sessionId: string) {
+    const { response } = await this.restService.post({
+      url: `${this.apiUrl}${routes.addNewCard}`,
+      data: {
+        session_id: sessionId,
+        token: token,
+      },
+    });
 
-        if (!result.session_id) {
-            throw new Error('Session error');
-        }
+    console.log(response);
+  }
 
-        return result;
-    }
+  async getTokens() {
+    const { response } = await this.restService.get<TokenResponse>({
+      url: `${this.apiUrl}${routes.tokens}`,
+    });
+    return response;
+  }
 
-    async addNewCard(token: string, sessionId: string) {
-        const response = await fetch(`${this.apiUrl}${routes.addNewCard}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.verificationStore.accessToken}`,
-            },
-            body: JSON.stringify({
-                session_id: sessionId,
-                token: token,
-            }),
-        });
+  async processPayment(bookingId: number, tokenId: number) {
+    const { response } = await this.restService.post({
+      url: `${this.apiUrl}${routes.processPayment}`,
+      data: { booking_id: bookingId, token_id: tokenId },
+    });
+    console.log(response);
+  }
+  async deleteToken(tokenId: number) {
+    const { response } = await this.restService.delete({
+      url: `${this.apiUrl}${routes.deleteToken}/${tokenId}`,
+    });
 
-        console.log(response);
-    }
-
-    async getTokens() {
-        const response = await fetch(`${this.apiUrl}${routes.tokens}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.verificationStore.accessToken}`,
-            },
-        });
-
-        return await response.json() as TokenResponse;
-    }
-
-    async processPayment(bookingId: number, tokenId: number) {
-        const response = await fetch(`${this.apiUrl}${routes.processPayment}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.verificationStore.accessToken}`,
-            },
-            body: JSON.stringify({
-                booking_id: bookingId,
-                token_id: tokenId,
-            }),
-        });
-
-        console.log(response);
-    }
+    console.log(response);
+  }
 }
 
 export const paymentService = new PaymentService();

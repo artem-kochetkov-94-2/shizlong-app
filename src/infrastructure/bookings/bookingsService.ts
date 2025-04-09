@@ -1,12 +1,15 @@
-import { API_URL, API_URL_V2 } from "@src/const";
-import { BookingRequest, BookingResponse, MyBookingsResponse } from "./types";
-import { VerificationStore, verificationStore } from "@src/application/store/verificationStore";
-import { validateResponse } from "../validateResponse";
-import { RestService } from "../restService/restService";
+import { API_URL, API_URL_V2 } from '@src/const';
+import { BookingRequest, BookingResponse, MyBookingsResponse } from './types';
+import {
+  VerificationStore,
+  verificationStore,
+} from '@src/application/store/verificationStore';
+import { RestService } from '../restService/restService';
 
 const routes = {
   create: '/booking/create',
   myBookings: '/booking/get-my-bookings',
+  cancel: '/booking/cancel',
 };
 
 class BookingsService {
@@ -25,18 +28,11 @@ class BookingsService {
       return [];
     }
 
-    const response = await fetch(`${this.apiUrlV1}${routes.myBookings}`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${this.verificationStore.accessToken}`,
-        'Content-Type': 'application/json',
-      },
+    const { response } = await this.restService.post<MyBookingsResponse>({
+      url: `${this.apiUrlV1}${routes.myBookings}`,
     });
 
-    const result: MyBookingsResponse = await response.json();
-
-    return result.bookings;
+    return response.bookings;
   }
 
   getCurrentBookings() {
@@ -48,12 +44,20 @@ class BookingsService {
   }
 
   async createBooking(booking: BookingRequest) {
-    const response = await this.restService.post<BookingResponse>({
+    const { response } = await this.restService.post<BookingResponse>({
       url: `${this.apiUrlV2}${routes.create}`,
       data: booking,
     });
 
-    return response.response;
+    return response;
+  }
+
+  async cancelBooking(bookingId: number) {
+    const { response } = await this.restService.post<BookingResponse>({
+      url: `${this.apiUrlV1}${routes.cancel}/${bookingId}`,
+    });
+
+    return response;
   }
 }
 

@@ -40,3 +40,10 @@
         width: 100%;
     }
 }
+
+.favorite {
+    svg {
+      fill: #f95e5e;
+      color: #f95e5e;
+    }
+  }

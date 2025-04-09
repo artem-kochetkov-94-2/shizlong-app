@@ -81,6 +81,13 @@ class BookStore {
     this.bookingsStore = bookingsStore;
   }
 
+  get bookPrice() {
+    const priceForModule = (this.selectedModule?.module.price_per_hour || 0) * this.hours;
+    const priceForAccessories = Object.values(this.accessories).reduce((acc, a) => acc + (a.accessory.price || 0) * a.quantity, 0);
+
+    return priceForModule + priceForAccessories;
+  }
+
   get startDate() {
     const [hours, minutes] = this.startTime.split(':').map(Number);
     const startDate = new Date(this.date as Date);
@@ -159,7 +166,12 @@ class BookStore {
   }
 
   setSelectedModule(module: RawModule | null) {
+    this.clear();
     this.selectedModule = module;
+  }
+
+  clear() {
+    this.accessories = {};
   }
 
   async createBooking(onCreated: (id: number) => void) {
@@ -181,8 +193,8 @@ class BookStore {
       }
 
       const result = await bookingsService.createBooking(booking);
+      await bookingsStore.getMyBookings();
       onCreated(result.id);
-      bookingsStore.getMyBookings();
       this.paymentStore.processPayment(result.id);
     } catch (error) {
       console.log('createBooking error', error);
