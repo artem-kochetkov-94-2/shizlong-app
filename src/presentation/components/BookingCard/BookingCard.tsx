@@ -157,8 +157,8 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               color='white'
               iconColor='dark'
               href={createYandexMapsRouteLink(
-                [geoLocation.latitude, geoLocation.longitude],
-                location?.coordinates.slice().reverse() as [number, number],
+                [geoLocation?.latitude, geoLocation?.longitude],
+                location?.coordinates.slice().reverse() as [number, number] || [0, 0],
               )}
             />
             <IconButton

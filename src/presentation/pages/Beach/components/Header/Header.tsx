@@ -52,8 +52,8 @@ export const Header = observer(({ handleToggleFavorite }: HeaderProps) => {
           shape='rounded'
           color='white'
           href={createYandexMapsRouteLink(
-            [geoLocation.latitude, geoLocation.longitude],
-            location?.coordinates.slice().reverse() as [number, number],
+            [geoLocation?.latitude, geoLocation?.longitude],
+            location?.coordinates.slice().reverse() as [number, number] || [0, 0],
           )}
         />
       </div>

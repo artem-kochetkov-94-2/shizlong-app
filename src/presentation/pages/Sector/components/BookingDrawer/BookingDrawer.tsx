@@ -94,7 +94,7 @@ export const BookingDrawer = observer(() => {
               <div className={styles.bookings}>
                 {locationBookings.length === 0 && (
                   <div className={styles.bookingsEmpty}>
-                    На секторе {sector?.name} пляжа {location?.name} на сегодня у вас броней нет
+                    На {sector?.name} пляжа {location?.name} на сегодня у вас броней нет
                   </div>
                 )}
 

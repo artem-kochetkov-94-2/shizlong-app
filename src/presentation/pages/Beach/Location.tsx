@@ -53,13 +53,11 @@ export const Location = observer(() => {
 
   if (!location) return null;
 
-  // @todo - если не в час
   const servicesFeatures = services.map((s) => ({
     name: s.name,
     icon: s.placed_icon?.link_icon,
     extraTitle: `${s.minimal_price?.price.formatted_value}`,
-    // @todo
-    extraDescription: `в час ???`,
+    extraDescription: s.minimal_price?.type.description,
   }));
 
   return (
@@ -85,18 +83,18 @@ export const Location = observer(() => {
                   <Contacts location={location} />
                   <About title='Описание' description={location.description ?? ''} />
                   <Features title='Услуги' items={servicesFeatures} />
-                  <Features
-                    title='Пляжная инфраструктура'
-                    items={additionalServicesAsFeatures}
-                  />
+                  {additionalServicesAsFeatures.length > 0 && (
+                    <Features
+                      title='Пляжная инфраструктура'
+                      items={additionalServicesAsFeatures}
+                    />
+                  )}
                   {/* @todo - особенности */}
                   {/* <Features title="Особенности" items={peculiarities} /> */}
                 </div>
               )}
             </Sheet.Scroller>
-            <div
-              className={classNames(styles.footer, { [styles.shortFooter]: snap === 2 })}
-            >
+            <div className={classNames(styles.footer, { [styles.shortFooter]: snap === 2 })}>
               <Button
                 variant='yellow'
                 onClick={() => {
@@ -128,7 +126,7 @@ export const Location = observer(() => {
                     href={
                       createYandexMapsRouteLink(
                         [geoLocation.latitude, geoLocation.longitude],
-                        location.coordinates.slice().reverse() as [number, number]
+                        location?.coordinates.slice().reverse() as [number, number] || [0, 0]
                       )}
                   />
                   <IconButton

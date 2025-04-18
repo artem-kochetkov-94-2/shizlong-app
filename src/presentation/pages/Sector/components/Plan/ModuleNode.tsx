@@ -27,7 +27,7 @@ const isModuleAvailable = (
   const bookingStartTime = new Date(bookingDate.setHours(startHour, startMinute, 0, 0));
   const bookingEndTime = new Date(bookingStartTime.getTime() + hours * 60 * 60 * 1000);
 
-  // if (module.number != '52') return [false, null];
+  // if (module.number != '55') return [false, null];
   // console.clear();
   // console.log('bookingStartTime', bookingStartTime);
   // console.log('bookingEndTime', bookingEndTime);
