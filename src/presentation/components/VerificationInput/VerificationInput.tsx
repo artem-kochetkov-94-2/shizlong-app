@@ -18,13 +18,13 @@ interface VerificationInputProps {
   showNavigateBtn?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
-  isKeyboardVisible: boolean;
+  isKeyboardVisible?: boolean;
 }
 
 const RESEND_INTERVAL_SECONDS = 60;
 
 export const VerificationInput = observer(
-  ({ onExit, showNavigateBtn = true, onFocus, onBlur, isKeyboardVisible }: VerificationInputProps) => {
+  ({ onExit, showNavigateBtn = true, onFocus, onBlur, isKeyboardVisible = false }: VerificationInputProps) => {
     const { phoneNumber, verificationError, strategy } = verificationStore;
     const navigate = useNavigate();
 
@@ -37,6 +37,7 @@ export const VerificationInput = observer(
 
     useEffect(() => {
       const inputs = inputWrapperRef.current?.querySelectorAll('input');
+      if (!onFocus || !onBlur) return;
       inputs?.forEach(input => {
         input.addEventListener('focus', onFocus);
         input.addEventListener('blur', onBlur);

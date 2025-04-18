@@ -107,12 +107,12 @@ class MapStore {
     }
   }
 
-  setLocationMarker(location: RawLocation) {
+  setLocationMarker(location: RawLocation, isFavorite: boolean) {
     const existingMarker = this.locationMarkers.get(location.id);
 
     if (existingMarker) {
       existingMarker.setLabel({
-        ...(location.favorite ? labelFavoriteParams : labelParams),
+        ...(isFavorite ? labelFavoriteParams : labelParams),
         text: location.name,
       });
 
@@ -123,7 +123,7 @@ class MapStore {
       coordinates: location.coordinates,
       icon: markerIcon,
       label: {
-        ...(location.favorite ? labelFavoriteParams : labelParams),
+        ...(isFavorite ? labelFavoriteParams : labelParams),
         text: location.name,
       },
     });
@@ -135,13 +135,14 @@ class MapStore {
     return marker;
   }
 
-  setMarkers(locations: RawLocation[]) {
+  setMarkers(locations: RawLocation[], favoriteLocations: RawLocation[]) {
     if (!this.map) return;
 
     const markers = new Map();
 
     locations.forEach((location) => {
-      markers.set(location.id, this.setLocationMarker(location));
+      const isFavorite = favoriteLocations.some((l) => l.id === location.id);
+      markers.set(location.id, this.setLocationMarker(location, isFavorite));
     });
 
     this.locationMarkers = markers;

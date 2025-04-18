@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { autorun, makeAutoObservable } from 'mobx';
 import { NotificationsStore, notificationsStore } from './notificationsStore';
 import { PaymentStore, paymentStore } from './paymentStore';
 import { VerificationStore, verificationStore } from './verificationStore';
@@ -17,14 +17,20 @@ export class UserStore {
     this.paymentStore = paymentStore;
     this.profileStore = profileStore;
     this.verificationStore = verificationStore;
+
+    autorun(() => {
+      const isVerified = verificationStore.isVerified;
+
+      if (isVerified) {
+        this.init();
+      }
+    });
   }
 
   async init() {
-    if (verificationStore.isVerified) {
-      this.notificationsStore.checkTelegramStatus();
-      this.paymentStore.getTokens();
-      this.profileStore.getProfile();
-    }
+    this.notificationsStore.checkTelegramStatus();
+    this.paymentStore.getTokens();
+    this.profileStore.getProfile();
   }
 
   async logout(cb: () => void) {

@@ -8,11 +8,12 @@ import { observer } from "mobx-react-lite"
 import { useFields } from "./useFields"
 
 interface AddCardProps {
-    successCb?: (tokenId?: number) => void;
+    successCb?: (token: string, session: string) => void;
     errorCb?: () => void;
+    buttonText?: string;
 }
 
-export const AddCard = observer(({ successCb, errorCb }: AddCardProps) => {
+export const AddCard = observer(({ successCb, errorCb, buttonText = 'Оплатить' }: AddCardProps) => {
     const { isAddingNewCard } = paymentStore;
 
     const { focused, dirtyFields } = useFields();
@@ -35,7 +36,7 @@ export const AddCard = observer(({ successCb, errorCb }: AddCardProps) => {
             // @ts-ignore
             holder_name: document.getElementById('cardholder-name')?.value,
           }
-          
+
           await paymentStore.addNewCard(additionalData, successCb, errorCb);
         }
     
@@ -81,7 +82,7 @@ export const AddCard = observer(({ successCb, errorCb }: AddCardProps) => {
                         disabled={isAddingNewCard}
                         withShadow={true}
                     >
-                        Добавить карту
+                        {buttonText}
                     </Button>
                 </form>
             </Card>

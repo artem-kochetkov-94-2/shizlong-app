@@ -40,3 +40,23 @@ export type Token = {
 }
 
 export type TokenResponse = Token[];
+
+export type ProcessPaymentRequestBody = {
+    booking_id: number;
+    token_id: number;
+} | {
+    booking_id: number;
+    session: string;
+    token: string;
+}
+
+export type ProcessPaymentResponse = {
+    id: number;
+    sum: number;
+    payed_sum: number;
+    status: {
+        name: 'COMPLETE' | string;
+        description: string;
+    }
+}
+

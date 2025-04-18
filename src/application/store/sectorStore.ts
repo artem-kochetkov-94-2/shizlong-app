@@ -30,7 +30,7 @@ class SectorStore {
     await this.fetchSector(sectorId);
     await this.fetchSchemes(sectorId);
 
-    const dayScheme = this.schemes.find((scheme) => scheme.time_of_day === 'day');
+    const dayScheme = this.schemes.find((scheme) => scheme.time_of_day.name === 'daily');
     this.setActiveScheme(dayScheme || this.schemes[0] || null);
   }
 

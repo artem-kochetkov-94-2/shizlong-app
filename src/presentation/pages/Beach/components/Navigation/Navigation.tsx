@@ -5,10 +5,11 @@ import { RawLocation } from "@src/infrastructure/Locations/types";
 import { locationStore, locationTabs } from "@src/application/store/locationStore";
 import { Images } from "./components/Images";
 import styles from './Navigation.module.css';
+import { observer } from "mobx-react-lite";
 
-export const Navigation = ({ location, snap }: { location: RawLocation; snap: number }) => {
+export const Navigation = observer(({ location, snap }: { location: RawLocation; snap: number }) => {
   const { currentTab, setCurrentTab } = useTabs(locationTabs[0].value);
-  const { minModulePrice } = locationStore;
+  const { minServicePrice } = locationStore;
 
   if (snap === 2) {
     return (
@@ -17,7 +18,7 @@ export const Navigation = ({ location, snap }: { location: RawLocation; snap: nu
         <div className={styles.rowShort}>
           <div className={styles.nameShort}>{location.name}</div>
           <div className={styles.tagShort}>
-            <Tag size="medium" text={`от ${minModulePrice.toLocaleString('ru-RU')} ₽`} />
+            <Tag size="medium" text={`от ${minServicePrice?.price.formatted_value}`} />
           </div>
         </div>
       </div>
@@ -32,7 +33,7 @@ export const Navigation = ({ location, snap }: { location: RawLocation; snap: nu
       <div className={styles.row}>
         {/* @TODO - рейтинг */}
         {/* <Rating value={4.2} count={1300} /> */}
-        <Tag size="medium" text={`от ${minModulePrice.toLocaleString('ru-RU')} ₽`} />
+        <Tag size="medium" text={`от ${minServicePrice?.price.formatted_value}`} />
       </div>
       <Tabs
         tabs={locationTabs}
@@ -41,4 +42,4 @@ export const Navigation = ({ location, snap }: { location: RawLocation; snap: nu
       />
     </div>
   );
-}
+});

@@ -5,8 +5,8 @@ export class ApiError extends Error {
 }
 
 type IsApiError = {
-    errors: string[];
-    message: string;
+  errors: string[];
+  message: string;
 }
 
 const isApiError = (response: unknown): response is IsApiError => {
@@ -14,7 +14,7 @@ const isApiError = (response: unknown): response is IsApiError => {
     response
       && typeof response === 'object'
       && response !== null
-      && 'errors' in response
+      && ('errors' in response || 'message' in response)
   ) {
     return true;
   }
@@ -24,6 +24,6 @@ const isApiError = (response: unknown): response is IsApiError => {
 
 export const validateResponse = (response: unknown) => {
   if (isApiError(response)) {
-    throw new ApiError(response.errors[0] || response.message);
+    throw new ApiError(response.message || response.errors[0]);
   }
 };

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { declensionOfHours } from '@src/application/utils/formatDate';
 
 export const ChooseTime = observer(() => {
-    const { hours } = bookStore;
+    const { formHours } = bookStore;
     const [isOpen, setIsOpen] = useState(false);
     const availableHours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Пример значений
     const selectRef = useRef<HTMLSelectElement>(null);
@@ -40,14 +40,14 @@ export const ChooseTime = observer(() => {
         <div className={styles.modulesControlsItem}>
             {!isOpen && (
                 <div className={styles.modulesControlsItemLabel} onClick={handleClick}>
-                    на {hours} {declensionOfHours(hours)}
+                    на {formHours} {declensionOfHours(formHours)}
                 </div>
             )}
 
             {isOpen && (
                 <select
                     ref={selectRef}
-                    value={hours}
+                    value={formHours}
                     onChange={handleSelectChange}
                     className={styles.modulesControlsItemInput}
                 >

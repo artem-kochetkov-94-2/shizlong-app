@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     width: 33.333%;
     height: 100%;
     font-family: Roboto;
@@ -15,4 +15,5 @@
     border-bottom-right-radius: 50px;
     background-color: #E3E5EA;
     overflow: hidden;
+    white-space: nowrap;
 }

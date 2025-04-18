@@ -1,4 +1,4 @@
-import { makeAutoObservable, autorun } from 'mobx';
+import { makeAutoObservable, autorun, runInAction } from 'mobx';
 import {
   RawLocation,
   RawSector,
@@ -30,7 +30,7 @@ export const locationTabs: Tab[] = [
   },
 ];
 
-class LocationStore {
+export class LocationStore {
   locationId: number | null = null;
   location: RawLocation | null = null;
   activeTab: 'information' | 'services' | 'abonements' | 'reviews' = 'information';
@@ -71,13 +71,12 @@ class LocationStore {
     }));
   }
 
-  // @todo - минимальная цена модуля
-  get minModulePrice() {
-    const sortedModules = this.modules
+  get minServicePrice(): RawService['minimal_price'] | null {
+    const sorted = this.services
       .slice()
-      .filter((m) => m.module.price_per_hour !== null)
-      .sort((a, b) => a.module.price_per_hour! - b.module.price_per_hour!);
-    return sortedModules[0]?.module.price_per_hour || 0;
+      .filter((s) => s.minimal_price?.price.value !== null)
+      .sort((a, b) => a.minimal_price?.price.value! - b.minimal_price?.price.value!);
+    return sorted[0]?.minimal_price || null;
   }
 
   setLocation(locationId: number) {
@@ -132,7 +131,9 @@ class LocationStore {
       this.isLoading = true;
       const location = await locationsService.getLocation(id);
       console.log('location', location);
-      this.location = location;
+      runInAction(() => {
+        this.location = location;
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -145,7 +146,9 @@ class LocationStore {
       this.isServicesLoading = true;
       const services = await locationsService.getServices(id);
       console.log('services', services);
-      this.services = services;
+      runInAction(() => {
+        this.services = services;
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -153,13 +156,14 @@ class LocationStore {
     }
   }
 
-
   async fetchAdditionalServices(id: number) {
     try {
       this.isAdditionalServicesLoading = true;
       const additionalServices = await locationsService.getAdditionalServices(id);
       console.log('additionalServices', additionalServices);
-      this.additionalServices = additionalServices;
+      runInAction(() => {
+        this.additionalServices = additionalServices;
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -185,7 +189,9 @@ class LocationStore {
       this.isSectorsLoading = true;
       const sectors = await locationsService.getSectors(id);
       console.log('sectors', sectors);
-      this.sectors = sectors;
+      runInAction(() => {
+        this.sectors = sectors;
+      });
     } catch (error) {
       console.error(error);
     } finally {

@@ -71,7 +71,6 @@ function App() {
 
           <Route path={RoutesMap.UiKit} element={<UiKit />} />
           {/* <Route path={RoutesMap.Filters} element={<Filters />} /> */}
-          {/* <Route path={RoutesMap.Receipt} element={<Receipt />} /> */}
           {/* <Route path={RoutesMap.StaffCall} element={<StaffCall />} /> */}
         </Routes>
       </Layout>

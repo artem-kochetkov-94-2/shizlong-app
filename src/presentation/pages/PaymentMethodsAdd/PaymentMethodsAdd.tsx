@@ -6,7 +6,7 @@ export const PaymentMethodsAdd = observer(() => {
   return (
     <>
       <PageHeader topPadding={true}>Добавление карты</PageHeader>
-      <AddCard />
+      <AddCard buttonText='Добавить карту' />
     </>
   );
 });

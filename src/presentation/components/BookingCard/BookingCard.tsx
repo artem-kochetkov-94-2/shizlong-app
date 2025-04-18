@@ -13,6 +13,8 @@ import { locationsStore } from '@src/application/store/locationsStore';
 import { bookingsStore } from '@src/application/store/bookingsStore';
 import { CancelBookingPanel } from '../CancelBookingPanel';
 import styles from './BookingCard.module.css';
+import { createYandexMapsRouteLink } from '@src/application/utils/createYandexMapsRouteLink';
+import { geoStore } from '@src/application/store/geoStore';
 
 const bookingStatusMap = {
   reserved: 'Не оплачена',
@@ -41,9 +43,12 @@ export const colorByStatus = {
 export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
   const [isCancelOpen, setCancelOpen] = useState(false);
   const navigate = useNavigate();
-  const isFavorite = locationsStore.getFavoriteStatus(booking.module.sector.location.id);
+  const isFavorite = locationsStore.getFavoriteStatus(booking.sector_scheme.sector.location_id);
   const { isLoadingProcessPayment } = paymentStore;
   const { isLoadingCancelBooking } = bookingsStore;
+  const { location: geoLocation } = geoStore;
+  const { locations } = locationsStore;
+  const location = locations.find((l) => l.id === booking.sector_scheme.sector.location_id);
 
   return (
     <>
@@ -56,22 +61,27 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
         <div className={styles.wrapper}>
           <div className={styles.content}>
             <div className={styles.category}>Пляж</div>
-            <div className={styles.name}>{booking.module.sector.location.name}</div>
+            <div
+              className={styles.name}
+              onClick={() => navigate(Routes.BookingDetails.replace(':id', booking.id.toString()))}
+            >
+              {booking.sector_scheme.sector.location.name}
+            </div>
 
             <div className={styles.row}>
               {/* <Tag text="Вы на пляже" /> */}
-              <span>{booking.module.sector.name}</span>
+              <span>{booking.sector_scheme.sector.name}</span>
             </div>
             <div className={styles.range}>
-              <span>{formatFullDate(new Date(booking.start_time))}</span>
+              <span>{formatFullDate(new Date(booking.booking_modules[0].start_time))}</span>
               <Icon name='time' size='extra-small' />
               <span>
-                {new Date(booking.start_time).toLocaleString('ru-RU', {
+                {new Date(booking.booking_modules[0].start_time).toLocaleString('ru-RU', {
                   hour: '2-digit',
                   minute: '2-digit',
                 })}{' '}
                 -{' '}
-                {new Date(booking.end_time).toLocaleString('ru-RU', {
+                {new Date(booking.booking_modules[0].end_time).toLocaleString('ru-RU', {
                   hour: '2-digit',
                   minute: '2-digit',
                 })}
@@ -88,25 +98,23 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               touchStartPreventDefault={false}
             >
               <SwiperSlide>
-                <img src={booking.module.sector.location.link_space} />
+                <img src={booking.sector_scheme.sector.location.link_space} />
               </SwiperSlide>
             </Swiper>
 
             <div
               className={styles.status}
               style={{
-                backgroundColor: bgColorByStatus[booking.status],
-                color: colorByStatus[booking.status],
+                backgroundColor: bgColorByStatus[booking.status.name],
+                color: colorByStatus[booking.status.name],
               }}
             >
-              <span>{bookingStatusMap[booking.status]}</span>
+              <span>{bookingStatusMap[booking.status.name]}</span>
             </div>
 
             <div
               className={styles.qrCode}
-              onClick={() =>
-                navigate(Routes.BookingDetails.replace(':id', booking.id.toString()))
-              }
+              onClick={() => navigate(Routes.BookingDetailsQR.replace(':id', booking.id.toString()))}
             >
               <Icon name='qr-code2' size='small' color='dark' />
             </div>
@@ -135,9 +143,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               size='medium'
               variant='tertiary'
               onClick={() => {
-                navigate(
-                  Routes.Sector.replace(':id', booking.module.sector.id.toString())
-                );
+                navigate(Routes.Sector.replace(':id', booking.sector_scheme.sector.id.toString()));
               }}
             >
               <Icon name='location-flag' size='extra-small' />
@@ -150,6 +156,10 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               shape='rounded'
               color='white'
               iconColor='dark'
+              href={createYandexMapsRouteLink(
+                [geoLocation.latitude, geoLocation.longitude],
+                location?.coordinates.slice().reverse() as [number, number],
+              )}
             />
             <IconButton
               iconName='in-map'
@@ -162,14 +172,14 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
           </div>
 
           <div className={styles.actionItem}>
-            {booking.status === 'reserved' && (
+            {booking.status.name === 'reserved' && (
               <>
                 <Button
                   size='medium'
                   variant='yellow'
                   onClick={() => paymentStore.processPayment(booking.id)}
-                  isLoading={isLoadingProcessPayment.get(booking.id)}
-                  disabled={isLoadingProcessPayment.get(booking.id)}
+                  isLoading={isLoadingProcessPayment.has(booking.id)}
+                  disabled={isLoadingProcessPayment.has(booking.id)}
                 >
                   <span>Оплатить</span>
                 </Button>

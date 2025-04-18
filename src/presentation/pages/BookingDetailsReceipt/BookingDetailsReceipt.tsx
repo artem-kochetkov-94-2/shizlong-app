@@ -8,7 +8,7 @@ import { Sheet } from 'react-modal-sheet';
 import { useNavigate, useParams } from 'react-router-dom';
 import { bookingCardStore } from '@src/application/store/bookingCardStore';
 import { useEffect } from 'react';
-import { formatFullDateWithTime } from '@src/application/utils/formatDate';
+// import { formatFullDateWithTime } from '@src/application/utils/formatDate';
 import { bookingsStore } from '@src/application/store/bookingsStore';
 import { observer } from 'mobx-react-lite';
 
@@ -43,7 +43,8 @@ export const BookingDetailsReceipt = observer(() => {
                 <Card>
                   <div className={styles.header}>Шезлонгер</div>
                   <div className={styles.paragraph}>Чек по операции</div>
-                  <div className={styles.paragraph}>{formatFullDateWithTime(new Date(booking.created_at))}</div>
+                  {/* @todo */}
+                  {/* <div className={styles.paragraph}>{formatFullDateWithTime(new Date(booking.created_at))}</div> */}
                   <hr />
                   <div className={styles.wrapper}>
                     <div className={styles.subHeader}>Операция </div>
@@ -57,7 +58,7 @@ export const BookingDetailsReceipt = observer(() => {
                     <div className={styles.subHeader}>Получатель</div>
                     <div className={styles.info}>ООО «Шезлонгер»</div>
                     <div className={styles.subHeader}>Сумма платежа</div>
-                    <div className={styles.info}>{booking.total_price.toLocaleString('ru-RU')} ₽</div>
+                    <div className={styles.info}>{booking.total_price.formatted_value}</div>
                     <div className={styles.subHeader}>Комиссия</div>
                     <div className={styles.info}>0,00 ₽</div>
                   </div>
@@ -85,14 +86,14 @@ export const BookingDetailsReceipt = observer(() => {
                       </div>
                     </div> */}
                     
-                    {booking.booking_accessories.map((item) => (
+                    {booking.accessories.map((item) => (
                       <div className={styles.row}>
                         <div className={styles.col}>
                           <span className={styles.info}>{item.beach_accessory.name}</span>
-                          <span className={styles.subHeader}>{item.beach_accessory.price.toLocaleString('ru-RU')} ₽ × {item.quantity} ед.</span>
+                          <span className={styles.subHeader}>{item.beach_accessory.price.formatted_value} ₽ × {item.quantity} ед.</span>
                         </div>
                         <div className={styles.col}>
-                          <span className={styles.info}>{(item.quantity * item.beach_accessory.price).toLocaleString('ru-RU')} ₽</span>
+                          <span className={styles.info}>{(item.quantity * item.beach_accessory.price.value).toLocaleString('ru-RU')} ₽</span>
                         </div>
                       </div>
                     ))}
@@ -100,7 +101,7 @@ export const BookingDetailsReceipt = observer(() => {
                   <div className={styles.button}>
                     <DecorateButton
                       color='blue'
-                      text={`Оплачено ${booking.total_price.toLocaleString('ru-RU')} ₽`}
+                      text={`Оплачено ${booking.total_price.formatted_value}`}
                     />
                   </div>
                 </Card>

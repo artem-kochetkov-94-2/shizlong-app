@@ -20,7 +20,6 @@ export const Sector = observer(() => {
   const { id } = useParams<{ id: string }>();
   const { location, sectors } = locationStore;
   const { sector } = sectorStore;
-  const { selectedModule } = bookStore;
 
   useEffect(() => {
     sectorStore.init(Number(id));
@@ -29,6 +28,7 @@ export const Sector = observer(() => {
   useEffect(() => {
     if (!sector || location) return;
 
+    console.log('sector', JSON.parse(JSON.stringify(sector)));
     locationStore.init(sector.location_id);
   }, [sector, location]);
 
@@ -37,25 +37,25 @@ export const Sector = observer(() => {
   useEffect(() => {
     if (!sector || !location) return;
 
-    if (!bookStore.startTime || bookStore.hours === 0) {
+    if (!bookStore.formStartTime || bookStore.formHours === 0) {
       return;
     }
 
     console.log('bookStore.date', bookStore.date);
-    console.log('bookStore.hours', bookStore.hours);
-    console.log('bookStore.startTime', bookStore.startTime);
+    console.log('bookStore.hours', bookStore.formHours);
+    console.log('bookStore.startTime', bookStore.formStartTime);
 
     const {
       from_date,
       to_date,
-    } = formatDateTime(bookStore.date as Date, bookStore.hours, bookStore.startTime);
+    } = formatDateTime(bookStore.date as Date, bookStore.formHours, bookStore.formStartTime);
 
     locationStore.fetchModules(
       sector.location_id,
       from_date,
       to_date,
     );
-  }, [sector, location, bookStore.date, bookStore.hours, bookStore.startTime]);
+  }, [sector, location, bookStore.date, bookStore.formHours, bookStore.formStartTime]);
 
   if (!sector || !location) return null;
 
@@ -76,10 +76,12 @@ export const Sector = observer(() => {
       <Plan
         onNext={() => handleChangeSector(nextSector?.id)}
         onPrev={() => handleChangeSector(prevSector?.id)}
+        hasNext={!!nextSector}
+        hasPrev={!!prevSector}
       />
 
       <BookingDrawer />
-      {selectedModule && <Module />}
+      <Module />
     </div>
   );
 });

@@ -1,4 +1,4 @@
-import { API_URL, API_URL_V2 } from '@src/const';
+import { API_URL_V2 } from '@src/const';
 import {
   FavoriteUpdateResult,
   RawAdditionalService,
@@ -9,132 +9,126 @@ import {
   RawSectorSchema,
   RawService,
 } from './types';
-import { ApiResponse } from '@src/infrastructure/types';
 import { RestService } from '../restService/restService';
+import { VerificationStore, verificationStore } from '@src/application/store/verificationStore';
 
 const routes = {
-  locations: '/get-locations',
-  locationWithFavorite: '/get-locations-with-favorite ',
-  favoritelocations: '/get-favorite-locations',
-  addFavoritelocation: '/add-favorite-location',
-  removeFavoritelocation: '/remove-favorite-location',
-  location: '/get-location',
-  sectors: '/get-sectors',
-  sector: '/get-sector',
-  additionalServices: '/get-additional-services',
-  getBeachAccessories: '/get-beach-accessories',
-  schemes: '/get-schemes',
-  getServices: '/get-services',
+  locations: '/location/list',
+  addFavoritelocation: '/customer/favorites/add',
+  removeFavoritelocation: '/customer/favorites/remove',
+  location: '/location',
+  sectors: '/location/:id/sector/list',
+  sector: '/sector',
+  additionalServices: '/location/:id/additional-services',
+  locationAccessories: '/location/:id/accessories',
+  schemes: '/sector/:id/scheme/list',
+  getServices: '/location/:id/services',
+
+  cashierSectors: '/cashier/sectors/get',
+  cashierLocations: '/cashier/locations/get',
 };
 
 class LocationsService {
-  private readonly apiUrl = API_URL;
   private readonly apiUrlV2 = API_URL_V2;
   private restService: RestService;
+  private readonly verificationStore: VerificationStore;
 
   constructor() {
     this.restService = new RestService();
+    this.verificationStore = verificationStore;
   }
 
   async getLocations() {
-    const { response } = await this.restService.get<ApiResponse<RawLocation[]>>({
-      url: `${this.apiUrl}${routes.locations}`,
+    if (this.verificationStore.isVerified) {
+      const { response } = await this.restService.post<RawLocation[]>({
+        url: `${this.apiUrlV2}${routes.locations}`,
+      });
+
+      return response;
+    }
+
+    const { response } = await this.restService.get<RawLocation[]>({
+      url: `${this.apiUrlV2}${routes.locations}`,
     });
-    return response.data;
+    return response;
   }
 
   async getFavoriteLocations() {
-    const { response } = await this.restService.post<ApiResponse<RawLocation[]>>({
-      url: `${this.apiUrl}${routes.favoritelocations}`,
+    const { response } = await this.restService.post<RawLocation[]>({
+      url: `${this.apiUrlV2}${routes.locations}`,
+      data: {
+        favorite_only: true,
+      }
     });
 
-    if (!response.success) {
-      return [];
-    }
-
-    return response.data;
-  }
-
-  async getLocationWhithFavorite() {
-    const { response } = await this.restService.post<ApiResponse<RawLocation[]>>({
-      url: `${this.apiUrl}${routes.locationWithFavorite}`,
-    });
-    return response.data;
+    return response;
   }
 
   async addFavoritelocation(id: number) {
     const { response } = await this.restService.post<FavoriteUpdateResult>({
-      url: routes.addFavoritelocation,
+      url: `${this.apiUrlV2}${routes.addFavoritelocation}`,
       data: { location_id: id },
     });
     return response;
   }
 
   async removeFavoritelocation(id: number) {
-    const { response } = await this.restService.post<FavoriteUpdateResult>({
-      url: routes.removeFavoritelocation,
-      data: { location_id: id },
+    const { response } = await this.restService.delete<FavoriteUpdateResult>({
+      url: `${this.apiUrlV2}${routes.removeFavoritelocation}/${id}`,
     });
     return response;
   }
 
   async getLocation(id: number) {
-    const { response } = await this.restService.post<ApiResponse<RawLocation>>({
-      url: `${this.apiUrl}${routes.location}`,
-      data: { location_id: id },
+    const { response } = await this.restService.get<RawLocation>({
+      url: `${this.apiUrlV2}${routes.location}/${id}`,
     });
-    return response.data;
+    return response;
   }
 
   async getSectors(id: number) {
-    const { response } = await this.restService.post<ApiResponse<RawSector[]>>({
-      url: `${this.apiUrl}${routes.sectors}`,
-      data: { location_id: id },
+    const { response } = await this.restService.get<RawSector[]>({
+      url: `${this.apiUrlV2}${routes.sectors}`.replace(':id', id.toString()),
     });
 
-    return response.data;
+    return response;
   }
 
   async getSector(id: number) {
-    const { response } = await this.restService.post<ApiResponse<RawSector>>({
-      url: `${this.apiUrl}${routes.sector}`,
-      data: { sector_id: id },
+    const { response } = await this.restService.get<RawSector>({
+      url: `${this.apiUrlV2}${routes.sector}/${id}`,
     });
-    return response.data;
+    return response;
   }
 
   async getSchemes(sectorId: number) {
-    const { response } = await this.restService.post<ApiResponse<RawSectorSchema[]>>({
-      url: `${this.apiUrl}${routes.schemes}`,
-      data: { sector_id: sectorId },
+    const { response } = await this.restService.get<RawSectorSchema[]>({
+      url: `${this.apiUrlV2}${routes.schemes}`.replace(':id', `${sectorId}`),
     });
-    return response.data;
+    return response;
   }
 
   async getServices(id: number) {
-    const { response } = await this.restService.post<ApiResponse<RawService[]>>({
-      url: `${this.apiUrl}${routes.getServices}`,
-      data: { location_id: id },
+    const { response } = await this.restService.get<RawService[]>({
+      url: `${this.apiUrlV2}${routes.getServices}`.replace(':id', `${id}`),
     });
-    return response.data;
+    return response;
   }
 
   async getAdditionalServices(id: number) {
-    const { response } = await this.restService.post<ApiResponse<RawAdditionalService[]>>(
+    const { response } = await this.restService.get<RawAdditionalService[]>(
       {
-        url: `${this.apiUrl}${routes.additionalServices}`,
-        data: { location_id: id },
+        url: `${this.apiUrlV2}${routes.additionalServices}`.replace(':id', `${id}`),
       }
     );
-    return response.data;
+    return response;
   }
 
   async getBeachAccessories(id: number) {
-    const { response } = await this.restService.post<ApiResponse<RawBeachAccessory[]>>({
-      url: `${this.apiUrl}${routes.getBeachAccessories}`,
-      data: { location_id: id },
+    const { response } = await this.restService.get<RawBeachAccessory[]>({
+      url: `${this.apiUrlV2}${routes.locationAccessories}`.replace(':id', `${id}`),
     });
-    return response.data;
+    return response;
   }
 
   async getModules(locationId: number, from_date?: string, to_date?: string) {
@@ -148,6 +142,21 @@ class LocationsService {
       data: { ...body },
     });
 
+    return response;
+  }
+
+  // cashier
+  async getCashierSectors() {
+    const { response } = await this.restService.get<RawSector[]>({
+      url: `${this.apiUrlV2}${routes.cashierSectors}`,
+    });
+    return response;
+  }
+
+  async getCashierLocations() {
+    const { response } = await this.restService.get<RawLocation[]>({
+      url: `${this.apiUrlV2}${routes.cashierLocations}`,
+    });
     return response;
   }
 }

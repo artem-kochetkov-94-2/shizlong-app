@@ -11,9 +11,18 @@ interface SearchInputProps {
   value?: string;
   onChange?: (value: string) => void;
   size?: 'medium' | 'large';
+  disabled?: boolean;
 }
 
-export const SearchInput = ({ placeholder, rightContent, withBorder, value, onChange, size = 'medium' }: SearchInputProps) => {
+export const SearchInput = ({
+  placeholder,
+  rightContent,
+  withBorder,
+  value,
+  onChange,
+  size = 'medium',
+  disabled = false,
+}: SearchInputProps) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(event.target.value);
   };
@@ -35,6 +44,7 @@ export const SearchInput = ({ placeholder, rightContent, withBorder, value, onCh
         onChange={handleInputChange}
         placeholder={placeholder}
         className={styles.searchInput}
+        disabled={disabled}
       />
       {value && (
         <IconButton

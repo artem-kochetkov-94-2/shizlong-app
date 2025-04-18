@@ -1,0 +1,54 @@
+.userInfo {
+  display: flex;
+  margin-left: 15px;
+  margin-right: auto;
+}
+  
+.avatar {
+  width: 64px;
+  height: 64px;
+  margin-right: 15px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+
+  &.avatarEmpty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #ffffffb2;
+    svg {
+      color: #ffffffb2;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+  
+.userName {
+  margin-bottom: 5px;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19.2px;
+  color: #292c31;
+}
+  
+.userPhone {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
+}
+
+.userPhone {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
+}

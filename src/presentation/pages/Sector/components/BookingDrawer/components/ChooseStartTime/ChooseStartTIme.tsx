@@ -14,21 +14,21 @@ const roundMinutesUpToNearestQuarter = (time: string) => {
 };
 
 export const ChooseStartTime = observer(() => {
-    const { startTime } = bookStore;
+    const { formStartTime } = bookStore;
 
     const handleTimeChange = (value: string) => {
         bookStore.setStartTime(value);
     };
 
     const handleTimeBlur = () => {
-        handleTimeChange(roundMinutesUpToNearestQuarter(startTime));
+        handleTimeChange(roundMinutesUpToNearestQuarter(formStartTime));
     };
 
     useEffect(() => {
-        handleTimeChange(roundMinutesUpToNearestQuarter(startTime));
-    }, [startTime]);
+        handleTimeChange(roundMinutesUpToNearestQuarter(formStartTime));
+    }, [formStartTime]);
 
-    console.log('startTime', startTime);
+    console.log('startTime', formStartTime);
 
     return (
         <div className={cn(
@@ -36,7 +36,7 @@ export const ChooseStartTime = observer(() => {
             styles.modulesControlsItemActive
         )}>
             <Time
-                value={startTime}
+                value={formStartTime}
                 onChange={handleTimeChange}
                 onBlur={handleTimeBlur}
             />

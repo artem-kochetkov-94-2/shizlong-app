@@ -36,8 +36,8 @@ export const Modals = observer(() => {
                 <AddCardModal
                     key={EVENT.MODAL_ADD_CARD}
                     onClose={() => onClose(EVENT.MODAL_ADD_CARD)}
-                    successCb={(id: number) => {
-                        addCardState.successCb?.(id);
+                    successCb={(token: string, session: string) => {
+                        addCardState.successCb?.(token, session);
                         onClose(EVENT.MODAL_ADD_CARD);
                     }}
                 />

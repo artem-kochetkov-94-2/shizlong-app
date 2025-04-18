@@ -31,11 +31,11 @@ const formatShortDateWithoutYear = (date: Date) => {
     });
 };
 
-function formatTimeRange(startHour: Date, endHour: Date) {
+const formatTimeRange = (startHour: Date | string, endHour: Date | string) => {
     const options = { hour: '2-digit', minute: '2-digit' };
 
-    console.log('startHour', startHour);
-    console.log('endHour', endHour);
+    // console.log('startHour', startHour);
+    // console.log('endHour', endHour);
 
     // @ts-ignore
     const start = new Date(startHour).toLocaleTimeString('ru-RU', options);
@@ -45,26 +45,26 @@ function formatTimeRange(startHour: Date, endHour: Date) {
     return `${start} - ${end}`;
 }
 
-function getTimeRangeDuration(startHour: Date, endHour: Date) {
+function getTimeRangeDuration(startHour: Date | string, endHour: Date | string) {
     const start = new Date(startHour);
     const end = new Date(endHour);
 
     return end.getTime() - start.getTime();
 }
 
-function getTimeRangeDurationInHours(startHour: Date, endHour: Date) {
+function getTimeRangeDurationInHours(startHour: Date | string, endHour: Date | string) {
     const duration = getTimeRangeDuration(startHour, endHour);
 
     return duration / (1000 * 60 * 60);
 }
 
-function getTimeRangeDurationInMinutes(startHour: Date, endHour: Date) {
+function getTimeRangeDurationInMinutes(startHour: Date | string, endHour: Date | string) {
     const duration = getTimeRangeDuration(startHour, endHour);
 
     return duration / (1000 * 60);
 }
 
-function getTimeRangeDurationInHoursAndMinutes(startHour: Date, endHour: Date) {
+function getTimeRangeDurationInHoursAndMinutes(startHour: Date | string, endHour: Date | string) {
     const duration = getTimeRangeDuration(startHour, endHour);
 
     return {

@@ -3,57 +3,25 @@ import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import backgroundImg from './assets/waves.png';
 import classNames from 'classnames';
 import { Icon } from '@src/presentation/ui-kit/Icon';
-import bookingsEmptyImg from './assets/empty.svg';
-import { bookingsStore } from '@src/application/store/bookingsStore';
-import { Tabs, useTabs } from '@src/presentation/ui-kit/Tabs';
-import { Tab } from '@src/presentation/ui-kit/Tabs/Tabs';
-import { CompletedBookings } from './components/CompletedBookings/CompletedBookings';
-import { CurrentBookings } from './components/CurrentBookings/CurrentBookings';
 import { observer } from 'mobx-react-lite';
-// import { Rating } from '@src/presentation/components/Rating';
 import { useNavigate } from 'react-router-dom';
-import { ChangeEvent, useRef, useState } from 'react';
+import { useState } from 'react';
 import { DropdownMenu } from './components/DropdownMenu/DropdownMenu';
 import { Routes } from '@src/routes';
 import { notificationsStore } from '@src/application/store/notificationsStore';
 import { paymentStore } from '@src/application/store/paymentStore';
+import { UserInfo } from './components/UserInfo/UserInfo';
+import { ClientContent } from './components/ClientContent';
 import { profileStore } from '@src/application/store/profileStore';
-import { formatPhoneNumber } from '@src/application/utils/formatPhone';
-
-export const bookingsTabs: Tab[] = [
-  {
-    value: 'current',
-    label: 'Актуальные',
-  },
-  {
-    value: 'completed',
-    label: 'Завершённые',
-  },
-];
+import { CashierContent } from './components/CashierContent';
 
 export const Profile = observer(() => {
-  const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const { isEmptyBookings } = bookingsStore;
-  const { currentTab, setCurrentTab } = useTabs(bookingsTabs[0].value);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { currentBookings, completedBookings } = bookingsStore;
   const { isSubscribedToTelegram } = notificationsStore;
   const { tokens } = paymentStore;
-  const { profile } = profileStore;
+  const { isCashier } = profileStore;
 
   const navigate = useNavigate();
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedAvatar(file);
-    }
-  };
-
-  const handleAvatarClick = () => {
-    fileInputRef.current?.click();
-  };
 
   return (
     <div className={styles.profile}>
@@ -67,32 +35,7 @@ export const Profile = observer(() => {
           onClick={() => navigate(-1)}
         />
 
-        <div className={styles.userInfo}>
-          <div
-            className={classNames(styles.avatar, !selectedAvatar && styles.avatarEmpty)}
-            onClick={handleAvatarClick}
-          >
-            <input
-              ref={fileInputRef}
-              type='file'
-              accept='image/*'
-              style={{ display: 'none' }}
-              onChange={handleFileChange}
-            />
-            {!selectedAvatar && <Icon name={'profile'} />}
-            {selectedAvatar && <img src={URL.createObjectURL(selectedAvatar)} alt='' />}
-          </div>
-          <div>
-            <div className={styles.userName}>
-              {profile.name} {profile.last_name}
-            </div>
-            <div className={styles.userPhone}>
-              {formatPhoneNumber(profile.phone || '')}
-            </div>
-            {/* @todo */}
-            {/* <Rating value={4.8} count={5} showCount={false} /> */}
-          </div>
-        </div>
+        <UserInfo />
 
         <IconButton
           iconName='settings'
@@ -146,7 +89,7 @@ export const Profile = observer(() => {
             <Icon size='small' name='arrow-right' />
           </div> */}
           {!tokens.length && (
-            <div className={styles.reminderItem}>
+            <div className={styles.reminderItem} onClick={() => navigate(Routes.PaymentMethodsAdd)}>
               <Icon size='small' name='card' />
               <span>Привязать банковскую карту</span>
               <Icon size='small' name='arrow-right' />
@@ -170,36 +113,9 @@ export const Profile = observer(() => {
           </div> */}
         </div>
 
-        <div className={styles.bookings}>
-          <div className={styles.bookingsTitle}>Бронирования</div>
-
-          {isEmptyBookings ? (
-            <div className={styles.bookingsEmpty}>
-              <div className={styles.bookingsEmptyTitle}>У вас пока нет броней</div>
-              <img src={bookingsEmptyImg} />
-            </div>
-          ) : (
-            <>
-              <Tabs
-                tabs={bookingsTabs.map((t) => {
-                  return {
-                    ...t,
-                    label:
-                      t.value === 'current'
-                        ? `Актуальные ${currentBookings.length}`
-                        : `Завершённые ${completedBookings.length}`,
-                  };
-                })}
-                activeTab={currentTab}
-                onTabChange={setCurrentTab}
-              />
-
-              {currentTab === 'current' && <CurrentBookings />}
-              {currentTab === 'completed' && <CompletedBookings />}
-            </>
-          )}
-        </div>
+        {isCashier ? <CashierContent /> : <ClientContent />}
       </div>
+
       {isDropdownOpen && <DropdownMenu />}
     </div>
   );

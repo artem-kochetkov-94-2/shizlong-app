@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import cn from 'classnames';
 import styles from './Tag.module.css';
+
 interface TagProps {
   text: ReactNode;
   size?: 'small' | 'medium';

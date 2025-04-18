@@ -23,9 +23,11 @@ const nodeTypes = {
 interface PlanProps {
     onNext: () => void,
     onPrev: () => void,
+    hasNext: boolean,
+    hasPrev: boolean,
 }
 
-export const Plan = observer(({ onNext, onPrev }: PlanProps) => {
+export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) => {
   const [nodes, setNodes] = useNodesState<Node>([]);
   const [viewport, setViewport] = useState<Viewport>({
     x: 0,
@@ -51,17 +53,15 @@ export const Plan = observer(({ onNext, onPrev }: PlanProps) => {
     }];
 
     sectorModules.forEach((m) => {
-        const module = m.module;
-
         const node = {
-            id: `${module.id}`,
+            id: `${m.id}`,
             type: 'ModuleNode',
             data: {
                 module: m,
             },
             position: {
-                x: Number(module.placed_icon.left),
-                y: Number(module.placed_icon.top),
+                x: Number(m.placed_icon?.left),
+                y: Number(m.placed_icon?.top),
             },
         };
 
@@ -74,7 +74,7 @@ export const Plan = observer(({ onNext, onPrev }: PlanProps) => {
   useEffect(() => {
     if (!sector || !modules) return;
 
-    const sectorModules = modules.filter((m) => m.module.sector_id === sector.id && m.module.sector_scheme_id === activeScheme?.id);
+    const sectorModules = modules.filter((m) => m.sector_id === sector.id && m.sector_scheme_id === activeScheme?.id);
 
     const nodes = getNodes(sector, sectorModules);
     setNodes(nodes);
@@ -83,7 +83,7 @@ export const Plan = observer(({ onNext, onPrev }: PlanProps) => {
   const onViewportChange = (newViewport: Viewport) => {
     const screenWidth = window.innerWidth;
     const canvasWidth = size?.width || 0;
-    const arrowWidth = 35;
+    const arrowWidth = 25;
     const canvasWidthWithZoom = canvasWidth * newViewport.zoom;
     const diff = screenWidth - canvasWidthWithZoom;
 
@@ -142,12 +142,17 @@ export const Plan = observer(({ onNext, onPrev }: PlanProps) => {
         >
             <Controls showInteractive={false} orientation="horizontal" />
         </ReactFlow>
-        <div className={styles.left} onClick={onPrev}>
-            <Icon name="arrow-left" color="dark" size="small" />
-        </div>
-        <div className={styles.right} onClick={onNext}>
-            <Icon name="arrow-right" color="dark" size="small" />
-        </div>
+
+        {hasPrev && (
+            <div className={styles.left} onClick={onPrev}>
+                <Icon name="arrow-left" color="dark" size="extra-small" />
+            </div>
+        )}
+        {hasNext && (
+            <div className={styles.right} onClick={onNext}>
+                <Icon name="arrow-right" color="dark" size="extra-small" />
+            </div>
+        )}
     </>
   );
 });

@@ -13,19 +13,29 @@ import { useNavigate } from "react-router-dom";
 import { bookStore } from "@src/application/store/bookStore";
 import { observer } from "mobx-react-lite";
 import { DateValue } from "@src/application/types/date";
-import { SERVER_URL } from "@src/const";
 import { locationStore } from "@src/application/store/locationStore";
 import { sectorStore } from "@src/application/store/sectorStore";
 import { Counter } from '@src/presentation/ui-kit/Counter';
 import { Routes } from "@src/routes";
+import { useSearchParams } from 'react-router-dom';
+import { Module } from '@src/presentation/components/Module/Module';
 
 export const Booking = observer(() => {
     const navigate = useNavigate();
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [isTimeOpen, setIsTimeOpen] = useState(false);
+    const [searchParams] = useSearchParams();
+    const moduleId = searchParams.get('module');
 
-    const { selectedModule, formattedDate, formattedTime, formattedDuration, isCreatingBooking, bookPrice } = bookStore;
-    const { location, beachAccessories } = locationStore;
+    const {
+        formattedDate,
+        formattedTime,
+        formattedDuration,
+        isCreatingBooking,
+        modulesPrice,
+        modules: selectedModules,
+    } = bookStore;
+    const { location, beachAccessories, modules } = locationStore;
     const { sector } = sectorStore;
 
     const onChange = (value: DateValue) => {
@@ -33,13 +43,9 @@ export const Booking = observer(() => {
         setIsCalendarOpen(false);
     };
 
-    console.log('accessories', JSON.parse(JSON.stringify(bookStore.accessories)));
-
     const onCreated = (id: number) => {
         navigate(Routes.BookingDetails.replace(':id', id.toString()));
     }
-
-    console.log('isTimeOpen', isTimeOpen);
 
     return (
         <>
@@ -61,7 +67,7 @@ export const Booking = observer(() => {
                             />
                             <div className={styles.headerContent}>
                                 <div className={styles.title}>
-                                    {bookStore.modulesSelectValue === 'one' ? 'Заказать один модуль' : 'Заказать группу модулей'}
+                                    {selectedModules.size === 1 ? 'Заказать один модуль' : 'Заказать группу модулей'}
                                 </div>
                                 <div className={styles.subtitle}>{sector?.name} пляжа {location?.name}</div>
                             </div>
@@ -69,17 +75,37 @@ export const Booking = observer(() => {
                         <Sheet.Scroller>
                             <div className={styles.content}>
                                 <div className={styles.modules}>
-                                    <div className={styles.module}>
-                                        <img
-                                            src={`${SERVER_URL}${selectedModule?.module.placed_icon.link_icon}`}
-                                            alt={selectedModule?.module.placed_icon.name_icon}
-                                        />
-                                        <div className={styles.moduleName}>{selectedModule?.module.name}</div>
-                                        <div className={styles.moduleExtraContent}>
-                                            <div className={styles.modulePrice}>{selectedModule?.module.price_per_hour} ₽</div>
-                                            <div className={styles.modulePriceFor}>за 1 час</div>
-                                        </div>
-                                    </div>
+                                    {[...selectedModules.keys()].map((moduleId) => {
+                                        const module = modules.find((m) => m.id === moduleId);
+
+                                        return (
+                                            <div
+                                                className={styles.module}
+                                                onClick={() => navigate(Routes.Booking + `?module=${module?.id}`)}
+                                                key={moduleId}
+                                            >
+                                                <div className={styles.moduleImage}>
+                                                    <img
+                                                        src={module?.placed_icon?.link_icon}
+                                                        alt={module?.placed_icon?.name_icon}
+                                                    />
+                                                </div>
+                                                <div className={styles.moduleName}>
+                                                    {module?.name}{' '}
+                                                    <span>#{module?.number}</span>
+                                                </div>
+                                                <div className={styles.moduleExtraContent}>
+                                                    {/* @todo */}
+                                                    <div className={styles.modulePrice}>
+                                                        {module?.module_schemes[0].price.formatted_value}
+                                                    </div>
+                                                    <div className={styles.modulePriceFor}>
+                                                        за {module?.module_schemes[0].type.description}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
 
                                 <Card className={styles.card}>
@@ -104,7 +130,7 @@ export const Booking = observer(() => {
                                             <span>{formattedTime}</span>
                                         </div>
 
-                                        <Tag size="medium" text={formattedDuration} />
+                                        {/* <Tag size="medium" text={formattedDuration} /> */}
                                         <Icon name="arrow-right" size="small" />
                                     </div>
                                 </Card>
@@ -127,11 +153,11 @@ export const Booking = observer(() => {
 
                                         <div className={styles.accessoriesContent}>
                                             {beachAccessories.map((accessory) => (
-                                                <div className={styles.accessoryWrapper}>
+                                                <div className={styles.accessoryWrapper} key={accessory.id}>
                                                     <div className={styles.accessory}>
                                                         <img src={accessory.link_icon} alt={accessory.name} />
                                                         <div className={styles.accessoryName}>{accessory.name}</div>
-                                                        <div className={styles.accessoryPrice}>от {accessory.price} ₽</div>
+                                                        <div className={styles.accessoryPrice}>от {accessory.price.formatted_value}</div>
                                                         <div className={styles.accessoryToggle}>
                                                             <Toggle onToggle={() => bookStore.toggleAccessory(accessory, !bookStore.accessories[accessory.id])} />
                                                         </div>
@@ -180,12 +206,18 @@ export const Booking = observer(() => {
                             >
                                 Оплатить
                             </Button>
-                            <span>{bookPrice.toLocaleString()} ₽</span>
+                            <span>{modulesPrice.toLocaleString()} ₽</span>
                         </div>
                     </Sheet.Content>
                 </Sheet.Container>
                 <Sheet.Backdrop />
             </Sheet>
+
+            {moduleId && (
+                <Module
+                    onClose={() => navigate(-1)}
+                />
+            )}
 
             {isCalendarOpen && (
                 <Calendar
@@ -200,7 +232,7 @@ export const Booking = observer(() => {
                 <Time
                     isOpen={isTimeOpen}
                     onClose={() => setIsTimeOpen(false)}
-                    startTime={bookStore.startTime}
+                    startTime={bookStore.formStartTime}
                     endTime={bookStore.endTime}
                 />
             )}

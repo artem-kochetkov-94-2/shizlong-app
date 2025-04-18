@@ -41,7 +41,7 @@ export const BookingDetailsQR = observer(() => {
                     <div className={styles.header}>
                         <div className={styles.title}>Моя бронь</div>
                         <div className={styles.subtitle}>
-                            {booking?.module.sector.location.name}, сектор {booking?.module.sector.name}
+                            {booking?.sector_scheme.sector.location.name}, сектор {booking?.sector_scheme.sector.name}
                         </div>
 
                         <IconButton
@@ -57,7 +57,7 @@ export const BookingDetailsQR = observer(() => {
                         <div className={styles.content}>
                             <div className={styles.qr}>
                                 <img
-                                    src={`data:image/png;base64, ${booking.qr_code}`}
+                                    src={`data:image/png;base64, ${booking.qr}`}
                                     alt=""
                                     className={styles.qrCodeImg}
                                 />
@@ -65,19 +65,21 @@ export const BookingDetailsQR = observer(() => {
                             </div>
 
                             <div className={styles.services}>
-                                <Tag
-                                    size='medium'
-                                    color='default'
-                                    text={booking.module.name}
-                                    rightContent={`#${booking.module.number}`}
-                                    shadow
-                                />
+                                {booking.booking_modules.map(module => (
+                                    <Tag
+                                        size='medium'
+                                        color='default'
+                                        text={module.module.name}
+                                        rightContent={`#${module.module.number}`}
+                                        shadow
+                                    />
+                                ))}
                             </div>
 
-                            {booking.booking_accessories.length > 0 && (
+                            {booking.accessories.length > 0 && (
                                 <Card>
                                     <div className={styles.accessories}>
-                                        {booking.booking_accessories.map(accessory => (
+                                        {booking.accessories.map(accessory => (
                                             <Tag
                                                 size='medium'
                                                 color='gray'
@@ -101,18 +103,24 @@ export const BookingDetailsQR = observer(() => {
                                 <div className={styles.contacts}>
                                     <div className={styles.contactItem}>
                                         <Icon name="time" size="extra-small" className={styles.icon} />
-                                        <div className={styles.label}>{formatTimeRange(new Date(booking.start_time), new Date(booking.end_time))}</div>
+                                        <div className={styles.label}>
+                                            {formatTimeRange(new Date(booking.booking_modules[0]!.start_time), new Date(booking.booking_modules[0]!.end_time))}
+                                        </div>
                                         <div className={styles.timeRangeTag}>
                                             <Tag
                                                 size='medium'
                                                 color='primary'
-                                                text={getTimeRangeDurationInHours(new Date(booking.start_time), new Date(booking.end_time)) + ' ' + declensionOfHours(getTimeRangeDurationInHours(new Date(booking.start_time), new Date(booking.end_time)))}
+                                                text={getTimeRangeDurationInHours(
+                                                    new Date(booking.booking_modules[0]!.start_time),
+                                                    new Date(booking.booking_modules[0]!.end_time)) + ' ' + declensionOfHours(getTimeRangeDurationInHours(new Date(booking.booking_modules[0]!.start_time),
+                                                    new Date(booking.booking_modules[0]!.end_time))
+                                                )}
                                             />
                                         </div>
                                     </div>
                                     <div className={styles.contactItem}>
                                         <Icon name="calendar" size="extra-small" className={styles.icon} />
-                                        <div className={styles.label}>{formatFullDate(new Date(booking.start_time))}</div>
+                                        <div className={styles.label}>{formatFullDate(new Date(booking.booking_modules[0]!.start_time))}</div>
                                     </div>
                                     <div className={styles.contactItem}>
                                         <Icon
@@ -121,16 +129,16 @@ export const BookingDetailsQR = observer(() => {
                                             className={styles.icon}
                                         />
                                         <div className={styles.text}>
-                                            {booking?.module.sector.location.region},{' '}
-                                            {booking?.module.sector.location.city},{' '}
-                                            {booking?.module.sector.location.address}
+                                            {booking?.sector_scheme.sector.location.region},{' '}
+                                            {booking?.sector_scheme.sector.location.city},{' '}
+                                            {booking?.sector_scheme.sector.location.address}
                                         </div>
                                     </div>
                                 </div>
                             </Card>
 
                             <div className={styles.payment}>
-                                <DecorateButton text={`Оплачено ${booking.total_price.toLocaleString('ru-RU')} ₽`} />
+                                <DecorateButton text={`Оплачено ${booking.total_price.formatted_value}`} />
                                 <Button
                                     variant={'gray2'}
                                     onClick={() => navigate(Routes.BookingDetailsReceipt.replace(':id', booking.id.toString()))}

@@ -17,14 +17,11 @@ class BookingCardStore {
     this.bookingId = id;
 
     try {
-        this.isLoading = true;
-        // this.booking = null;
-        // const booking = await bookingsService.getBooking(id);
-        // this.booking = null;
+      this.isLoading = true;
     } catch (error) {
-        console.error(error);
+      console.error(error);
     } finally {
-        this.isLoading = false;
+      this.isLoading = false;
     }
   }
 

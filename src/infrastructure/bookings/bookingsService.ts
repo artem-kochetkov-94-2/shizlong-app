@@ -3,7 +3,7 @@ import {
   BookingRequest,
   BookingResponse,
   MyBookingsResponse,
-  PaymentStatusResponse,
+  // PaymentStatusResponse,
 } from './types';
 import {
   VerificationStore,
@@ -13,7 +13,8 @@ import { RestService } from '../restService/restService';
 
 const routes = {
   create: '/booking/create',
-  myBookings: '/booking/get-my-bookings',
+  createGroup: '/booking/create-group',
+  myBookings: '/customer/bookings',
   cancel: '/booking/cancel',
   paymentStatus: '/booking/status/'
 };
@@ -35,15 +36,24 @@ class BookingsService {
     }
 
     const { response } = await this.restService.post<MyBookingsResponse>({
-      url: `${this.apiUrlV1}${routes.myBookings}`,
+      url: `${this.apiUrlV2}${routes.myBookings}`,
     });
 
-    return response.bookings;
+    return response;
   }
 
   async createBooking(booking: BookingRequest) {
     const { response } = await this.restService.post<BookingResponse>({
       url: `${this.apiUrlV2}${routes.create}`,
+      data: booking,
+    });
+
+    return response;
+  }
+
+  async createGroupBooking(booking: BookingRequest) {
+    const { response } = await this.restService.post<BookingResponse>({
+      url: `${this.apiUrlV2}${routes.createGroup}`,
       data: booking,
     });
 
@@ -58,13 +68,13 @@ class BookingsService {
     return response;
   }
 
-  async getPaymentStatus(bookingId: number) {
-    const { response } = await this.restService.get<PaymentStatusResponse>({
-      url: `${this.apiUrlV2}${routes.paymentStatus}${bookingId}`,
-    });
+  // async getPaymentStatus(bookingId: number) {
+  //   const { response } = await this.restService.get<PaymentStatusResponse>({
+  //     url: `${this.apiUrlV2}${routes.paymentStatus}${bookingId}`,
+  //   });
 
-    return response;
-  }
+  //   return response;
+  // }
 }
 
 export const bookingsService = new BookingsService();

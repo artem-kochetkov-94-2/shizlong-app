@@ -24,6 +24,5 @@ export const Routes = {
   Privacy: 'privacy-policy',
   UiKit: '/ui-kit',
   Filters: '/filters',
-  Receipt: '/receipt',
   StaffCall: '/staffcall',
 } as const;

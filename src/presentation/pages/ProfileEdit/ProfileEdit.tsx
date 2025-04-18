@@ -9,16 +9,18 @@ import { profileStore } from '@src/application/store/profileStore';
 import { observer } from 'mobx-react-lite';
 
 export const ProfileEdit = observer(() => {
-  const [firstName, setFirstName] = useState(profileStore.profile.name ?? '');
-  const [lastName, setLastName] = useState(profileStore.profile.last_name ?? '');
-  const [phone, setPhone] = useState(profileStore.profile.phone ?? '');
+  const { profile } = profileStore;
+
+  const [firstName, setFirstName] = useState(profile?.name ?? '');
+  const [lastName, setLastName] = useState(profile?.last_name ?? '');
+  const [phone, setPhone] = useState(profile?.phone ?? '');
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
-    setFirstName(profileStore.profile.name ?? '');
-    setLastName(profileStore.profile.last_name ?? '');
-    setPhone(profileStore.profile.phone ?? '');
-  }, [profileStore.profile]);
+    setFirstName(profile?.name ?? '');
+    setLastName(profile?.last_name ?? '');
+    setPhone(profile?.phone ?? '');
+  }, [profile]);
 
   const handleSubmit = () => {
     profileStore.updateProfile({

@@ -18,6 +18,8 @@ import classNames from 'classnames';
 import { Routes } from '@src/routes';
 import { locationsStore } from '@src/application/store/locationsStore';
 import cn from 'classnames';
+import { createYandexMapsRouteLink } from '@src/application/utils/createYandexMapsRouteLink';
+import { geoStore } from '@src/application/store/geoStore';
 
 const SNAP_POINTS = [1, 483, 150];
 const INITIAL_SNAP_POINT = 1;
@@ -25,6 +27,7 @@ const INITIAL_SNAP_POINT = 1;
 export const Location = observer(() => {
   const [isOpen, setIsOpen] = useState(true);
   const [snap, setSnap] = useState(INITIAL_SNAP_POINT);
+  const { location: geoLocation } = geoStore;
   const ref = useRef<SheetRef>(null);
   const snapTo = (i: number) => ref.current?.snapTo(i);
   const { id } = useParams<{ id: string }>();
@@ -53,9 +56,10 @@ export const Location = observer(() => {
   // @todo - если не в час
   const servicesFeatures = services.map((s) => ({
     name: s.name,
-    icon: s.placed_icon.link_icon,
-    extraTitle: `${s.price_per_hour} ₽ `,
-    extraDescription: `в час`,
+    icon: s.placed_icon?.link_icon,
+    extraTitle: `${s.minimal_price?.price.formatted_value}`,
+    // @todo
+    extraDescription: `в час ???`,
   }));
 
   return (
@@ -121,6 +125,11 @@ export const Location = observer(() => {
                     size='large'
                     shape='rounded'
                     color='white'
+                    href={
+                      createYandexMapsRouteLink(
+                        [geoLocation.latitude, geoLocation.longitude],
+                        location.coordinates.slice().reverse() as [number, number]
+                      )}
                   />
                   <IconButton
                     iconName='in-map'

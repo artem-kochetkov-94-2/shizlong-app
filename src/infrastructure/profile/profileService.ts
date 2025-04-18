@@ -3,8 +3,8 @@ import { RestService } from '../restService/restService';
 import { ProfileData, UpdateProfile, UpdateProfileResponse } from './types';
 
 const routes = {
-  getProfile: '/profile/show',
-  updateProfile: '/profile/update',
+  getProfile: '/customer/profile/get',
+  updateProfile: '/customer/profile/update',
 };
 
 class ProfileService {

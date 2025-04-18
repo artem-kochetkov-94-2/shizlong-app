@@ -10,9 +10,8 @@ import { Button } from "@src/presentation/ui-kit/Button";
 import { Sheet } from "react-modal-sheet";
 import { observer } from 'mobx-react-lite';
 import { locationStore } from '@src/application/store/locationStore';
-import { SERVER_URL } from '@src/const';
 import { Routes } from '@src/routes';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ModuleStatus } from '@src/infrastructure/Locations/types';
 import { bookStore } from '@src/application/store/bookStore';
 import { formatTimeRange, getTimeRangeDurationInHoursAndMinutes } from '@src/application/utils/formatDate';
@@ -23,32 +22,44 @@ const labels: Record<ModuleStatus, string> = {
     inactive: 'неактивен',
 }
 
-export const Module = observer(() => {
-    const { selectedModule } = bookStore;
-    const { beachAccessories, location } = locationStore;
+type ModuleProps = {
+    onClose?: () => void;
+    onModuleRemove?: () => void;
+}
+
+export const Module = observer(({ onClose, onModuleRemove }: ModuleProps) => {
+    const { beachAccessories, location, modules } = locationStore;
     const { formattedTime, formattedDate } = bookStore;
 
-    console.log('module', JSON.parse(JSON.stringify(selectedModule)));
+    const [searchParams] = useSearchParams();
+    const moduleId = searchParams.get('module');
+    const module = modules.find((m) => m.id === Number(moduleId));
+    const moduleCheapestPrice = module?.module_schemes.reduce((min, scheme) => scheme.price.value < min.price.value ? scheme : min, module?.module_schemes[0]);
 
     const navigate = useNavigate();
 
-    if (!selectedModule) return null;
+    if (!module) return null;
 
     // @todo: добавить проверку на мою бронь
     const isMyBooking = false;
 
     const handleClose = () => {
-        navigate(Routes.Sector.replace(':id', selectedModule?.module.sector_id.toString() || ''));
-        bookStore.setSelectedModule(null);
+        if (onClose) {
+            onClose();
+        } else {
+            navigate(Routes.Sector.replace(':id', module?.sector_id.toString() || ''));
+        }
     };
 
     const handleShowSchema = () => {
-        navigate(Routes.Sector.replace(':id', selectedModule?.module.sector_id.toString() || ''));
+        navigate(Routes.Sector.replace(':id', module?.sector_id.toString() || ''));
     };
 
     const goToLocation = () => {
         navigate(Routes.Location.replace(':id', location?.id.toString() || ''));
     };
+
+    const isModuleInBooking = bookStore.modules.has(module.id);
 
     return (
         <Sheet
@@ -61,13 +72,14 @@ export const Module = observer(() => {
                 <Sheet.Content>
                     <div className={styles.header}>
                         <div className={styles.headline}>
-                            <div className={styles.headlineTitle}>{selectedModule?.module.name}</div>
-                            <Tag text={`${selectedModule?.module.price_per_hour || 0} ₽ в час`} size="medium" />
+                            <div className={styles.headlineTitle}>{module?.name}</div>
+                            {/* @otodo */}
+                            <Tag text={moduleCheapestPrice?.price.formatted_value} size="medium" />
                         </div>
 
                         <div className={styles.statusRow}>
-                            <div className={cn(styles.status, styles[isMyBooking ? 'my' : selectedModule?.module.status])}>
-                                <span>{isMyBooking ? 'моя бронь' : labels[selectedModule?.module.status]}</span>
+                            <div className={cn(styles.status, styles[isMyBooking ? 'my' : module?.status.name])}>
+                                <span>{isMyBooking ? 'моя бронь' : labels[module?.status.name]}</span>
                             </div>
                             <div className={styles.time}>{formattedTime}, {formattedDate}</div>
                         </div>
@@ -82,9 +94,9 @@ export const Module = observer(() => {
                         )}
 
                         <Swiper spaceBetween={8} slidesPerView={'auto'}>
-                            {selectedModule.module.images?.map((i) => (
+                            {module.images?.map((i) => (
                                 <SwiperSlide key={i} className={styles.swiperSlide}>
-                                    <img src={`${SERVER_URL}/${i}`} className={styles.image} />
+                                    <img src={i} className={styles.image} />
                                 </SwiperSlide>
                             ))}
                         </Swiper>
@@ -105,8 +117,8 @@ export const Module = observer(() => {
 
                                         <div className={styles.infoItemContent}>
                                             <div className={styles.reservations}>
-                                                {selectedModule.slots.map((s) => {
-                                                    const duration = getTimeRangeDurationInHoursAndMinutes(s.start_hour, s.end_hour);
+                                                {module.slots.map((s) => {
+                                                    const duration = getTimeRangeDurationInHoursAndMinutes(s.from, s.to);
 
                                                     return (
                                                         <div
@@ -121,7 +133,7 @@ export const Module = observer(() => {
                                                             }
                                                         >
                                                             <span>{s.is_busy ? 'Занят' : 'Свободен'}</span>
-                                                            <span>{formatTimeRange(s.start_hour, s.end_hour)}</span>
+                                                            <span>{formatTimeRange(s.from, s.to)}</span>
                                                             <span>{duration.hours} ч. {duration.minutes ? `${duration.minutes} мин.` : ''}</span>
                                                         </div>
                                                     );
@@ -175,14 +187,16 @@ export const Module = observer(() => {
 
                             <Card>
                                 <div className={styles.description}>
-                                    <img className={styles.descriptionImg} src={`${SERVER_URL}${selectedModule?.module.placed_icon.link_icon}`} />
-                                    <div className={styles.descriptionText}>{selectedModule?.module.name}</div>
+                                    <div className={styles.descriptionImg}>
+                                        <img src={module?.placed_icon?.link_icon} />
+                                    </div>
+                                    <div className={styles.descriptionText}>{module?.name}</div>
                                 </div>
                             </Card>
 
                             <About
                                 title="Описание"
-                                description={selectedModule.module.description || ""}
+                                description={module.description || ""}
                             />
 
                             <Card>
@@ -196,7 +210,7 @@ export const Module = observer(() => {
                                                     {accessory.name}
                                                 </div>
                                                 <div className={styles.accessoriesItemPrice}>
-                                                    от {accessory.price} ₽
+                                                    от {accessory.price.formatted_value}
                                                 </div>
                                             </div>
                                         ))}
@@ -226,8 +240,15 @@ export const Module = observer(() => {
                     </Sheet.Scroller>
 
                     <div className={styles.footer}>
-                        <Button size="medium" variant="yellow" onClick={() => navigate(Routes.Booking)}>
-                            Заказать
+                        <Button
+                            size="medium"
+                            variant="yellow"
+                            onClick={() => {
+                                bookStore.toggleModule(module);
+                                handleClose();
+                            }}
+                        >
+                            {isModuleInBooking ? 'Убрать из заказа' : 'Заказать'}
                         </Button>
                         {/* <Button size="medium" variant="secondary">
                             Заказать по абонементу

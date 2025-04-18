@@ -20,7 +20,7 @@ export const Services: React.FC<ServicesProps> = ({ services }) => {
         <ul className={styles.serviceList}>
           {services.map((service, index) => (
             <li key={index} className={styles.serviceItem}>
-              <span className={styles.serviceName}>{service.name}</span>
+              <span className={styles.serviceName}>{service.name}123</span>
               <span className={styles.servicePrice}>{service.price}</span>
               <span className={styles.serviceDuration}>{service.duration}</span>
             </li>

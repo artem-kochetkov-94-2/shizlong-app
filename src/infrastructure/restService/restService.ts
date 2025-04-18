@@ -17,15 +17,8 @@ export class RestService {
         originalResponse: response,
       };
     } catch (error) {
-      validateResponse(error);
-      // @ts-ignore
-      if (error?.response?.data?.message) {
-        // @ts-ignore
-        throw new Error(error.response.data.message);
-      }
-
       if (axios.isAxiosError(error)) {
-        throw new Error(error.message);
+        throw new Error(error.response?.data?.message || error.message);
       } else {
         const _error = error as Error;
         throw _error;

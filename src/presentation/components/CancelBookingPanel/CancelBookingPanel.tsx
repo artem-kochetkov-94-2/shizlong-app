@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import { bookingsStore } from '@src/application/store/bookingsStore';
 import { Sheet, SheetRef } from 'react-modal-sheet';

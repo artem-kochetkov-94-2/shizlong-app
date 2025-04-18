@@ -1,0 +1,1 @@
+export { CashierContent } from './CashierContent';

@@ -1,0 +1,64 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 106px;
+  padding: 8px;
+  gap: 14px;
+  border-radius: 12px;
+  background-color: #fff;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 3px 5px;
+}
+
+.category {
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14.4px;
+  color: #a0a7b1;
+}
+
+.name {
+  margin-bottom: 9px;
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19.2px;
+  color: #292c31;
+}
+
+.slider {
+  width: 120px;
+  height: 90px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img {
+    max-width: 100%;
+  }
+}
+
+.tailBookings {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14.4px;
+  color: #6b7280;
+
+  svg {
+    font-size: 18px;
+    color: #ffbc02;
+  }
+}

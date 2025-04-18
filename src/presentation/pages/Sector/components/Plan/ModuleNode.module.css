@@ -42,3 +42,7 @@
 .booked span {
   background: #f95e5e;
 }
+
+.activeModule {
+  outline: 2px solid #000;
+}

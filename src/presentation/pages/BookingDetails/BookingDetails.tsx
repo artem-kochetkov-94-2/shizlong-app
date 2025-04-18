@@ -13,9 +13,8 @@ import { DecorateButton } from "@src/presentation/components/DecorateButton";
 import waves from "@src/assets/waves.png";
 import styles from "./BookingDetails.module.css";
 import { bookingCardStore } from "@src/application/store/bookingCardStore";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { paymentStore } from "@src/application/store/paymentStore";
-import { bookingsStore } from "@src/application/store/bookingsStore";
 import classNames from "classnames";
 import { CancelBookingPanel } from "@src/presentation/components/CancelBookingPanel";
 
@@ -29,64 +28,20 @@ const bookingStatuses = {
 export const BookingDetails = observer(() => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const timer = useRef<number | null>(null);
-    const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
-    const { startedProcessPayment } = paymentStore;
+    const { booking } = bookingCardStore;
+    const { isLoadingProcessPayment, isPaymentError, isPaymentSuccess } = paymentStore;
     const [isCancelOpen, setCancelOpen] = useState(false);
 
     useEffect(() => {
       bookingCardStore.setBookingId(Number(id));
     }, [id]);
 
-    const { booking } = bookingCardStore;
-    const { isLoadingProcessPayment } = paymentStore;
-
-    useEffect(() => {
-      if (!booking || booking.status !== 'reserved') {
-        return;
-      }
-
-      if (!startedProcessPayment.has(Number(booking?.id))) {
-        return;
-      }
-
-      const getStatus = async () => {
-        try {
-          setPaymentStatus('Ожидание оплаты...');
-          const status = await bookingsStore.getPaymentStatus(Number(booking.id));
-          console.log(status);
-
-          if (status === 'processing') {
-            timer.current = setTimeout(() => {
-              getStatus();
-            }, 2000);
-            return;
-          }
-
-          if (status === 'complete') {
-            setPaymentStatus('Оплата прошла успешно');
-            bookingsStore.getMyBookings();
-          }
-
-          paymentStore.clearProcessPayment(Number(booking.id));
-        } catch (e) {
-          console.log(e);
-        }
-      }
-
-      getStatus();
-
-      return () => {
-        if (timer.current) {
-          clearTimeout(timer.current);
-        }
-      }
-    }, [booking, startedProcessPayment]);
-
     if (!booking) {
       return <div>Бронь не найдена</div>;
     }
-    
+
+    const hasPaymentStatus = isLoadingProcessPayment.has(booking.id) || isPaymentError.has(booking.id) || isPaymentSuccess.has(booking.id);
+  
     return (
       <>
         <Sheet
@@ -114,11 +69,11 @@ export const BookingDetails = observer(() => {
                       <div className={styles.cardHeaderContent}>
                         <div className={styles.cardTitle}>Моя бронь</div>
                         <div className={styles.cardSubtitle}>
-                          {bookingStatuses[booking.status as keyof typeof bookingStatuses]}
+                          {bookingStatuses[booking.status.name as keyof typeof bookingStatuses]}
                         </div>
                       </div>
                       <div className={styles.cardHeaderActions}>
-                        {booking.status === 'cancelled' && (
+                        {booking.status.name === 'cancelled' && (
                           <IconButton
                             size="medium"
                             shape="rounded"
@@ -128,10 +83,10 @@ export const BookingDetails = observer(() => {
                             iconSize="extra-small"
                           />
                         )}
-                        {booking.status === 'completed' && (
+                        {booking.status.name === 'completed' && (
                           <Icon size="medium" name="check4" />
                         )}
-                        {(booking.status === 'pending' || booking.status === 'confirmed' || booking.status === 'reserved') && (
+                        {(booking.status.name === 'pending' || booking.status.name === 'confirmed' || booking.status.name === 'reserved') && (
                           <IconButton
                             size="medium"
                             shape="rounded"
@@ -149,10 +104,10 @@ export const BookingDetails = observer(() => {
                           <div className={styles.cardBodyHeaderCol}>
                             <div className={styles.cardBodyHeaderTitle}>пляж</div>
                             <div className={styles.cardBodyHeaderSubtitle}>
-                              {booking?.module.sector.location.name}
+                              {booking?.sector_scheme.sector.location.name}
                             </div>
                             <div className={styles.cardBodyHeaderText}>
-                              {booking?.module.sector.name}
+                              {booking?.sector_scheme.sector.name}
                             </div>
                           </div>
                           <div className={styles.cardBodyHeaderCol}>
@@ -160,7 +115,7 @@ export const BookingDetails = observer(() => {
                               size="medium"
                               shape="rounded"
                               iconName="arrow-right"
-                              onClick={() => navigate(Routes.Location.replace(':id', booking?.module.sector.location.id.toString()))}
+                              onClick={() => navigate(Routes.Location.replace(':id', booking?.sector_scheme.sector.location.id.toString()))}
                               withShadow={true}
                               color="white"
                               iconColor="dark"
@@ -172,18 +127,32 @@ export const BookingDetails = observer(() => {
                       <div className={styles.contacts}>
                         <div className={styles.contactItem}>
                           <Icon name="time" size="extra-small" className={styles.icon} />
-                          <div className={styles.label}>{formatTimeRange(new Date(booking.start_time), new Date(booking.end_time))}</div>
+                          <div className={styles.label}>
+                            {formatTimeRange(
+                              new Date(booking.booking_modules[0]!.start_time),
+                              new Date(booking.booking_modules[0]!.end_time)
+                            )}
+                          </div>
                           <div className={styles.timeRangeTag}>
                             <Tag
                               size='medium'
                               color='primary'
-                              text={getTimeRangeDurationInHours(new Date(booking.start_time), new Date(booking.end_time)) + ' ' + declensionOfHours(getTimeRangeDurationInHours(new Date(booking.start_time), new Date(booking.end_time)))}
+                              text={
+                                getTimeRangeDurationInHours(
+                                  new Date(booking.booking_modules[0]!.start_time),
+                                  new Date(booking.booking_modules[0]!.end_time)
+                                ) + ' ' + declensionOfHours(
+                                  getTimeRangeDurationInHours(
+                                    new Date(booking.booking_modules[0]!.start_time),
+                                    new Date(booking.booking_modules[0]!.end_time)
+                                  )
+                              )}
                             />
                           </div>
                         </div>
                         <div className={styles.contactItem}>
                           <Icon name="calendar" size="extra-small" className={styles.icon} />
-                          <div className={styles.label}>{formatFullDate(new Date(booking.start_time))}</div>
+                          <div className={styles.label}>{formatFullDate(new Date(booking.booking_modules[0]!.start_time))}</div>
                         </div>
                         <div className={styles.contactItem}>
                           <Icon
@@ -192,9 +161,9 @@ export const BookingDetails = observer(() => {
                             className={styles.icon}
                           />
                           <div className={styles.text}>
-                            {booking?.module.sector.location.region},{' '}
-                            {booking?.module.sector.location.city},{' '}
-                            {booking?.module.sector.location.address}
+                            {booking?.sector_scheme.sector.location.region},{' '}
+                            {booking?.sector_scheme.sector.location.city},{' '}
+                            {booking?.sector_scheme.sector.location.address}
                           </div>
                         </div>
                       </div>
@@ -202,33 +171,34 @@ export const BookingDetails = observer(() => {
                   </Card>
 
                   <div className={styles.actions}>
-                    {booking.status === 'reserved' && (
+                    {booking.status.name === 'reserved' && (
                       <Button
                         variant={'yellow'}
                         onClick={() => paymentStore.processPayment(booking.id)}
-                        isLoading={isLoadingProcessPayment.get(booking.id)}
-                        disabled={isLoadingProcessPayment.get(booking.id)}
+                        isLoading={isLoadingProcessPayment.has(booking.id)}
+                        disabled={isLoadingProcessPayment.has(booking.id)}
+                        withShadow={true}
                       >
                         <span>Оплатить</span>
                       </Button>
                     )}
 
-                    {(booking.status === 'confirmed' || booking.status === 'reserved') && (
-                      <Button variant={'gray2'} onClick={() => setCancelOpen(true)}>
+                    {(booking.status.name === 'confirmed' || booking.status.name === 'reserved') && (
+                      <Button variant={'gray2'} onClick={() => setCancelOpen(true)} withShadow={true}>
                         <Icon name={'cancel'} size='extra-small' />
                         <span>Отменить</span>
                       </Button>
                     )}
 
-                    {(booking.status === 'completed' || booking.status === 'cancelled') && (
-                      <Button variant={'yellow'}>
+                    {(booking.status.name === 'completed' || booking.status.name === 'cancelled') && (
+                      <Button variant={'yellow'} withShadow={true}>
                         <Icon name={'retry'} size='extra-small' />
                         <span>Повторить</span>
                       </Button>
                     )}
 
-                    {booking.status === 'pending' && (
-                      <Button variant={'gray2'}>
+                    {booking.status.name === 'pending' && (
+                      <Button variant={'gray2'} withShadow={true}>
                         <Icon name={'stop'} size='extra-small' />
                         <span>Завершить</span>
                       </Button>
@@ -258,28 +228,35 @@ export const BookingDetails = observer(() => {
                     />
                   </div>
 
-                    {paymentStatus && (
+                    {hasPaymentStatus && (
                       <Card>
                         <div className={classNames(styles.paymentStatus, {
-                          // @todo
-                          [styles.paymentStatusError]: paymentStatus === 'Ожидание оплаты...',
-                          [styles.paymentStatusSuccess]: paymentStatus === 'Оплата прошла успешно'
+                          [styles.paymentStatusProcess]: isLoadingProcessPayment.has(booking.id),
+                          [styles.paymentStatusSuccess]: isPaymentSuccess.has(booking.id),
+                          [styles.paymentStatusError]: isPaymentError.has(booking.id)
                         })}>
-                          <div className={styles.paymentStatusText}>{paymentStatus}</div>
+                          <div className={styles.paymentStatusText}>
+                            {isLoadingProcessPayment.has(booking.id)
+                              ? 'Ожидание оплаты...'
+                              : isPaymentError.has(booking.id)
+                                ? 'Ошибка оплаты'
+                                : 'Оплата прошла успешно'
+                            }
+                          </div>
                         </div>
                       </Card>
                     )}
 
                     <Features
                       title="Входящие модули"
-                      items={[{
-                        name: booking.module.name,
-                        nameAccent: booking.module.number,
-                        icon: booking.module.placed_icon.link_icon,
+                      items={booking.booking_modules.map((module) => ({
+                        name: module.module.name,
+                        nameAccent: module.module.number ? `#${module.module.number}` : '',
+                        icon: module.module.placed_icon?.link_icon,
                         onClick: () => {
-                          navigate(Routes.Sector.replace(':id', booking.module.sector.id.toString()) + `?module=${booking.module.id}`);
+                          navigate(Routes.Sector.replace(':id', booking.sector_scheme.sector.id.toString()) + `?module=${module.module.id}`);
                         }
-                      }]}
+                      }))}
                     />
 
                     <Card>
@@ -288,7 +265,7 @@ export const BookingDetails = observer(() => {
                         <div className={styles.accessoriesSubtitle}>входят в бронь</div>
 
                         <div className={styles.accessoriesContent}>
-                          {booking.booking_accessories.map((accessory) => (
+                          {booking.accessories.map((accessory) => (
                             <div className={styles.accessoryWrapper}>
                               <div className={styles.accessory}>
                                 <img
@@ -309,16 +286,16 @@ export const BookingDetails = observer(() => {
                     </Card>
                 </div>
 
-                  <div className={styles.payment}>
-                    <DecorateButton text={`Оплачено ${booking.total_price.toLocaleString('ru-RU')} ₽`} />
-                    <Button
-                      variant={'gray2'}
-                      onClick={() => navigate(Routes.BookingDetailsReceipt.replace(':id', booking.id.toString()))}
-                    >
-                      <Icon name={'check2'} size='extra-small' />
-                      <span>Показать чек</span>
-                    </Button>
-                  </div>
+                <div className={styles.payment}>
+                  <DecorateButton text={`Оплачено ${booking.total_price.formatted_value}`} />
+                  <Button
+                    variant={'gray2'}
+                    onClick={() => navigate(Routes.BookingDetailsReceipt.replace(':id', booking.id.toString()))}
+                  >
+                    <Icon name={'check2'} size='extra-small' />
+                    <span>Показать чек</span>
+                  </Button>
+                </div>
               </Sheet.Scroller>
             </Sheet.Content>
           </Sheet.Container>

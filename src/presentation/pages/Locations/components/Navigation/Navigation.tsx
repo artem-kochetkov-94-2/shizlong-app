@@ -16,6 +16,7 @@ export const Navigation = () => {
         rightContent={<Icon name="filter" size="small" />}
         value={search}
         onChange={setSearch}
+        disabled={true}
       />
       <ProfileButton />
     </div>

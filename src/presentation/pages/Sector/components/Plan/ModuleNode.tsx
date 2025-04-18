@@ -1,79 +1,61 @@
 import { bookStore } from '@src/application/store/bookStore';
-import { SERVER_URL } from '@src/const';
-import { RawModule } from '@src/infrastructure/Locations/types';
+import { RawModule, Slot } from '@src/infrastructure/Locations/types';
 import cn from 'classnames';
 import styles from './ModuleNode.module.css';
-import { useNavigate } from 'react-router-dom';
-import { Routes } from '@src/routes';
+import { observer } from 'mobx-react-lite';
+
+function formatToLocalString(dateString: string): Date {
+  // Разбиваем строку на дату и время
+  const [datePart, timePart] = dateString.split(' ');
+  const [year, month, day] = datePart.split('-').map(Number);
+  const [hour, minute, second] = timePart.split(':').map(Number);
+
+  // Создаем объект Date в локальной временной зоне
+  const date = new Date(year, month - 1, day, hour, minute, second);
+
+  return date;
+}
 
 const isModuleAvailable = (
   module: RawModule,
-  date: Date,
+  date: string,
   hours: number,
   startTime: string
-) => {
+): [boolean, Slot | null] => {
   const bookingDate = new Date(date);
   const [startHour, startMinute] = startTime.split(':').map(Number);
   const bookingStartTime = new Date(bookingDate.setHours(startHour, startMinute, 0, 0));
   const bookingEndTime = new Date(bookingStartTime.getTime() + hours * 60 * 60 * 1000);
 
-  console.log('date', date);
-  console.log('bookingStartTime', bookingStartTime);
-  console.log('bookingEndTime', bookingEndTime);
-
-  return module.slots.some((slot) => {
+  const availableSlot = module.slots.find((slot) => {
     if (slot.is_busy) return false;
 
-    const slotStartTime = new Date(slot.start_hour);
-    const slotEndTime = new Date(slot.end_hour);
+    const formattedSlotStartTime = formatToLocalString(slot.from);
+    const formattedSlotEndTime = formatToLocalString(slot.to);
 
-    return bookingStartTime >= slotStartTime && bookingEndTime <= slotEndTime;
+    return new Date(bookingStartTime) >= new Date(formattedSlotStartTime) && new Date(bookingEndTime) <= new Date(formattedSlotEndTime);
   });
+
+  if (availableSlot) {
+    return [true, availableSlot];
+  }
+
+  return [false, null];
 };
-
-// const isModuleAvailable = (module: RawModule, date: Date, hours: number, startTime: string): boolean => {
-//     console.log('date', date);
-//     // Преобразуем startTime и hours в Date объекты
-//     const [startHour, startMinute] = startTime.split(':').map(Number);
-//     const startDateTime = new Date(date);
-//     startDateTime.setHours(startHour, startMinute, 0, 0);
-
-//     const endDateTime = new Date(startDateTime);
-//     endDateTime.setHours(endDateTime.getHours() + hours);
-
-//     // Проверяем каждый слот
-//     for (const slot of module.slots) {
-//         if (slot.is_busy) {
-//             const slotStart = new Date(slot.start_hour);
-//             const slotEnd = new Date(slot.end_hour);
-
-//             // Проверяем пересечение времени
-//             if (
-//                 (startDateTime >= slotStart && startDateTime < slotEnd) ||
-//                 (endDateTime > slotStart && endDateTime <= slotEnd) ||
-//                 (startDateTime <= slotStart && endDateTime >= slotEnd)
-//             ) {
-//                 return false; // Модуль занят в это время
-//             }
-//         }
-//     }
-
-//     return true;
-// }
 
 const baseWidth = 16.14;
 
-export const ModuleNode = ({ data: { module } }: { data: { module: RawModule } }) => {
-  const navigate = useNavigate();
-  const isAvailable = isModuleAvailable(
+export const ModuleNode = observer(({ data: { module } }: { data: { module: RawModule } }) => {
+  const { modules } = bookStore;
+  const [isAvailable, availableSlot] = isModuleAvailable(
     module,
-    bookStore.date as Date,
-    bookStore.hours,
-    bookStore.startTime
+    bookStore.date,
+    bookStore.formHours,
+    bookStore.formStartTime
   );
 
-  const width = Number(module.module.placed_icon.width_icon) * baseWidth;
-  const height = Number(module.module.placed_icon.height_icon) * baseWidth;
+  const width = Number(module.placed_icon?.width_icon) * baseWidth;
+  const height = Number(module.placed_icon?.height_icon) * baseWidth;
   const fontSize = height * 0.3;
 
   return (
@@ -90,22 +72,21 @@ export const ModuleNode = ({ data: { module } }: { data: { module: RawModule } }
             minHeight: `${fontSize}px`,
             fontSize: `${fontSize}px`,
           }}
+          onClick={() => bookStore.toggleModule(module, availableSlot)}
         >
-          {module.module.number}
+          {module.number}
         </span>
       </span>
       <img
-        src={`${SERVER_URL}${module.module.placed_icon.link_icon}`}
-        alt={module.module.placed_icon.name_icon}
-        onClick={() => {
-          navigate(
-            Routes.Sector.replace(':id', module.module.sector_id.toString()) +
-              `?module=${module.module.id}`
-          );
-        }}
+        src={module.placed_icon?.link_icon}
+        alt={module.placed_icon?.name_icon}
+        onClick={() => bookStore.toggleModule(module, availableSlot)}
         width={width}
         height={height}
+        className={cn({
+          [styles.activeModule]: modules.has(module.id),
+        })}
       />
     </div>
   );
-};
+});

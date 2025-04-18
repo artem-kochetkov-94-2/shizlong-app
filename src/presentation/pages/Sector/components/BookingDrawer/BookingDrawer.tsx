@@ -15,26 +15,38 @@ import { Tabs } from '@src/presentation/ui-kit/Tabs';
 import { Sheet, SheetRef } from 'react-modal-sheet';
 import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
 import { useEffect, useRef, useState } from 'react';
-import { ModulesSelect } from './components/ModulesSelect';
+// import { ModulesSelect } from './components/ModulesSelect';
 import { ChooseDate } from './components/ChooseDate';
 import { ChooseTime } from './components/ChooseTime';
-//@ts-ignore
 import { ChooseStartTime } from './components/ChooseStartTime/ChooseStartTIme';
-// import { TimeSlider } from "@src/presentation/components/TimeSlider";
 import { ProfileButton } from '@src/presentation/pages/Locations/components/Navigation/components/ProfileButton';
+import { useNavigate } from 'react-router-dom';
+import { Routes } from '@src/routes';
+import { Button } from '@src/presentation/ui-kit/Button';
+import { locationStore } from '@src/application/store/locationStore';
+import { bookingsStore } from '@src/application/store/bookingsStore';
+import { BookingCard } from '@src/presentation/components/BookingCard';
 
 const SNAP_POINTS = [758, 309, 79];
 const INITIAL_SNAP_POINT = 1;
 
 export const BookingDrawer = observer(() => {
   const { activeTab } = bookStore;
-  const { activeBookingsTab } = bookStore;
-  const { activeScheme, schemes } = sectorStore;
+  const { activeBookingsTab, modules, bookPrice } = bookStore;
+  const { currentBookings } = bookingsStore;
+  const { activeScheme, schemes, sector } = sectorStore;
+  const { location } = locationStore;
+
+  const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(true);
 
   const ref = useRef<SheetRef>(null);
   const snapTo = (i: number) => ref.current?.snapTo(i);
+
+  console.log('sector', JSON.parse(JSON.stringify(sectorStore.sector)));
+
+  const locationBookings = currentBookings.filter((b) => b.sector_scheme.sector.location.id === location?.id);
 
   useEffect(() => {
     setTimeout(() => {
@@ -57,8 +69,8 @@ export const BookingDrawer = observer(() => {
         <Sheet.Content>
           <div className={styles.controls}>
             <div className={styles.controlsItem}>
-              <IconButton iconName='tap' size='extra-small' />
-              <span>Займите любой доступный модуль</span>
+              <IconButton iconName='tap' size='extra-small' shape='rounded' />
+              <span>Выберите несколько модулей</span>
             </div>
             {activeScheme && schemes.length > 1 && (
               <div className={classNames(styles.controlsItem, styles.scheme)}>
@@ -77,45 +89,68 @@ export const BookingDrawer = observer(() => {
             <ProfileButton />
           </div>
 
-          {activeTab === 'bookings' && (
-            <div className={styles.bookings}>
-              <div className={styles.bookingsEmpty}>
-                На секторе #2 пляжа Ривьера на сегодня у вас броней нет
-              </div>
+          <Sheet.Scroller>
+            {activeTab === 'bookings' && (
+              <div className={styles.bookings}>
+                {locationBookings.length === 0 && (
+                  <div className={styles.bookingsEmpty}>
+                    На секторе {sector?.name} пляжа {location?.name} на сегодня у вас броней нет
+                  </div>
+                )}
 
-              <Tabs
-                tabs={bookingTabs}
-                activeTab={activeBookingsTab}
-                onTabChange={(tab) => bookStore.setActiveBookingsTab(tab)}
-              />
-            </div>
-          )}
-
-          {activeTab === 'order' && (
-            <>
-              <div className={styles.content}>
-                <div className={styles.divider} />
-
-                <div className={styles.modulesRow}>
-                  <div className={styles.modulesRowTitle}>Заказать</div>
-                  <ModulesSelect />
-                </div>
-
-                <div className={styles.modulesControls}>
-                  <ChooseStartTime />
-                  <ChooseTime />
-                  <ChooseDate />
-                </div>
-              </div>
-              {/* @todo - слайдер времени */}
-              {/* {activeScheme && (
-                <TimeSlider
-                  timeStart={activeScheme.time_start}
-                  timeEnd={activeScheme.time_end}
+                <Tabs
+                  tabs={bookingTabs}
+                  activeTab={activeBookingsTab}
+                  onTabChange={(tab) => bookStore.setActiveBookingsTab(tab)}
                 />
-              )} */}
-            </>
-          )}
+
+                {locationBookings.length > 0 && (
+                  <div className={styles.bookingsContainer}>
+                    {locationBookings.map((booking) => (
+                      <BookingCard key={booking.id} booking={booking} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'order' && (
+              <>
+                <div className={styles.content}>
+                  <div className={styles.divider} />
+
+                  <div className={styles.modulesRow}>
+                    <div className={styles.modulesRowTitle}>Заказать</div>
+                  </div>
+
+                  <div className={styles.modulesControls}>
+                    <ChooseStartTime />
+                    <ChooseTime />
+                    <ChooseDate />
+                  </div>
+
+                  {modules.size > 0 && (
+                    <div style={{ marginTop: 15}}>
+                      <Button
+                        variant='yellow'
+                        size='medium'
+                        onClick={() => navigate(Routes.Booking)}
+                      >
+                        Заказать {bookPrice.toLocaleString()} ₽
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                {/* @todo - слайдер времени */}
+                {/* {activeScheme && (
+                  <TimeSlider
+                    timeStart={activeScheme.time_start}
+                    timeEnd={activeScheme.time_end}
+                  />
+                )} */}
+              </>
+            )}
+          </Sheet.Scroller>
         </Sheet.Content>
       </Sheet.Container>
     </Sheet>

@@ -6,6 +6,8 @@ import styles from './Header.module.css';
 import cn from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { Routes } from '@src/routes';
+import { createYandexMapsRouteLink } from '@src/application/utils/createYandexMapsRouteLink';
+import { geoStore } from '@src/application/store/geoStore';
 
 interface HeaderProps {
   handleToggleFavorite: () => void;
@@ -14,6 +16,7 @@ interface HeaderProps {
 export const Header = observer(({ handleToggleFavorite }: HeaderProps) => {
   const navigate = useNavigate();
   const { location } = locationStore;
+  const { location: geoLocation } = geoStore;
   const { id } = useParams<{ id: string }>();
   const isFavorite = locationsStore.getFavoriteStatus(Number(id));
 
@@ -27,10 +30,12 @@ export const Header = observer(({ handleToggleFavorite }: HeaderProps) => {
         shape='rounded'
         color='white'
       />
+
       <div className={styles.title}>
         <span className={styles.category}>пляж</span>
         <span className={styles.name}>{location?.name}</span>
       </div>
+
       <div className={cn(styles.icons)}>
         <IconButton
           className={cn({ [styles.favorite]: isFavorite })}
@@ -41,7 +46,16 @@ export const Header = observer(({ handleToggleFavorite }: HeaderProps) => {
           onClick={handleToggleFavorite}
           disabled={isFavorite === null}
         />
-        <IconButton iconName='route' size='medium' shape='rounded' color='white' />
+        <IconButton
+          iconName='route'
+          size='medium'
+          shape='rounded'
+          color='white'
+          href={createYandexMapsRouteLink(
+            [geoLocation.latitude, geoLocation.longitude],
+            location?.coordinates.slice().reverse() as [number, number],
+          )}
+        />
       </div>
     </div>
   );

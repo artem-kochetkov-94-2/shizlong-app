@@ -28,7 +28,7 @@ export const Header = observer(({
                 color="white"
             />
             <div className={styles.title}>
-                <span className={styles.category}>Сектор {sector.name}</span>
+                <span className={styles.category}>{sector.name}</span>
                 <span className={styles.name}>{name}</span>
             </div>
             <div className={styles.icons}>

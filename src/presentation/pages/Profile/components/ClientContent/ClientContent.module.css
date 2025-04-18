@@ -1,0 +1,25 @@
+.bookingsTitle {
+  margin-bottom: 3px;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21.09px;
+  color: #292c31;
+}
+
+.bookingsEmpty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.bookingsEmptyTitle {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.8px;
+  text-align: center;
+  color: #a0a7b1;
+}

@@ -1,6 +1,6 @@
 import { RawLocation } from '@src/infrastructure/Locations/types';
 import { locationsService } from '@src/infrastructure/Locations/locationsService';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { mapStore } from './mapStore';
 import { verificationStore } from './verificationStore';
 
@@ -20,7 +20,9 @@ export class LocationsStore {
     try {
       this.isLoadingFavorite = true;
       const locations = await locationsService.getFavoriteLocations();
-      this.favoriteLocations = locations;
+      runInAction(() => {
+        this.favoriteLocations = locations;
+      });
       console.log(locations);
     } catch (error) {
       this.favoriteLocations = [];
@@ -34,11 +36,9 @@ export class LocationsStore {
   }
 
   async init() {
+    await this.fetchLocations();
     if (verificationStore.isVerified) {
-      await this.fetchLocationsWhithFavorite();
       await this.fetchfavoriteLocations();
-    } else {
-      await this.fetchLocations();
     }
   }
 
@@ -64,19 +64,6 @@ export class LocationsStore {
       this.isLoading = true;
       const locations = await locationsService.getLocations();
       console.log('locations', locations);
-      this.setLocations(locations);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  async fetchLocationsWhithFavorite() {
-    try {
-      this.isLoading = true;
-      const locations = await locationsService.getLocationWhithFavorite();
-      console.log('withFavorite', locations);
       this.setLocations(locations);
     } catch (error) {
       console.error(error);

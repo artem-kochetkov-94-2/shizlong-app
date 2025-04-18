@@ -12,22 +12,22 @@ export const SchemeMode = observer(() => {
   return (
     <div className={styles.schemeMode}>
         <div className={styles.schemeModeTitle}>
-          Выбран {activeScheme?.time_of_day === 'day' ? 'дневной' : 'вечерний'} режим пляжа
+          Выбран {activeScheme?.time_of_day.name === 'daily' ? 'дневной' : 'вечерний'} режим пляжа
         </div>
         
         <div className={styles.schemeModeItems}>
 
-          {schemes.map(scheme => (
+          {schemes.slice().sort((a) => a.time_of_day.name === 'daily' ? -1 : 1).map(scheme => (
             <IconButton
               key={scheme.id}
-              iconName={scheme.time_of_day === 'day' ? 'sun' : 'moon'}
+              iconName={scheme.time_of_day.name === 'daily' ? 'sun' : 'moon'}
               size="medium"
               shape="rounded"
-              color={activeScheme?.time_of_day === scheme.time_of_day ? 'white' : 'transparent'}
+              color={activeScheme?.time_of_day.name === scheme.time_of_day.name ? 'white' : 'transparent'}
               className={classNames(styles.schemeModeItem, {
-                [styles.active]: activeScheme?.time_of_day === scheme.time_of_day,
+                [styles.active]: activeScheme?.time_of_day.name === scheme.time_of_day.name,
               })}
-              withShadow={activeScheme?.time_of_day === scheme.time_of_day}
+              withShadow={activeScheme?.time_of_day.name === scheme.time_of_day.name}
               onClick={() => sectorStore.setActiveScheme(scheme)}
             />
           ))}

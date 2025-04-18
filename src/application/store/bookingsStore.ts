@@ -13,11 +13,11 @@ export class BookingsStore {
   }
 
   get currentBookings() {
-    return this.bookings.filter((booking) => booking.status === 'pending' || booking.status === 'confirmed' || booking.status === 'reserved');
+    return this.bookings.filter((booking) => booking.status.name === 'pending' || booking.status.name === 'confirmed' || booking.status.name === 'reserved');
   }
 
   get completedBookings() {
-    return this.bookings.filter((booking) => booking.status === 'completed' || booking.status === 'cancelled');
+    return this.bookings.filter((booking) => booking.status.name === 'completed' || booking.status.name === 'cancelled');
   }
 
   async getMyBookings() {
@@ -46,15 +46,6 @@ export class BookingsStore {
       console.error(error);
     } finally {
       this.isLoadingCancelBooking.set(bookingId, false);
-    }
-  }
-
-  async getPaymentStatus(bookingId: number) {
-    try {
-      const result = await this.bookingsService.getPaymentStatus(bookingId);
-      return result.payment.status;
-    } catch (error) {
-      console.error(error);
     }
   }
 }

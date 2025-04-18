@@ -19,7 +19,7 @@ const MAX_OPTIONS_TO_VIEW = 4;
 
 export const CardItem = observer(
   ({ data, optionsToView = MAX_OPTIONS_TO_VIEW, category }: CardItemProps) => {
-    const { id, name, link_space, working_hours, additional_services } = data;
+    const { id, name, link_space, working_hours, additional_service } = data;
     const maxOptionsToView = Math.min(optionsToView, MAX_OPTIONS_TO_VIEW);
     const isFavorite = locationsStore.getFavoriteStatus(id);
 
@@ -37,13 +37,13 @@ export const CardItem = observer(
               <Tag text={`от ${price} ₽`} />
               <div className={styles.options}>
                 <div className={styles.optionsItems}>
-                  {additional_services.slice(0, maxOptionsToView).map((s, i) => (
+                  {additional_service.slice(0, maxOptionsToView).map((s, i) => (
                     <div className={styles.optionsItem} key={i}>
                       <img src={s.link_icon} />
                     </div>
                   ))}
                 </div>
-                {additional_services.length > maxOptionsToView && <span>+{additional_services.length - maxOptionsToView}</span>}
+                {additional_service.length > maxOptionsToView && <span>+{additional_service.length - maxOptionsToView}</span>}
               </div>
             </div>
             <div className={styles.range}>

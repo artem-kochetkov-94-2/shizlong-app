@@ -1,5 +1,5 @@
 import { API_URL_V2 } from '@src/const';
-import { SessionResponse, TokenResponse } from './types';
+import { ProcessPaymentRequestBody, ProcessPaymentResponse, SessionResponse, TokenResponse } from './types';
 import { RestService } from '../restService/restService';
 
 const routes = {
@@ -25,17 +25,17 @@ class PaymentService {
     return response;
   }
 
-  async addNewCard(token: string, sessionId: string) {
-    const { response } = await this.restService.post({
-      url: `${this.apiUrl}${routes.addNewCard}`,
-      data: {
-        session_id: sessionId,
-        token: token,
-      },
-    });
+  // async addNewCard(token: string, sessionId: string) {
+  //   const { response } = await this.restService.post({
+  //     url: `${this.apiUrl}${routes.addNewCard}`,
+  //     data: {
+  //       session_id: sessionId,
+  //       token: token,
+  //     },
+  //   });
 
-    console.log(response);
-  }
+  //   console.log(response);
+  // }
 
   async getTokens() {
     const { response } = await this.restService.get<TokenResponse>({
@@ -44,12 +44,17 @@ class PaymentService {
     return response;
   }
 
-  async processPayment(bookingId: number, tokenId: number) {
-    const { response } = await this.restService.post({
+  async processPayment(requestBody: ProcessPaymentRequestBody) {
+    const { response } = await this.restService.post<ProcessPaymentResponse>({
       url: `${this.apiUrl}${routes.processPayment}`,
-      data: { booking_id: bookingId, token_id: tokenId },
+      data: requestBody,
     });
+
     console.log(response);
+
+    if (response.status.name !== 'COMPLETE') {
+      throw new Error('Payment failed');
+    }
   }
   async deleteToken(tokenId: number) {
     const { response } = await this.restService.delete({

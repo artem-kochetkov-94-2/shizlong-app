@@ -1,10 +1,15 @@
-export interface BookingRequest {
+import { RawLocation, RawModule, RawSector, RawSectorSchema } from "../Locations/types";
+
+export type BookingModule = {
     module_id: number;
     start_time: string;
     end_time: string;
-    timeZone: string;
-    accessories: Accessory[];
 }
+
+export type BookingRequest = {
+    modules: BookingModule[];
+    accessories: Accessory[];
+};
 
 interface Card {
     id: number;
@@ -37,63 +42,73 @@ interface Accessory {
     quantity: string;
 }
 
-export interface MyBookingsResponse {
-    success: boolean;
-    bookings: RawBooking[];
+export type MyBookingsResponse = RawBooking[];
+
+// Booking
+
+interface RawBookingAccessory {
+    id: number;
+    quantity: number;
+    beach_accessory?: {
+        id: number;
+        name: string;
+        link_icon: string;
+        price?: {
+            value: number;
+            formatted_value: string;
+        }
+    }
+}
+
+interface RawBookingCustomer {
+    id: number;
+    name: string;
+    phone: string;
+}
+
+interface RawBookingModule {
+    end_time: string;
+    id: number;
+    price: number;
+    start_time: string;
+    module: RawModule;
+}
+
+interface RawBookingPayment {
+    id: number;
+    payed_sum: number;
+    status: {
+        name: PaymentStatusUppercase;
+        description: string;
+    }
+    sum: number;
+}
+
+interface RawBoookingSectorScheme extends RawSectorSchema {
+    sector: RawSector & {
+        location: RawLocation;
+    };
 }
 
 export interface RawBooking {
+    accessories: RawBookingAccessory[];
+    customer: RawBookingCustomer;
     id: number;
-    booked_by: number;
-    customer_id: number;
-    module_id: number;
-    start_time: string;
-    end_time: string;
-    total_price: number;
-    status: BookingStatus;
-    created_at: string;
-    updated_at: string;
-    qr_code: string;
-    module: {
-        id: number;
-        name: string;
-        number: string;
-        sector_id: number;
-        placed_icon_id: number;
-        placed_icon_group_id: number | null;
-        placed_icon: {
-            id: number;
-            link_icon: string;
-        };
-        placed_icon_group: null,
-        sector: {
-            id: number;
-            name: string;
-            location_id: number;
-            location: {
-                id: number;
-                name: string;
-                link_space: string;
-                address: string;
-                city: string;
-                region: string;
-                district: string | null;
-            };
-        };
-    };
-    booking_accessories: {
-        id: number;
-        booking_id: number;
-        beach_accessory_id: number;
-        quantity: number;
-        beach_accessory: {
-            id: number;
-            name: string;
-            price: number;
-            link_icon: string;
-        }
-    }[];
+    booking_modules: RawBookingModule[];
+    payment: RawBookingPayment;
+    sector_scheme: RawBoookingSectorScheme;
+    status: {
+        description: string;
+        name: BookingStatus;
+    }
+    tokens: unknown[];
+    total_price: { value: number; formatted_value: string };
+    qr: string;
 }
+
+type PaymentStatus = 'processing' | 'complete' | 'cancel';
+
+type PaymentStatusUppercase = 'PROCESSING' | 'COMPLETE' | 'CANCEL';
 
 type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'reserved';
 
@@ -104,6 +119,6 @@ export interface PaymentStatusResponse {
     total_price: number;
     status: BookingStatus;
     payment: {
-        status: 'processing' | 'complete' | 'cancel';
+        status: PaymentStatus;
     }
 }

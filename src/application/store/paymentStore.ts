@@ -1,9 +1,8 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { paymentService } from '@src/infrastructure/payment/paymentService';
-import { FormRequestResponse, Token } from '@src/infrastructure/payment/types';
+import { Token } from '@src/infrastructure/payment/types';
 import { eventService } from '../services/EventService/EventService';
 import { EVENT } from '../services/EventService/EventList';
-import { delay } from '../utils/delay';
 
 const baseStyle = {
   base: {
@@ -56,8 +55,9 @@ export class PaymentStore {
   tokens: Token[] = [];
   isAddingNewCard = false;
   isLoadingTokens = false;
-  isLoadingProcessPayment = new Map<number, boolean>();
-  startedProcessPayment = new Set<number>();
+  isLoadingProcessPayment = new Set<number>();
+  isPaymentError = new Set<number>();
+  isPaymentSuccess = new Set<number>();
 
   constructor() {
     makeAutoObservable(this);
@@ -98,7 +98,7 @@ export class PaymentStore {
 
   async addNewCard(
     additionalData: { holder_name: string },
-    successCb?: (tokenId?: number) => void,
+    successCb?: (token: string, session: string) => void,
     errorCb?: () => void
   ) {
     if (!this.sessionId) {
@@ -116,19 +116,13 @@ export class PaymentStore {
       );
 
       if (result.statusCode === 'SUCCESS') {
-        await paymentService.addNewCard(result.token, this.sessionId);
-        await delay(3000);
-        await this.getTokens();
-        successCb?.();
+        successCb?.(result.token, this.sessionId);
         return;
       }
-
-      const message = Object.values(result.errors);
 
       eventService.emit(EVENT.MODAL_ERROR, {
         isActive: true,
         message: 'Ошибка при добавлении карты',
-        text: message,
       });
 
       errorCb?.();
@@ -140,49 +134,43 @@ export class PaymentStore {
     }
   }
 
-  async processPayment(bookingId: number, tokenId?: number) {
+  async processPayment(bookingId: number, token?: string, sessionId?: string) {
     try {
-      if (tokenId) {
-        await paymentService.processPayment(bookingId, tokenId);
+      if (token && sessionId) {
+        await paymentService.processPayment({
+          booking_id: bookingId,
+          token: token,
+          session: sessionId,
+        });
         return;
       }
 
       if (this.tokens.length > 0) {
-        const newLoadingMap = new Map(this.isLoadingProcessPayment);
-        newLoadingMap.set(bookingId, true);
+        const newLoadingMap = new Set(this.isLoadingProcessPayment);
+        newLoadingMap.add(bookingId);
         runInAction(() => {
           this.isLoadingProcessPayment = newLoadingMap;
         });
 
-        await paymentService.processPayment(bookingId, this.tokens[0].id);
-        runInAction(() => {
-          const newSet = new Set(this.startedProcessPayment);
-          newSet.add(bookingId);
-          this.startedProcessPayment = newSet;
-        });
+        await paymentService.processPayment({ booking_id: bookingId, token_id: this.tokens[0].id });
+        this.isPaymentSuccess.add(bookingId);
+        await this.getTokens();
       } else {
         eventService.emit(EVENT.MODAL_ADD_CARD, {
           isActive: true,
-          successCb: (tokenId?: number) => this.processPayment(bookingId, tokenId)
+          successCb: (token: string, session: string) => this.processPayment(bookingId, token, session)
         });
       }
     } catch (error) {
+      this.isPaymentError.add(bookingId);
       console.error(error);
     } finally {
-      const newLoadingMap = new Map(this.isLoadingProcessPayment);
-      newLoadingMap.set(bookingId, false);
+      const newLoadingMap = new Set(this.isLoadingProcessPayment);
+      newLoadingMap.delete(bookingId);
       runInAction(() => {
         this.isLoadingProcessPayment = newLoadingMap;
       });
     }
-  }
-
-  clearProcessPayment(bookingId: number) {
-    const newSet = new Set(this.startedProcessPayment);
-    newSet.delete(bookingId);
-    runInAction(() => {
-      this.startedProcessPayment = newSet;
-    });
   }
 
   async deleteToken(tokenId: number) {
