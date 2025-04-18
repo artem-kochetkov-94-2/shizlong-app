@@ -27,7 +27,7 @@ export const ChooseTime = observer(() => {
     }, [isOpen]);
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        bookStore.setHours(Number(e.target.value));
+        bookStore.setFormHours(Number(e.target.value));
         setIsOpen(false);
     }
 

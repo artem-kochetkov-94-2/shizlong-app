@@ -3,20 +3,21 @@ import styles from "./Time.module.css";
 import { Button } from "@src/presentation/ui-kit/Button";
 import { Card } from "@src/presentation/ui-kit/Card";
 import cn from "classnames";
-import { Icon } from "@src/presentation/ui-kit/Icon";
+// import { Icon } from "@src/presentation/ui-kit/Icon";
 // import { Time as TimeComponent } from "@src/presentation/components/Time";
 import { bookStore } from "@src/application/store/bookStore";
 import { observer } from "mobx-react-lite";
 import { Sheet } from 'react-modal-sheet';
 import {
     formatFullDate,
-    formatShortDate,
-    formatTimeRange,
-    getTimeRangeDurationInHoursAndMinutes,
+    // formatShortDate,
+    // formatTimeRange,
+    // getTimeRangeDurationInHoursAndMinutes,
     // calculateTimeDifferenceInHours,
 } from "@src/application/utils/formatDate";
-import { useMemo, useState } from "react";
-import { ModuleScheme } from "@src/infrastructure/Locations/types";
+import { useState } from "react";
+// import { useMemo, useState } from "react";
+// import { ModuleScheme } from "@src/infrastructure/Locations/types";
 
 interface TimeProps {
     isOpen: boolean,
@@ -25,19 +26,19 @@ interface TimeProps {
     endTime: string
 }
 
-const getDifferenceInMinutes = (start: string, end: string) => {
-    const [startHour, startMinute] = start.split(':').map(Number);
-    const [endHour, endMinute] = end.split(':').map(Number);
-    return (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
-}
+// const getDifferenceInMinutes = (start: string, end: string) => {
+//     const [startHour, startMinute] = start.split(':').map(Number);
+//     const [endHour, endMinute] = end.split(':').map(Number);
+//     return (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+// }
 
-const roundMinutesToNearestQuarter = (time: string) => {
-    const [hour, minute] = time.split(':').map(Number);
-    const roundedMinutes = Math.round(minute / 15) * 15;
-    const adjustedHour = roundedMinutes === 60 ? hour + 1 : hour;
-    const adjustedMinutes = roundedMinutes === 60 ? 0 : roundedMinutes;
-    return `${adjustedHour.toString().padStart(2, '0')}:${adjustedMinutes.toString().padStart(2, '0')}`;
-};
+// const roundMinutesToNearestQuarter = (time: string) => {
+//     const [hour, minute] = time.split(':').map(Number);
+//     const roundedMinutes = Math.round(minute / 15) * 15;
+//     const adjustedHour = roundedMinutes === 60 ? hour + 1 : hour;
+//     const adjustedMinutes = roundedMinutes === 60 ? 0 : roundedMinutes;
+//     return `${adjustedHour.toString().padStart(2, '0')}:${adjustedMinutes.toString().padStart(2, '0')}`;
+// };
 
 export const Time = observer(({
     isOpen,

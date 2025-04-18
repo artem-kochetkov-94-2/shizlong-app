@@ -27,11 +27,22 @@ const isModuleAvailable = (
   const bookingStartTime = new Date(bookingDate.setHours(startHour, startMinute, 0, 0));
   const bookingEndTime = new Date(bookingStartTime.getTime() + hours * 60 * 60 * 1000);
 
+  // if (module.number != '52') return [false, null];
+  // console.clear();
+  // console.log('bookingStartTime', bookingStartTime);
+  // console.log('bookingEndTime', bookingEndTime);
+
   const availableSlot = module.slots.find((slot) => {
     if (slot.is_busy) return false;
 
     const formattedSlotStartTime = formatToLocalString(slot.from);
     const formattedSlotEndTime = formatToLocalString(slot.to);
+
+    // console.log('--------------------------------');
+    // console.log('slot', JSON.parse(JSON.stringify(slot)));
+    // console.log('--------------------------------');
+    // console.log('formattedSlotStartTime', formattedSlotStartTime);
+    // console.log('formattedSlotEndTime', formattedSlotEndTime);
 
     return new Date(bookingStartTime) >= new Date(formattedSlotStartTime) && new Date(bookingEndTime) <= new Date(formattedSlotEndTime);
   });
