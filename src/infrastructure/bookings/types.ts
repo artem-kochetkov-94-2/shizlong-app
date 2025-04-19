@@ -110,7 +110,7 @@ type PaymentStatus = 'processing' | 'complete' | 'cancel';
 
 type PaymentStatusUppercase = 'PROCESSING' | 'COMPLETE' | 'CANCEL';
 
-type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'reserved';
+type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'reserved' | 'busy';
 
 export interface PaymentStatusResponse {
     id: number;

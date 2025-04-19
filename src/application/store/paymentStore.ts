@@ -3,6 +3,7 @@ import { paymentService } from '@src/infrastructure/payment/paymentService';
 import { Token } from '@src/infrastructure/payment/types';
 import { eventService } from '../services/EventService/EventService';
 import { EVENT } from '../services/EventService/EventList';
+import { bookingsStore } from './bookingsStore';
 
 const baseStyle = {
   base: {
@@ -134,27 +135,42 @@ export class PaymentStore {
     }
   }
 
+  toggleLoadingPayment(bookingId: number, active: boolean) {
+    if (active) {
+      const newLoadingMap = new Set(this.isLoadingProcessPayment);
+      newLoadingMap.add(bookingId);
+      runInAction(() => {
+        this.isLoadingProcessPayment = newLoadingMap;
+      });
+    } else {
+      const newLoadingMap = new Set(this.isLoadingProcessPayment);
+      newLoadingMap.delete(bookingId);
+      runInAction(() => {
+        this.isLoadingProcessPayment = newLoadingMap;
+      });
+    }
+  }
+
   async processPayment(bookingId: number, token?: string, sessionId?: string) {
     try {
       if (token && sessionId) {
+        this.toggleLoadingPayment(bookingId, true);
         await paymentService.processPayment({
           booking_id: bookingId,
           token: token,
           session: sessionId,
         });
+        await bookingsStore.getMyBookings();
         return;
       }
 
       if (this.tokens.length > 0) {
-        const newLoadingMap = new Set(this.isLoadingProcessPayment);
-        newLoadingMap.add(bookingId);
-        runInAction(() => {
-          this.isLoadingProcessPayment = newLoadingMap;
-        });
+        this.toggleLoadingPayment(bookingId, true);
 
         await paymentService.processPayment({ booking_id: bookingId, token_id: this.tokens[0].id });
         this.isPaymentSuccess.add(bookingId);
         await this.getTokens();
+        await bookingsStore.getMyBookings();
       } else {
         eventService.emit(EVENT.MODAL_ADD_CARD, {
           isActive: true,
@@ -165,11 +181,7 @@ export class PaymentStore {
       this.isPaymentError.add(bookingId);
       console.error(error);
     } finally {
-      const newLoadingMap = new Set(this.isLoadingProcessPayment);
-      newLoadingMap.delete(bookingId);
-      runInAction(() => {
-        this.isLoadingProcessPayment = newLoadingMap;
-      });
+      this.toggleLoadingPayment(bookingId, false);
     }
   }
 

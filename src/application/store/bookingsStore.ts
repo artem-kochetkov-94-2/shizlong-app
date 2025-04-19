@@ -13,7 +13,12 @@ export class BookingsStore {
   }
 
   get currentBookings() {
-    return this.bookings.filter((booking) => booking.status.name === 'pending' || booking.status.name === 'confirmed' || booking.status.name === 'reserved');
+    return this.bookings.filter((booking) => 
+      booking.status.name === 'pending'
+      || booking.status.name === 'confirmed'
+      || booking.status.name === 'reserved'
+      || booking.status.name === 'busy'
+    );
   }
 
   get completedBookings() {

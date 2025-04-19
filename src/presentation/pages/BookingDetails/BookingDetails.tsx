@@ -20,6 +20,7 @@ import { CancelBookingPanel } from "@src/presentation/components/CancelBookingPa
 
 const bookingStatuses = {
   pending: 'активна',
+  busy: 'оплачена',
   confirmed: 'оплачена',
   cancelled: 'Отменена',
   completed: 'отдых состоялся',
@@ -86,7 +87,7 @@ export const BookingDetails = observer(() => {
                         {booking.status.name === 'completed' && (
                           <Icon size="medium" name="check4" />
                         )}
-                        {(booking.status.name === 'pending' || booking.status.name === 'confirmed' || booking.status.name === 'reserved') && (
+                        {(booking.status.name === 'pending' || booking.status.name === 'confirmed' || booking.status.name === 'busy' || booking.status.name === 'reserved') && (
                           <IconButton
                             size="medium"
                             shape="rounded"
@@ -183,7 +184,7 @@ export const BookingDetails = observer(() => {
                       </Button>
                     )}
 
-                    {(booking.status.name === 'confirmed' || booking.status.name === 'reserved') && (
+                    {(booking.status.name === 'confirmed' || booking.status.name === 'busy' || booking.status.name === 'reserved') && (
                       <Button variant={'gray2'} onClick={() => setCancelOpen(true)} withShadow={true}>
                         <Icon name={'cancel'} size='extra-small' />
                         <span>Отменить</span>
@@ -228,62 +229,62 @@ export const BookingDetails = observer(() => {
                     />
                   </div>
 
-                    {hasPaymentStatus && (
-                      <Card>
-                        <div className={classNames(styles.paymentStatus, {
-                          [styles.paymentStatusProcess]: isLoadingProcessPayment.has(booking.id),
-                          [styles.paymentStatusSuccess]: isPaymentSuccess.has(booking.id),
-                          [styles.paymentStatusError]: isPaymentError.has(booking.id)
-                        })}>
-                          <div className={styles.paymentStatusText}>
-                            {isLoadingProcessPayment.has(booking.id)
-                              ? 'Ожидание оплаты...'
-                              : isPaymentError.has(booking.id)
-                                ? 'Ошибка оплаты'
-                                : 'Оплата прошла успешно'
-                            }
-                          </div>
-                        </div>
-                      </Card>
-                    )}
-
-                    <Features
-                      title="Входящие модули"
-                      items={booking.booking_modules.map((module) => ({
-                        name: module.module.name,
-                        nameAccent: module.module.number ? `#${module.module.number}` : '',
-                        icon: module.module.placed_icon?.link_icon,
-                        onClick: () => {
-                          navigate(Routes.Sector.replace(':id', booking.sector_scheme.sector.id.toString()) + `?module=${module.module.id}`);
-                        }
-                      }))}
-                    />
-
+                  {hasPaymentStatus && (
                     <Card>
-                      <div className={styles.accessories}>
-                        <div className={styles.accessoriesTitle}>Пляжные аксессуары</div>
-                        <div className={styles.accessoriesSubtitle}>входят в бронь</div>
-
-                        <div className={styles.accessoriesContent}>
-                          {booking.accessories.map((accessory) => (
-                            <div className={styles.accessoryWrapper}>
-                              <div className={styles.accessory}>
-                                <img
-                                  src={accessory.beach_accessory.link_icon}
-                                  alt={accessory.beach_accessory.name}
-                                />
-                                <div className={styles.accessoryName}>
-                                  {accessory.beach_accessory.name}
-                                </div>
-                                <div className={styles.accessoryPrice}>
-                                  {accessory.quantity} ед.
-                                </div>
-                              </div>
-                            </div>
-                          ))}
+                      <div className={classNames(styles.paymentStatus, {
+                        [styles.paymentStatusProcess]: isLoadingProcessPayment.has(booking.id),
+                        [styles.paymentStatusSuccess]: isPaymentSuccess.has(booking.id),
+                        [styles.paymentStatusError]: isPaymentError.has(booking.id)
+                      })}>
+                        <div className={styles.paymentStatusText}>
+                          {isLoadingProcessPayment.has(booking.id)
+                            ? 'Ожидание оплаты...'
+                            : isPaymentError.has(booking.id)
+                              ? 'Ошибка оплаты'
+                              : 'Оплата прошла успешно'
+                          }
                         </div>
                       </div>
                     </Card>
+                  )}
+
+                  <Features
+                    title="Входящие модули"
+                    items={booking.booking_modules.map((module) => ({
+                      name: module.module.name,
+                      nameAccent: module.module.number ? `#${module.module.number}` : '',
+                      icon: module.module.placed_icon?.link_icon,
+                      onClick: () => {
+                        navigate(Routes.Sector.replace(':id', booking.sector_scheme.sector.id.toString()) + `?module=${module.module.id}`);
+                      }
+                    }))}
+                  />
+
+                  <Card>
+                    <div className={styles.accessories}>
+                      <div className={styles.accessoriesTitle}>Пляжные аксессуары</div>
+                      <div className={styles.accessoriesSubtitle}>входят в бронь</div>
+
+                      <div className={styles.accessoriesContent}>
+                        {booking.accessories.map((accessory) => (
+                          <div className={styles.accessoryWrapper}>
+                            <div className={styles.accessory}>
+                              <img
+                                src={accessory.beach_accessory.link_icon}
+                                alt={accessory.beach_accessory.name}
+                              />
+                              <div className={styles.accessoryName}>
+                                {accessory.beach_accessory.name}
+                              </div>
+                              <div className={styles.accessoryPrice}>
+                                {accessory.quantity} ед.
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </Card>
                 </div>
 
                 <div className={styles.payment}>

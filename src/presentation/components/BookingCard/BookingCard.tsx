@@ -18,26 +18,29 @@ import { geoStore } from '@src/application/store/geoStore';
 
 const bookingStatusMap = {
   reserved: 'Не оплачена',
-  pending: 'Активна',
   confirmed: 'Оплачена',
+  busy: 'Оплачена',
+  pending: 'Активна',
   cancelled: 'Отменена',
   completed: 'Завершена',
 };
 
 export const bgColorByStatus = {
   reserved: '#161D25CC',
-  completed: '#ED9B58',
-  cancelled: '#F95E5E',
-  pending: '#FBD24C',
   confirmed: '#161D25CC',
+  busy: '#161D25CC',
+  pending: '#FBD24C',
+  cancelled: '#F95E5E',
+  completed: '#ED9B58',
 };
 
 export const colorByStatus = {
   reserved: '#ffffff',
-  completed: '#ffffff',
-  cancelled: '#ffffff',
-  pending: '#292C31',
   confirmed: '#ffffff',
+  busy: '#ffffff',
+  pending: '#292C31',
+  cancelled: '#ffffff',
+  completed: '#ffffff',
 };
 
 export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
@@ -193,6 +196,15 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
                   <span>Отменить</span>
                 </Button>
               </>
+            )}
+            {booking.status.name === 'busy' && (
+              <Button
+                size='medium'
+                variant='tertiary'
+                onClick={() => setCancelOpen(true)}
+              >
+                <span>Отменить</span>
+              </Button>
             )}
             {/* <IconButton
                 iconName="stop"
