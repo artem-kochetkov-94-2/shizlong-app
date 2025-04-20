@@ -83,11 +83,11 @@ export const BookingDetailsQR = observer(() => {
                                             <Tag
                                                 size='medium'
                                                 color='gray'
-                                                text={accessory.beach_accessory.name}
+                                                text={accessory.beach_accessory?.name}
                                                 leftContent={
                                                     <img
-                                                        src={accessory.beach_accessory.link_icon}
-                                                        alt={accessory.beach_accessory.name}
+                                                        src={accessory.beach_accessory?.link_icon}
+                                                        alt={accessory.beach_accessory?.name}
                                                         className={styles.accessoryImage}
                                                     />
                                                 }
@@ -142,6 +142,7 @@ export const BookingDetailsQR = observer(() => {
                                 <Button
                                     variant={'gray2'}
                                     onClick={() => navigate(Routes.BookingDetailsReceipt.replace(':id', booking.id.toString()))}
+                                    disabled={booking.status.name === 'reserved'}
                                 >
                                     <Icon name={'check2'} size='extra-small' />
                                     <span>Показать чек</span>

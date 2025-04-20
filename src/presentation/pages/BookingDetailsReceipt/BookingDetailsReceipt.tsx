@@ -89,11 +89,13 @@ export const BookingDetailsReceipt = observer(() => {
                     {booking.accessories.map((item) => (
                       <div className={styles.row}>
                         <div className={styles.col}>
-                          <span className={styles.info}>{item.beach_accessory.name}</span>
-                          <span className={styles.subHeader}>{item.beach_accessory.price.formatted_value} ₽ × {item.quantity} ед.</span>
+                          <span className={styles.info}>{item.beach_accessory?.name}</span>
+                          <span className={styles.subHeader}>{item.beach_accessory?.price?.formatted_value} ₽ × {item.quantity} ед.</span>
                         </div>
                         <div className={styles.col}>
-                          <span className={styles.info}>{(item.quantity * item.beach_accessory.price.value).toLocaleString('ru-RU')} ₽</span>
+                          <span className={styles.info}>
+                            {(item.quantity * (item.beach_accessory?.price?.value || 0)).toLocaleString('ru-RU')} ₽
+                          </span>
                         </div>
                       </div>
                     ))}

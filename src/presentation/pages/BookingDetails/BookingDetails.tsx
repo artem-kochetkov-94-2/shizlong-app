@@ -270,11 +270,11 @@ export const BookingDetails = observer(() => {
                           <div className={styles.accessoryWrapper}>
                             <div className={styles.accessory}>
                               <img
-                                src={accessory.beach_accessory.link_icon}
-                                alt={accessory.beach_accessory.name}
+                                src={accessory.beach_accessory?.link_icon}
+                                alt={accessory.beach_accessory?.name}
                               />
                               <div className={styles.accessoryName}>
-                                {accessory.beach_accessory.name}
+                                {accessory.beach_accessory?.name}
                               </div>
                               <div className={styles.accessoryPrice}>
                                 {accessory.quantity} ед.
@@ -288,10 +288,11 @@ export const BookingDetails = observer(() => {
                 </div>
 
                 <div className={styles.payment}>
-                  <DecorateButton text={`Оплачено ${booking.total_price.formatted_value}`} />
+                  <DecorateButton text={`Оплачено ${  booking.status.name === 'reserved' ? 0 : booking.total_price.formatted_value }`} />
                   <Button
                     variant={'gray2'}
                     onClick={() => navigate(Routes.BookingDetailsReceipt.replace(':id', booking.id.toString()))}
+                    disabled={booking.status.name === 'reserved'}
                   >
                     <Icon name={'check2'} size='extra-small' />
                     <span>Показать чек</span>
