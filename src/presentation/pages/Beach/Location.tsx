@@ -32,6 +32,7 @@ export const Location = observer(() => {
   const snapTo = (i: number) => ref.current?.snapTo(i);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [paddingBottom, setPaddingBottom] = useState(0);
 
   const { location, additionalServicesAsFeatures, services, sectors } = locationStore;
   const isFavorite = locationsStore.getFavoriteStatus(Number(id));
@@ -39,6 +40,12 @@ export const Location = observer(() => {
   const handleToggleFavorite = (): void => {
     locationsStore.toggleFavoriteLocation(Number(id), !isFavorite);
   };
+
+  useEffect(() => {
+    if (!ref.current) return;
+    // @todo
+    setPaddingBottom(ref.current?.y);
+  }, [ref.current]);
 
   useEffect(() => {
     if (!id) return;
@@ -50,6 +57,10 @@ export const Location = observer(() => {
       mapStore.toggleSelectionLocationMarker(Number(id), false);
     };
   }, [id]);
+
+  useEffect(() => {
+    snapTo(INITIAL_SNAP_POINT);
+  }, []);
 
   if (!location) return null;
 
@@ -68,6 +79,7 @@ export const Location = observer(() => {
         ref={ref}
         isOpen={isOpen}
         onClose={() => setIsOpen(true)}
+        detent='content-height'
         snapPoints={SNAP_POINTS}
         onSnap={(s) => setSnap(s)}
         initialSnap={INITIAL_SNAP_POINT}
@@ -75,7 +87,7 @@ export const Location = observer(() => {
       >
         <Sheet.Container>
           <Sheet.Header />
-          <Sheet.Content style={{ paddingBottom: ref.current?.y }}>
+          <Sheet.Content style={{ paddingBottom }}>
             <Navigation location={location} snap={snap} />
             <Sheet.Scroller>
               {snap === 2 ? null : (

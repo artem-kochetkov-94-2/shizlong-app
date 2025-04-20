@@ -59,7 +59,7 @@ export const Module = observer(({ onClose, onModuleRemove }: ModuleProps) => {
         navigate(Routes.Location.replace(':id', location?.id.toString() || ''));
     };
 
-    const isModuleInBooking = bookStore.modules.has(module.id);
+    const isModuleInBooking = bookStore.bookModules.has(module.id);
 
     return (
         <Sheet

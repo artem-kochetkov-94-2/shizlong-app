@@ -32,7 +32,7 @@ const INITIAL_SNAP_POINT = 1;
 
 export const BookingDrawer = observer(() => {
   const { activeTab } = bookStore;
-  const { activeBookingsTab, modules, bookPrice } = bookStore;
+  const { activeBookingsTab, bookModules, modulesPrice } = bookStore;
   const { currentBookings } = bookingsStore;
   const { activeScheme, schemes, sector } = sectorStore;
   const { location } = locationStore;
@@ -53,6 +53,12 @@ export const BookingDrawer = observer(() => {
       snapTo(1);
     }, 1000);
   }, []);
+
+  useEffect(() => {
+    if (activeTab === 'order') {
+      snapTo(INITIAL_SNAP_POINT);
+    }
+  }, [activeTab]);
 
   return (
     <Sheet
@@ -129,14 +135,14 @@ export const BookingDrawer = observer(() => {
                     <ChooseDate />
                   </div>
 
-                  {modules.size > 0 && (
+                  {bookModules.size > 0 && (
                     <div style={{ marginTop: 15}}>
                       <Button
                         variant='yellow'
                         size='medium'
                         onClick={() => navigate(Routes.Booking)}
                       >
-                        Заказать {bookPrice.toLocaleString()} ₽
+                        Заказать {modulesPrice.toLocaleString()} ₽
                       </Button>
                     </div>
                   )}

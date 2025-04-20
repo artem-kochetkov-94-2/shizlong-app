@@ -25,6 +25,10 @@
     white-space: nowrap;
     background-color: #F3F4F6;
     color: #6B7280;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 .active {

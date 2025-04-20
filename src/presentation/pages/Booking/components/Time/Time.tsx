@@ -40,13 +40,24 @@ interface TimeProps {
 //     return `${adjustedHour.toString().padStart(2, '0')}:${adjustedMinutes.toString().padStart(2, '0')}`;
 // };
 
+const formatPeriodTime = (time: string) => {
+    return time.split(':').slice(0, 2).join(':');
+};
+
 export const Time = observer(({
     isOpen,
     onClose,
     // startTime,
     // endTime,
 }: TimeProps) => {
-    const { bookedModules, formattedDate, date, periodsToBook, moduleSchemeId } = bookStore;
+    const {
+        bookedModules,
+        formattedDate,
+        date,
+        periodsToBook,
+        availablePeriodToBook,
+        moduleSchemeId,
+    } = bookStore;
     // const [start, setStart] = useState(startTime);
     // const [end, setEnd] = useState(endTime);
     const [activePeriodId, setActivePeriodId] = useState<number | null>(moduleSchemeId);
@@ -138,18 +149,28 @@ export const Time = observer(({
                         <div className={styles.body}>
                             <Card>
                                 <div className={styles.periods}>
-                                    {periodsToBook.map((period) => (
-                                        <div
-                                            key={period.id}
-                                            className={cn(styles.period, {
-                                                [styles.periodActive]: period.id === activePeriodId,
-                                            })}
-                                            onClick={() => setActivePeriodId(period.id)}
-                                        >
-                                            <div className={styles.periodTime}>{period.start_time} - {period.end_time}</div>
-                                            <div className={styles.periodName}>{period.name}</div>
-                                        </div>
-                                    ))}
+                                    {periodsToBook.map((period) => {
+                                        const isDisabled = !availablePeriodToBook.find((p) => p.id === period.id);
+
+                                        return (
+                                            <div
+                                                key={period.id}
+                                                className={cn(styles.period, {
+                                                    [styles.periodActive]: period.id === activePeriodId,
+                                                    [styles.periodDisabled]: isDisabled,
+                                                })}
+                                                onClick={() => {
+                                                    if (isDisabled) return;
+                                                    setActivePeriodId(period.id)
+                                                }}
+                                            >
+                                                <div className={styles.periodTime}>
+                                                    {formatPeriodTime(period.start_time)} - {formatPeriodTime(period.end_time)}
+                                                </div>
+                                                <div className={styles.periodName}>{period.name}</div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                                 {/* <div className={styles.time}>
                                     <TimeComponent

@@ -3,7 +3,7 @@ import { Card } from "@src/presentation/ui-kit/Card";
 import { Button } from "@src/presentation/ui-kit/Button";
 import { IconButton } from "@src/presentation/ui-kit/IconButton";
 import { Icon } from "@src/presentation/ui-kit/Icon";
-import { Tag } from "@src/presentation/ui-kit/Tag";
+// import { Tag } from "@src/presentation/ui-kit/Tag";
 import Toggle from "@src/presentation/ui-kit/Toggle/Toggle";
 import { useState } from "react";
 import { Calendar } from "@src/presentation/components/Calendar";
@@ -31,9 +31,10 @@ export const Booking = observer(() => {
         formattedDate,
         formattedTime,
         formattedDuration,
+        bookPrice,
         isCreatingBooking,
-        modulesPrice,
-        modules: selectedModules,
+        bookModules,
+        moduleSchemeId,
     } = bookStore;
     const { location, beachAccessories, modules } = locationStore;
     const { sector } = sectorStore;
@@ -67,7 +68,7 @@ export const Booking = observer(() => {
                             />
                             <div className={styles.headerContent}>
                                 <div className={styles.title}>
-                                    {selectedModules.size === 1 ? 'Заказать один модуль' : 'Заказать группу модулей'}
+                                    {bookModules.size === 1 ? 'Заказать один модуль' : 'Заказать группу модулей'}
                                 </div>
                                 <div className={styles.subtitle}>{sector?.name} пляжа {location?.name}</div>
                             </div>
@@ -75,8 +76,9 @@ export const Booking = observer(() => {
                         <Sheet.Scroller>
                             <div className={styles.content}>
                                 <div className={styles.modules}>
-                                    {[...selectedModules.keys()].map((moduleId) => {
+                                    {[...bookModules.keys()].map((moduleId) => {
                                         const module = modules.find((m) => m.id === moduleId);
+                                        const moduleScheme = module?.module_schemes.find((ms) => ms.id === moduleSchemeId);
 
                                         return (
                                             <div
@@ -95,13 +97,14 @@ export const Booking = observer(() => {
                                                     <span>#{module?.number}</span>
                                                 </div>
                                                 <div className={styles.moduleExtraContent}>
-                                                    {/* @todo */}
                                                     <div className={styles.modulePrice}>
-                                                        {module?.module_schemes[0].price.formatted_value}
+                                                        {moduleScheme?.price.formatted_value}
                                                     </div>
-                                                    <div className={styles.modulePriceFor}>
-                                                        за {module?.module_schemes[0].type.description}
-                                                    </div>
+                                                    {moduleScheme ? (
+                                                        <div className={styles.modulePriceFor}>
+                                                            за {moduleScheme?.type.description}
+                                                        </div>
+                                                    ) : null}
                                                 </div>
                                             </div>
                                         );
@@ -126,7 +129,7 @@ export const Booking = observer(() => {
                                 <Card className={styles.card}>
                                     <div className={styles.time} onClick={() => setIsTimeOpen(true)}>
                                         <div className={styles.cardTitle}>
-                                            <span>Часы</span    >
+                                            <span>Часы</span>
                                             <span>{formattedTime}</span>
                                         </div>
 
@@ -200,13 +203,13 @@ export const Booking = observer(() => {
                             <Button
                                 size="medium"
                                 variant="yellow"
-                                disabled={isCreatingBooking}
+                                disabled={isCreatingBooking || !bookStore.moduleSchemeId}
                                 isLoading={isCreatingBooking}
                                 onClick={() => bookStore.createBooking(onCreated)}
                             >
                                 Оплатить
                             </Button>
-                            <span>{modulesPrice.toLocaleString()} ₽</span>
+                            <span>{bookPrice.toLocaleString()} ₽</span>
                         </div>
                     </Sheet.Content>
                 </Sheet.Container>

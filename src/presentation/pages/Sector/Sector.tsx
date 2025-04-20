@@ -18,8 +18,11 @@ export const Sector = observer(() => {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
-  const { location, sectors } = locationStore;
-  const { sector } = sectorStore;
+  const { location, sectors, modules } = locationStore;
+  const { sector, activeScheme } = sectorStore;
+  const { bookModules } = bookStore;
+
+  console.log('========== bookModules', JSON.parse(JSON.stringify(bookModules)));
 
   useEffect(() => {
     sectorStore.init(Number(id));
@@ -32,8 +35,21 @@ export const Sector = observer(() => {
     locationStore.init(sector.location_id);
   }, [sector, location]);
 
+  // clear modules from another sector or scheme
+  useEffect(() => {
+    if (!sector || !location || !bookModules.size) return;
+
+    const first = bookModules.values().next().value;
+    const module = modules.find((m) => m.id === first?.id);
+
+    if (module?.sector_id !== sector.id || module?.sector_scheme_id !== activeScheme?.id) {
+      bookStore.clear();
+    }
+  }, [sector, location, bookModules, modules, activeScheme]);
+
   useOpenModule();
 
+  // fetch modules
   useEffect(() => {
     if (!sector || !location) return;
 

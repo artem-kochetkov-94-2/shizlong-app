@@ -1,6 +1,6 @@
 import { profileService } from '@src/infrastructure/profile/profileService';
 import { ProfileData, UpdateProfile } from '@src/infrastructure/profile/types';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 export class ProfileStore {
   profile: ProfileData | null = null;
@@ -20,7 +20,9 @@ export class ProfileStore {
   async getProfile() {
     try {
       const response = await profileService.getProfile();
-      this.profile = response;
+      runInAction(() => {
+        this.profile = response;
+      });
     } catch (error) {
       console.log(error);
     }
@@ -29,7 +31,9 @@ export class ProfileStore {
   async updateProfile(data: UpdateProfile) {
     try {
       const response = await profileService.updateProfile(data);
-      this.profile = response;
+      runInAction(() => {
+        this.profile = response;
+      });
       console.log(response);
     } catch (error) {
       console.log(error);

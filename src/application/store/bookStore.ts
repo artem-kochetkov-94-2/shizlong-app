@@ -1,5 +1,5 @@
 import { Tab } from '@src/presentation/ui-kit/RoundedTabs';
-import { autorun, makeAutoObservable } from 'mobx';
+import { autorun, get, makeAutoObservable, reaction, runInAction } from 'mobx';
 import { DateValue } from '@src/application/types/date';
 import {
   formatShortDateWithoutYear,
@@ -17,6 +17,19 @@ import { PaymentStore, paymentStore } from './paymentStore';
 import { BookingsStore, bookingsStore } from './bookingsStore';
 import { LocationStore, locationStore } from './locationStore';
 import { BookingModule, BookingRequest } from '@src/infrastructure/bookings/types';
+
+function formatToLocalString(dateString: string): Date {
+  // Разбиваем строку на дату и время
+  const [datePart, timePart] = dateString.split(' ');
+  const [year, month, day] = datePart.split('-').map(Number);
+  const [hour, minute, second] = timePart.split(':').map(Number);
+
+  // Создаем объект Date в локальной временной зоне
+  const date = new Date(year, month - 1, day, hour, minute, second);
+
+  return date;
+}
+
 
 export const sectorTabs: Tab[] = [
   {
@@ -53,7 +66,7 @@ class BookStore {
     accessory: RawBeachAccessory;
     quantity: number;
   }> = {};
-  modules: Set<number> = new Set();
+  bookModules: Map<number, RawModule> = new Map();
   paymentStore: PaymentStore;
   bookingsStore: BookingsStore;
   locationStore: LocationStore;
@@ -75,37 +88,60 @@ class BookStore {
         const endDate = new Date(date as Date);
         endDate.setHours(startHours + formHours, minutes);
   
-        this.endTime = endDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        runInAction(() => {
+          this.endTime = endDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        });
       }
+    });
+
+    reaction(
+      () => this.locationStore.modules,
+      (modules) => {
+        const newBookModules = new Map<number, RawModule>();
+
+        this.bookModules.forEach((bookModule) => {
+          const locationModule = modules.find((m) => m.id === bookModule.id);
+          if (!locationModule) return;
+
+          newBookModules.set(bookModule.id, locationModule);
+        });
+
+        runInAction(() => {
+          this.bookModules = newBookModules;
+        });
+        this.checkModules();
     });
   }
 
   get bookedModules() {
-    return this.locationStore.modules.filter(m => this.modules.has(m.id));
+    return this.locationStore.modules.filter(m => this.bookModules.has(m.id));
   }
 
   get modulesPrice() {
-    // @todo
-    // return this.bookedModules.reduce((acc, m) => acc + (m.price_per_hour || 0) * this.hours, 0);
-    return 0;
+    let acc = 0;
+
+    this.bookModules.forEach((module) => {
+      const moduleScheme = module.module_schemes.find((scheme) => scheme.id === this.moduleSchemeId);
+      if (moduleScheme) {
+        acc += (moduleScheme.price.value || 0);
+      }
+    });
+
+    return acc;
   }
 
   get bookPrice() {
-    // @todo
-    // const priceForModule = this.bookedModules.reduce((acc, m) => acc + (m.price_per_hour || 0) * this.hours, 0);
-    // return priceForModule + this.modulesPrice;
-    return 0;
+    const priceForAcessories = Object.values(this.accessories).reduce((acc, accessory) => acc + (accessory.accessory.price.value || 0) * accessory.quantity, 0);
+    return this.modulesPrice + priceForAcessories;
   }
 
+  // доступные слоты для бронирования
   get availablePeriodToBook() {
     const periods: ModuleScheme[] = [];
     const schemes = new Map<number, ModuleScheme>();
     const schemesCountBySchemeId = new Map<number, number>();
 
-    this.modules.forEach((moduleId) => {
-      const module = this.locationStore.modules.find((m) => m.id === moduleId);
-      if (!module) return;
-
+    this.bookModules.forEach((module) => {
       module.module_schemes.forEach((scheme) => {
         if (!schemes.has(scheme.id)) {
           schemes.set(scheme.id, scheme);
@@ -120,7 +156,7 @@ class BookStore {
     });
 
     schemesCountBySchemeId.forEach((count, schemeId) => {
-      if (count === this.modules.size) {
+      if (count === this.bookModules.size) {
         const scheme = schemes.get(schemeId);
         if (scheme) {
           periods.push(scheme);
@@ -133,15 +169,13 @@ class BookStore {
     return periods;
   }
 
+  // все периоды схемы сами
   get periodsToBook() {
     const periods: ModuleScheme[] = [];
     const schemes = new Map<number, ModuleScheme>();
     const schemesCountBySchemeId = new Map<number, number>();
 
-    this.modules.forEach((moduleId) => {
-      const module = this.locationStore.modules.find((m) => m.id === moduleId);
-      if (!module) return;
-
+    this.bookModules.forEach((module) => {
       module.module_schemes.forEach((scheme) => {
         if (!schemes.has(scheme.id)) {
           schemes.set(scheme.id, scheme);
@@ -155,7 +189,7 @@ class BookStore {
     });
 
     schemesCountBySchemeId.forEach((count, schemeId) => {
-      if (count === this.modules.size) {
+      if (count === this.bookModules.size) {
         const scheme = schemes.get(schemeId);
         if (scheme) {
           periods.push(scheme);
@@ -165,7 +199,9 @@ class BookStore {
 
     console.log('schemesCountBySchemeId', schemesCountBySchemeId);
 
-    return periods;
+    return periods.sort((a, b) => {
+      return Number(a.start_time.split(':')[0]) - Number(b.start_time.split(':')[0]);
+    });
   }
 
   get startDate() {
@@ -196,6 +232,78 @@ class BookStore {
 
   get formattedDate() {
     return formatShortDateWithoutYear(this.date as Date);
+  }
+
+  isModuleAvailable = (module: RawModule): [boolean, Slot | null] => {
+    const bookingDate = new Date(this.date as Date);
+    const [startHour, startMinute] = this.formStartTime.split(':').map(Number);
+    const bookingStartTime = new Date(bookingDate.setHours(startHour, startMinute, 0, 0));
+    const bookingEndTime = new Date(bookingStartTime.getTime() + this.formHours * 60 * 60 * 1000);
+  
+    // if (module.number != '58') return [false, null];
+    // if (module.number === '58') {
+    //   if (clear) {
+    //     console.clear();
+    //     console.log('1111--------------------------------');
+    //     console.log('1111--------------------------------');
+    //   }
+    //   console.log('2222--------------------------------');
+    //   console.log('module', JSON.parse(JSON.stringify(module)));
+    //   console.log('bookingStartTime', bookingStartTime);
+    //   console.log('bookingEndTime', bookingEndTime);
+    // }
+    // console.clear();
+    // console.log('bookingStartTime', bookingStartTime);
+    // console.log('bookingEndTime', bookingEndTime);
+  
+    const availableSlot = module.slots.find((slot) => {
+      if (slot.is_busy) return false;
+  
+      const formattedSlotStartTime = formatToLocalString(slot.from);
+      const formattedSlotEndTime = formatToLocalString(slot.to);
+  
+      // console.log('--------------------------------');
+      // console.log('slot', JSON.parse(JSON.stringify(slot)));
+      // console.log('--------------------------------');
+      // console.log('formattedSlotStartTime', formattedSlotStartTime);
+      // console.log('formattedSlotEndTime', formattedSlotEndTime);
+  
+      return new Date(bookingStartTime) >= new Date(formattedSlotStartTime) && new Date(bookingEndTime) <= new Date(formattedSlotEndTime);
+    });
+
+    // if (module.number === '58') {
+    //   if (availableSlot) {
+    //     console.log('true');
+    //   } else {
+    //     console.log('false');
+    //   }
+    // }
+
+    if (availableSlot) {
+      return [true, availableSlot];
+    }
+  
+    return [false, null];
+  };
+
+  // А если разные схемы выбраны ошибка будет ли?
+  // Модалка авторизации код отступ
+  // Модалка карта отсупы
+  checkModules() {
+    // console.log('CHECK MODULES');
+    const newModules = new Map<number, RawModule>();
+    this.bookModules.forEach((module) => {
+      const [isAvailable] = this.isModuleAvailable(module);
+      if (isAvailable) {
+        newModules.set(module.id, module);
+      } else {
+        newModules.delete(module.id);
+      }
+    });
+    // console.log('newModules', JSON.parse(JSON.stringify(newModules)));
+    runInAction(() => {
+      this.bookModules = newModules;
+    });
   }
 
   setModuleSchemeId(value: number) {
@@ -243,6 +351,8 @@ class BookStore {
 
   clear() {
     this.accessories = {};
+    this.bookModules.clear();
+    this.moduleSchemeId = null;
   }
 
   async createBooking(onCreated: (id: number) => void) {
@@ -251,13 +361,9 @@ class BookStore {
 
       const modules: BookingModule[] = [];
       
-      [...this.modules.keys()].forEach((moduleId) => {
-        const module = this.locationStore.modules.find((m) => m.id === moduleId);
-
-        if (!module) return;
-
+      this.bookModules.forEach((module) => {
         modules.push({
-          module_id: moduleId,
+          module_id: module.id,
           module_scheme_id: this.moduleSchemeId,
           module_scheme_date: convertToISO(this.date as Date).split('T')[0],
         });
@@ -294,11 +400,11 @@ class BookStore {
     }
   }
 
-  toggleModule(module: RawModule, availableSlot: Slot | null) {
-    if (this.modules.has(module.id)) {
-      this.modules.delete(module.id);
+  toggleModule(module: RawModule, availableSlot?: Slot | null) {
+    if (this.bookModules.has(module.id)) {
+      this.bookModules.delete(module.id);
     } else {
-      this.modules.add(module.id);
+      this.bookModules.set(module.id, module);
       if (availableSlot) {
         this.moduleSchemeId = availableSlot.module_scheme_id;
       }

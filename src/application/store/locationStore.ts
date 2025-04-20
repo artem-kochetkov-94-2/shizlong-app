@@ -176,7 +176,9 @@ export class LocationStore {
       this.isBeachAccessoriesLoading = true;
       const beachAccessories = await locationsService.getBeachAccessories(id);
       console.log('beachAccessories', beachAccessories);
-      this.beachAccessories = beachAccessories;
+      runInAction(() => {
+        this.beachAccessories = beachAccessories;
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -204,7 +206,9 @@ export class LocationStore {
       this.isModulesLoading = true;
       const modules = await locationsService.getModules(id, from_date, to_date);
       console.log('modules', modules);
-      this.modules = modules;
+      runInAction(() => {
+        this.modules = modules;
+      });
     } catch (error) {
       console.error(error);
     } finally {

@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { RawSector, RawSectorSchema } from '@src/infrastructure/Locations/types';
 import { locationsService } from '@src/infrastructure/Locations/locationsService';
 
@@ -38,7 +38,9 @@ class SectorStore {
     try {
       this.isSchemesLoading = true;
       const schemes = await locationsService.getSchemes(sectorId);
-      this.schemes = schemes;
+      runInAction(() => {
+        this.schemes = schemes;
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -54,7 +56,9 @@ class SectorStore {
     try {
       this.isSectorLoading = true;
       const sector = await locationsService.getSector(sectorId);
-      this.sector = sector;
+      runInAction(() => {
+        this.sector = sector;
+      });
     } catch (error) {
       console.error(error);
     } finally {
