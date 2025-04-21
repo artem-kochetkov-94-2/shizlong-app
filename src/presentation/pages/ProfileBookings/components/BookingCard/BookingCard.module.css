@@ -1,0 +1,119 @@
+.item {
+  border-radius: 12px;
+  background-color: #fff;
+}
+
+.wrapper {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 106px;
+  padding: 8px;
+  gap: 14px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 3px 5px;
+}
+
+.category {
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14.4px;
+  color: #a0a7b1;
+}
+
+.name {
+  margin-bottom: 5px;
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19.2px;
+  color: #292c31;
+}
+
+/* customer */
+
+.customer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 5px;
+}
+
+.customerName {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 120%;
+}
+
+.phone {
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14.4px;
+}
+
+/* date */
+
+.range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14.4px;
+  white-space: nowrap;
+  color: #6b7280;
+
+  svg {
+    font-size: 18px;
+    color: #ffbc02;
+  }
+}
+
+/* slider */
+
+.slider {
+  position: relative;
+  width: 120px;
+  height: 90px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img {
+    max-width: 120px;
+    max-height: 90px;
+  }
+}
+
+/* status */
+
+.status {
+  position: absolute;
+  z-index: 1;
+  width: 63px;
+  height: 17px;
+  top: 3px;
+  left: 3px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  background: #161D25CC;
+  backdrop-filter: blur(10px);
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 120%;
+  color: #FFFFFF;
+}

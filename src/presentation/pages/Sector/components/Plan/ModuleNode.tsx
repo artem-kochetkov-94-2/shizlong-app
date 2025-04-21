@@ -8,9 +8,7 @@ const baseWidth = 16.14;
 
 export const ModuleNode = observer(({ data: { module }}: { data: { module: RawModule } }) => {
   const { bookModules } = bookStore;
-  const [isAvailable, availableSlot] = bookStore.isModuleAvailable(module, false);
-  // const isAvailable = true;
-  // const availableSlot = null;
+  const isAvailable = bookStore.isModuleAvailable(module);
 
   const width = Number(module.placed_icon?.width_icon) * baseWidth;
   const height = Number(module.placed_icon?.height_icon) * baseWidth;
@@ -32,7 +30,7 @@ export const ModuleNode = observer(({ data: { module }}: { data: { module: RawMo
           }}
           onClick={() => {
             if (!isAvailable) return;
-            bookStore.toggleModule(module, availableSlot);
+            bookStore.toggleModule(module);
           }}
         >
           {module.number}
@@ -43,7 +41,7 @@ export const ModuleNode = observer(({ data: { module }}: { data: { module: RawMo
         alt={module.placed_icon?.name_icon}
         onClick={() => {
           if (!isAvailable) return;
-          bookStore.toggleModule(module, availableSlot)
+          bookStore.toggleModule(module)
         }}
         width={width}
         height={height}

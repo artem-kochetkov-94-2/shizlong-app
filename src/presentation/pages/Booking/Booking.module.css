@@ -52,6 +52,10 @@
     gap: 10px;
 }
 
+.moduleUnavailable {
+    opacity: 0.3;
+}
+
 .moduleImage {
     display: flex;
     align-items: center;

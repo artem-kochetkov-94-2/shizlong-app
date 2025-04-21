@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite';
 import { Routes } from '@src/routes';
 import { createYandexMapsRouteLink } from '@src/application/utils/createYandexMapsRouteLink';
 import { geoStore } from '@src/application/store/geoStore';
+import { profileStore } from '@src/application/store/profileStore';
 
 interface HeaderProps {
   handleToggleFavorite: () => void;
@@ -19,13 +20,22 @@ export const Header = observer(({ handleToggleFavorite }: HeaderProps) => {
   const { location: geoLocation } = geoStore;
   const { id } = useParams<{ id: string }>();
   const isFavorite = locationsStore.getFavoriteStatus(Number(id));
+  const { isCashier } = profileStore;
+
+  const onBackClick = () => {
+    if (isCashier) {
+      navigate(Routes.Profile);
+    } else {
+      navigate(Routes.Locations)
+    }
+  }
 
   return (
     <div className={styles.header}>
       <IconButton
         iconName='arrow-left'
         size='medium'
-        onClick={() => navigate(Routes.Locations)}
+        onClick={onBackClick}
         className={styles.backButton}
         shape='rounded'
         color='white'
@@ -36,27 +46,29 @@ export const Header = observer(({ handleToggleFavorite }: HeaderProps) => {
         <span className={styles.name}>{location?.name}</span>
       </div>
 
-      <div className={cn(styles.icons)}>
-        <IconButton
-          className={cn({ [styles.favorite]: isFavorite })}
-          size='medium'
-          iconName='favorite-outline'
-          shape='rounded'
-          color='white'
-          onClick={handleToggleFavorite}
-          disabled={isFavorite === null}
-        />
-        <IconButton
-          iconName='route'
-          size='medium'
-          shape='rounded'
-          color='white'
-          href={createYandexMapsRouteLink(
-            [geoLocation?.latitude, geoLocation?.longitude],
-            location?.coordinates.slice().reverse() as [number, number] || [0, 0],
-          )}
-        />
-      </div>
+      {isCashier ? null : (
+        <div className={cn(styles.icons)}>
+          <IconButton
+            className={cn({ [styles.favorite]: isFavorite })}
+            size='medium'
+            iconName='favorite-outline'
+            shape='rounded'
+            color='white'
+            onClick={handleToggleFavorite}
+            disabled={isFavorite === null}
+          />
+          <IconButton
+            iconName='route'
+            size='medium'
+            shape='rounded'
+            color='white'
+            href={createYandexMapsRouteLink(
+              [geoLocation?.latitude, geoLocation?.longitude],
+              location?.coordinates.slice().reverse() as [number, number] || [0, 0],
+            )}
+          />
+        </div>
+      )}
     </div>
   );
 });

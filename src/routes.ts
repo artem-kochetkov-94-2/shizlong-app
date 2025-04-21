@@ -22,6 +22,7 @@ export const Routes = {
   PaymentMethodsAdd: '/payment-methods-add',
   Support: '/support',
   Privacy: 'privacy-policy',
+  ProfileBookings: '/profile-bookings',
   UiKit: '/ui-kit',
   Filters: '/filters',
   StaffCall: '/staffcall',

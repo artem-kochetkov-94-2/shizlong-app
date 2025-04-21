@@ -134,7 +134,7 @@ export interface ModuleScheme {
   is_active: boolean;
   price: Price;
   type: {
-    name: 'period';
+    name: 'period' | 'hourly';
     description: string;
   }
 }

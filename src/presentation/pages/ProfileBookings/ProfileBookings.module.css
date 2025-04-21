@@ -1,0 +1,21 @@
+.wrapper {}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: calc(100vh - 60px);
+    padding: 16px;
+    padding-bottom: 100px;
+}
+
+.navigation {
+    margin-bottom: 16px;
+}
+
+.bookings {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+

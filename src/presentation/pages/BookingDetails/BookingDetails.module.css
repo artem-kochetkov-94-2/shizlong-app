@@ -62,39 +62,6 @@
   color: #a0a7b1;
 }
 
-/* actions */
-
-.actions {
-  display: flex;
-  gap: 10px;
-}
-
-/* paymentStatus */
-
-.paymentStatus {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 16px;
-    text-align: center;
-    font-family: Roboto;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 16.8px;
-}
-
-.paymentStatusProcess {
-  color: #F95E5E;
-}
-
-.paymentStatusError {
-  color: #F95E5E;
-}
-
-.paymentStatusSuccess {
-    color: #64B64B;
-}
-
 /* cardBody */
 
 .cardBodyHeader {
@@ -253,14 +220,9 @@
   flex-shrink: 0;
 }
 
-/* payment */
-
 .payment {
   display: flex;
-  padding: 16px;
   gap: 10px;
-  border-top: 1px solid #e3e5ea;
-  background: #ffffff;
 
   & > * {
     width: calc(50% - 5px);

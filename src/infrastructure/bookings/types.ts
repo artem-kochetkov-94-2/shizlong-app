@@ -4,6 +4,10 @@ export type BookingModule = {
     module_id: number;
     start_time: string;
     end_time: string;
+} | {
+    module_id: number;
+    module_scheme_id: number;
+    module_scheme_date: string;
 }
 
 export type BookingRequest = {
@@ -96,7 +100,7 @@ export interface RawBooking {
     id: number;
     booking_modules: RawBookingModule[];
     payment: RawBookingPayment;
-    sector_scheme: RawBoookingSectorScheme;
+    sector_scheme?: RawBoookingSectorScheme;
     status: {
         description: string;
         name: BookingStatus;

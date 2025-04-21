@@ -11,8 +11,8 @@ import { Routes } from "@src/routes";
 import { Plan } from "./components/Plan";
 import { Module } from '@src/presentation/components/Module';
 import { bookStore } from '@src/application/store/bookStore';
-import { formatDateTime } from '@src/application/utils/formatDate';
 import { useOpenModule } from './hooks/useOpenModule';
+import { useFetchModules } from '@src/application/hooks/useFetchModules';
 
 export const Sector = observer(() => {
   const navigate = useNavigate();
@@ -31,7 +31,6 @@ export const Sector = observer(() => {
   useEffect(() => {
     if (!sector || location) return;
 
-    console.log('sector', JSON.parse(JSON.stringify(sector)));
     locationStore.init(sector.location_id);
   }, [sector, location]);
 
@@ -48,30 +47,7 @@ export const Sector = observer(() => {
   }, [sector, location, bookModules, modules, activeScheme]);
 
   useOpenModule();
-
-  // fetch modules
-  useEffect(() => {
-    if (!sector || !location) return;
-
-    if (!bookStore.formStartTime || bookStore.formHours === 0) {
-      return;
-    }
-
-    console.log('bookStore.date', bookStore.date);
-    console.log('bookStore.hours', bookStore.formHours);
-    console.log('bookStore.startTime', bookStore.formStartTime);
-
-    const {
-      from_date,
-      to_date,
-    } = formatDateTime(bookStore.date as Date, bookStore.formHours, bookStore.formStartTime);
-
-    locationStore.fetchModules(
-      sector.location_id,
-      from_date,
-      to_date,
-    );
-  }, [sector, location, bookStore.date, bookStore.formHours, bookStore.formStartTime]);
+  useFetchModules();
 
   if (!sector || !location) return null;
 

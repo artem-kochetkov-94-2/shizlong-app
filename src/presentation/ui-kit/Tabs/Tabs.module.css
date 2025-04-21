@@ -16,6 +16,7 @@
   line-height: 19.2px;
   color: #A0A7B1;
   outline: none;
+  white-space: nowrap;
 
   &:focus {
     outline: none;
