@@ -9,7 +9,7 @@ import { mapStore } from "@src/application/store/mapStore";
 import { useUpdateMarkers } from "./hooks/useUpdateMarkers";
 import { useGetClientBookings } from "./hooks/useGetClientBookings";
 import { useGetCashierData } from "./hooks/useGetCashierData";
-import { profileStore } from "@src/application/store/profileStore";
+// import { profileStore } from "@src/application/store/profileStore";
 
 export const Layout = observer(({ children }: PropsWithChildren) => {
     useGeo();
@@ -17,10 +17,10 @@ export const Layout = observer(({ children }: PropsWithChildren) => {
     useEffect(() => {
         if (!mapStore.map || !mapStore.mapglAPI) return;
 
-        if (!profileStore.profile || profileStore.isCashier) return;
+        // if (!profileStore.profile || profileStore.isCashier) return;
 
         locationsStore.init();
-    }, [verificationStore.isVerified, mapStore.map, mapStore.mapglAPI, profileStore.profile, profileStore.isCashier]);
+    }, [verificationStore.isVerified, mapStore.map, mapStore.mapglAPI]);
 
     useUpdateMarkers();
     useGetClientBookings();
