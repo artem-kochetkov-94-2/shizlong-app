@@ -248,7 +248,7 @@ export const Module = observer(({ onClose, onModuleRemove }: ModuleProps) => {
                                 handleClose();
                             }}
                         >
-                            {isModuleInBooking ? 'Убрать из заказа' : 'Заказать'}
+                            {isModuleInBooking ? 'Убрать из заказа' : 'Добавить в заказ'}
                         </Button>
                         {/* <Button size="medium" variant="secondary">
                             Заказать по абонементу

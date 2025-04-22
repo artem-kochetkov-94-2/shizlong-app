@@ -126,9 +126,9 @@ export const BookingDrawer = observer(() => {
                 <div className={styles.content}>
                   <div className={styles.divider} />
 
-                  <div className={styles.modulesRow}>
+                  {/* <div className={styles.modulesRow}>
                     <div className={styles.modulesRowTitle}>Заказать</div>
-                  </div>
+                  </div> */}
 
                   <div className={styles.modulesPeriods}>
                     {allPeriods.map(([startTime, endTime]) => {
@@ -156,7 +156,7 @@ export const BookingDrawer = observer(() => {
                   </div>
 
                   {bookModules.size > 0 && (
-                    <div style={{ marginTop: 15}}>
+                    <div style={{ marginTop: 10 }}>
                       <Button
                         variant='yellow'
                         size='medium'
