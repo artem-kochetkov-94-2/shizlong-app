@@ -5,6 +5,7 @@ import { useEffect } from "react";
 export const useUpdateMarkers = () => {
     useEffect(() => {
         if (!mapStore.map || !mapStore.mapglAPI) return;
+        if (locationsStore.locations.length === 0) return;
         mapStore.setMarkers(locationsStore.locations, locationsStore.favoriteLocations);
     }, [locationsStore.locations, locationsStore.favoriteLocations, mapStore.map, mapStore.mapglAPI]);
 }
