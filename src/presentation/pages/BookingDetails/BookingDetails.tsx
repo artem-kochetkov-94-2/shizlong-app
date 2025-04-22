@@ -8,16 +8,17 @@ import { Icon } from "@src/presentation/ui-kit/Icon";
 import { Tag } from "@src/presentation/ui-kit/Tag";
 import { Card } from "@src/presentation/ui-kit/Card";
 import { Features } from "@src/presentation/components/Features";
-import { Button } from "@src/presentation/ui-kit/Button";
-import { DecorateButton } from "@src/presentation/components/DecorateButton";
 import waves from "@src/assets/waves.png";
 import styles from "./BookingDetails.module.css";
 import { bookingCardStore } from "@src/application/store/bookingCardStore";
 import { useEffect, useState } from "react";
-import { paymentStore } from "@src/application/store/paymentStore";
-import classNames from "classnames";
 import { CancelBookingPanel } from "@src/presentation/components/CancelBookingPanel";
+import { HeaderRightContent } from "./components/HeaderRightContent";
+import { Actions } from "./components/Actions";
+import { profileStore } from "@src/application/store/profileStore";
+import { Footer } from "./components/Footer";
 
+import { Payment } from "./components/Payment";
 const bookingStatuses = {
   pending: 'активна',
   busy: 'оплачена',
@@ -30,7 +31,8 @@ export const BookingDetails = observer(() => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { booking } = bookingCardStore;
-    const { isLoadingProcessPayment, isPaymentError, isPaymentSuccess } = paymentStore;
+    const { isCashier } = profileStore;
+
     const [isCancelOpen, setCancelOpen] = useState(false);
 
     useEffect(() => {
@@ -40,8 +42,6 @@ export const BookingDetails = observer(() => {
     if (!booking) {
       return <div>Бронь не найдена</div>;
     }
-
-    const hasPaymentStatus = isLoadingProcessPayment.has(booking.id) || isPaymentError.has(booking.id) || isPaymentSuccess.has(booking.id);
   
     return (
       <>
@@ -73,30 +73,8 @@ export const BookingDetails = observer(() => {
                           {bookingStatuses[booking.status.name as keyof typeof bookingStatuses]}
                         </div>
                       </div>
-                      <div className={styles.cardHeaderActions}>
-                        {booking.status.name === 'cancelled' && (
-                          <IconButton
-                            size="medium"
-                            shape="rounded"
-                            iconName="cancel"
-                            color="red"
-                            iconColor="white"
-                            iconSize="extra-small"
-                          />
-                        )}
-                        {booking.status.name === 'completed' && (
-                          <Icon size="medium" name="check4" />
-                        )}
-                        {(booking.status.name === 'pending' || booking.status.name === 'confirmed' || booking.status.name === 'busy' || booking.status.name === 'reserved') && (
-                          <IconButton
-                            size="medium"
-                            shape="rounded"
-                            iconName="qr-code2"
-                            iconColor="dark"
-                            onClick={() => navigate(Routes.BookingDetailsQR.replace(':id', booking.id.toString()))}
-                          />
-                        )}
-                      </div>
+
+                      <HeaderRightContent booking={booking} />
                     </div>
 
                     <div className={styles.cardBody}>
@@ -105,10 +83,10 @@ export const BookingDetails = observer(() => {
                           <div className={styles.cardBodyHeaderCol}>
                             <div className={styles.cardBodyHeaderTitle}>пляж</div>
                             <div className={styles.cardBodyHeaderSubtitle}>
-                              {booking?.sector_scheme.sector.location.name}
+                              {booking?.sector_scheme?.sector.location.name}
                             </div>
                             <div className={styles.cardBodyHeaderText}>
-                              {booking?.sector_scheme.sector.name}
+                              {booking?.sector_scheme?.sector.name}
                             </div>
                           </div>
                           <div className={styles.cardBodyHeaderCol}>
@@ -116,7 +94,7 @@ export const BookingDetails = observer(() => {
                               size="medium"
                               shape="rounded"
                               iconName="arrow-right"
-                              onClick={() => navigate(Routes.Location.replace(':id', booking?.sector_scheme.sector.location.id.toString()))}
+                              onClick={() => navigate(Routes.Location.replace(':id', booking?.sector_scheme?.sector.location.id.toString() ?? ''))}
                               withShadow={true}
                               color="white"
                               iconColor="dark"
@@ -162,90 +140,17 @@ export const BookingDetails = observer(() => {
                             className={styles.icon}
                           />
                           <div className={styles.text}>
-                            {booking?.sector_scheme.sector.location.region},{' '}
-                            {booking?.sector_scheme.sector.location.city},{' '}
-                            {booking?.sector_scheme.sector.location.address}
+                            {booking?.sector_scheme?.sector.location.region},{' '}
+                            {booking?.sector_scheme?.sector.location.city},{' '}
+                            {booking?.sector_scheme?.sector.location.address}
                           </div>
                         </div>
                       </div>
                     </div>
                   </Card>
 
-                  <div className={styles.actions}>
-                    {booking.status.name === 'reserved' && (
-                      <Button
-                        variant={'yellow'}
-                        onClick={() => paymentStore.processPayment(booking.id)}
-                        isLoading={isLoadingProcessPayment.has(booking.id)}
-                        disabled={isLoadingProcessPayment.has(booking.id)}
-                        withShadow={true}
-                      >
-                        <span>Оплатить</span>
-                      </Button>
-                    )}
-
-                    {(booking.status.name === 'confirmed' || booking.status.name === 'busy' || booking.status.name === 'reserved') && (
-                      <Button variant={'gray2'} onClick={() => setCancelOpen(true)} withShadow={true}>
-                        <Icon name={'cancel'} size='extra-small' />
-                        <span>Отменить</span>
-                      </Button>
-                    )}
-
-                    {(booking.status.name === 'completed' || booking.status.name === 'cancelled') && (
-                      <Button variant={'yellow'} withShadow={true}>
-                        <Icon name={'retry'} size='extra-small' />
-                        <span>Повторить</span>
-                      </Button>
-                    )}
-
-                    {booking.status.name === 'pending' && (
-                      <Button variant={'gray2'} withShadow={true}>
-                        <Icon name={'stop'} size='extra-small' />
-                        <span>Завершить</span>
-                      </Button>
-                    )}
-                      
-                    <IconButton
-                      size="large"
-                      shape="rounded"
-                      iconName="location-flag"
-                      iconColor="dark"
-                      color="white"
-                    />
-                    <IconButton
-                      size="large"
-                      shape="rounded"
-                      iconName="route"
-                      iconColor="dark"
-                      color="white"
-                    />
-                    <IconButton
-                      size="large"
-                      shape="rounded"
-                      iconName="in-map"
-                      iconColor="dark"
-                      iconSize="small"
-                      color="white"
-                    />
-                  </div>
-
-                  {hasPaymentStatus && (
-                    <Card>
-                      <div className={classNames(styles.paymentStatus, {
-                        [styles.paymentStatusProcess]: isLoadingProcessPayment.has(booking.id),
-                        [styles.paymentStatusSuccess]: isPaymentSuccess.has(booking.id),
-                        [styles.paymentStatusError]: isPaymentError.has(booking.id)
-                      })}>
-                        <div className={styles.paymentStatusText}>
-                          {isLoadingProcessPayment.has(booking.id)
-                            ? 'Ожидание оплаты...'
-                            : isPaymentError.has(booking.id)
-                              ? 'Ошибка оплаты'
-                              : 'Оплата прошла успешно'
-                          }
-                        </div>
-                      </div>
-                    </Card>
+                  {isCashier ? null : (
+                    <Actions booking={booking} setCancelOpen={setCancelOpen} />
                   )}
 
                   <Features
@@ -255,7 +160,7 @@ export const BookingDetails = observer(() => {
                       nameAccent: module.module.number ? `#${module.module.number}` : '',
                       icon: module.module.placed_icon?.link_icon,
                       onClick: () => {
-                        navigate(Routes.Sector.replace(':id', booking.sector_scheme.sector.id.toString()) + `?module=${module.module.id}`);
+                        navigate(Routes.Sector.replace(':id', booking.sector_scheme?.sector.id.toString() ?? '') + `?module=${module.module.id}`);
                       }
                     }))}
                   />
@@ -285,20 +190,15 @@ export const BookingDetails = observer(() => {
                       </div>
                     </div>
                   </Card>
-                </div>
 
-                <div className={styles.payment}>
-                  <DecorateButton text={`Оплачено ${  booking.status.name === 'reserved' ? 0 : booking.total_price.formatted_value }`} />
-                  <Button
-                    variant={'gray2'}
-                    onClick={() => navigate(Routes.BookingDetailsReceipt.replace(':id', booking.id.toString()))}
-                    disabled={booking.status.name === 'reserved'}
-                  >
-                    <Icon name={'check2'} size='extra-small' />
-                    <span>Показать чек</span>
-                  </Button>
+                  {isCashier && (
+                    <div className={styles.payment}>
+                      <Payment booking={booking} />
+                    </div>
+                  )}
                 </div>
               </Sheet.Scroller>
+              <Footer booking={booking} />
             </Sheet.Content>
           </Sheet.Container>
           <Sheet.Backdrop />

@@ -15,7 +15,6 @@ import { Tabs } from '@src/presentation/ui-kit/Tabs';
 import { Sheet, SheetRef } from 'react-modal-sheet';
 import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
 import { useEffect, useRef, useState } from 'react';
-// import { ModulesSelect } from './components/ModulesSelect';
 import { ChooseDate } from './components/ChooseDate';
 import { ChooseTime } from './components/ChooseTime';
 import { ChooseStartTime } from './components/ChooseStartTime/ChooseStartTIme';
@@ -27,12 +26,16 @@ import { locationStore } from '@src/application/store/locationStore';
 import { bookingsStore } from '@src/application/store/bookingsStore';
 import { BookingCard } from '@src/presentation/components/BookingCard';
 
+const formatPeriodTime = (time: string) => {
+  return time.split(':').slice(0, 2).join(':');
+};
+
 const SNAP_POINTS = [758, 309, 79];
 const INITIAL_SNAP_POINT = 1;
 
 export const BookingDrawer = observer(() => {
   const { activeTab } = bookStore;
-  const { activeBookingsTab, bookModules, modulesPrice } = bookStore;
+  const { activeBookingsTab, bookModules, modulesPrice, allPeriods } = bookStore;
   const { currentBookings } = bookingsStore;
   const { activeScheme, schemes, sector } = sectorStore;
   const { location } = locationStore;
@@ -44,9 +47,7 @@ export const BookingDrawer = observer(() => {
   const ref = useRef<SheetRef>(null);
   const snapTo = (i: number) => ref.current?.snapTo(i);
 
-  console.log('sector', JSON.parse(JSON.stringify(sectorStore.sector)));
-
-  const locationBookings = currentBookings.filter((b) => b.sector_scheme.sector.location.id === location?.id);
+  const locationBookings = currentBookings.filter((b) => b.sector_scheme?.sector.location.id === location?.id);
 
   useEffect(() => {
     setTimeout(() => {
@@ -125,8 +126,27 @@ export const BookingDrawer = observer(() => {
                 <div className={styles.content}>
                   <div className={styles.divider} />
 
-                  <div className={styles.modulesRow}>
+                  {/* <div className={styles.modulesRow}>
                     <div className={styles.modulesRowTitle}>Заказать</div>
+                  </div> */}
+
+                  <div className={styles.modulesPeriods}>
+                    {allPeriods.map(([startTime, endTime]) => {
+                      return (
+                        <div
+                          key={`${startTime}-${endTime}`}
+                          className={classNames(styles.period, {
+                            [styles.periodActive]: bookStore.isActivePeriod([startTime, endTime]),
+                          })}
+                          onClick={() => bookStore.setPeriod([startTime, endTime])}
+                        >
+                          <div className={styles.periodTime}>
+                            {formatPeriodTime(startTime)} - {formatPeriodTime(endTime)}
+                          </div>
+                          <div className={styles.periodName}>{bookStore.getNamePeriod([startTime, endTime])}</div>
+                        </div>
+                      );
+                      })}
                   </div>
 
                   <div className={styles.modulesControls}>
@@ -136,7 +156,7 @@ export const BookingDrawer = observer(() => {
                   </div>
 
                   {bookModules.size > 0 && (
-                    <div style={{ marginTop: 15}}>
+                    <div style={{ marginTop: 10 }}>
                       <Button
                         variant='yellow'
                         size='medium'

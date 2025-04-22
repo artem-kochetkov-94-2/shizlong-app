@@ -19,6 +19,8 @@ import { Counter } from '@src/presentation/ui-kit/Counter';
 import { Routes } from "@src/routes";
 import { useSearchParams } from 'react-router-dom';
 import { Module } from '@src/presentation/components/Module/Module';
+import cn from 'classnames';
+import { useFetchModules } from '@src/application/hooks/useFetchModules';
 
 export const Booking = observer(() => {
     const navigate = useNavigate();
@@ -34,10 +36,12 @@ export const Booking = observer(() => {
         bookPrice,
         isCreatingBooking,
         bookModules,
-        moduleSchemeId,
+        moduleSchemePeriod,
     } = bookStore;
     const { location, beachAccessories, modules } = locationStore;
     const { sector } = sectorStore;
+
+    useFetchModules();
 
     const onChange = (value: DateValue) => {
         bookStore.setDate(value);
@@ -78,11 +82,16 @@ export const Booking = observer(() => {
                                 <div className={styles.modules}>
                                     {[...bookModules.keys()].map((moduleId) => {
                                         const module = modules.find((m) => m.id === moduleId);
-                                        const moduleScheme = module?.module_schemes.find((ms) => ms.id === moduleSchemeId);
+                                        if (!module) return null;
+                                        const isModuleAvailable = bookStore.isModuleAvailable(module);
+
+                                        const moduleScheme = bookStore.getScheme(module);
 
                                         return (
                                             <div
-                                                className={styles.module}
+                                                className={cn(styles.module, {
+                                                    [styles.moduleUnavailable]: !isModuleAvailable,
+                                                })}
                                                 onClick={() => navigate(Routes.Booking + `?module=${module?.id}`)}
                                                 key={moduleId}
                                             >
@@ -203,7 +212,7 @@ export const Booking = observer(() => {
                             <Button
                                 size="medium"
                                 variant="yellow"
-                                disabled={isCreatingBooking || !bookStore.moduleSchemeId}
+                                disabled={isCreatingBooking}
                                 isLoading={isCreatingBooking}
                                 onClick={() => bookStore.createBooking(onCreated)}
                             >

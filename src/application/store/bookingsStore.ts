@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { bookingsService } from '@src/infrastructure/bookings/bookingsService';
 import { RawBooking } from '@src/infrastructure/bookings/types';
 
@@ -29,7 +29,9 @@ export class BookingsStore {
     try {
       this.isLoading = true;
       const bookings = await this.bookingsService.getMyBookings();
-      this.bookings = bookings;
+      runInAction(() => {
+        this.bookings = bookings;
+      });
     } catch (error) {
       console.error(error);
     } finally {

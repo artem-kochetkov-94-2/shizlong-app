@@ -46,12 +46,14 @@ export const colorByStatus = {
 export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
   const [isCancelOpen, setCancelOpen] = useState(false);
   const navigate = useNavigate();
-  const isFavorite = locationsStore.getFavoriteStatus(booking.sector_scheme.sector.location_id);
+  const isFavorite = locationsStore.getFavoriteStatus(booking.sector_scheme?.sector.location_id);
   const { isLoadingProcessPayment } = paymentStore;
   const { isLoadingCancelBooking } = bookingsStore;
   const { location: geoLocation } = geoStore;
   const { locations } = locationsStore;
-  const location = locations.find((l) => l.id === booking.sector_scheme.sector.location_id);
+  const location = locations.find((l) => l.id === booking.sector_scheme?.sector.location_id);
+
+  console.log('booking', JSON.parse(JSON.stringify(booking)));
 
   return (
     <>
@@ -68,23 +70,23 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               className={styles.name}
               onClick={() => navigate(Routes.BookingDetails.replace(':id', booking.id.toString()))}
             >
-              {booking.sector_scheme.sector.location.name}
+              {booking.sector_scheme?.sector.location.name}
             </div>
 
             <div className={styles.row}>
               {/* <Tag text="Вы на пляже" /> */}
-              <span>{booking.sector_scheme.sector.name}</span>
+              <span>{booking.sector_scheme?.sector.name}</span>
             </div>
             <div className={styles.range}>
-              <span>{formatFullDate(new Date(booking.booking_modules[0].start_time))}</span>
+              <span>{formatFullDate(new Date(booking.booking_modules?.[0]?.start_time))}</span>
               <Icon name='time' size='extra-small' />
               <span>
-                {new Date(booking.booking_modules[0].start_time).toLocaleString('ru-RU', {
+                {new Date(booking.booking_modules?.[0]?.start_time).toLocaleString('ru-RU', {
                   hour: '2-digit',
                   minute: '2-digit',
                 })}{' '}
                 -{' '}
-                {new Date(booking.booking_modules[0].end_time).toLocaleString('ru-RU', {
+                {new Date(booking.booking_modules?.[0]?.end_time).toLocaleString('ru-RU', {
                   hour: '2-digit',
                   minute: '2-digit',
                 })}
@@ -101,7 +103,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               touchStartPreventDefault={false}
             >
               <SwiperSlide>
-                <img src={booking.sector_scheme.sector.location.link_space} />
+                <img src={booking.sector_scheme?.sector.location.link_space} />
               </SwiperSlide>
             </Swiper>
 
@@ -146,7 +148,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               size='medium'
               variant='tertiary'
               onClick={() => {
-                navigate(Routes.Sector.replace(':id', booking.sector_scheme.sector.id.toString()));
+                navigate(Routes.Sector.replace(':id', booking.sector_scheme?.sector.id.toString() || ''));
               }}
             >
               <Icon name='location-flag' size='extra-small' />

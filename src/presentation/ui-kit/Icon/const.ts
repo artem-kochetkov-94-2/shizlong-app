@@ -29,6 +29,7 @@ import { ReactComponent as BeachIcon } from './assets/beach.svg';
 import { ReactComponent as Check2Icon } from './assets/check2.svg';
 import { ReactComponent as LikeIcon } from './assets/like.svg';
 import { ReactComponent as Check3Icon } from './assets/check3.svg';
+import { ReactComponent as Check6Icon } from './assets/check6.svg';
 import { ReactComponent as HelpIcon } from './assets/help.svg';
 import { ReactComponent as CreditCardIcon } from './assets/credit-card.svg';
 import { ReactComponent as NotifiIcon } from './assets/notifi.svg';
@@ -51,6 +52,7 @@ import { ReactComponent as ArrowDownIcon } from './assets/arrow-down.svg';
 import { ReactComponent as CancelIcon } from './assets/cancel.svg';
 import { ReactComponent as RetryIcon } from './assets/retry.svg';
 import { ReactComponent as Card2Icon } from './assets/card2.svg';
+import { ReactComponent as PhoneIcon } from './assets/phone.svg';
 import { IconName } from './types';
 
 export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = {
@@ -87,6 +89,7 @@ export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = 
   check3: Check3Icon,
   check4: Check4Icon,
   check5: Check5Icon,
+  check6: Check6Icon,
   help: HelpIcon,
   'credit-card': CreditCardIcon,
   notifi: NotifiIcon,
@@ -107,4 +110,5 @@ export const icons: Record<IconName, React.FC<React.SVGProps<SVGSVGElement>>> = 
   cancel: CancelIcon,
   retry: RetryIcon,
   card2: Card2Icon,
+  phone: PhoneIcon,
 };

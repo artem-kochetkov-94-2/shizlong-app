@@ -2,50 +2,32 @@ import { locationStore } from '@src/application/store/locationStore';
 import { observer } from 'mobx-react-lite';
 import { Contacts } from './components/Contacts';
 import { Features } from '@src/presentation/components/Features/Features';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
-import { Button } from '@presentation/ui-kit/Button';
 import { About } from '@src/presentation/components/About/About';
 import styles from './Location.module.css';
-import { useState } from 'react';
 import { mapStore } from '@src/application/store/mapStore';
-import { Sheet, SheetRef } from 'react-modal-sheet';
+import { Sheet } from 'react-modal-sheet';
 import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
-import { IconButton } from '@src/presentation/ui-kit/IconButton';
-import classNames from 'classnames';
-import { Routes } from '@src/routes';
 import { locationsStore } from '@src/application/store/locationsStore';
-import cn from 'classnames';
-import { createYandexMapsRouteLink } from '@src/application/utils/createYandexMapsRouteLink';
-import { geoStore } from '@src/application/store/geoStore';
-
-const SNAP_POINTS = [1, 483, 150];
-const INITIAL_SNAP_POINT = 1;
+import { useDrawer, INITIAL_SNAP_POINT, SNAP_POINTS } from './useDrawer';
+import { profileStore } from '@src/application/store/profileStore';
+import { ClientFooter } from './components/Footer/ClientFooter';
+import { CashierFooter } from './components/Footer/CashierFooter';
 
 export const Location = observer(() => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [snap, setSnap] = useState(INITIAL_SNAP_POINT);
-  const { location: geoLocation } = geoStore;
-  const ref = useRef<SheetRef>(null);
-  const snapTo = (i: number) => ref.current?.snapTo(i);
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const [paddingBottom, setPaddingBottom] = useState(0);
+  const { isOpen, setIsOpen, snap, setSnap, ref, snapTo, paddingBottom } = useDrawer();
 
-  const { location, additionalServicesAsFeatures, services, sectors } = locationStore;
+  const { isCashier } = profileStore;
+  const { location, additionalServicesAsFeatures, services } = locationStore;
+  
   const isFavorite = locationsStore.getFavoriteStatus(Number(id));
-
   const handleToggleFavorite = (): void => {
     locationsStore.toggleFavoriteLocation(Number(id), !isFavorite);
   };
-
-  useEffect(() => {
-    if (!ref.current) return;
-    // @todo
-    setPaddingBottom(ref.current?.y);
-  }, [ref.current]);
 
   useEffect(() => {
     if (!id) return;
@@ -57,10 +39,6 @@ export const Location = observer(() => {
       mapStore.toggleSelectionLocationMarker(Number(id), false);
     };
   }, [id]);
-
-  useEffect(() => {
-    snapTo(INITIAL_SNAP_POINT);
-  }, []);
 
   if (!location) return null;
 
@@ -106,50 +84,17 @@ export const Location = observer(() => {
                 </div>
               )}
             </Sheet.Scroller>
-            <div className={classNames(styles.footer, { [styles.shortFooter]: snap === 2 })}>
-              <Button
-                variant='yellow'
-                onClick={() => {
-                  locationStore.choosePlace();
-                  if (sectors.length === 1) {
-                    navigate(Routes.Sector.replace(':id', sectors[0].id.toString()));
-                  } else if (snap === 0) {
-                    snapTo(1);
-                  }
-                }}
-              >
-                Выбрать место
-              </Button>
-              {snap === 0 ? (
-                <div className={styles.actions}>
-                  <IconButton
-                    iconName='favorite-outline'
-                    size='large'
-                    shape='rounded'
-                    color='white'
-                    onClick={handleToggleFavorite}
-                    className={cn({ [styles.favorite]: isFavorite })}
-                  />
-                  <IconButton
-                    iconName='route'
-                    size='large'
-                    shape='rounded'
-                    color='white'
-                    href={
-                      createYandexMapsRouteLink(
-                        [geoLocation.latitude, geoLocation.longitude],
-                        location?.coordinates.slice().reverse() as [number, number] || [0, 0]
-                      )}
-                  />
-                  <IconButton
-                    iconName='in-map'
-                    size='large'
-                    shape='rounded'
-                    color='white'
-                  />
-                </div>
-              ) : null}
-            </div>
+            
+            {isCashier ? (
+              <CashierFooter snap={snap} snapTo={snapTo} />
+            ) : (
+              <ClientFooter
+                snap={snap}
+                snapTo={snapTo}
+                handleToggleFavorite={handleToggleFavorite}
+                isFavorite={isFavorite}
+              />
+            )}
           </Sheet.Content>
         </Sheet.Container>
         {snap === 0 ? <Sheet.Backdrop /> : <></>}

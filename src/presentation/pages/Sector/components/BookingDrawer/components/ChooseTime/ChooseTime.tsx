@@ -7,7 +7,7 @@ import { declensionOfHours } from '@src/application/utils/formatDate';
 export const ChooseTime = observer(() => {
     const { formHours } = bookStore;
     const [isOpen, setIsOpen] = useState(false);
-    const availableHours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Пример значений
+    const availableHours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]; // Пример значений
     const selectRef = useRef<HTMLSelectElement>(null);
 
     useEffect(() => {
@@ -28,6 +28,7 @@ export const ChooseTime = observer(() => {
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         bookStore.setFormHours(Number(e.target.value));
+        bookStore.setPeriod(null);
         setIsOpen(false);
     }
 

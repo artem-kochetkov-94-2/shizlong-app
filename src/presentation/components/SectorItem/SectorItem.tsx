@@ -17,10 +17,12 @@ export const SectorItem = observer(({ data }: SectorItemProps) => {
     const location = locations.find((location) => location.id === location_id);
 
     return (
-      <Link to={Routes.Location.replace(':id', `${id}`)}>
+      <Link to={Routes.Sector.replace(':id', `${id}`)}>
         <div className={styles.wrapper}>
           <div className={styles.content}>
-            <div className={styles.category}>Пляж {location?.name}</div>
+            <div className={styles.category}>
+              Пляж {location?.name}
+            </div>
             <div className={styles.name}>{name}</div>
 
             <Tag text={`Занято модулей 5 из 32`} size='small' />

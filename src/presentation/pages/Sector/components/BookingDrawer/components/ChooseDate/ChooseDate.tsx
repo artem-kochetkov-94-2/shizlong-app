@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Icon } from "@src/presentation/ui-kit/Icon";
 import { Calendar } from "@src/presentation/components/Calendar";
-import { formatShortDate } from "@src/application/utils/formatDate";
+import { formatShortDate, formatShortDateWithoutYear } from "@src/application/utils/formatDate";
 import styles from './ChooseDate.module.css';
 import { DateValue } from "@src/application/types/date";
 import { bookStore } from "@src/application/store/bookStore";
@@ -21,7 +21,7 @@ export const ChooseDate = observer(() => {
     return (
         <>
             <div className={styles.modulesControlsItem} onClick={() => setIsOpen(true)}>
-                <span>{isNow ? 'сегодня' : formatShortDate(date as Date)}</span>
+                <span>{isNow ? 'сегодня' : formatShortDateWithoutYear(date as Date)}</span>
                 <Icon name="arrow-down" size="extra-small" />
             </div>
 

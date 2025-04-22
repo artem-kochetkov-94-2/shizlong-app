@@ -41,7 +41,7 @@ export const BookingDetailsQR = observer(() => {
                     <div className={styles.header}>
                         <div className={styles.title}>Моя бронь</div>
                         <div className={styles.subtitle}>
-                            {booking?.sector_scheme.sector.location.name}, сектор {booking?.sector_scheme.sector.name}
+                            {booking?.sector_scheme?.sector.location.name}, сектор {booking?.sector_scheme?.sector.name}
                         </div>
 
                         <IconButton
@@ -129,16 +129,16 @@ export const BookingDetailsQR = observer(() => {
                                             className={styles.icon}
                                         />
                                         <div className={styles.text}>
-                                            {booking?.sector_scheme.sector.location.region},{' '}
-                                            {booking?.sector_scheme.sector.location.city},{' '}
-                                            {booking?.sector_scheme.sector.location.address}
+                                            {booking?.sector_scheme?.sector.location.region},{' '}
+                                            {booking?.sector_scheme?.sector.location.city},{' '}
+                                            {booking?.sector_scheme?.sector.location.address}
                                         </div>
                                     </div>
                                 </div>
                             </Card>
 
                             <div className={styles.payment}>
-                                <DecorateButton text={`Оплачено ${booking.total_price.formatted_value}`} />
+                                <DecorateButton text={`Оплачено ${booking.status.name === 'reserved' ? 0 : booking.total_price.formatted_value}`} />
                                 <Button
                                     variant={'gray2'}
                                     onClick={() => navigate(Routes.BookingDetailsReceipt.replace(':id', booking.id.toString()))}

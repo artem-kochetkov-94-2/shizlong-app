@@ -6,16 +6,17 @@ import { observer } from "mobx-react-lite";
 import { locationStore } from "@src/application/store/locationStore";
 import classNames from "classnames";
 import { Routes } from '@src/routes';
+import { profileStore } from "@src/application/store/profileStore";
 
-export const Header = observer(({
-    name,
-    sector,
-}: {
+interface HeaderProps {
     name: string,
     sector: RawSector,
-}) => {
+}
+
+export const Header = observer(({ name, sector }: HeaderProps) => {
     const navigate = useNavigate();
     const { sectors } = locationStore;
+    const { isCashier } = profileStore;
 
     return (
         <div className={styles.header}>
@@ -31,20 +32,22 @@ export const Header = observer(({
                 <span className={styles.category}>{sector.name}</span>
                 <span className={styles.name}>{name}</span>
             </div>
-            <div className={styles.icons}>
-                <IconButton
-                    iconName="favorite-outline"
-                    size="medium"
-                    shape="rounded"
-                    color="white"
-                />
-                <IconButton
-                    iconName="route"
-                    size="medium"
-                    shape="rounded"
-                    color="white"
-                />
-            </div>
+            {isCashier ? null : (
+                <div className={styles.icons}>
+                    <IconButton
+                        iconName="favorite-outline"
+                        size="medium"
+                        shape="rounded"
+                        color="white"
+                    />
+                    <IconButton
+                        iconName="route"
+                        size="medium"
+                        shape="rounded"
+                        color="white"
+                    />
+                </div>
+            )}
 
             <div className={styles.slides}>
                 {sectors.map((s) => (

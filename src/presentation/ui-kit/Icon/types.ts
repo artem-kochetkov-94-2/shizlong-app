@@ -32,6 +32,7 @@ export type IconName =
   | 'check3'
   | 'check4'
   | 'check5'
+  | 'check6'
   | 'checkYellow'
   | 'like'
   | 'help'
@@ -51,7 +52,8 @@ export type IconName =
   | 'arrow-up'
   | 'arrow-down'
   | 'cancel'
-  | 'retry';
+  | 'retry'
+  | 'phone';
 
 export type IconSize = 'extra-small' | 'small' | 'medium' | 'large';
 

@@ -18,6 +18,7 @@ export const ChooseStartTime = observer(() => {
 
     const handleTimeChange = (value: string) => {
         bookStore.setStartTime(value);
+        bookStore.setPeriod(null);
     };
 
     const handleTimeBlur = () => {
@@ -25,7 +26,7 @@ export const ChooseStartTime = observer(() => {
     };
 
     useEffect(() => {
-        handleTimeChange(roundMinutesUpToNearestQuarter(formStartTime));
+        bookStore.setStartTime((roundMinutesUpToNearestQuarter(formStartTime)));
     }, [formStartTime]);
 
     console.log('startTime', formStartTime);

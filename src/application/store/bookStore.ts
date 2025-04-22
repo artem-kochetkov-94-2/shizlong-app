@@ -1,5 +1,5 @@
 import { Tab } from '@src/presentation/ui-kit/RoundedTabs';
-import { autorun, get, makeAutoObservable, reaction, runInAction } from 'mobx';
+import { autorun, makeAutoObservable, reaction, runInAction } from 'mobx';
 import { DateValue } from '@src/application/types/date';
 import {
   formatShortDateWithoutYear,
@@ -29,7 +29,6 @@ function formatToLocalString(dateString: string): Date {
 
   return date;
 }
-
 
 export const sectorTabs: Tab[] = [
   {
@@ -70,7 +69,7 @@ class BookStore {
   paymentStore: PaymentStore;
   bookingsStore: BookingsStore;
   locationStore: LocationStore;
-  moduleSchemeId: number | null = null;
+  moduleSchemePeriod: [string, string] | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -121,7 +120,13 @@ class BookStore {
     let acc = 0;
 
     this.bookModules.forEach((module) => {
-      const moduleScheme = module.module_schemes.find((scheme) => scheme.id === this.moduleSchemeId);
+      const moduleScheme = this.getScheme(module);
+
+      if (moduleScheme?.type.name === 'hourly') {
+        acc += (moduleScheme.price.value || 0) * this.formHours;
+        return acc;
+      }
+
       if (moduleScheme) {
         acc += (moduleScheme.price.value || 0);
       }
@@ -136,73 +141,87 @@ class BookStore {
   }
 
   // доступные слоты для бронирования
-  get availablePeriodToBook() {
-    const periods: ModuleScheme[] = [];
-    const schemes = new Map<number, ModuleScheme>();
-    const schemesCountBySchemeId = new Map<number, number>();
+  // get availablePeriodToBook() {
+  //   const periods: ModuleScheme[] = [];
+  //   const schemes = new Map<number, ModuleScheme>();
+  //   const schemesCountBySchemeId = new Map<number, number>();
 
-    this.bookModules.forEach((module) => {
+  //   this.bookModules.forEach((module) => {
+  //     module.module_schemes.forEach((scheme) => {
+  //       if (!schemes.has(scheme.id)) {
+  //         schemes.set(scheme.id, scheme);
+  //       }
+  //     });
+
+  //     const availableSlots = module.slots.filter((slot) => !slot.is_busy);
+  //     availableSlots.forEach((slot) => {
+  //       const schemesCount = schemesCountBySchemeId.get(slot.module_scheme_id) || 0;
+  //       schemesCountBySchemeId.set(slot.module_scheme_id, schemesCount + 1);
+  //     });
+  //   });
+
+  //   schemesCountBySchemeId.forEach((count, schemeId) => {
+  //     if (count === this.bookModules.size) {
+  //       const scheme = schemes.get(schemeId);
+  //       if (scheme) {
+  //         periods.push(scheme);
+  //       }
+  //     }
+  //   });
+
+  //   return periods;
+  // }
+
+  get allPeriods() {
+    const schemes: [string, string][] = [];
+
+    this.locationStore.modules.forEach((module) => {
       module.module_schemes.forEach((scheme) => {
-        if (!schemes.has(scheme.id)) {
-          schemes.set(scheme.id, scheme);
-        }
-      });
+        if (scheme.type.name === 'hourly') return;
 
-      const availableSlots = module.slots.filter((slot) => !slot.is_busy);
-      availableSlots.forEach((slot) => {
-        const schemesCount = schemesCountBySchemeId.get(slot.module_scheme_id) || 0;
-        schemesCountBySchemeId.set(slot.module_scheme_id, schemesCount + 1);
+        if (!schemes.find((period) => period[0] === scheme.start_time && period[1] === scheme.end_time)) {
+          schemes.push([scheme.start_time, scheme.end_time]);
+        }
       });
     });
 
-    schemesCountBySchemeId.forEach((count, schemeId) => {
-      if (count === this.bookModules.size) {
-        const scheme = schemes.get(schemeId);
-        if (scheme) {
-          periods.push(scheme);
-        }
-      }
-    });
-
-    console.log('schemesCountBySchemeId', schemesCountBySchemeId);
-
-    return periods;
+    return schemes;
   }
 
   // все периоды схемы сами
-  get periodsToBook() {
-    const periods: ModuleScheme[] = [];
-    const schemes = new Map<number, ModuleScheme>();
-    const schemesCountBySchemeId = new Map<number, number>();
+  // get periodsToBook() {
+  //   const periods: ModuleScheme[] = [];
+  //   const schemes = new Map<number, ModuleScheme>();
+  //   const schemesCountBySchemeId = new Map<number, number>();
 
-    this.bookModules.forEach((module) => {
-      module.module_schemes.forEach((scheme) => {
-        if (!schemes.has(scheme.id)) {
-          schemes.set(scheme.id, scheme);
-        }
-      });
+  //   this.bookModules.forEach((module) => {
+  //     module.module_schemes.forEach((scheme) => {
+  //       if (!schemes.has(scheme.id)) {
+  //         schemes.set(scheme.id, scheme);
+  //       }
+  //     });
 
-      module.slots.forEach((slot) => {
-        const schemesCount = schemesCountBySchemeId.get(slot.module_scheme_id) || 0;
-        schemesCountBySchemeId.set(slot.module_scheme_id, schemesCount + 1);
-      });
-    });
+  //     module.slots.forEach((slot) => {
+  //       const schemesCount = schemesCountBySchemeId.get(slot.module_scheme_id) || 0;
+  //       schemesCountBySchemeId.set(slot.module_scheme_id, schemesCount + 1);
+  //     });
+  //   });
 
-    schemesCountBySchemeId.forEach((count, schemeId) => {
-      if (count === this.bookModules.size) {
-        const scheme = schemes.get(schemeId);
-        if (scheme) {
-          periods.push(scheme);
-        }
-      }
-    });
+  //   schemesCountBySchemeId.forEach((count, schemeId) => {
+  //     if (count === this.bookModules.size) {
+  //       const scheme = schemes.get(schemeId);
+  //       if (scheme) {
+  //         periods.push(scheme);
+  //       }
+  //     }
+  //   });
 
-    console.log('schemesCountBySchemeId', schemesCountBySchemeId);
+  //   console.log('schemesCountBySchemeId', schemesCountBySchemeId);
 
-    return periods.sort((a, b) => {
-      return Number(a.start_time.split(':')[0]) - Number(b.start_time.split(':')[0]);
-    });
-  }
+  //   return periods.sort((a, b) => {
+  //     return Number(a.start_time.split(':')[0]) - Number(b.start_time.split(':')[0]);
+  //   });
+  // }
 
   get startDate() {
     const [hours, minutes] = this.formStartTime.split(':').map(Number);
@@ -234,80 +253,141 @@ class BookStore {
     return formatShortDateWithoutYear(this.date as Date);
   }
 
-  isModuleAvailable = (module: RawModule): [boolean, Slot | null] => {
+  getNamePeriod = (period: [string, string]): string => {
+    const module = this.locationStore.modules.find((module) => {
+      return module.module_schemes.find((scheme) => scheme.start_time === period[0] && scheme.end_time === period[1]);
+    });
+
+    return module?.module_schemes.find((scheme) => scheme.start_time === period[0] && scheme.end_time === period[1])?.name || '';
+  }
+
+  getAvailableSlot = (module: RawModule): Slot | null => {
     const bookingDate = new Date(this.date as Date);
     const [startHour, startMinute] = this.formStartTime.split(':').map(Number);
     const bookingStartTime = new Date(bookingDate.setHours(startHour, startMinute, 0, 0));
     const bookingEndTime = new Date(bookingStartTime.getTime() + this.formHours * 60 * 60 * 1000);
   
-    // if (module.number != '58') return [false, null];
-    // if (module.number === '58') {
-    //   if (clear) {
-    //     console.clear();
-    //     console.log('1111--------------------------------');
-    //     console.log('1111--------------------------------');
-    //   }
-    //   console.log('2222--------------------------------');
-    //   console.log('module', JSON.parse(JSON.stringify(module)));
-    //   console.log('bookingStartTime', bookingStartTime);
-    //   console.log('bookingEndTime', bookingEndTime);
-    // }
-    // console.clear();
-    // console.log('bookingStartTime', bookingStartTime);
-    // console.log('bookingEndTime', bookingEndTime);
-  
     const availableSlot = module.slots.find((slot) => {
       if (slot.is_busy) return false;
+      if (module.module_schemes.find((scheme) => scheme.id === slot.module_scheme_id)?.type.name !== 'hourly') return false;
   
       const formattedSlotStartTime = formatToLocalString(slot.from);
       const formattedSlotEndTime = formatToLocalString(slot.to);
   
-      // console.log('--------------------------------');
-      // console.log('slot', JSON.parse(JSON.stringify(slot)));
-      // console.log('--------------------------------');
-      // console.log('formattedSlotStartTime', formattedSlotStartTime);
-      // console.log('formattedSlotEndTime', formattedSlotEndTime);
-  
       return new Date(bookingStartTime) >= new Date(formattedSlotStartTime) && new Date(bookingEndTime) <= new Date(formattedSlotEndTime);
     });
 
-    // if (module.number === '58') {
-    //   if (availableSlot) {
-    //     console.log('true');
-    //   } else {
-    //     console.log('false');
-    //   }
-    // }
+    return availableSlot || null;
+  }
+
+  isModuleAvailableForHourlySchemes = (module: RawModule): boolean => {
+    const availableSlot = this.getAvailableSlot(module);
 
     if (availableSlot) {
-      return [true, availableSlot];
+      return true;
     }
   
-    return [false, null];
+    return false;
+  }
+
+  isModuleAvailableForPeriodSchemes = (module: RawModule): boolean => {
+    if (!this.moduleSchemePeriod) return false;
+
+    const availableSlot = module.slots.find((slot) => {
+      if (slot.is_busy) return false;
+
+      const slotFromTime = slot.from.split(' ')[1];
+      const slotToTime = slot.to.split(' ')[1];
+
+      if (slotFromTime !== this.moduleSchemePeriod![0] || slotToTime !== this.moduleSchemePeriod![1]) return false;
+      if (module.module_schemes.find((scheme) => scheme.id === slot.module_scheme_id)?.type.name === 'hourly') return false;
+  
+      return true;
+    });
+
+    if (availableSlot) {
+      return true;
+    }
+
+    return false;
+  }
+
+  isModuleAvailable = (module: RawModule): boolean => {
+    if (this.moduleSchemePeriod === null) {
+      return this.isModuleAvailableForHourlySchemes(module);
+    };
+
+    return this.isModuleAvailableForPeriodSchemes(module);
   };
 
-  // А если разные схемы выбраны ошибка будет ли?
-  // Модалка авторизации код отступ
-  // Модалка карта отсупы
+  isActivePeriod = (period: [string, string]): boolean => {
+    if (this.moduleSchemePeriod !== null) {
+      return period[0] === this.moduleSchemePeriod![0] && period[1] === this.moduleSchemePeriod![1];
+    }
+
+    return false;
+  }
+
+  getSchemeByPeriod = (module: RawModule): ModuleScheme | null => {
+    if (!this.moduleSchemePeriod) return null;
+
+    const findedPeriod = module.module_schemes.find((scheme) => {
+      return scheme.start_time === this.moduleSchemePeriod![0] && scheme.end_time === this.moduleSchemePeriod![1];
+    });
+
+    return findedPeriod || null;
+  }
+
+  getSchemeByHourly = (module: RawModule): ModuleScheme | null => {
+    const availableSlot = this.getAvailableSlot(module);
+
+    if (availableSlot) {
+      return module.module_schemes.find((scheme) => scheme.id === availableSlot.module_scheme_id) || null;
+    }
+
+    return null;
+  }
+
+  getScheme = (module: RawModule): ModuleScheme | null => {
+    if (this.moduleSchemePeriod === null) {
+      return this.getSchemeByHourly(module);
+    }
+
+    return this.getSchemeByPeriod(module);
+  }
+
   checkModules() {
-    // console.log('CHECK MODULES');
     const newModules = new Map<number, RawModule>();
+
     this.bookModules.forEach((module) => {
-      const [isAvailable] = this.isModuleAvailable(module);
+      const isAvailable = this.isModuleAvailable(module);
       if (isAvailable) {
         newModules.set(module.id, module);
       } else {
         newModules.delete(module.id);
       }
     });
-    // console.log('newModules', JSON.parse(JSON.stringify(newModules)));
+
     runInAction(() => {
       this.bookModules = newModules;
     });
   }
 
-  setModuleSchemeId(value: number) {
-    this.moduleSchemeId = value;
+  setPeriod(period: [string, string] | null) {
+    if (period === null) {
+      this.moduleSchemePeriod = null;
+      return;
+    }
+
+    const startTime = period[0].split(':').slice(0, 2).join(':');
+    const endTime = period[1].split(':').slice(0, 2).join(':');
+    const hours = Number(endTime.split(':')[0]) - Number(startTime.split(':')[0]);
+
+    bookStore.setStartTime(startTime);
+    bookStore.setEndTime(endTime);
+    bookStore.setFormHours(hours);
+
+    this.moduleSchemePeriod = period;
   }
 
   setEndTime(value: string) {
@@ -352,7 +432,7 @@ class BookStore {
   clear() {
     this.accessories = {};
     this.bookModules.clear();
-    this.moduleSchemeId = null;
+    this.moduleSchemePeriod = null;
   }
 
   async createBooking(onCreated: (id: number) => void) {
@@ -362,11 +442,23 @@ class BookStore {
       const modules: BookingModule[] = [];
       
       this.bookModules.forEach((module) => {
-        modules.push({
-          module_id: module.id,
-          module_scheme_id: this.moduleSchemeId,
-          module_scheme_date: convertToISO(this.date as Date).split('T')[0],
-        });
+        if (this.moduleSchemePeriod) {
+          const moduleScheme = this.getScheme(module);
+
+          if (moduleScheme) {
+            modules.push({
+              module_id: module.id,
+              module_scheme_id: moduleScheme.id,
+              module_scheme_date: convertToISO(this.date as Date).split('T')[0],
+            });
+          }
+        } else {
+          modules.push({
+            module_id: module.id,
+            start_time: convertToISO(this.date as Date).split('T')[0] + 'T' + this.formStartTime,
+            end_time: convertToISO(this.date as Date).split('T')[0] + 'T' + this.endTime,
+          });
+        }
       });
 
       const booking: BookingRequest = {
@@ -377,6 +469,8 @@ class BookStore {
           quantity: `${a.quantity}`,
         })),
       };
+
+      console.log('BookingRequest', JSON.parse(JSON.stringify(booking)));
 
       const result = await bookingsService.createGroupBooking(booking);
       await bookingsStore.getMyBookings();
@@ -400,14 +494,11 @@ class BookStore {
     }
   }
 
-  toggleModule(module: RawModule, availableSlot?: Slot | null) {
+  toggleModule(module: RawModule) {
     if (this.bookModules.has(module.id)) {
       this.bookModules.delete(module.id);
     } else {
       this.bookModules.set(module.id, module);
-      if (availableSlot) {
-        this.moduleSchemeId = availableSlot.module_scheme_id;
-      }
     }
   }
 }

@@ -3,17 +3,17 @@ import styles from "./Time.module.css";
 import { Button } from "@src/presentation/ui-kit/Button";
 import { Card } from "@src/presentation/ui-kit/Card";
 import cn from "classnames";
-// import { Icon } from "@src/presentation/ui-kit/Icon";
-// import { Time as TimeComponent } from "@src/presentation/components/Time";
+import { Icon } from "@src/presentation/ui-kit/Icon";
+import { Time as TimeComponent } from "@src/presentation/components/Time";
 import { bookStore } from "@src/application/store/bookStore";
 import { observer } from "mobx-react-lite";
 import { Sheet } from 'react-modal-sheet';
 import {
     formatFullDate,
-    // formatShortDate,
-    // formatTimeRange,
-    // getTimeRangeDurationInHoursAndMinutes,
-    // calculateTimeDifferenceInHours,
+    formatShortDate,
+    formatTimeRange,
+    getTimeRangeDurationInHoursAndMinutes,
+    calculateTimeDifferenceInHours,
 } from "@src/application/utils/formatDate";
 import { useState } from "react";
 // import { useMemo, useState } from "react";
@@ -26,19 +26,19 @@ interface TimeProps {
     endTime: string
 }
 
-// const getDifferenceInMinutes = (start: string, end: string) => {
-//     const [startHour, startMinute] = start.split(':').map(Number);
-//     const [endHour, endMinute] = end.split(':').map(Number);
-//     return (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
-// }
+const getDifferenceInMinutes = (start: string, end: string) => {
+    const [startHour, startMinute] = start.split(':').map(Number);
+    const [endHour, endMinute] = end.split(':').map(Number);
+    return (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+}
 
-// const roundMinutesToNearestQuarter = (time: string) => {
-//     const [hour, minute] = time.split(':').map(Number);
-//     const roundedMinutes = Math.round(minute / 15) * 15;
-//     const adjustedHour = roundedMinutes === 60 ? hour + 1 : hour;
-//     const adjustedMinutes = roundedMinutes === 60 ? 0 : roundedMinutes;
-//     return `${adjustedHour.toString().padStart(2, '0')}:${adjustedMinutes.toString().padStart(2, '0')}`;
-// };
+const roundMinutesToNearestQuarter = (time: string) => {
+    const [hour, minute] = time.split(':').map(Number);
+    const roundedMinutes = Math.round(minute / 15) * 15;
+    const adjustedHour = roundedMinutes === 60 ? hour + 1 : hour;
+    const adjustedMinutes = roundedMinutes === 60 ? 0 : roundedMinutes;
+    return `${adjustedHour.toString().padStart(2, '0')}:${adjustedMinutes.toString().padStart(2, '0')}`;
+};
 
 const formatPeriodTime = (time: string) => {
     return time.split(':').slice(0, 2).join(':');
@@ -47,62 +47,54 @@ const formatPeriodTime = (time: string) => {
 export const Time = observer(({
     isOpen,
     onClose,
-    // startTime,
-    // endTime,
+    startTime,
+    endTime,
 }: TimeProps) => {
     const {
         bookedModules,
         formattedDate,
         date,
-        periodsToBook,
-        availablePeriodToBook,
-        moduleSchemeId,
+        allPeriods,
+        moduleSchemePeriod,
     } = bookStore;
-    // const [start, setStart] = useState(startTime);
-    // const [end, setEnd] = useState(endTime);
-    const [activePeriodId, setActivePeriodId] = useState<number | null>(moduleSchemeId);
+    const [start, setStart] = useState(startTime);
+    const [end, setEnd] = useState(endTime);
+
+    const [activePeriod, setActivePeriod] = useState<[string, string] | null>(bookStore.moduleSchemePeriod);
 
     if (!bookedModules.length) return null;
 
-    // const handleBlur = (setter: React.Dispatch<React.SetStateAction<string>>, value: string, isStart: boolean) => {
-    //     const roundedTime = roundMinutesToNearestQuarter(value);
-    //     setter(roundedTime);
+    const handleBlur = (setter: React.Dispatch<React.SetStateAction<string>>, value: string, isStart: boolean) => {
+        const roundedTime = roundMinutesToNearestQuarter(value);
+        setter(roundedTime);
 
-    //     if (isStart) {
-    //         const differenceInMinutes = getDifferenceInMinutes(roundedTime, end);
-    //         if (differenceInMinutes % 60 !== 0) {
-    //             const additionalMinutes = differenceInMinutes % 60 < 30 ? -(differenceInMinutes % 60) : 60 - (differenceInMinutes % 60);
-    //             const [endHour, endMinute] = end.split(':').map(Number);
-    //             const newEndMinute = endMinute + additionalMinutes;
-    //             const newEndHour = endHour + Math.floor(newEndMinute / 60);
-    //             const adjustedEndMinute = newEndMinute % 60;
-    //             setEnd(`${newEndHour}:${adjustedEndMinute < 10 ? '0' : ''}${adjustedEndMinute}`);
-    //         }
-    //     }
-    // }
+        if (isStart) {
+            const differenceInMinutes = getDifferenceInMinutes(roundedTime, end);
+            if (differenceInMinutes % 60 !== 0) {
+                const additionalMinutes = differenceInMinutes % 60 < 30 ? -(differenceInMinutes % 60) : 60 - (differenceInMinutes % 60);
+                const [endHour, endMinute] = end.split(':').map(Number);
+                const newEndMinute = endMinute + additionalMinutes;
+                const newEndHour = endHour + Math.floor(newEndMinute / 60);
+                const adjustedEndMinute = newEndMinute % 60;
+                setEnd(`${newEndHour}:${adjustedEndMinute < 10 ? '0' : ''}${adjustedEndMinute}`);
+            }
+        }
+    }
 
-    console.log('bookedModules', JSON.parse(JSON.stringify(bookedModules)));
-    console.log('moduleSchemeId', moduleSchemeId);
+    const handleHourlySubmit = () => {
+        bookStore.setStartTime(start);
+        bookStore.setFormHours(calculateTimeDifferenceInHours(start, end));
+        onClose();
+    }
 
-    console.log('----------------------------------bookStore', bookStore.formStartTime);
-    console.log('----------------------------------bookStore', bookStore.endTime);
+    const handlePeriodSubmit = () => {
+        if (!activePeriod) return;
 
-    // const _handleSubmit = () => {
-    //     bookStore.setStartTime(start);
-    //     bookStore.setHours(calculateTimeDifferenceInHours(start, end));
-    //     onClose();
-    // }
-
-    const handleSubmit = () => {
-        const period = periodsToBook.find((p) => p.id === activePeriodId);
-        if (!period) return;
-
-        const startTime = period.start_time.split(':').slice(0, 2).join(':');
-        const endTime = period.end_time.split(':').slice(0, 2).join(':');
+        const startTime = activePeriod[0].split(':').slice(0, 2).join(':');
+        const endTime = activePeriod[1].split(':').slice(0, 2).join(':');
         bookStore.setStartTime(startTime);
         bookStore.setEndTime(endTime);
-
-        bookStore.setModuleSchemeId(period.id);
+        bookStore.setPeriod([activePeriod[0], activePeriod[1]]);
         onClose();
     }
 
@@ -118,8 +110,6 @@ export const Time = observer(({
     //     // @todo - время начала не может быть больше текущего времени
     //     return null;
     // }, [start, end]);
-
-    console.log('periodsToBook', JSON.parse(JSON.stringify(periodsToBook)));
 
     return (
         <Sheet
@@ -148,71 +138,78 @@ export const Time = observer(({
 
                         <div className={styles.body}>
                             <Card>
-                                <div className={styles.periods}>
-                                    {periodsToBook.map((period) => {
-                                        const isDisabled = !availablePeriodToBook.find((p) => p.id === period.id);
+                                {moduleSchemePeriod ? (
+                                    <div className={styles.periods}>
+                                        {allPeriods.map((period) => {
+                                            // const isDisabled = !availablePeriodToBook.find((p) => p.id === period.id);
 
-                                        return (
-                                            <div
-                                                key={period.id}
-                                                className={cn(styles.period, {
-                                                    [styles.periodActive]: period.id === activePeriodId,
-                                                    [styles.periodDisabled]: isDisabled,
-                                                })}
-                                                onClick={() => {
-                                                    if (isDisabled) return;
-                                                    setActivePeriodId(period.id)
-                                                }}
-                                            >
-                                                <div className={styles.periodTime}>
-                                                    {formatPeriodTime(period.start_time)} - {formatPeriodTime(period.end_time)}
+                                            return (
+                                                <div
+                                                    key={`${period[0]}-${period[1]}`}
+                                                    className={cn(styles.period, {
+                                                        [styles.periodActive]: activePeriod?.[0] === period[0] && activePeriod?.[1] === period[1],
+                                                        // [styles.periodDisabled]: isDisabled,
+                                                    })}
+                                                    onClick={() => {
+                                                        // if (isDisabled) return;
+                                                        setActivePeriod(period);
+                                                    }}
+                                                >
+                                                    <div className={styles.periodTime}>
+                                                        {formatPeriodTime(period[0])} - {formatPeriodTime(period[1])}
+                                                    </div>
+                                                    <div className={styles.periodName}>{bookStore.getNamePeriod(period)}</div>
                                                 </div>
-                                                <div className={styles.periodName}>{period.name}</div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                                {/* <div className={styles.time}>
-                                    <TimeComponent
-                                        value={start}
-                                        onChange={(value) => setStart(value)}
-                                        onBlur={() => handleBlur(setStart, start, true)}
-                                    />
-                                    <TimeComponent
-                                        value={end}
-                                        onChange={(value) => setEnd(value)}
-                                        onBlur={() => handleBlur(setEnd, end, false)}
-                                    />
-                                </div> */}
-                                <div className={styles.reservations}>
-                                    {/* <div className={styles.reservationsTitle}>
-                                        <Icon name="time" size="extra-small"/>
-                                        <span>Доступность модуля</span>
-                                        <span>{formattedDate}</span>
+                                            );
+                                        })}
                                     </div>
+                                ) : (
+                                    <div className={styles.time}>
+                                        <TimeComponent
+                                            value={start}
+                                            onChange={(value) => setStart(value)}
+                                            onBlur={() => handleBlur(setStart, start, true)}
+                                        />
+                                        <TimeComponent
+                                            value={end}
+                                            onChange={(value) => setEnd(value)}
+                                            onBlur={() => handleBlur(setEnd, end, false)}
+                                        />
+                                    </div>
+                                )}
+                                
+                                {bookedModules.length === 1 && (
+                                    <div className={styles.reservations}>
+                                        <div className={styles.reservationsTitle}>
+                                            <Icon name="time" size="extra-small"/>
+                                            <span>Доступность модуля</span>
+                                            <span>{formattedDate}</span>
+                                        </div>
 
-                                    {bookedModules[0]?.slots.map((s) => {
-                                        const duration = getTimeRangeDurationInHoursAndMinutes(s.from, s.to);
+                                        {bookedModules[0]?.slots.map((s) => {
+                                            const duration = getTimeRangeDurationInHoursAndMinutes(s.from, s.to);
 
-                                        return (
-                                            <div
-                                                className={
-                                                    cn(
-                                                        styles.reservation,
-                                                        {
-                                                            [styles.free]: !s.is_busy,
-                                                            [styles.booked]: s.is_busy,
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                <span>{s.is_busy ? 'Занят' : 'Свободен'}</span>
-                                                <span>{formatTimeRange(s.from, s.to)}</span>
-                                                <span>{duration.hours} ч. {duration.minutes ? `${duration.minutes} мин.` : ''}</span>
-                                            </div>
-                                        );
-                                    })} */}
-                                </div>
+                                            return (
+                                                <div
+                                                    className={
+                                                        cn(
+                                                            styles.reservation,
+                                                            {
+                                                                [styles.free]: !s.is_busy,
+                                                                [styles.booked]: s.is_busy,
+                                                            }
+                                                        )
+                                                    }
+                                                >
+                                                    <span>{s.is_busy ? 'Занят' : 'Свободен'}</span>
+                                                    <span>{formatTimeRange(s.from, s.to)}</span>
+                                                    <span>{duration.hours} ч. {duration.minutes ? `${duration.minutes} мин.` : ''}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+
                                 <div className={styles.reservationsFooter}>
                                     По местному времени
                                 </div>
@@ -222,7 +219,13 @@ export const Time = observer(({
                         </div>
 
                         <div className={styles.footer}>
-                            <Button size="medium" variant="yellow" onClick={handleSubmit}>Выбрать</Button>
+                            <Button
+                                size="medium"
+                                variant="yellow"
+                                onClick={moduleSchemePeriod ? handlePeriodSubmit : handleHourlySubmit}
+                            >
+                                Выбрать
+                            </Button>
                             <Button size="medium" variant="tertiary" onClick={onClose}>Отмена</Button>
                         </div>
                     </div>

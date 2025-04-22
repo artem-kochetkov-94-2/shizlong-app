@@ -1,0 +1,27 @@
+.footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 15px;
+    border-top: 1px solid #E3E5EA;
+    background-color: #ffffff;
+}
+
+.shortFooter {
+    padding-block: 10px;
+    border-top: none;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.favorite {
+    svg {
+      fill: #f95e5e;
+      color: #f95e5e;
+    }
+  }

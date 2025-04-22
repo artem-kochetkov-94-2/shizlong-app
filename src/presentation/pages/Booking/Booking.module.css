@@ -52,6 +52,10 @@
     gap: 10px;
 }
 
+.moduleUnavailable {
+    opacity: 0.3;
+}
+
 .moduleImage {
     display: flex;
     align-items: center;
@@ -100,6 +104,7 @@
     font-size: 12px;
     line-height: 14.4px;
     color: #A0A7B1;
+    white-space: nowrap;
 }
 
 /* Card */
