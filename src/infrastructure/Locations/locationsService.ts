@@ -10,7 +10,10 @@ import {
   RawService,
 } from './types';
 import { RestService } from '../restService/restService';
-import { VerificationStore, verificationStore } from '@src/application/store/verificationStore';
+import {
+  VerificationStore,
+  verificationStore,
+} from '@src/application/store/verificationStore';
 
 const routes = {
   locations: '/location/list',
@@ -58,7 +61,7 @@ class LocationsService {
       url: `${this.apiUrlV2}${routes.locations}`,
       data: {
         favorite_only: true,
-      }
+      },
     });
 
     return response;
@@ -116,11 +119,9 @@ class LocationsService {
   }
 
   async getAdditionalServices(id: number) {
-    const { response } = await this.restService.get<RawAdditionalService[]>(
-      {
-        url: `${this.apiUrlV2}${routes.additionalServices}`.replace(':id', `${id}`),
-      }
-    );
+    const { response } = await this.restService.get<RawAdditionalService[]>({
+      url: `${this.apiUrlV2}${routes.additionalServices}`.replace(':id', `${id}`),
+    });
     return response;
   }
 

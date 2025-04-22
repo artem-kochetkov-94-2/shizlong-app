@@ -18,10 +18,14 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
       <div className={styles.item} key={booking.id}>
         <div className={styles.wrapper}>
           <div className={styles.content}>
-            <div className={styles.category}>{booking.sector_scheme?.sector.name} пляжа</div>
+            <div className={styles.category}>
+              {booking.sector_scheme?.sector.name} пляжа
+            </div>
             <div
               className={styles.name}
-              onClick={() => navigate(Routes.BookingDetails.replace(':id', booking.id.toString()))}
+              onClick={() =>
+                navigate(Routes.BookingDetails.replace(':id', booking.id.toString()))
+              }
             >
               {booking.sector_scheme?.sector.location.name}
             </div>
@@ -32,18 +36,26 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
             </div>
 
             <div className={styles.range}>
-              <span>{formatFullDate(new Date(booking.booking_modules?.[0]?.start_time))}</span>
+              <span>
+                {formatFullDate(new Date(booking.booking_modules?.[0]?.start_time))}
+              </span>
               <Icon name='time' size='extra-small' />
               <span>
-                {new Date(booking.booking_modules?.[0]?.start_time).toLocaleString('ru-RU', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}{' '}
+                {new Date(booking.booking_modules?.[0]?.start_time).toLocaleString(
+                  'ru-RU',
+                  {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }
+                )}{' '}
                 -{' '}
-                {new Date(booking.booking_modules?.[0]?.end_time).toLocaleString('ru-RU', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+                {new Date(booking.booking_modules?.[0]?.end_time).toLocaleString(
+                  'ru-RU',
+                  {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }
+                )}
               </span>
             </div>
           </div>
@@ -61,7 +73,12 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               </SwiperSlide>
             </Swiper>
             <div className={styles.status}>
-              {booking.booking_modules.length} {declension(booking.booking_modules.length, ['модуль', 'модуля', 'модулей'])}
+              {booking.booking_modules.length}{' '}
+              {declension(booking.booking_modules.length, [
+                'модуль',
+                'модуля',
+                'модулей',
+              ])}
             </div>
           </div>
         </div>

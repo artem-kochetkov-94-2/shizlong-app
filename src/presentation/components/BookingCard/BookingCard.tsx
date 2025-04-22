@@ -46,12 +46,16 @@ export const colorByStatus = {
 export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
   const [isCancelOpen, setCancelOpen] = useState(false);
   const navigate = useNavigate();
-  const isFavorite = locationsStore.getFavoriteStatus(booking.sector_scheme?.sector.location_id);
+  const isFavorite = locationsStore.getFavoriteStatus(
+    booking.sector_scheme?.sector.location_id
+  );
   const { isLoadingProcessPayment } = paymentStore;
   const { isLoadingCancelBooking } = bookingsStore;
   const { location: geoLocation } = geoStore;
   const { locations } = locationsStore;
-  const location = locations.find((l) => l.id === booking.sector_scheme?.sector.location_id);
+  const location = locations.find(
+    (l) => l.id === booking.sector_scheme?.sector.location_id
+  );
 
   console.log('booking', JSON.parse(JSON.stringify(booking)));
 
@@ -68,7 +72,9 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
             <div className={styles.category}>Пляж</div>
             <div
               className={styles.name}
-              onClick={() => navigate(Routes.BookingDetails.replace(':id', booking.id.toString()))}
+              onClick={() =>
+                navigate(Routes.BookingDetails.replace(':id', booking.id.toString()))
+              }
             >
               {booking.sector_scheme?.sector.location.name}
             </div>
@@ -78,18 +84,26 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               <span>{booking.sector_scheme?.sector.name}</span>
             </div>
             <div className={styles.range}>
-              <span>{formatFullDate(new Date(booking.booking_modules?.[0]?.start_time))}</span>
+              <span>
+                {formatFullDate(new Date(booking.booking_modules?.[0]?.start_time))}
+              </span>
               <Icon name='time' size='extra-small' />
               <span>
-                {new Date(booking.booking_modules?.[0]?.start_time).toLocaleString('ru-RU', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}{' '}
+                {new Date(booking.booking_modules?.[0]?.start_time).toLocaleString(
+                  'ru-RU',
+                  {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }
+                )}{' '}
                 -{' '}
-                {new Date(booking.booking_modules?.[0]?.end_time).toLocaleString('ru-RU', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+                {new Date(booking.booking_modules?.[0]?.end_time).toLocaleString(
+                  'ru-RU',
+                  {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }
+                )}
               </span>
             </div>
           </div>
@@ -119,7 +133,9 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
 
             <div
               className={styles.qrCode}
-              onClick={() => navigate(Routes.BookingDetailsQR.replace(':id', booking.id.toString()))}
+              onClick={() =>
+                navigate(Routes.BookingDetailsQR.replace(':id', booking.id.toString()))
+              }
             >
               <Icon name='qr-code2' size='small' color='dark' />
             </div>
@@ -148,7 +164,12 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               size='medium'
               variant='tertiary'
               onClick={() => {
-                navigate(Routes.Sector.replace(':id', booking.sector_scheme?.sector.id.toString() || ''));
+                navigate(
+                  Routes.Sector.replace(
+                    ':id',
+                    booking.sector_scheme?.sector.id.toString() || ''
+                  )
+                );
               }}
             >
               <Icon name='location-flag' size='extra-small' />
@@ -163,7 +184,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               iconColor='dark'
               href={createYandexMapsRouteLink(
                 [geoLocation?.latitude, geoLocation?.longitude],
-                location?.coordinates.slice().reverse() as [number, number] || [0, 0],
+                (location?.coordinates.slice().reverse() as [number, number]) || [0, 0]
               )}
             />
             <IconButton
@@ -205,7 +226,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
                 variant='tertiary'
                 onClick={() => setCancelOpen(true)}
               >
-                <span>Отменить</span>
+                <span>Отмени</span>
               </Button>
             )}
             {/* <IconButton
