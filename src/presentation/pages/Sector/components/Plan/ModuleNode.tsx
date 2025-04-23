@@ -3,15 +3,17 @@ import { RawModule } from '@src/infrastructure/Locations/types';
 import cn from 'classnames';
 import styles from './ModuleNode.module.css';
 import { observer } from 'mobx-react-lite';
-
-const baseWidth = 16.14;
+import { sectorStore } from '@src/application/store/sectorStore';
 
 export const ModuleNode = observer(({ data: { module }}: { data: { module: RawModule } }) => {
   const { bookModules } = bookStore;
+  const { size, sector } = sectorStore;
   const isAvailable = bookStore.isModuleAvailable(module);
 
-  const width = Number(module.placed_icon?.width_icon) * baseWidth;
-  const height = Number(module.placed_icon?.height_icon) * baseWidth;
+  const pixelMeter = size?.width / sector?.map_width_meter;
+
+  const width = Number(module.placed_icon?.width_icon) * pixelMeter;
+  const height = Number(module.placed_icon?.height_icon) * pixelMeter;
   const fontSize = height * 0.3;
 
   return (
