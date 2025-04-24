@@ -110,6 +110,43 @@ export interface RawBooking {
     qr: string;
 }
 
+export interface RawCashierBooking {
+  id: number;
+  total_price: {
+    value: number;
+    formatted_value: string;
+  };
+  status: {
+    name: BookingStatus;
+    description: string;
+  };
+  accessories: RawBookingAccessory[];
+  sector_scheme: RawBoookingSectorScheme;
+  modules_count: number;
+  customer: RawBookingCustomer;
+  booked_user: null | {
+    id: number;
+    name: string;
+    phone: string;
+  };
+}
+export interface CashierBookingResponse {
+  data: RawCashierBooking[];
+  links: {
+    first: string;
+    last: string | null;
+    next: string;
+    prev: string | null;
+  }
+  meta: {
+    current_page: number;
+    from: number;
+    path: string;
+    per_page: number;
+    to: number;
+  }
+}
+
 type PaymentStatus = 'processing' | 'complete' | 'cancel';
 
 type PaymentStatusUppercase = 'PROCESSING' | 'COMPLETE' | 'CANCEL';

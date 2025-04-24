@@ -1,10 +1,12 @@
 import { makeAutoObservable } from 'mobx';
 import { RawLocation, RawSector } from '@src/infrastructure/Locations/types';
 import { locationsService } from '@src/infrastructure/Locations/locationsService';
+import { RawCashierBooking } from '@src/infrastructure/bookings/types';
 
 export class CashierStore {
   locations: RawLocation[] = [];
   sectors: RawSector[] = [];
+  bookings: RawCashierBooking[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -38,6 +40,16 @@ export class CashierStore {
     try {
       const sectors = await locationsService.getCashierSectors();
       return sectors;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  async fetchBookings() {
+    try {
+      const { data } = await locationsService.getCashierBookings();
+      return this.bookings = data;
     } catch (error) {
       console.error(error);
       throw error;
