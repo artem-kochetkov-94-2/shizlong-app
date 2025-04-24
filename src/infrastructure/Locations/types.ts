@@ -133,6 +133,8 @@ export interface ModuleScheme {
   end_time: string;
   is_active: boolean;
   price: Price;
+  discreteness: number;
+  discreteness_steps: number;
   type: {
     name: 'period' | 'hourly';
     description: string;

@@ -22,7 +22,9 @@ export const Sector = observer(() => {
   const { sector, activeScheme } = sectorStore;
   const { bookModules } = bookStore;
 
-  console.log('========== bookModules', JSON.parse(JSON.stringify(bookModules)));
+  // console.log('========== bookModules', JSON.parse(JSON.stringify(bookModules)));
+  // console.log('SCHEME MODULES', JSON.parse(JSON.stringify(modules.filter((m) => m.sector_scheme_id === activeScheme?.id))));
+  // console.log('SCHEME MODULES HOURLY', JSON.parse(JSON.stringify(modules.filter((m) => m.module_schemes.find((s) => s.type.name === 'hourly')))));
 
   useEffect(() => {
     sectorStore.init(Number(id));
@@ -34,14 +36,18 @@ export const Sector = observer(() => {
     locationStore.init(sector.location_id);
   }, [sector, location]);
 
+  // clear states after change scheme
+  useEffect(() => {
+    bookStore.clear();
+  }, [activeScheme]);
+
   // clear modules from another sector or scheme
   useEffect(() => {
     if (!sector || !location || !bookModules.size) return;
 
     const first = bookModules.values().next().value;
-    const module = modules.find((m) => m.id === first?.id);
 
-    if (module?.sector_id !== sector.id || module?.sector_scheme_id !== activeScheme?.id) {
+    if (first?.sector_id !== sector.id || first?.sector_scheme_id !== activeScheme?.id) {
       bookStore.clear();
     }
   }, [sector, location, bookModules, modules, activeScheme]);
@@ -57,7 +63,6 @@ export const Sector = observer(() => {
 
   const handleChangeSector = (sectorId: number | undefined) => {
     if (!sectorId) return;
-
     navigate(`${Routes.Sector.replace(':id', `${sectorId}`)}`);
   };
 
