@@ -24,6 +24,7 @@ export const CancelBookingPanel = observer(
         onClose={onClose}
         detent='content-height'
         dragVelocityThreshold={DRAG_VELOCITY_THRESHOLD}
+        style={{zIndex: '10000'}}
       >
         <Sheet.Container>
           <Sheet.Header />
