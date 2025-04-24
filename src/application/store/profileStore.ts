@@ -11,7 +11,7 @@ export class ProfileStore {
 
   get isCashier() {
     // return true;
-    return true;
+    return false;
     return this.profile?.employee?.role.name === 'owner';
   }
 
