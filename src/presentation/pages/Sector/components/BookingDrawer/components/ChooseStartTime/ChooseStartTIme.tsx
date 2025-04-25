@@ -3,44 +3,35 @@ import { Time } from '@src/presentation/components/Time';
 import styles from './ChooseStartTime.module.css';
 import { bookStore } from '@src/application/store/bookStore';
 import { observer } from 'mobx-react-lite';
-import { useEffect } from 'react';
-
-const roundMinutesUpToNearestQuarter = (time: string) => {
-    const [hour, minute] = time.split(':').map(Number);
-    const roundedMinutes = Math.ceil(minute / 15) * 15;
-    const adjustedHour = roundedMinutes === 60 ? hour + 1 : hour;
-    const adjustedMinutes = roundedMinutes === 60 ? 0 : roundedMinutes;
-    return `${adjustedHour.toString().padStart(2, '0')}:${adjustedMinutes.toString().padStart(2, '0')}`;
-};
+import { roundMinutesUpToNearestQuarter } from '@src/application/utils/roundMinutesUpToNearestQuarter';
+import { formatPeriodTime } from '@src/application/utils/formatPeriodTime';
 
 export const ChooseStartTime = observer(() => {
-    const { formStartTime } = bookStore;
+    const { formStartTime, moduleSchemePeriod } = bookStore;
 
     const handleTimeChange = (value: string) => {
-        bookStore.setStartTime(value);
-        bookStore.setPeriod(null);
+        bookStore.setStartTime((roundMinutesUpToNearestQuarter(value)));
     };
 
     const handleTimeBlur = () => {
         handleTimeChange(roundMinutesUpToNearestQuarter(formStartTime));
     };
 
-    useEffect(() => {
-        bookStore.setStartTime((roundMinutesUpToNearestQuarter(formStartTime)));
-    }, [formStartTime]);
-
-    console.log('startTime', formStartTime);
-
     return (
         <div className={cn(
             styles.modulesControlsItem,
-            styles.modulesControlsItemActive
+            { [styles.modulesControlsItemActive]: moduleSchemePeriod?.type === 'period' }
         )}>
-            <Time
-                value={formStartTime}
-                onChange={handleTimeChange}
-                onBlur={handleTimeBlur}
-            />
+            {moduleSchemePeriod?.type === 'hourly' && (
+                <Time
+                    value={formStartTime}
+                    onChange={handleTimeChange}
+                    onBlur={handleTimeBlur}
+                />
+            )}
+            {moduleSchemePeriod?.type === 'period' && (
+                <div>{formatPeriodTime(moduleSchemePeriod.startTime)} - {formatPeriodTime(moduleSchemePeriod.endTime)}</div>
+            )}
         </div>
     );
 });

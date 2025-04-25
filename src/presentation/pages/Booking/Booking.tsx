@@ -19,8 +19,8 @@ import { Counter } from '@src/presentation/ui-kit/Counter';
 import { Routes } from "@src/routes";
 import { useSearchParams } from 'react-router-dom';
 import { Module } from '@src/presentation/components/Module/Module';
-import cn from 'classnames';
 import { useFetchModules } from '@src/application/hooks/useFetchModules';
+import cn from 'classnames';
 
 export const Booking = observer(() => {
     const navigate = useNavigate();
@@ -32,11 +32,9 @@ export const Booking = observer(() => {
     const {
         formattedDate,
         formattedTime,
-        formattedDuration,
         bookPrice,
         isCreatingBooking,
         bookModules,
-        moduleSchemePeriod,
     } = bookStore;
     const { location, beachAccessories, modules } = locationStore;
     const { sector } = sectorStore;
@@ -84,7 +82,6 @@ export const Booking = observer(() => {
                                         const module = modules.find((m) => m.id === moduleId);
                                         if (!module) return null;
                                         const isModuleAvailable = bookStore.isModuleAvailable(module);
-
                                         const moduleScheme = bookStore.getScheme(module);
 
                                         return (
@@ -136,14 +133,15 @@ export const Booking = observer(() => {
                                 </Card>
 
                                 <Card className={styles.card}>
-                                    <div className={styles.time} onClick={() => setIsTimeOpen(true)}>
+                                    <div className={styles.time}>
+                                    {/* <div className={styles.time} onClick={() => setIsTimeOpen(true)}> */}
                                         <div className={styles.cardTitle}>
                                             <span>Часы</span>
                                             <span>{formattedTime}</span>
                                         </div>
 
                                         {/* <Tag size="medium" text={formattedDuration} /> */}
-                                        <Icon name="arrow-right" size="small" />
+                                        {/* <Icon name="arrow-right" size="small" /> */}
                                     </div>
                                 </Card>
 

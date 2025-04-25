@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import { RawSector, RawSectorSchema } from '@src/infrastructure/Locations/types';
 import { locationsService } from '@src/infrastructure/Locations/locationsService';
 
-class SectorStore {
+export class SectorStore {
   schemes: RawSectorSchema[] = [];
   sector: RawSector | null = null;
   activeScheme: RawSectorSchema | null = null;
