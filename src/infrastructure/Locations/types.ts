@@ -53,6 +53,7 @@ interface PlacedIcon {
   style: string;
   name_icon: string;
   link_icon: string;
+  is_decorated?: boolean;
 }
 
 export interface RawService {
@@ -158,7 +159,7 @@ export interface RawModule {
     name: ModuleStatus;
     description: string;
   }
-  module_schemes: ModuleScheme[]
+  module_schemes?: ModuleScheme[]
 }
 
 export interface FavoriteUpdateResult {

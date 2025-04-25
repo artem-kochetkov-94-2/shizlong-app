@@ -45,6 +45,7 @@ export class LocationStore {
   isModulesLoading = false;
   isServicesLoading = false;
   modules: RawModule[] = [];
+  decorate: RawModule[] = [];
   services: RawService[] = [];
 
   constructor() {
@@ -204,10 +205,17 @@ export class LocationStore {
   async fetchModules(id: number, from_date?: string, to_date?: string) {
     try {
       this.isModulesLoading = true;
-      const modules = await locationsService.getModules(id, from_date, to_date);
+      const elements = await locationsService.getModules(id, from_date, to_date);
+      const modules = elements.filter(e => e.placed_icon.is_decorated === false);
+      const decorate = elements.filter(e => e.placed_icon.is_decorated === true);
+
+      console.log('elements', elements);
       console.log('modules', modules);
+      console.log('decorate', decorate);
+
       runInAction(() => {
         this.modules = modules;
+        this.decorate = decorate;
       });
     } catch (error) {
       console.error(error);
