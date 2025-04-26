@@ -42,7 +42,7 @@ interface Price {
   formatted_value: string;
 }
 
-interface PlacedIcon {
+export interface PlacedIcon {
   id: number;
   width_icon: string;
   height_icon: string;
@@ -54,6 +54,7 @@ interface PlacedIcon {
   name_icon: string;
   link_icon: string;
   is_decorated?: boolean;
+  sector_scheme_id?: number;
 }
 
 export interface RawService {

@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import styles from './Plan.module.css';
-import { RawModule, RawSector } from '@src/infrastructure/Locations/types';
+import { PlacedIcon, RawModule, RawSector } from '@src/infrastructure/Locations/types';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { ModuleNode } from './ModuleNode';
 import { PlanImageNode } from './PlanImageNode';
@@ -39,7 +39,7 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
   const { modules, decorate } = locationStore;
   const { sector, activeScheme, size } = sectorStore;
 
-  const getNodes = (sector: RawSector, sectorModules: RawModule[], decorate: RawModule[]) => {
+  const getNodes = (sector: RawSector, sectorModules: RawModule[], decorate: PlacedIcon[]) => {
     const nodes: Node[] = [{
         id: 'sector_scheme',
         type: 'PlanImageNode',
@@ -70,16 +70,16 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
         nodes.push(node);
     });
 
-    decorate.forEach((m) => {
+    decorate.forEach((d) => {
         const node = {
-            id: `${m.id}`,
+            id: `${d.id}`,
             type: 'DecorateNode',
             data: {
-                module: m,
+                decorate: d,
             },
             position: {
-                x: Number(m.placed_icon?.left) * 2,
-                y: Number(m.placed_icon?.top) * 2,
+                x: Number(d.left) * 2,
+                y: Number(d.top) * 2,
             },
         };
 
@@ -93,8 +93,9 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
     if (!sector || !modules) return;
 
     const sectorModules = modules.filter((m) => m.sector_id === sector.id && m.sector_scheme_id === activeScheme?.id);
+    const decorates = decorate.filter(d => d.sector_scheme_id === activeScheme?.id)
 
-    const nodes = getNodes(sector, sectorModules, decorate);
+    const nodes = getNodes(sector, sectorModules, decorates);
     setNodes(nodes);
   }, [sector, modules, decorate, activeScheme]);
 

@@ -6,6 +6,7 @@ import {
   RawModule,
   RawBeachAccessory,
   RawService,
+  PlacedIcon,
 } from '@src/infrastructure/Locations/types';
 import { Tab } from '@src/presentation/ui-kit/Tabs/Tabs';
 import { locationsService } from '@src/infrastructure/Locations/locationsService';
@@ -45,7 +46,7 @@ export class LocationStore {
   isModulesLoading = false;
   isServicesLoading = false;
   modules: RawModule[] = [];
-  decorate: RawModule[] = [];
+  decorate: PlacedIcon[] = [];
   services: RawService[] = [];
 
   constructor() {
@@ -103,6 +104,7 @@ export class LocationStore {
     this.fetchAdditionalServices(locationId);
     this.fetchBeachAccessories(locationId);
     this.fetchModules(locationId);
+    this.fetchDecorate(locationId);
     this.fetchServices(locationId);
   }
 
@@ -207,14 +209,29 @@ export class LocationStore {
       this.isModulesLoading = true;
       const elements = await locationsService.getModules(id, from_date, to_date);
       const modules = elements.filter(e => e.placed_icon.is_decorated === false);
-      const decorate = elements.filter(e => e.placed_icon.is_decorated === true);
 
-      console.log('elements', elements);
       console.log('modules', modules);
-      console.log('decorate', decorate);
+      // console.log('decorate', decorate);
 
       runInAction(() => {
         this.modules = modules;
+        // this.decorate = decorate;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.isModulesLoading = false;
+    }
+  }
+
+  async fetchDecorate(id: number) {
+    try {
+      this.isModulesLoading = true;
+      const decorate = await locationsService.getDecorate(id);
+
+      console.log('decorate', decorate);
+
+      runInAction(() => {
         this.decorate = decorate;
       });
     } catch (error) {

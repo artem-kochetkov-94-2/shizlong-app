@@ -1,6 +1,7 @@
-import { API_URL_V2 } from '@src/const';
+import { API_URL, API_URL_V2 } from '@src/const';
 import {
   FavoriteUpdateResult,
+  PlacedIcon,
   RawAdditionalService,
   RawBeachAccessory,
   RawLocation,
@@ -26,10 +27,13 @@ const routes = {
 
   cashierSectors: '/cashier/sectors/get',
   cashierLocations: '/cashier/locations/get',
+
+  decorate: '/location/:id/get-decor',
 };
 
 class LocationsService {
   private readonly apiUrlV2 = API_URL_V2;
+  private readonly apiUrlV1 = API_URL;
   private restService: RestService;
   private readonly verificationStore: VerificationStore;
 
@@ -140,6 +144,14 @@ class LocationsService {
     const { response } = await this.restService.post<RawModule[]>({
       url: `${this.apiUrlV2}/location/${locationId}/modules`,
       data: { ...body },
+    });
+
+    return response;
+  }
+  
+  async getDecorate(locationId: number) {
+    const { response } = await this.restService.post<PlacedIcon[]>({
+      url: `${this.apiUrlV1}${routes.decorate.replace(':id', locationId.toString())}`,
     });
 
     return response;
