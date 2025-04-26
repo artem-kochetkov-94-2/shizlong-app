@@ -180,7 +180,7 @@ class BookStore {
     const schemes: [string, string][] = [];
 
     this.activeSchemeModules.forEach((module) => {
-      module.module_schemes.forEach((scheme) => {
+      module.module_schemes?.forEach((scheme) => {
         if (scheme.type.name === 'hourly') return;
 
         if (!schemes.find((period) => period[0] === scheme.start_time && period[1] === scheme.end_time)) {
@@ -217,7 +217,7 @@ class BookStore {
     const discreteness = new Set<number>();
 
     this.activeSchemeModules.forEach((module) => {
-      module.module_schemes.forEach((scheme) => {
+      module.module_schemes?.forEach((scheme) => {
         if (scheme.type.name === 'hourly') {
           for (let i = 0; i < scheme.discreteness_steps; i++) {
             discreteness.add(scheme.discreteness * i + scheme.discreteness);
@@ -278,7 +278,7 @@ class BookStore {
 
     const availableSlot = module.slots.find((slot) => {
       if (slot.is_busy) return false;
-      if (module.module_schemes.find((scheme) => scheme.id === slot.module_scheme_id)?.type.name !== 'hourly') return false;
+      if (module.module_schemes?.find((scheme) => scheme.id === slot.module_scheme_id)?.type.name !== 'hourly') return false;
   
       const formattedSlotStartTime = formatToLocalString(slot.from);
       const formattedSlotEndTime = formatToLocalString(slot.to);
@@ -292,6 +292,7 @@ class BookStore {
   isModuleAvailableForHourlySchemes = (module: RawModule): boolean => {
     const availableSlot = this.getAvailableSlot(module);
     const moduleScheme = this.getScheme(module);
+    if (moduleScheme?.is_active === false) return false;
 
     if (this.bookModules.size > 1) {
       const firstBookModule = this.bookModules.values().next().value!;
@@ -320,16 +321,17 @@ class BookStore {
       const slotToTime = slot.to.split(' ')[1];
 
       if (slotFromTime !== moduleSchemePeriod!.startTime || slotToTime !== moduleSchemePeriod!.endTime) return false;
-      if (module.module_schemes.find((scheme) => scheme.id === slot.module_scheme_id)?.type.name === 'hourly') return false;
+      if (module.module_schemes?.find((scheme) => scheme.id === slot.module_scheme_id)?.type.name === 'hourly') return false;
   
       return true;
     });
 
-    if (availableSlot) {
-      return true;
-    }
+    if (!availableSlot) return false;
 
-    return false;
+    const scheme = this.getScheme(module);
+    if (!scheme) return false;
+
+    return scheme.is_active;
   }
 
   isModuleAvailable = (module: RawModule): boolean => {
@@ -348,7 +350,7 @@ class BookStore {
     const moduleSchemePeriod = this.moduleSchemePeriod;
     if (!isActiveRangePeriod(moduleSchemePeriod)) return null;
 
-    const findedPeriod = module.module_schemes.find((scheme) => {
+    const findedPeriod = module.module_schemes?.find((scheme) => {
       return scheme.start_time === moduleSchemePeriod.startTime && scheme.end_time === moduleSchemePeriod.endTime;
     });
 
@@ -362,7 +364,7 @@ class BookStore {
     const availableSlot = this.getAvailableSlot(module);
 
     if (availableSlot) {
-      return module.module_schemes.find((scheme) => scheme.id === availableSlot.module_scheme_id) || null;
+      return module.module_schemes?.find((scheme) => scheme.id === availableSlot.module_scheme_id) || null;
     }
 
     return null;

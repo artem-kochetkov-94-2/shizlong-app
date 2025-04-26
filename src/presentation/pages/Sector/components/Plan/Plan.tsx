@@ -10,13 +10,15 @@ import {
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import styles from './Plan.module.css';
-import { RawModule, RawSector } from '@src/infrastructure/Locations/types';
+import { PlacedIcon, RawModule, RawSector } from '@src/infrastructure/Locations/types';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { ModuleNode } from './ModuleNode';
 import { PlanImageNode } from './PlanImageNode';
+import { DecorateNode } from './DecorateNode';
 
 const nodeTypes = {
     ModuleNode,
+    DecorateNode,
     PlanImageNode,
 };
 
@@ -34,10 +36,10 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
     y: 0,
     zoom: 1,
   });
-  const { modules } = locationStore;
+  const { modules, decorate } = locationStore;
   const { sector, activeScheme, size } = sectorStore;
 
-  const getNodes = (sector: RawSector, sectorModules: RawModule[]) => {
+  const getNodes = (sector: RawSector, sectorModules: RawModule[], decorate: PlacedIcon[]) => {
     const nodes: Node[] = [{
         id: 'sector_scheme',
         type: 'PlanImageNode',
@@ -68,6 +70,22 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
         nodes.push(node);
     });
 
+    decorate.forEach((d) => {
+        const node = {
+            id: `${d.id}`,
+            type: 'DecorateNode',
+            data: {
+                decorate: d,
+            },
+            position: {
+                x: Number(d.left) * 2,
+                y: Number(d.top) * 2,
+            },
+        };
+
+        nodes.push(node);
+    });
+
     return nodes;
   }
 
@@ -75,10 +93,11 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
     if (!sector || !modules) return;
 
     const sectorModules = modules.filter((m) => m.sector_id === sector.id && m.sector_scheme_id === activeScheme?.id);
+    const decorates = decorate.filter(d => d.sector_scheme_id === activeScheme?.id)
 
-    const nodes = getNodes(sector, sectorModules);
+    const nodes = getNodes(sector, sectorModules, decorates);
     setNodes(nodes);
-  }, [sector, modules, activeScheme]);
+  }, [sector, modules, decorate, activeScheme]);
 
   const onViewportChange = (newViewport: Viewport) => {
     const screenWidth = window.innerWidth;
