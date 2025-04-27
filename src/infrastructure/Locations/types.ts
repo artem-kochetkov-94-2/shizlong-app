@@ -42,7 +42,7 @@ interface Price {
   formatted_value: string;
 }
 
-interface PlacedIcon {
+export interface PlacedIcon {
   id: number;
   width_icon: string;
   height_icon: string;
@@ -53,6 +53,8 @@ interface PlacedIcon {
   style: string;
   name_icon: string;
   link_icon: string;
+  is_decorated?: boolean;
+  sector_scheme_id?: number;
 }
 
 export interface RawService {
@@ -60,7 +62,7 @@ export interface RawService {
   name: string;
   images: string[];
   description: string | null;
-  placed_icon: PlacedIcon;
+  placed_icon?: PlacedIcon;
   minimal_price?: {
     price: Price;
     type: {
@@ -149,7 +151,7 @@ export interface RawModule {
   description: string | null;
   id: number;
   images: string[];
-  placed_icon: PlacedIcon;
+  placed_icon?: PlacedIcon;
   placed_icon_group: null;
   sector_id: number;
   sector_scheme_id: number;
@@ -158,7 +160,7 @@ export interface RawModule {
     name: ModuleStatus;
     description: string;
   }
-  module_schemes: ModuleScheme[]
+  module_schemes?: ModuleScheme[]
 }
 
 export interface FavoriteUpdateResult {

@@ -9,7 +9,11 @@ import styles from './BookingCard.module.css';
 import { Tag } from '@src/presentation/ui-kit/Tag';
 import { declension } from '@src/application/utils/delcension';
 
-export const BookingCard = observer(({ booking }: { booking: RawCashierBooking }) => {
+interface BookingCardProps {
+  booking: RawCashierBooking;
+}
+
+export const BookingCard = observer(({ booking }: BookingCardProps) => {
   const navigate = useNavigate();
   console.log('booking', JSON.parse(JSON.stringify(booking)));
 

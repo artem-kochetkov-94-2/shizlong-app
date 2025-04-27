@@ -25,7 +25,7 @@ import { locationStore } from '@src/application/store/locationStore';
 import { bookingsStore } from '@src/application/store/bookingsStore';
 import { BookingCard } from '@src/presentation/components/BookingCard';
 import { ChoosePeriod } from './components/ChoosePeriod/ChoosePeriod';
-import { ChooseStartTime } from './components/ChooseStartTime';
+import { ChooseStartTime } from './components/ChooseStartTime/ChooseStartTIme';
 
 const SNAP_POINTS = [758, 309, 79];
 const INITIAL_SNAP_POINT = 1;

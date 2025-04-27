@@ -34,7 +34,7 @@ export const Module = observer(({ onClose, onModuleRemove }: ModuleProps) => {
     const [searchParams] = useSearchParams();
     const moduleId = searchParams.get('module');
     const module = modules.find((m) => m.id === Number(moduleId));
-    const moduleCheapestPrice = module?.module_schemes.reduce((min, scheme) => scheme.price.value < min.price.value ? scheme : min, module?.module_schemes[0]);
+    const moduleCheapestPrice = module?.module_schemes?.reduce((min, scheme) => scheme.price.value < min.price.value ? scheme : min, module?.module_schemes[0]);
 
     const navigate = useNavigate();
 
