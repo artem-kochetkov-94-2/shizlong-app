@@ -1,12 +1,9 @@
 import { PageHeader } from '@src/presentation/ui-kit/PageHeader';
 import { observer } from 'mobx-react-lite';
 import { Tabs, useTabs } from '@src/presentation/ui-kit/Tabs';
-import { bookingsStore } from '@src/application/store/bookingsStore';
 import { BookingCard } from './components/BookingCard/BookingCard';
 import { Virtuoso } from 'react-virtuoso';
-import { profileStore } from '@src/application/store/profileStore';
-import { useEffect } from 'react';
-import { verificationStore } from '@src/application/store/verificationStore';
+import { cashierStore } from '@src/application/store/cashierStore';
 import styles from './ProfileBookings.module.css';
 
 const tabs = [
@@ -25,15 +22,8 @@ const tabs = [
 ];
 
 export const ProfileBookings = observer(() => {
-  const { bookings } = bookingsStore;
+  const { bookings } = cashierStore;
   const { currentTab, setCurrentTab } = useTabs(tabs[0].value);
-
-  // @todo: change to cashier bookings
-  useEffect(() => {
-    if (!verificationStore.isVerified || !profileStore.profile) return;
-
-    bookingsStore.getMyBookings();
-  }, [verificationStore.isVerified, profileStore.profile]);
 
   return (
     <div className={styles.wrapper}>
