@@ -40,6 +40,7 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
   const { sector, activeScheme, size } = sectorStore;
 
   const getNodes = (sector: RawSector, sectorModules: RawModule[], decorate: PlacedIcon[]) => {
+    console.log('sectorModules', sectorModules);
     const nodes: Node[] = [{
         id: 'sector_scheme',
         type: 'PlanImageNode',
@@ -62,8 +63,8 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
                 module: m,
             },
             position: {
-                x: Number(m.placed_icon?.left) * 2,
-                y: Number(m.placed_icon?.top) * 2,
+                x: Number(m.placed_icon?.left),
+                y: Number(m.placed_icon?.top),
             },
         };
 
@@ -78,8 +79,8 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
                 decorate: d,
             },
             position: {
-                x: Number(d.left) * 2,
-                y: Number(d.top) * 2,
+                x: Number(d.left),
+                y: Number(d.top),
             },
         };
 
