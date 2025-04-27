@@ -62,7 +62,7 @@ export interface RawService {
   name: string;
   images: string[];
   description: string | null;
-  placed_icon: PlacedIcon;
+  placed_icon?: PlacedIcon;
   minimal_price?: {
     price: Price;
     type: {
@@ -151,7 +151,7 @@ export interface RawModule {
   description: string | null;
   id: number;
   images: string[];
-  placed_icon: PlacedIcon;
+  placed_icon?: PlacedIcon;
   placed_icon_group: null;
   sector_id: number;
   sector_scheme_id: number;

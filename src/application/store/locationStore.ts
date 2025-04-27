@@ -208,7 +208,7 @@ export class LocationStore {
     try {
       this.isModulesLoading = true;
       const elements = await locationsService.getModules(id, from_date, to_date);
-      const modules = elements.filter(e => e.placed_icon.is_decorated === false);
+      const modules = elements.filter(e => e.placed_icon?.is_decorated === false);
 
       console.log('modules', modules);
       // console.log('decorate', decorate);
