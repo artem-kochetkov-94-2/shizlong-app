@@ -65,7 +65,13 @@ export const ProfileBookings = observer(() => {
           totalCount={bookings.length}
           itemContent={(index) => {
             const booking = bookings[index];
-            return <BookingCard key={booking.id} booking={booking} />;
+            const isLast = index === bookings.length - 1;
+            return (
+              <>
+                <BookingCard key={booking.id} booking={booking} />
+                {isLast && <div style={{ height: 100 }} />}
+              </>
+            );
           }}
         />
       </div>
