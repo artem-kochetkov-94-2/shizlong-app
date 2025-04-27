@@ -17,6 +17,7 @@ export class CashierStore {
       const [locations, sectors] = await Promise.all([
         this.fetchLocations(),
         this.fetchSectors(),
+        this.fetchBookings(),
       ]);
 
       this.locations = locations;
