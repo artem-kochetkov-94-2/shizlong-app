@@ -16,8 +16,7 @@ import { Sheet, SheetRef } from 'react-modal-sheet';
 import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
 import { useEffect, useRef, useState } from 'react';
 import { ChooseDate } from './components/ChooseDate';
-import { ChooseTime } from './components/ChooseTime';
-import { ChooseStartTime } from './components/ChooseStartTime/ChooseStartTIme';
+// import { ChooseTime } from './components/ChooseTime';
 import { ProfileButton } from '@src/presentation/pages/Locations/components/Navigation/components/ProfileButton';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '@src/routes';
@@ -25,17 +24,15 @@ import { Button } from '@src/presentation/ui-kit/Button';
 import { locationStore } from '@src/application/store/locationStore';
 import { bookingsStore } from '@src/application/store/bookingsStore';
 import { BookingCard } from '@src/presentation/components/BookingCard';
-
-const formatPeriodTime = (time: string) => {
-  return time.split(':').slice(0, 2).join(':');
-};
+import { ChoosePeriod } from './components/ChoosePeriod/ChoosePeriod';
+import { ChooseStartTime } from './components/ChooseStartTime/ChooseStartTIme';
 
 const SNAP_POINTS = [758, 309, 79];
 const INITIAL_SNAP_POINT = 1;
 
 export const BookingDrawer = observer(() => {
   const { activeTab } = bookStore;
-  const { activeBookingsTab, bookModules, modulesPrice, allPeriods } = bookStore;
+  const { activeBookingsTab, bookModules, modulesPrice, allPeriods, hourlyPeriods, moduleSchemePeriod, largestPeriod } = bookStore;
   const { currentBookings } = bookingsStore;
   const { activeScheme, schemes, sector } = sectorStore;
   const { location } = locationStore;
@@ -60,6 +57,26 @@ export const BookingDrawer = observer(() => {
       snapTo(INITIAL_SNAP_POINT);
     }
   }, [activeTab]);
+
+  useEffect(() => {
+    if (moduleSchemePeriod !== null) return;
+
+    if (largestPeriod) {
+      bookStore.setPeriod({
+        type: 'period',
+        startTime: `${largestPeriod[0]}`,
+        endTime: `${largestPeriod[1]}`,
+      });
+      return;
+    }
+
+    if (hourlyPeriods.length > 0) {
+      bookStore.setPeriod({
+        type: 'hourly',
+        hours: hourlyPeriods[0],
+      });
+    }
+  }, [allPeriods, largestPeriod, hourlyPeriods, moduleSchemePeriod]);
 
   return (
     <Sheet
@@ -126,32 +143,9 @@ export const BookingDrawer = observer(() => {
                 <div className={styles.content}>
                   <div className={styles.divider} />
 
-                  {/* <div className={styles.modulesRow}>
-                    <div className={styles.modulesRowTitle}>Заказать</div>
-                  </div> */}
-
-                  <div className={styles.modulesPeriods}>
-                    {allPeriods.map(([startTime, endTime]) => {
-                      return (
-                        <div
-                          key={`${startTime}-${endTime}`}
-                          className={classNames(styles.period, {
-                            [styles.periodActive]: bookStore.isActivePeriod([startTime, endTime]),
-                          })}
-                          onClick={() => bookStore.setPeriod([startTime, endTime])}
-                        >
-                          <div className={styles.periodTime}>
-                            {formatPeriodTime(startTime)} - {formatPeriodTime(endTime)}
-                          </div>
-                          <div className={styles.periodName}>{bookStore.getNamePeriod([startTime, endTime])}</div>
-                        </div>
-                      );
-                      })}
-                  </div>
-
                   <div className={styles.modulesControls}>
+                    <ChoosePeriod />
                     <ChooseStartTime />
-                    <ChooseTime />
                     <ChooseDate />
                   </div>
 

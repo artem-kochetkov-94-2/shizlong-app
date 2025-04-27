@@ -34,7 +34,7 @@ export const Module = observer(({ onClose, onModuleRemove }: ModuleProps) => {
     const [searchParams] = useSearchParams();
     const moduleId = searchParams.get('module');
     const module = modules.find((m) => m.id === Number(moduleId));
-    const moduleCheapestPrice = module?.module_schemes.reduce((min, scheme) => scheme.price.value < min.price.value ? scheme : min, module?.module_schemes[0]);
+    const moduleCheapestPrice = module?.module_schemes?.reduce((min, scheme) => scheme.price.value < min.price.value ? scheme : min, module?.module_schemes[0]);
 
     const navigate = useNavigate();
 
@@ -60,6 +60,7 @@ export const Module = observer(({ onClose, onModuleRemove }: ModuleProps) => {
     };
 
     const isModuleInBooking = bookStore.bookModules.has(module.id);
+    const isModuleAvailable = bookStore.isModuleAvailable(module);
 
     return (
         <Sheet
@@ -247,8 +248,9 @@ export const Module = observer(({ onClose, onModuleRemove }: ModuleProps) => {
                                 bookStore.toggleModule(module);
                                 handleClose();
                             }}
+                            disabled={!isModuleInBooking && !isModuleAvailable}
                         >
-                            {isModuleInBooking ? 'Убрать из заказа' : 'Добавить в заказ'}
+                            {isModuleInBooking ? 'Убрать из заказа' : isModuleAvailable ? 'Добавить в заказ' : 'Недоступен'}
                         </Button>
                         {/* <Button size="medium" variant="secondary">
                             Заказать по абонементу

@@ -17,6 +17,8 @@ import { PaymentStore, paymentStore } from './paymentStore';
 import { BookingsStore, bookingsStore } from './bookingsStore';
 import { LocationStore, locationStore } from './locationStore';
 import { BookingModule, BookingRequest } from '@src/infrastructure/bookings/types';
+import { SectorStore, sectorStore } from './sectorStore';
+import { roundMinutesUpToNearestQuarter } from '../utils/roundMinutesUpToNearestQuarter';
 
 function formatToLocalString(dateString: string): Date {
   // Разбиваем строку на дату и время
@@ -51,31 +53,61 @@ export const bookingTabs: Tab[] = [
 export type SectorTab = typeof sectorTabs[number]['value'];
 export type BookingsTab = typeof bookingTabs[number]['value'];
 
+interface ActiveHourlyPeriod {
+  type: 'hourly';
+  hours: number;
+}
+
+interface ActiveRangePeriod {
+  type: 'period';
+  startTime: string;
+  endTime: string;
+}
+
+type ActivePeriod = ActiveHourlyPeriod | ActiveRangePeriod;
+
+const isActiveRangePeriod = (period: ActivePeriod | null): period is ActiveRangePeriod => {
+  return period?.type === 'period';
+}
+
+const isActiveHourlyPeriod = (period: ActivePeriod | null): period is ActiveHourlyPeriod => {
+  return period?.type === 'hourly';
+}
+
 class BookStore {
   activeTab: SectorTab = 'order';
   activeBookingsTab = 'bookings';
+
   date: DateValue = new Date();
   isoDate: string = new Date().toISOString();
+
   formHours: number = 2;
   minutes: number = 0;
-  formStartTime: string = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-  endTime: string = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+
+  formStartTime: string = roundMinutesUpToNearestQuarter(new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }));
+  endTime: string = roundMinutesUpToNearestQuarter(new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }));
+
   isCreatingBooking = false;
+
   accessories: Record<number, {
     accessory: RawBeachAccessory;
     quantity: number;
   }> = {};
   bookModules: Map<number, RawModule> = new Map();
+
+  moduleSchemePeriod: ActivePeriod | null = null;
+
   paymentStore: PaymentStore;
   bookingsStore: BookingsStore;
   locationStore: LocationStore;
-  moduleSchemePeriod: [string, string] | null = null;
+  sectorStore: SectorStore;
 
   constructor() {
     makeAutoObservable(this);
     this.paymentStore = paymentStore;
     this.bookingsStore = bookingsStore;
     this.locationStore = locationStore;
+    this.sectorStore = sectorStore;
 
     autorun(() => {
       const formStartTime = this.formStartTime;
@@ -112,6 +144,10 @@ class BookStore {
     });
   }
 
+  get activeSchemeModules() {
+    return this.locationStore.modules.filter((m) => m.sector_scheme_id === this.sectorStore.activeScheme?.id);
+  }
+
   get bookedModules() {
     return this.locationStore.modules.filter(m => this.bookModules.has(m.id));
   }
@@ -140,43 +176,11 @@ class BookStore {
     return this.modulesPrice + priceForAcessories;
   }
 
-  // доступные слоты для бронирования
-  // get availablePeriodToBook() {
-  //   const periods: ModuleScheme[] = [];
-  //   const schemes = new Map<number, ModuleScheme>();
-  //   const schemesCountBySchemeId = new Map<number, number>();
-
-  //   this.bookModules.forEach((module) => {
-  //     module.module_schemes.forEach((scheme) => {
-  //       if (!schemes.has(scheme.id)) {
-  //         schemes.set(scheme.id, scheme);
-  //       }
-  //     });
-
-  //     const availableSlots = module.slots.filter((slot) => !slot.is_busy);
-  //     availableSlots.forEach((slot) => {
-  //       const schemesCount = schemesCountBySchemeId.get(slot.module_scheme_id) || 0;
-  //       schemesCountBySchemeId.set(slot.module_scheme_id, schemesCount + 1);
-  //     });
-  //   });
-
-  //   schemesCountBySchemeId.forEach((count, schemeId) => {
-  //     if (count === this.bookModules.size) {
-  //       const scheme = schemes.get(schemeId);
-  //       if (scheme) {
-  //         periods.push(scheme);
-  //       }
-  //     }
-  //   });
-
-  //   return periods;
-  // }
-
   get allPeriods() {
     const schemes: [string, string][] = [];
 
-    this.locationStore.modules.forEach((module) => {
-      module.module_schemes.forEach((scheme) => {
+    this.activeSchemeModules.forEach((module) => {
+      module.module_schemes?.forEach((scheme) => {
         if (scheme.type.name === 'hourly') return;
 
         if (!schemes.find((period) => period[0] === scheme.start_time && period[1] === scheme.end_time)) {
@@ -188,40 +192,42 @@ class BookStore {
     return schemes;
   }
 
-  // все периоды схемы сами
-  // get periodsToBook() {
-  //   const periods: ModuleScheme[] = [];
-  //   const schemes = new Map<number, ModuleScheme>();
-  //   const schemesCountBySchemeId = new Map<number, number>();
+  get largestPeriod(): [string, string] | null {
+    let largestPeriod: [string, string] = [];
 
-  //   this.bookModules.forEach((module) => {
-  //     module.module_schemes.forEach((scheme) => {
-  //       if (!schemes.has(scheme.id)) {
-  //         schemes.set(scheme.id, scheme);
-  //       }
-  //     });
+    this.allPeriods.forEach((period) => {
+      const [start, end] = period;
+      const currentStartHours = Number(start.split(':')[0]);
+      const currentEndHours = Number(end.split(':')[0]);
+      const currentDuration = currentEndHours - currentStartHours;
 
-  //     module.slots.forEach((slot) => {
-  //       const schemesCount = schemesCountBySchemeId.get(slot.module_scheme_id) || 0;
-  //       schemesCountBySchemeId.set(slot.module_scheme_id, schemesCount + 1);
-  //     });
-  //   });
+      const largestStartHours = Number(largestPeriod[0]?.split(':')[0]) || 0;
+      const largestEndHours = Number(largestPeriod[1]?.split(':')[0]) || 0;
+      const largestDuration = largestEndHours - largestStartHours;
 
-  //   schemesCountBySchemeId.forEach((count, schemeId) => {
-  //     if (count === this.bookModules.size) {
-  //       const scheme = schemes.get(schemeId);
-  //       if (scheme) {
-  //         periods.push(scheme);
-  //       }
-  //     }
-  //   });
+      if (currentDuration > largestDuration) {
+        largestPeriod = [start, end];
+      }
+    });
 
-  //   console.log('schemesCountBySchemeId', schemesCountBySchemeId);
+    return largestPeriod.length > 0 ? largestPeriod : null;
+  }
 
-  //   return periods.sort((a, b) => {
-  //     return Number(a.start_time.split(':')[0]) - Number(b.start_time.split(':')[0]);
-  //   });
-  // }
+  get hourlyPeriods() {
+    const discreteness = new Set<number>();
+
+    this.activeSchemeModules.forEach((module) => {
+      module.module_schemes?.forEach((scheme) => {
+        if (scheme.type.name === 'hourly') {
+          for (let i = 0; i < scheme.discreteness_steps; i++) {
+            discreteness.add(scheme.discreteness * i + scheme.discreteness);
+          }
+        }
+      });
+    });
+
+    return Array.from(discreteness).sort((a, b) => a - b);
+  }
 
   get startDate() {
     const [hours, minutes] = this.formStartTime.split(':').map(Number);
@@ -241,7 +247,6 @@ class BookStore {
 
   get formattedDuration() {
     const { hours, minutes } = getTimeRangeDurationInHoursAndMinutes(this.startDate, this.endDate);
-
     return `${hours} ${declensionOfHours(hours)} ${minutes ? `${minutes} мин.` : ''}`;
   }
 
@@ -253,12 +258,16 @@ class BookStore {
     return formatShortDateWithoutYear(this.date as Date);
   }
 
-  getNamePeriod = (period: [string, string]): string => {
-    const module = this.locationStore.modules.find((module) => {
-      return module.module_schemes.find((scheme) => scheme.start_time === period[0] && scheme.end_time === period[1]);
-    });
+  get activePeriod() {
+    if (isActiveHourlyPeriod(this.moduleSchemePeriod)) {
+      return this.moduleSchemePeriod.hours;
+    }
 
-    return module?.module_schemes.find((scheme) => scheme.start_time === period[0] && scheme.end_time === period[1])?.name || '';
+    if (isActiveRangePeriod(this.moduleSchemePeriod)) {
+      return [this.moduleSchemePeriod.startTime, this.moduleSchemePeriod.endTime].toString();
+    }
+
+    return '';
   }
 
   getAvailableSlot = (module: RawModule): Slot | null => {
@@ -266,10 +275,10 @@ class BookStore {
     const [startHour, startMinute] = this.formStartTime.split(':').map(Number);
     const bookingStartTime = new Date(bookingDate.setHours(startHour, startMinute, 0, 0));
     const bookingEndTime = new Date(bookingStartTime.getTime() + this.formHours * 60 * 60 * 1000);
-  
+
     const availableSlot = module.slots.find((slot) => {
       if (slot.is_busy) return false;
-      if (module.module_schemes.find((scheme) => scheme.id === slot.module_scheme_id)?.type.name !== 'hourly') return false;
+      if (module.module_schemes?.find((scheme) => scheme.id === slot.module_scheme_id)?.type.name !== 'hourly') return false;
   
       const formattedSlotStartTime = formatToLocalString(slot.from);
       const formattedSlotEndTime = formatToLocalString(slot.to);
@@ -282,6 +291,17 @@ class BookStore {
 
   isModuleAvailableForHourlySchemes = (module: RawModule): boolean => {
     const availableSlot = this.getAvailableSlot(module);
+    const moduleScheme = this.getScheme(module);
+    if (moduleScheme?.is_active === false) return false;
+
+    if (this.bookModules.size > 1) {
+      const firstBookModule = this.bookModules.values().next().value!;
+      const firstBookModuleScheme = this.getScheme(firstBookModule);
+
+      if (firstBookModuleScheme?.discreteness !== moduleScheme?.discreteness) {
+        return false;
+      }
+    }
 
     if (availableSlot) {
       return true;
@@ -291,7 +311,8 @@ class BookStore {
   }
 
   isModuleAvailableForPeriodSchemes = (module: RawModule): boolean => {
-    if (!this.moduleSchemePeriod) return false;
+   const moduleSchemePeriod = this.moduleSchemePeriod;
+   if (!isActiveRangePeriod(moduleSchemePeriod)) return false;
 
     const availableSlot = module.slots.find((slot) => {
       if (slot.is_busy) return false;
@@ -299,61 +320,66 @@ class BookStore {
       const slotFromTime = slot.from.split(' ')[1];
       const slotToTime = slot.to.split(' ')[1];
 
-      if (slotFromTime !== this.moduleSchemePeriod![0] || slotToTime !== this.moduleSchemePeriod![1]) return false;
-      if (module.module_schemes.find((scheme) => scheme.id === slot.module_scheme_id)?.type.name === 'hourly') return false;
+      if (slotFromTime !== moduleSchemePeriod!.startTime || slotToTime !== moduleSchemePeriod!.endTime) return false;
+      if (module.module_schemes?.find((scheme) => scheme.id === slot.module_scheme_id)?.type.name === 'hourly') return false;
   
       return true;
     });
 
-    if (availableSlot) {
-      return true;
-    }
+    if (!availableSlot) return false;
 
-    return false;
+    const scheme = this.getScheme(module);
+    if (!scheme) return false;
+
+    return scheme.is_active;
   }
 
   isModuleAvailable = (module: RawModule): boolean => {
-    if (this.moduleSchemePeriod === null) {
+    if (isActiveHourlyPeriod(this.moduleSchemePeriod)) {
       return this.isModuleAvailableForHourlySchemes(module);
     };
 
-    return this.isModuleAvailableForPeriodSchemes(module);
-  };
-
-  isActivePeriod = (period: [string, string]): boolean => {
-    if (this.moduleSchemePeriod !== null) {
-      return period[0] === this.moduleSchemePeriod![0] && period[1] === this.moduleSchemePeriod![1];
+    if (isActiveRangePeriod(this.moduleSchemePeriod)) {
+      return this.isModuleAvailableForPeriodSchemes(module);
     }
 
     return false;
-  }
+  };
 
   getSchemeByPeriod = (module: RawModule): ModuleScheme | null => {
-    if (!this.moduleSchemePeriod) return null;
+    const moduleSchemePeriod = this.moduleSchemePeriod;
+    if (!isActiveRangePeriod(moduleSchemePeriod)) return null;
 
-    const findedPeriod = module.module_schemes.find((scheme) => {
-      return scheme.start_time === this.moduleSchemePeriod![0] && scheme.end_time === this.moduleSchemePeriod![1];
+    const findedPeriod = module.module_schemes?.find((scheme) => {
+      return scheme.start_time === moduleSchemePeriod.startTime && scheme.end_time === moduleSchemePeriod.endTime;
     });
 
     return findedPeriod || null;
   }
 
   getSchemeByHourly = (module: RawModule): ModuleScheme | null => {
+    const moduleSchemePeriod = this.moduleSchemePeriod;
+    if (!isActiveHourlyPeriod(moduleSchemePeriod)) return null;
+
     const availableSlot = this.getAvailableSlot(module);
 
     if (availableSlot) {
-      return module.module_schemes.find((scheme) => scheme.id === availableSlot.module_scheme_id) || null;
+      return module.module_schemes?.find((scheme) => scheme.id === availableSlot.module_scheme_id) || null;
     }
 
     return null;
   }
 
   getScheme = (module: RawModule): ModuleScheme | null => {
-    if (this.moduleSchemePeriod === null) {
+    if (isActiveHourlyPeriod(this.moduleSchemePeriod)) {
       return this.getSchemeByHourly(module);
     }
 
-    return this.getSchemeByPeriod(module);
+    if (isActiveRangePeriod(this.moduleSchemePeriod)) {
+      return this.getSchemeByPeriod(module);
+    }
+
+    return null;
   }
 
   checkModules() {
@@ -373,19 +399,29 @@ class BookStore {
     });
   }
 
-  setPeriod(period: [string, string] | null) {
+  setPeriod(period: ActivePeriod | null) {
     if (period === null) {
       this.moduleSchemePeriod = null;
       return;
     }
 
-    const startTime = period[0].split(':').slice(0, 2).join(':');
-    const endTime = period[1].split(':').slice(0, 2).join(':');
-    const hours = Number(endTime.split(':')[0]) - Number(startTime.split(':')[0]);
+    if (isActiveRangePeriod(period)) {
+      const startTime = period.startTime.split(':').slice(0, 2).join(':');
+      const endTime = period.endTime.split(':').slice(0, 2).join(':');
+      const hours = Number(endTime.split(':')[0]) - Number(startTime.split(':')[0]);
 
-    bookStore.setStartTime(startTime);
-    bookStore.setEndTime(endTime);
-    bookStore.setFormHours(hours);
+      this.setStartTime(startTime);
+      this.setEndTime(endTime);
+      this.setFormHours(hours);
+    }
+
+    const moduleSchemePeriod = this.moduleSchemePeriod;
+    if (isActiveHourlyPeriod(period)) {
+      if (isActiveRangePeriod(moduleSchemePeriod)) {
+        this.setStartTime(roundMinutesUpToNearestQuarter(new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })));
+      }
+      this.setFormHours(period.hours);
+    }
 
     this.moduleSchemePeriod = period;
   }
@@ -438,20 +474,17 @@ class BookStore {
   async createBooking(onCreated: (id: number) => void) {
     try {
       this.isCreatingBooking = true;
-
+      const moduleSchemePeriod = this.moduleSchemePeriod;
       const modules: BookingModule[] = [];
-      
+     
       this.bookModules.forEach((module) => {
-        if (this.moduleSchemePeriod) {
+        if (isActiveRangePeriod(moduleSchemePeriod)) {
           const moduleScheme = this.getScheme(module);
-
-          if (moduleScheme) {
-            modules.push({
-              module_id: module.id,
-              module_scheme_id: moduleScheme.id,
-              module_scheme_date: convertToISO(this.date as Date).split('T')[0],
-            });
-          }
+          modules.push({
+            module_id: module.id,
+            module_scheme_id: moduleScheme?.id!,
+            module_scheme_date: convertToISO(this.date as Date).split('T')[0],
+          });
         } else {
           modules.push({
             module_id: module.id,
@@ -469,8 +502,6 @@ class BookStore {
           quantity: `${a.quantity}`,
         })),
       };
-
-      console.log('BookingRequest', JSON.parse(JSON.stringify(booking)));
 
       const result = await bookingsService.createGroupBooking(booking);
       await bookingsStore.getMyBookings();
