@@ -26,6 +26,8 @@ import { bookingsStore } from '@src/application/store/bookingsStore';
 import { BookingCard } from '@src/presentation/components/BookingCard';
 import { ChoosePeriod } from './components/ChoosePeriod/ChoosePeriod';
 import { ChooseStartTime } from './components/ChooseStartTime/ChooseStartTIme';
+import { eventService } from '@src/application/services/EventService/EventService';
+import { EVENT } from '@src/application/services/EventService/EventList';
 
 const SNAP_POINTS = [758, 309, 79];
 const INITIAL_SNAP_POINT = 1;
@@ -35,7 +37,7 @@ export const BookingDrawer = observer(() => {
   const { activeBookingsTab, bookModules, modulesPrice, allPeriods, hourlyPeriods, moduleSchemePeriod, largestPeriod } = bookStore;
   const { currentBookings } = bookingsStore;
   const { activeScheme, schemes, sector } = sectorStore;
-  const { location } = locationStore;
+  const { location, modules } = locationStore;
 
   const navigate = useNavigate();
 
@@ -58,6 +60,22 @@ export const BookingDrawer = observer(() => {
     }
   }, [activeTab]);
 
+  // clear states after change scheme
+  useEffect(() => {
+    bookStore.clear();
+  }, [activeScheme]);
+
+  // clear modules from another sector or scheme
+  useEffect(() => {
+    if (!sector || !location || !bookModules.size) return;
+
+    const first = bookModules.values().next().value;
+
+    if (first?.sector_id !== sector.id || first?.sector_scheme_id !== activeScheme?.id) {
+      bookStore.clear();
+    }
+  }, [sector, location, bookModules, modules, activeScheme]);
+
   useEffect(() => {
     if (moduleSchemePeriod !== null) return;
 
@@ -76,7 +94,11 @@ export const BookingDrawer = observer(() => {
         hours: hourlyPeriods[0],
       });
     }
-  }, [allPeriods, largestPeriod, hourlyPeriods, moduleSchemePeriod]);
+  }, [allPeriods, largestPeriod, hourlyPeriods, moduleSchemePeriod, activeScheme]);
+
+  const qrCodeClickHandler = () => {
+    eventService.emit(EVENT.MODAL_SCAN, { isActive: true });
+  }
 
   return (
     <Sheet
@@ -104,7 +126,7 @@ export const BookingDrawer = observer(() => {
           </div>
 
           <div className={styles.navigation}>
-            <IconButton iconName='qr-code' size='large' />
+            <IconButton iconName='qr-code' size='large' onClick={qrCodeClickHandler} />
             <RoundedTabs
               activeTab={activeTab}
               tabs={sectorTabs}

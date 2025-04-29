@@ -14,14 +14,6 @@
   &:focus-within {
     border: 1.5px solid #FBD24C;
   }
-
-  &.notEmpty {
-    border: 1.5px solid #FBD24C;
-  }
-
-  svg {
-    color: #A0A7B1;
-  }
 }
 
 .large {
@@ -67,4 +59,8 @@
 
 .searchButton:hover {
   background-color: #535bf2;
-} 
+}
+
+.focused {
+  background-color: #fff;
+}

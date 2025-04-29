@@ -25,5 +25,16 @@
         background-color: transparent;
         outline: none;
         color: #292c31;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    .modulesControlsItem {
+        select {
+            width: calc(100% - 10px);
+            margin: 0 5px;
+            font-size: 12px;
+        }
     }
 }

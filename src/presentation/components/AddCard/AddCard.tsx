@@ -6,6 +6,7 @@ import { useEffect } from "react"
 import { paymentStore } from "@src/application/store/paymentStore"
 import { observer } from "mobx-react-lite"
 import { useFields } from "./useFields"
+import useKeyboardVisibility from "@src/application/hooks/useKeyboardVisibility"
 
 interface AddCardProps {
     successCb?: (token: string, session: string) => void;
@@ -17,6 +18,7 @@ export const AddCard = observer(({ successCb, errorCb, buttonText = 'Оплат�
     const { isAddingNewCard } = paymentStore;
 
     const { focused, dirtyFields } = useFields();
+    const { isKeyboardVisible, inputRef } = useKeyboardVisibility();
 
     const isCardNumberFocused = focused.cardNumber || dirtyFields.cardNumber;
     const isExpiryFocused = focused.expiry || dirtyFields.expiry;
@@ -47,7 +49,7 @@ export const AddCard = observer(({ successCb, errorCb, buttonText = 'Оплат�
     }, [successCb]);
 
     return (
-        <div className={styles.wrapper}>
+        <div className={classNames(styles.wrapper, { [styles.isKeyboardVisible]: isKeyboardVisible })}>
             <div className={styles.title}>Укажите данные вашей карты</div>
 
             <Card boxShadow={true}>
@@ -68,7 +70,7 @@ export const AddCard = observer(({ successCb, errorCb, buttonText = 'Оплат�
                     </div>
                     <div className={styles.field}>
                         <label className={classNames(styles.label, { [styles.focused]: isCardNumberFocused })}>Name</label>
-                        <input id="cardholder-name" className={styles.inputWrapper} />
+                        <input ref={inputRef} id="cardholder-name" className={styles.inputWrapper} />
                     </div>
                     <div className={styles.field}>
                         <div id="user-agreement" className="input" />
