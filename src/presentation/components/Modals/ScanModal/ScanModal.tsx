@@ -12,14 +12,27 @@ interface ScanModalProps {
 export const ScanModal = observer(({ onClose }: ScanModalProps) => {
     console.log('ScanModal');
 
-    const videoRef = useRef(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
     const [qrScanner, setQrScanner] = useState<QrScanner | null>(null);
     const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
     const handleCloseModal = () => {
-        qrScanner?.destroy();
+        // qrScanner?.destroy();
+
+        if (videoRef.current) {
+            const mediaStream = videoRef.current.srcObject;
+            if (mediaStream instanceof MediaStream) {
+                const tracks = mediaStream.getTracks();
+                tracks.forEach(track => {
+                    track.stop();
+                });
+        
+                videoRef.current.srcObject = null;
+            }
+        }
+
         onClose();
     }
 
@@ -51,9 +64,8 @@ export const ScanModal = observer(({ onClose }: ScanModalProps) => {
     const initQrScanner = (video: HTMLVideoElement) => {
         const qrScanner = new QrScanner(
             video,
-            result => {
-                handleProcessResult(result.data);
-                console.log('decoded qr code:', result);
+            (result: QrScanner.ScanResult) => {
+                handleProcessResult(result.data);   
             },
             {
                 highlightScanRegion: true,
