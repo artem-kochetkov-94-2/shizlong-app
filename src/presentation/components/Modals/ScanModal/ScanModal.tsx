@@ -18,6 +18,11 @@ export const ScanModal = observer(({ onClose }: ScanModalProps) => {
 
     const navigate = useNavigate();
 
+    const handleCloseModal = () => {
+        qrScanner?.destroy();
+        onClose();
+    }
+
     const handleProcessResult = (data: string) => {
         if (!data) return;
 
@@ -28,7 +33,7 @@ export const ScanModal = observer(({ onClose }: ScanModalProps) => {
                 const sectorIndex = data.indexOf('sector');
                 const path = data.slice(sectorIndex);
                 navigate(path);
-                onClose();
+                handleCloseModal();
             }
 
              // https://shezlonger.app/location/5
@@ -36,7 +41,7 @@ export const ScanModal = observer(({ onClose }: ScanModalProps) => {
                 const locationIndex = data.indexOf('location');
                 const path = data.slice(locationIndex);
                 navigate(path);
-                onClose();
+                handleCloseModal();
              }
         } catch (e) {
             console.log('e');
@@ -60,49 +65,22 @@ export const ScanModal = observer(({ onClose }: ScanModalProps) => {
         );
 
         setQrScanner(qrScanner);
+        qrScanner.start();
     };
 
-    // useEffect(() => {
-    //     if (!videoRef.current) return;
-    //     initQrScanner(videoRef.current);
-    // }, [videoRef.current]);
-
-    // useEffect(() => {
-    //     qrScanner?.start();
-    // }, [qrScanner]);
+    useEffect(() => {
+        if (videoRef.current) {
+            if (!qrScanner) {
+                initQrScanner(videoRef.current);
+            }
+        }
+    }, [videoRef.current, qrScanner]);
 
     return (
         <div className={styles.scanModal}>
-            <PageHeader
-                topPadding
-                onClose={() => {
-                    qrScanner?.stop();
-                    qrScanner?.destroy();
-                    onClose();
-                }}
-            >
+            <PageHeader topPadding onClose={handleCloseModal}>
                 Сканирование QR-кода
             </PageHeader>
-
-            <button
-                onClick={() => {
-                    qrScanner?.stop()
-                }}
-            >
-                stop
-            </button>
-            <button
-                onClick={() => {
-                    qrScanner?.start();
-                    if (videoRef.current) {
-                        initQrScanner(videoRef.current);
-                    }
-                }}
-            >
-                start
-            </button>
-            <div>{qrScanner ? '1' : '0'}</div>
-            <div>{error}</div>
             <video ref={videoRef} style={{ width: '100%' }} />
         </div>
     );
