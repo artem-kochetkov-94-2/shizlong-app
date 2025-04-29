@@ -55,7 +55,10 @@ class PaymentService {
     if (response.status.name !== 'COMPLETE') {
       throw new Error('Payment failed');
     }
+
+    return response;
   }
+
   async deleteToken(tokenId: number) {
     const { response } = await this.restService.delete({
       url: `${this.apiUrl}${routes.deleteToken}/${tokenId}`,

@@ -7,13 +7,15 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './Locations.module.css';
 import { Sheet, SheetRef } from 'react-modal-sheet';
 import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
+import useKeyboardVisibility from '@src/application/hooks/useKeyboardVisibility';
 
-const SNAP_POINTS = [758, 309, 79];
+const SNAP_POINTS = [758, 309, 99];
 const INITIAL_SNAP_POINT = 2;
 
 export const Locations = observer(() => {
-  const { locations } = locationsStore;
+  const { filteredLocations } = locationsStore;
   const [isOpen, setIsOpen] = useState(true);
+  const { isKeyboardVisible, setIsKeyboardVisible } = useKeyboardVisibility();
 
   const ref = useRef<SheetRef>(null);
   const snapTo = (i: number) => ref.current?.snapTo(i);
@@ -37,11 +39,18 @@ export const Locations = observer(() => {
       <Sheet.Container>
         <Sheet.Header />
         <Sheet.Content style={{ paddingBottom: ref.current?.y }}>
-          <Navigation />
+          <Navigation
+            onInputFocus={() => {
+              snapTo(0);
+              setIsKeyboardVisible(true);
+            }}
+            onInputBlur={() => setIsKeyboardVisible(false)}
+          />
           <Sheet.Scroller>
             <div className={styles.content}>
               <Menu />
-              <CardList title='Пляжи рядом' items={locations} category='пляж' />
+              <CardList title='Пляжи рядом' items={filteredLocations} category='пляж' />
+              {filteredLocations.length === 0 && isKeyboardVisible && <div style={{ height: 200 }} />}
             </div>
           </Sheet.Scroller>
         </Sheet.Content>

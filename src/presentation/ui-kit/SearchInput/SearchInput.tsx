@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import styles from './SearchInput.module.css';
 import { Icon } from '@src/presentation/ui-kit/Icon';
@@ -12,6 +12,9 @@ interface SearchInputProps {
   onChange?: (value: string) => void;
   size?: 'medium' | 'large';
   disabled?: boolean;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  onClear?: () => void;
 }
 
 export const SearchInput = ({
@@ -22,7 +25,12 @@ export const SearchInput = ({
   onChange,
   size = 'medium',
   disabled = false,
+  onFocus,
+  onBlur,
+  onClear,
 }: SearchInputProps) => {
+  const [focused, setFocused] = useState(false);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(event.target.value);
   };
@@ -31,11 +39,22 @@ export const SearchInput = ({
     console.log('Поиск:', value);
   };
 
+  const handleFocus = () => {
+    setFocused(true);
+    onFocus?.();
+  }
+
+  const handleBlur = () => {
+    setFocused(false);
+    onBlur?.();
+  }
+
   return (
     <div className={classNames(styles.searchContainer, {
       [styles.notEmpty]: value,
       [styles.withBorder]: withBorder,
-      [styles.large]: size === 'large'
+      [styles.large]: size === 'large',
+      [styles.focused]: focused,
     })}>
       <Icon name="search" size="small" onClick={handleSearch} />
       <input
@@ -45,13 +64,17 @@ export const SearchInput = ({
         placeholder={placeholder}
         className={styles.searchInput}
         disabled={disabled}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       />
       {value && (
         <IconButton
           iconName="cross"
           size="small"
           iconSize="extra-small"
-          onClick={() => onChange?.('')}
+          onClick={onClear ? onClear : () => onChange?.('')}
+          color="grayDark"
+          iconColor="white"
         />
       )}
       {rightContent}

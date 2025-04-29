@@ -311,8 +311,8 @@ class BookStore {
   }
 
   isModuleAvailableForPeriodSchemes = (module: RawModule): boolean => {
-   const moduleSchemePeriod = this.moduleSchemePeriod;
-   if (!isActiveRangePeriod(moduleSchemePeriod)) return false;
+    const moduleSchemePeriod = this.moduleSchemePeriod;
+    if (!isActiveRangePeriod(moduleSchemePeriod)) return false;
 
     const availableSlot = module.slots.find((slot) => {
       if (slot.is_busy) return false;
