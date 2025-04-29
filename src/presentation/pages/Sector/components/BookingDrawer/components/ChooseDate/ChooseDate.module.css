@@ -17,3 +17,14 @@
     overflow: hidden;
     white-space: nowrap;
 }
+
+.spanText {
+    color: #292c31;
+    font-size: 14px;
+}
+
+@media (max-width: 400px) {
+    .spanText {
+        font-size: 12px;
+    }
+}

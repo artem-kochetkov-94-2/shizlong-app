@@ -4,10 +4,15 @@
     align-items: center;
     gap: 8px;
     width: 100%;
-    height: 59px;
+    height: 79px;
     padding: 15px;
-    padding-top: 0;
+    padding-top: 10px;
+    padding-bottom: 25px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     background-color: #fff;
+}
+
+.searchButton {
+    width: 71px;
 }

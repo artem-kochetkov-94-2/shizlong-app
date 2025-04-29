@@ -29,6 +29,11 @@ interface PlanProps {
     hasPrev: boolean,
 }
 
+const header = 160;
+const footer = 260;
+const headerWithFooter = header + footer;
+const arrowWidth = 25;
+
 export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) => {
   const [nodes, setNodes] = useNodesState<Node>([]);
   const [viewport, setViewport] = useState<Viewport>({
@@ -39,7 +44,7 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
   const { modules, decorate } = locationStore;
   const { sector, activeScheme, size } = sectorStore;
 
-//   1217 это что то из админки - базовая ширина подложки
+  // 1217 это что то из админки - базовая ширина подложки
   const koef = size?.width / 1217;
 
   const getNodes = (sector: RawSector, sectorModules: RawModule[], decorate: PlacedIcon[]) => {
@@ -103,35 +108,58 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
     setNodes(nodes);
   }, [sector, modules, decorate, activeScheme, size]);
 
-  const onViewportChange = (newViewport: Viewport) => {
-    const screenWidth = window.innerWidth;
-    const canvasWidth = size?.width || 0;
-    const arrowWidth = 25;
-    const canvasWidthWithZoom = canvasWidth * newViewport.zoom;
-    const diff = screenWidth - canvasWidthWithZoom;
+  const getY = (y: number, maxY: number, isImageHeightBiggestThanScreen: boolean, prevY: number | undefined) => {
+    const bottomCornerLargeFlow = Math.abs(maxY) + footer;
+    const bottomCornerSmallFlow = Math.abs(maxY) - footer;
 
-    let isImageBiggestThanScreen = true;
+    // console.log('prevY', prevY);
+    // console.log('y', y);
+    // console.log('bottomCornerSmallFlow', bottomCornerSmallFlow);
+    if (prevY !== undefined) {
+        if (bottomCornerSmallFlow > 0) {
+            // move top
+            if (y < prevY && y < bottomCornerSmallFlow) {
+                y = bottomCornerSmallFlow;
+            } else if (y > prevY && y > header) {
+                y = header;
+            }
+        } else if (bottomCornerSmallFlow < 0) {
+            // move top
+            if (y < prevY && y < bottomCornerSmallFlow) {
+                y = bottomCornerSmallFlow
+            } else if (y > prevY && y > header) {
+                y = header;
+            }
+        }
 
-    let maxX = Math.max(0, canvasWidthWithZoom - screenWidth);
-    if (diff > 0) {
-        maxX = diff;
-        isImageBiggestThanScreen = false;
+        // console.log('else if');
+
+        return y;
     }
 
+    if (isImageHeightBiggestThanScreen) {
+        if (y >= header) {
+            y = header;
+        } else if (Math.abs(y) > bottomCornerLargeFlow) {
+            y = bottomCornerLargeFlow * -1;
+        }
+    } else {
+        if (y <= header) {
+            y = header;
+        } else if (y > bottomCornerSmallFlow) {
+            y = bottomCornerSmallFlow;
+        }
+    }
+
+    return y;
+  }
+
+  const getX = (base: number, maxX: number, isImageWidthBiggestThanScreen: boolean) => {
+    let newX = base;
     const rightCornerLargeFlow = Math.abs(maxX) + arrowWidth;
     const rightCornerSmallFlow = Math.abs(maxX) - arrowWidth;
 
-    if (!isImageBiggestThanScreen && diff < arrowWidth * 2) {
-        setViewport({
-            x: arrowWidth,
-            y: newViewport.y,
-            zoom: newViewport.zoom,
-        });
-        return;
-    }
-
-    let newX = newViewport.x;
-    if (isImageBiggestThanScreen) {
+    if (isImageWidthBiggestThanScreen) {
         if (newX >= arrowWidth) {
             newX = arrowWidth;
         } else if (Math.abs(newX) > rightCornerLargeFlow) {
@@ -143,11 +171,57 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
         } else if (newX > rightCornerSmallFlow) {
             newX = rightCornerSmallFlow;
         }
-    }   
+    }
+
+    return newX;
+  }
+
+  const onViewportChange = (newViewport: Viewport) => {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const canvasWidth = size?.width || 0;
+    const canvasHeight = size?.height || 0;
+
+    const canvasWidthWithZoom = canvasWidth * newViewport.zoom;
+    const diffWidth = screenWidth - canvasWidthWithZoom;
+
+    const canvasHeightWithZoom = canvasHeight * newViewport.zoom;
+    const diffHeight = screenHeight - canvasHeightWithZoom;
+
+    let isImageWidthBiggestThanScreen = true;
+    let maxX = Math.max(0, canvasWidthWithZoom - screenWidth);
+    if (diffWidth > 0) {
+        maxX = diffWidth;
+        isImageWidthBiggestThanScreen = false;
+    }
+
+    let isImageHeightBiggestThanScreen = true;
+
+    let maxY = Math.max(0, canvasHeightWithZoom - screenHeight);
+    if (diffHeight > 0) {
+        maxY = diffHeight;
+        isImageHeightBiggestThanScreen = false;
+    }
+
+    // console.clear();
+
+    // console.log('viewPort', viewport);
+    // console.log('viewPort 2', newViewport);
+
+    const isInsideY = diffHeight < headerWithFooter && diffHeight > 0;
+
+    if (!isImageWidthBiggestThanScreen && diffWidth < arrowWidth * 2) {
+        setViewport({
+            x: arrowWidth,
+            y: getY(newViewport.y, maxY, isImageHeightBiggestThanScreen, isInsideY ? viewport.y : undefined),
+            zoom: newViewport.zoom,
+        });
+        return;
+    }
 
     setViewport({
-      x: newX,
-      y: newViewport.y,
+      x: getX(newViewport.x, maxX, isImageWidthBiggestThanScreen),
+      y: getY(newViewport.y, maxY, isImageHeightBiggestThanScreen, isInsideY ? viewport.y : undefined),
       zoom: newViewport.zoom,
     });
   };

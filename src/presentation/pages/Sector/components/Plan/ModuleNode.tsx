@@ -50,6 +50,7 @@ export const ModuleNode = observer(({ data: { module }}: { data: { module: RawMo
         className={cn({
           [styles.activeModule]: bookModules.has(module.id),
         })}
+        style={{ transform: `rotate(${module.placed_icon?.rotation}deg)`}}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import { formatFullDate } from '@src/application/utils/formatDate';
-import { RawBooking } from '@src/infrastructure/bookings/types';
+import { RawCashierBooking } from '@src/infrastructure/bookings/types';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Routes } from '@src/routes';
@@ -9,9 +9,17 @@ import styles from './BookingCard.module.css';
 import { Tag } from '@src/presentation/ui-kit/Tag';
 import { declension } from '@src/application/utils/delcension';
 
-export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
+interface BookingCardProps {
+  booking: RawCashierBooking;
+}
+
+export const BookingCard = observer(({ booking }: BookingCardProps) => {
   const navigate = useNavigate();
   console.log('booking', JSON.parse(JSON.stringify(booking)));
+
+  const formatTime = (timeStr: string): string => {
+    return timeStr.slice(0, 5);
+  };
 
   return (
     <>
@@ -32,18 +40,12 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
             </div>
 
             <div className={styles.range}>
-              <span>{formatFullDate(new Date(booking.booking_modules?.[0]?.start_time))}</span>
+              <span>{formatFullDate(new Date(booking.sector_scheme.time_start))}</span>
               <Icon name='time' size='extra-small' />
               <span>
-                {new Date(booking.booking_modules?.[0]?.start_time).toLocaleString('ru-RU', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}{' '}
+                {formatTime(booking.sector_scheme.time_start)}{' '}
                 -{' '}
-                {new Date(booking.booking_modules?.[0]?.end_time).toLocaleString('ru-RU', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+                {formatTime(booking.sector_scheme.time_end)}
               </span>
             </div>
           </div>
@@ -61,7 +63,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               </SwiperSlide>
             </Swiper>
             <div className={styles.status}>
-              {booking.booking_modules.length} {declension(booking.booking_modules.length, ['модуль', 'модуля', 'модулей'])}
+              {booking.modules_count} {declension(booking.modules_count, ['модуль', 'модуля', 'модулей'])}
             </div>
           </div>
         </div>

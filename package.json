@@ -28,6 +28,7 @@
     "mobx-react-lite": "^4.1.0",
     "motion": "^12.4.10",
     "normalize.css": "^8.0.1",
+    "qr-scanner": "^1.4.2",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
     "react-code-input": "^3.10.1",
@@ -38,6 +39,7 @@
     "react-router-dom": "^7.2.0",
     "react-swipeable-bottom-sheet": "^1.1.2",
     "react-time-picker": "^7.0.0",
+    "react-virtuoso": "^4.12.6",
     "swiper": "^11.2.4"
   },
   "devDependencies": {

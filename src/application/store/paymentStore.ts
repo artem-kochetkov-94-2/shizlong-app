@@ -69,7 +69,9 @@ export class PaymentStore {
       this.isLoadingTokens = true;
       const result = await paymentService.getTokens();
       console.log(result);
-      this.tokens = result;
+      runInAction(() => {
+        this.tokens = result;
+      })
     } catch (error) {
       console.error(error);
     } finally {
@@ -131,7 +133,9 @@ export class PaymentStore {
       console.error(error);
       errorCb?.();
     } finally {
-      this.isAddingNewCard = false;
+      runInAction(() => {
+        this.isAddingNewCard = false;
+      });
     }
   }
 
@@ -160,6 +164,7 @@ export class PaymentStore {
           token: token,
           session: sessionId,
         });
+        await this.getTokens();
         await bookingsStore.getMyBookings();
         return;
       }

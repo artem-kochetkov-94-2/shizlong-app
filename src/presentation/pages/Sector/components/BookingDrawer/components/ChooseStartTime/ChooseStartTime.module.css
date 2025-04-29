@@ -19,10 +19,25 @@
         border-radius: 0;
         background-color: transparent;
         outline: none;
+        font-size: 14px !important;
         color: #292c31;
     }
 }
 
 .modulesControlsItemActive {
     background-color: #fff;
+    color: #292c31;
+    font-size: 14px;
+}
+
+@media (max-width: 400px) {
+    .modulesControlsItem {
+        input {
+            font-size: 12px !important;
+        }
+    }
+
+    .modulesControlsItemActive {
+        font-size: 12px;
+    }
 }

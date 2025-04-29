@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { Routes } from "@src/routes";
 import { Plan } from "./components/Plan";
 import { Module } from '@src/presentation/components/Module';
-import { bookStore } from '@src/application/store/bookStore';
 import { useOpenModule } from './hooks/useOpenModule';
 import { useFetchModules } from '@src/application/hooks/useFetchModules';
 
@@ -18,9 +17,8 @@ export const Sector = observer(() => {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
-  const { location, sectors, modules } = locationStore;
-  const { sector, activeScheme } = sectorStore;
-  const { bookModules } = bookStore;
+  const { location, sectors } = locationStore;
+  const { sector } = sectorStore;
 
   // console.log('========== bookModules', JSON.parse(JSON.stringify(bookModules)));
   // console.log('SCHEME MODULES', JSON.parse(JSON.stringify(modules.filter((m) => m.sector_scheme_id === activeScheme?.id))));
@@ -35,22 +33,6 @@ export const Sector = observer(() => {
 
     locationStore.init(sector.location_id);
   }, [sector, location]);
-
-  // clear states after change scheme
-  useEffect(() => {
-    bookStore.clear();
-  }, [activeScheme]);
-
-  // clear modules from another sector or scheme
-  useEffect(() => {
-    if (!sector || !location || !bookModules.size) return;
-
-    const first = bookModules.values().next().value;
-
-    if (first?.sector_id !== sector.id || first?.sector_scheme_id !== activeScheme?.id) {
-      bookStore.clear();
-    }
-  }, [sector, location, bookModules, modules, activeScheme]);
 
   useOpenModule();
   useFetchModules();

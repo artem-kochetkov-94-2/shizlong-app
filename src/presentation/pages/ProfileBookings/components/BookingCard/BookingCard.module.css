@@ -1,6 +1,7 @@
 .item {
   border-radius: 12px;
   background-color: #fff;
+  margin-bottom: 16px;
 }
 
 .wrapper {
@@ -109,11 +110,11 @@
   justify-content: center;
   align-items: center;
   border-radius: 4px;
-  background: #161D25CC;
+  background: #161d25cc;
   backdrop-filter: blur(10px);
   font-family: 'Roboto';
   font-weight: 400;
   font-size: 11px;
   line-height: 120%;
-  color: #FFFFFF;
+  color: #ffffff;
 }

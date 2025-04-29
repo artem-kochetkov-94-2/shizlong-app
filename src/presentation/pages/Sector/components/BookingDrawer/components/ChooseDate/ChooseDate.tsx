@@ -21,7 +21,7 @@ export const ChooseDate = observer(() => {
     return (
         <>
             <div className={styles.modulesControlsItem} onClick={() => setIsOpen(true)}>
-                <span>{isNow ? 'сегодня' : formatShortDateWithoutYear(date as Date)}</span>
+                <span className={styles.spanText}>{isNow ? 'сегодня' : formatShortDateWithoutYear(date as Date)}</span>
                 <Icon name="arrow-down" size="extra-small" />
             </div>
 

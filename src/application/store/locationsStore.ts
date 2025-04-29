@@ -11,9 +11,14 @@ export class LocationsStore {
   isLoadingFavorite = false;
   isLoadingToggle = false;
   mapStore = mapStore;
+  search = '';
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  get filteredLocations() {
+    return this.locations.filter(l => l.name.includes(this.search));
   }
 
   async fetchfavoriteLocations() {
@@ -70,6 +75,10 @@ export class LocationsStore {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  setSearch(value: string) {
+    this.search = value;
   }
 
   getFavoriteStatus(id: number) {

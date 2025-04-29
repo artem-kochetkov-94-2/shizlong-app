@@ -54,6 +54,14 @@
   }
 }
 
+.grayDark {
+  background-color: #BEC5CF;
+
+  &:hover {
+    border-color: #BEC5CF;
+  }
+}
+
 .white {
   background-color: #f3f4f6;
 
