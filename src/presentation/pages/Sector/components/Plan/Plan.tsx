@@ -6,6 +6,7 @@ import {
     Controls,
     type Node,
     Viewport,
+    useReactFlow,
 } from '@xyflow/react';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
@@ -35,6 +36,7 @@ const headerWithFooter = header + footer;
 const arrowWidth = 25;
 
 export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) => {
+  const reactFlow = useReactFlow();
   const [nodes, setNodes] = useNodesState<Node>([]);
   const [viewport, setViewport] = useState<Viewport>({
     x: 0,
@@ -107,6 +109,10 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
     const nodes = getNodes(sector, sectorModules, decorates);
     setNodes(nodes);
   }, [sector, modules, decorate, activeScheme, size]);
+
+  useEffect(() => {
+    reactFlow.fitView();
+  }, [size, reactFlow]);
 
   const getY = (y: number, maxY: number, isImageHeightBiggestThanScreen: boolean, prevY: number | undefined) => {
     const bottomCornerLargeFlow = Math.abs(maxY) + footer;
