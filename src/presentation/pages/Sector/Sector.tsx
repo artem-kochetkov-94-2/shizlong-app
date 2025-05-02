@@ -12,6 +12,7 @@ import { Plan } from "./components/Plan";
 import { Module } from '@src/presentation/components/Module';
 import { useOpenModule } from './hooks/useOpenModule';
 import { useFetchModules } from '@src/application/hooks/useFetchModules';
+import { ReactFlowProvider } from '@xyflow/react';
 
 export const Sector = observer(() => {
   const navigate = useNavigate();
@@ -52,12 +53,14 @@ export const Sector = observer(() => {
     <div className={styles.wrapper}>
       <Header name={location.name} sector={sector} />
 
-      <Plan
-        onNext={() => handleChangeSector(nextSector?.id)}
-        onPrev={() => handleChangeSector(prevSector?.id)}
-        hasNext={!!nextSector}
-        hasPrev={!!prevSector}
-      />
+      <ReactFlowProvider>
+        <Plan
+          onNext={() => handleChangeSector(nextSector?.id)}
+          onPrev={() => handleChangeSector(prevSector?.id)}
+          hasNext={!!nextSector}
+          hasPrev={!!prevSector}
+        />
+      </ReactFlowProvider>
 
       <BookingDrawer />
       <Module />
