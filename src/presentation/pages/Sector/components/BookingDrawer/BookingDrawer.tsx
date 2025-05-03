@@ -32,6 +32,7 @@ import { useSetPeriod } from './useSetPeriod';
 import { bookingsStore } from '@src/application/store/bookingsStore';
 import { profileStore } from '@src/application/store/profileStore';
 import { cashierStore } from '@src/application/store/cashierStore';
+import { verificationStore } from '@src/application/store/verificationStore';
 
 const SNAP_POINTS = [758, 309, 79];
 const INITIAL_SNAP_POINT = 1;
@@ -63,12 +64,14 @@ export const BookingDrawer = observer(() => {
   useSetPeriod();
 
   useEffect(() => {
+    if (!verificationStore.isVerified) return;
+
     if (profileStore.isCashier) {
       cashierStore.initBookigns(sector?.id);
     } else {
       bookingsStore.initCurrentBookings();
     }
-  }, [sector?.id, profileStore.isCashier]);
+  }, [sector?.id, profileStore.isCashier, verificationStore.isVerified]);
 
   const qrCodeClickHandler = () => {
     eventService.emit(EVENT.MODAL_SCAN, { isActive: true });
