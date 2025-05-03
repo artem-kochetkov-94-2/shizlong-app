@@ -1,0 +1,10 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+
+    height: calc(100vh - 190px);
+    /* contentHeight paddingHeight tabHeight contentMargin */
+    max-height: calc(679px - 30px - 31px - 10px);
+}

@@ -17,21 +17,17 @@ export const BookingCard = observer(({ booking }: BookingCardProps) => {
   const navigate = useNavigate();
   console.log('booking', JSON.parse(JSON.stringify(booking)));
 
-  const formatTime = (timeStr: string): string => {
-    return timeStr.slice(0, 5);
-  };
-
   return (
     <>
       <div className={styles.item} key={booking.id}>
         <div className={styles.wrapper}>
           <div className={styles.content}>
-            <div className={styles.category}>{booking.sector_scheme?.sector.name} пляжа</div>
+            <div className={styles.category}>{booking.sector_scheme?.sector?.name} пляжа</div>
             <div
               className={styles.name}
               onClick={() => navigate(Routes.BookingDetails.replace(':id', booking.id.toString()))}
             >
-              {booking.sector_scheme?.sector.location.name}
+              {booking.sector_scheme?.sector?.location.name}
             </div>
 
             <div className={styles.customer}>
@@ -40,12 +36,18 @@ export const BookingCard = observer(({ booking }: BookingCardProps) => {
             </div>
 
             <div className={styles.range}>
-              <span>{formatFullDate(new Date(booking.sector_scheme.time_start))}</span>
+            <span>{formatFullDate(new Date(booking.booking_modules?.[0]?.start_time))}</span>
               <Icon name='time' size='extra-small' />
               <span>
-                {formatTime(booking.sector_scheme.time_start)}{' '}
+                {new Date(booking.booking_modules?.[0]?.start_time).toLocaleString('ru-RU', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}{' '}
                 -{' '}
-                {formatTime(booking.sector_scheme.time_end)}
+                {new Date(booking.booking_modules?.[0]?.end_time).toLocaleString('ru-RU', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
               </span>
             </div>
           </div>
@@ -59,7 +61,7 @@ export const BookingCard = observer(({ booking }: BookingCardProps) => {
               touchStartPreventDefault={false}
             >
               <SwiperSlide>
-                <img src={booking.sector_scheme?.sector.location.link_space} />
+                <img src={booking.sector_scheme?.sector?.location.link_space} />
               </SwiperSlide>
             </Swiper>
             <div className={styles.status}>

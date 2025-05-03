@@ -8,11 +8,11 @@ import {
   RawService,
   PlacedIcon,
 } from '@src/infrastructure/Locations/types';
-import { Tab } from '@src/presentation/ui-kit/Tabs/Tabs';
+import { TabItem } from '@src/presentation/ui-kit/Tabs/Tabs';
 import { locationsService } from '@src/infrastructure/Locations/locationsService';
 import { mapStore } from './mapStore';
 
-export const locationTabs: Tab[] = [
+export const locationTabs: TabItem<string>[] = [
   {
     value: 'information',
     label: 'Информация',

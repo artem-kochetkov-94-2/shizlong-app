@@ -3,6 +3,8 @@ import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '@src/routes';
+import { eventService } from '@src/application/services/EventService/EventService';
+import { EVENT } from '@src/application/services/EventService/EventList';
 
 export const CashierActions = () => {
     const navigate = useNavigate();
@@ -42,6 +44,9 @@ export const CashierActions = () => {
                     size='large'
                     withBorder
                     withBlur
+                    onClick={() => {
+                        eventService.emit(EVENT.MODAL_SCAN, { isActive: true });
+                    }}
                 />
                 <span>QR-сканер</span>
             </div>

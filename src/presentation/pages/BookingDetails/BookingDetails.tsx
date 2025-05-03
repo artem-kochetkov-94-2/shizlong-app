@@ -17,10 +17,9 @@ import { HeaderRightContent } from "./components/HeaderRightContent";
 import { Actions } from "./components/Actions";
 import { profileStore } from "@src/application/store/profileStore";
 import { Footer } from "./components/Footer";
-
 import { Payment } from "./components/Payment";
+
 const bookingStatuses = {
-  pending: 'активна',
   busy: 'оплачена',
   confirmed: 'оплачена',
   cancelled: 'Отменена',
@@ -158,7 +157,7 @@ export const BookingDetails = observer(() => {
                     items={booking.booking_modules.map((module) => ({
                       name: module.module.name,
                       nameAccent: module.module.number ? `#${module.module.number}` : '',
-                      icon: module.module.placed_icon?.link_icon,
+                      icon: module.module.placed_icon?.link_icon ?? '',
                       onClick: () => {
                         navigate(Routes.Sector.replace(':id', booking.sector_scheme?.sector.id.toString() ?? '') + `?module=${module.module.id}`);
                       }

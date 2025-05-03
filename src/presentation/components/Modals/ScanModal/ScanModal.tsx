@@ -4,10 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import QrScanner from 'qr-scanner';
 import { useNavigate } from "react-router-dom";
 import styles from './ScanModal.module.css';
+import { Routes } from "@src/routes";
 
 interface ScanModalProps {
     onClose: () => void;
 }
+
+const qrBookingPattern = 'booking/qr/check/';
 
 export const ScanModal = observer(({ onClose }: ScanModalProps) => {
     console.log('ScanModal');
@@ -54,6 +57,13 @@ export const ScanModal = observer(({ onClose }: ScanModalProps) => {
                 const locationIndex = data.indexOf('location');
                 const path = data.slice(locationIndex);
                 navigate(path);
+                handleCloseModal();
+             }
+
+             if (data.includes(qrBookingPattern)) {
+                const qrIndex = data.indexOf(qrBookingPattern);
+                const code = data.slice(qrIndex + qrBookingPattern.length);
+                navigate(Routes.BookingDetails.replace(':id', code));
                 handleCloseModal();
              }
         } catch (e) {

@@ -27,7 +27,7 @@ export const ClientContent = ({ booking }: ClientContentProps) => {
       {booking.status.name === 'completed' && (
         <Icon size="medium" name="check4" />
       )}
-      {(booking.status.name === 'pending' || booking.status.name === 'confirmed' || booking.status.name === 'busy' || booking.status.name === 'reserved') && (
+      {(booking.status.name === 'confirmed' || booking.status.name === 'busy' || booking.status.name === 'reserved') && (
         <IconButton
           size="medium"
           shape="rounded"

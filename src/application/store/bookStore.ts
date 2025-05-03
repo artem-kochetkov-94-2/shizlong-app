@@ -193,7 +193,7 @@ class BookStore {
   }
 
   get largestPeriod(): [string, string] | null {
-    let largestPeriod: [string, string] = [];
+    let largestPeriod: [string, string] | [] = [];
 
     this.allPeriods.forEach((period) => {
       const [start, end] = period;
@@ -504,7 +504,6 @@ class BookStore {
       };
 
       const result = await bookingsService.createGroupBooking(booking);
-      await bookingsStore.getMyBookings();
       onCreated(result.id);
       this.paymentStore.processPayment(result.id);
     } catch (error) {

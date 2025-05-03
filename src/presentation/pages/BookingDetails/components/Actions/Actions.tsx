@@ -50,12 +50,12 @@ export const Actions = observer(({ booking, setCancelOpen }: ActionsProps) => {
                     </Button>
                 )}
 
-                {booking.status.name === 'pending' && (
+                {/* {booking.status.name === 'pending' && (
                     <Button variant={'gray2'} withShadow={true}>
                         <Icon name={'stop'} size='extra-small' />
                         <span>Завершить</span>
                     </Button>
-                )}
+                )} */}
                     
                 <IconButton
                     size="large"

@@ -4,7 +4,6 @@ import { Sheet } from "react-modal-sheet";
 import { useNavigate, useParams } from "react-router-dom";
 import styles from "./BookingDetailsQR.module.css";
 import { Card } from "@src/presentation/ui-kit/Card";
-import { bookingsStore } from "@src/application/store/bookingsStore";
 import { observer } from "mobx-react-lite";
 import { Tag } from "@src/presentation/ui-kit/Tag";
 import { Icon } from "@src/presentation/ui-kit/Icon";
@@ -22,8 +21,7 @@ export const BookingDetailsQR = observer(() => {
         bookingCardStore.setBookingId(Number(id));
     }, [id]);
 
-    const { bookings } = bookingsStore;
-    const booking = bookings.find(b => b.id === Number(id));
+    const { booking } = bookingCardStore;
 
     if (!booking) {
         return <div>Бронь не найдена</div>;
@@ -67,6 +65,7 @@ export const BookingDetailsQR = observer(() => {
                             <div className={styles.services}>
                                 {booking.booking_modules.map(module => (
                                     <Tag
+                                        key={module.id}
                                         size='medium'
                                         color='default'
                                         text={module.module.name}
