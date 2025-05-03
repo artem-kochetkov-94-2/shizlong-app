@@ -69,7 +69,7 @@ export const BookingDrawer = observer(() => {
     if (profileStore.isCashier) {
       cashierStore.initBookigns(sector?.id);
     } else {
-      bookingsStore.initCurrentBookings();
+      bookingsStore.initCurrentBookings(sector?.id);
     }
   }, [sector?.id, profileStore.isCashier, verificationStore.isVerified]);
 

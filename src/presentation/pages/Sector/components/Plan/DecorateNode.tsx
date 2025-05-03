@@ -18,6 +18,7 @@ export const DecorateNode = observer(({ data: { decorate }}: { data: { decorate:
         alt={decorate?.name_icon}
         width={width}
         height={height}
+        style={{ transform: `rotate(${decorate?.rotation}deg)`}}
       />
     </div>
   );
