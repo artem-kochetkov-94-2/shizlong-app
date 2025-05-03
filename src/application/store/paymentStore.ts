@@ -165,7 +165,7 @@ export class PaymentStore {
           session: sessionId,
         });
         await this.getTokens();
-        await bookingsStore.getMyBookings();
+        // @todo update booking
         return;
       }
 
@@ -175,7 +175,8 @@ export class PaymentStore {
         await paymentService.processPayment({ booking_id: bookingId, token_id: this.tokens[0].id });
         this.isPaymentSuccess.add(bookingId);
         await this.getTokens();
-        await bookingsStore.getMyBookings();
+        // @todo
+        // await bookingsStore.getMyBookings();
       } else {
         eventService.emit(EVENT.MODAL_ADD_CARD, {
           isActive: true,

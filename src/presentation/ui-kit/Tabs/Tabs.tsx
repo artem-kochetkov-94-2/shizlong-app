@@ -1,14 +1,14 @@
 import React from 'react';
 import styles from './Tabs.module.css';
 
-export interface Tab {
-  value: string;
+export interface TabItem<T extends string> {
+  value: T;
   label: string;
 }
 
 interface TabsProps {
   activeTab: string;
-  tabs: Tab[];
+  tabs: TabItem<string>[];
   onTabChange: (tab: string) => void;
 }
 

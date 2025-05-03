@@ -5,8 +5,14 @@ import { BookingCard } from './components/BookingCard/BookingCard';
 import { Virtuoso } from 'react-virtuoso';
 import { cashierStore } from '@src/application/store/cashierStore';
 import styles from './ProfileBookings.module.css';
+import { useEffect } from 'react';
+import { CashierBookingResponse } from '@src/infrastructure/bookings/types';
+import { BookingsPages } from '@src/application/store/bookingsPages';
+import { TabItem } from '@src/presentation/ui-kit/Tabs/Tabs';
 
-const tabs = [
+type TabName = 'active' | 'expected' | 'history';
+
+const tabs: TabItem<TabName>[] = [
   {
     value: 'active',
     label: 'Активные',
@@ -22,8 +28,22 @@ const tabs = [
 ];
 
 export const ProfileBookings = observer(() => {
-  const { bookings } = cashierStore;
-  const { currentTab, setCurrentTab } = useTabs(tabs[0].value);
+  const { activeBookings, expectedBookings, historyBookings } = cashierStore;
+  const { currentTab, setCurrentTab } = useTabs<TabName>(tabs[0].value);
+
+  const tabBookings: Record<TabName, BookingsPages<CashierBookingResponse> | null> = {
+    active: activeBookings,
+    expected: expectedBookings,
+    history: historyBookings,
+  };
+
+  const bookings = tabBookings[currentTab];
+
+  console.log('booiings', bookings?.bookingsData.length);
+
+  useEffect(() => {
+    cashierStore.initBookigns();
+  }, [])
 
   return (
     <div className={styles.wrapper}>
@@ -35,9 +55,9 @@ export const ProfileBookings = observer(() => {
             tabs={tabs.map((t) => {
               let label = '';
 
-              if (t.value === 'active') label = `${t.label} ${bookings.length}`;
-              if (t.value === 'expected') label = `${t.label} ${bookings.length}`;
-              if (t.value === 'history') label = `${t.label} ${bookings.length}`;
+              if (t.value === 'active') label = `${t.label} ${activeBookings?.bookingsData.length}`;
+              if (t.value === 'expected') label = `${t.label} ${expectedBookings?.bookingsData.length}`;
+              if (t.value === 'history') label = `${t.label} ${historyBookings?.bookingsData.length}`;
 
               return {
                 ...t,
@@ -45,20 +65,22 @@ export const ProfileBookings = observer(() => {
               };
             })}
             activeTab={currentTab}
-            onTabChange={setCurrentTab}
+            onTabChange={(t) => setCurrentTab(t as TabName)}
           />
         </div>
 
         <Virtuoso
           style={{ flex: 1 }}
           className={styles.virtuoso}
-          totalCount={bookings.length}
+          totalCount={bookings?.bookingsData.length}
           itemContent={(index) => {
-            const booking = bookings[index];
-            const isLast = index === bookings.length - 1;
+            const booking = bookings?.bookingsData[index];
+            // @ts-ignore
+            const isLast = index === bookings?.bookingsData?.length - 1;
+
             return (
               <>
-                <BookingCard key={booking.id} booking={booking} />
+                {booking && <BookingCard key={booking.id} booking={booking} />}
                 {isLast && <div style={{ height: 100 }} />}
               </>
             );

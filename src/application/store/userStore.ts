@@ -28,6 +28,7 @@ export class UserStore {
   }
 
   async init() {
+    // @todo cashier
     this.notificationsStore.checkTelegramStatus();
     this.paymentStore.getTokens();
     this.profileStore.getProfile();

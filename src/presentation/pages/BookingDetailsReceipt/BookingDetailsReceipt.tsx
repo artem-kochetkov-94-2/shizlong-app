@@ -9,7 +9,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { bookingCardStore } from '@src/application/store/bookingCardStore';
 import { useEffect } from 'react';
 // import { formatFullDateWithTime } from '@src/application/utils/formatDate';
-import { bookingsStore } from '@src/application/store/bookingsStore';
 import { observer } from 'mobx-react-lite';
 
 export const BookingDetailsReceipt = observer(() => {
@@ -20,8 +19,7 @@ export const BookingDetailsReceipt = observer(() => {
     bookingCardStore.setBookingId(Number(id));
   }, [id]);
 
-  const { bookings } = bookingsStore;
-  const booking = bookings.find(b => b.id === Number(id));
+  const { booking } = bookingCardStore;
 
   if (!booking) {
     return <div>Бронь не найдена</div>;
@@ -52,22 +50,22 @@ export const BookingDetailsReceipt = observer(() => {
                     <div className={styles.subHeader}>ФИО плательщика</div>
                     <div className={styles.info}>Иванов Иван Иванович</div>
                     <div className={styles.subHeader}>Телефон плательщика</div>
-                    <div className={styles.info}>+7 (982) 247-52-44</div>
+                    <div className={styles.info}>{booking.customer.phone}</div>
                   </div>
                   <div className={styles.wrapper}>
                     <div className={styles.subHeader}>Получатель</div>
                     <div className={styles.info}>ООО «Шезлонгер»</div>
                     <div className={styles.subHeader}>Сумма платежа</div>
                     <div className={styles.info}>{booking.total_price.formatted_value}</div>
-                    <div className={styles.subHeader}>Комиссия</div>
-                    <div className={styles.info}>0,00 ₽</div>
+                    {/* <div className={styles.subHeader}>Комиссия</div>
+                    <div className={styles.info}>0,00 ₽</div> */}
                   </div>
-                  <div className={styles.wrapper}>
+                  {/* <div className={styles.wrapper}>
                     <div className={styles.subHeader}>Номер документа</div>
                     <div className={styles.info}>1000000000000523291656</div>
                     <div className={styles.subHeader}>Код авторизации</div>
                     <div className={styles.info}>070304</div>
-                  </div>
+                  </div> */}
                   <hr />
                   <div className={styles.wrapper}>
                     <div className={styles.subHeader}>Дополнительная информация</div>

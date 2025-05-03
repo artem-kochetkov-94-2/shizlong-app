@@ -46,7 +46,18 @@ interface Accessory {
     quantity: string;
 }
 
-export type MyBookingsResponse = RawBooking[];
+export type MyBookingsResponse = {
+    data: RawBooking[];
+    meta: {
+        current_page: number;
+        from: number;
+        last_page: number;
+        path: string;
+        per_page: number;
+        to: number;
+        total: number;
+    }
+}
 
 // Booking
 
@@ -122,6 +133,7 @@ export interface RawCashierBooking {
   };
   accessories: RawBookingAccessory[];
   sector_scheme: RawBoookingSectorScheme;
+  booking_modules: RawBookingModule[];
   modules_count: number;
   customer: RawBookingCustomer;
   booked_user: null | {
@@ -130,6 +142,7 @@ export interface RawCashierBooking {
     phone: string;
   };
 }
+
 export interface CashierBookingResponse {
   data: RawCashierBooking[];
   links: {
@@ -151,7 +164,7 @@ type PaymentStatus = 'processing' | 'complete' | 'cancel';
 
 type PaymentStatusUppercase = 'PROCESSING' | 'COMPLETE' | 'CANCEL';
 
-type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'reserved' | 'busy';
+type BookingStatus = 'confirmed' | 'cancelled' | 'completed' | 'reserved' | 'busy';
 
 export interface PaymentStatusResponse {
     id: number;

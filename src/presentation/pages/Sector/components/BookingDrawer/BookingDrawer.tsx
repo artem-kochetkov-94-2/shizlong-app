@@ -12,41 +12,40 @@ import { sectorStore } from '@src/application/store/sectorStore';
 import { SchemeMode } from '../SchemeMode/SchemeMode';
 import classNames from 'classnames';
 import { Tabs } from '@src/presentation/ui-kit/Tabs';
-import { Sheet, SheetRef } from 'react-modal-sheet';
+import { Sheet } from 'react-modal-sheet';
 import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { ChooseDate } from './components/ChooseDate';
-// import { ChooseTime } from './components/ChooseTime';
 import { ProfileButton } from '@src/presentation/pages/Locations/components/Navigation/components/ProfileButton';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '@src/routes';
 import { Button } from '@src/presentation/ui-kit/Button';
 import { locationStore } from '@src/application/store/locationStore';
-import { bookingsStore } from '@src/application/store/bookingsStore';
-import { BookingCard } from '@src/presentation/components/BookingCard';
 import { ChoosePeriod } from './components/ChoosePeriod/ChoosePeriod';
 import { ChooseStartTime } from './components/ChooseStartTime/ChooseStartTIme';
 import { eventService } from '@src/application/services/EventService/EventService';
 import { EVENT } from '@src/application/services/EventService/EventList';
+import { SectorBookings } from './components/SectorBookings';
+import { useDrawer } from '@src/presentation/pages/Beach/useDrawer';
+import { useClearStates } from './useClearStates';
+import { useSetPeriod } from './useSetPeriod';
+import { bookingsStore } from '@src/application/store/bookingsStore';
+import { profileStore } from '@src/application/store/profileStore';
+import { cashierStore } from '@src/application/store/cashierStore';
 
 const SNAP_POINTS = [758, 309, 79];
 const INITIAL_SNAP_POINT = 1;
 
 export const BookingDrawer = observer(() => {
   const { activeTab } = bookStore;
-  const { activeBookingsTab, bookModules, modulesPrice, allPeriods, hourlyPeriods, moduleSchemePeriod, largestPeriod } = bookStore;
-  const { currentBookings } = bookingsStore;
+  const { activeBookingsTab, bookModules, modulesPrice } = bookStore;
   const { activeScheme, schemes, sector } = sectorStore;
-  const { location, modules } = locationStore;
+  const { location } = locationStore;
+  const { currentBookings } = bookingsStore;
 
   const navigate = useNavigate();
 
-  const [isOpen, setIsOpen] = useState(true);
-
-  const ref = useRef<SheetRef>(null);
-  const snapTo = (i: number) => ref.current?.snapTo(i);
-
-  const locationBookings = currentBookings.filter((b) => b.sector_scheme?.sector.location.id === location?.id);
+  const { isOpen, setIsOpen, ref, snap, setSnap, snapTo } = useDrawer();
 
   useEffect(() => {
     setTimeout(() => {
@@ -60,41 +59,16 @@ export const BookingDrawer = observer(() => {
     }
   }, [activeTab]);
 
-  // clear states after change scheme
-  useEffect(() => {
-    bookStore.clear();
-  }, [activeScheme]);
-
-  // clear modules from another sector or scheme
-  useEffect(() => {
-    if (!sector || !location || !bookModules.size) return;
-
-    const first = bookModules.values().next().value;
-
-    if (first?.sector_id !== sector.id || first?.sector_scheme_id !== activeScheme?.id) {
-      bookStore.clear();
-    }
-  }, [sector, location, bookModules, modules, activeScheme]);
+  useClearStates();
+  useSetPeriod();
 
   useEffect(() => {
-    if (moduleSchemePeriod !== null) return;
-
-    if (largestPeriod) {
-      bookStore.setPeriod({
-        type: 'period',
-        startTime: `${largestPeriod[0]}`,
-        endTime: `${largestPeriod[1]}`,
-      });
-      return;
+    if (profileStore.isCashier) {
+      cashierStore.initBookigns(sector?.id);
+    } else {
+      bookingsStore.initCurrentBookings();
     }
-
-    if (hourlyPeriods.length > 0) {
-      bookStore.setPeriod({
-        type: 'hourly',
-        hours: hourlyPeriods[0],
-      });
-    }
-  }, [allPeriods, largestPeriod, hourlyPeriods, moduleSchemePeriod, activeScheme]);
+  }, [sector?.id, profileStore.isCashier]);
 
   const qrCodeClickHandler = () => {
     eventService.emit(EVENT.MODAL_SCAN, { isActive: true });
@@ -105,6 +79,7 @@ export const BookingDrawer = observer(() => {
       ref={ref}
       isOpen={isOpen}
       onClose={() => setIsOpen(true)}
+      onSnap={(snap) => setSnap(snap)}
       detent='content-height'
       snapPoints={SNAP_POINTS}
       initialSnap={INITIAL_SNAP_POINT}
@@ -113,17 +88,21 @@ export const BookingDrawer = observer(() => {
       <Sheet.Container>
         <Sheet.Header />
         <Sheet.Content>
-          <div className={styles.controls}>
-            <div className={styles.controlsItem}>
-              <IconButton iconName='tap' size='extra-small' shape='rounded' />
-              <span>Выберите несколько модулей</span>
-            </div>
-            {activeScheme && schemes.length > 1 && (
-              <div className={classNames(styles.controlsItem, styles.scheme)}>
-                <SchemeMode />
+          {(activeTab === 'bookings' && snap === 0) ? (
+            null
+          ): (
+            <div className={styles.controls}>
+              <div className={styles.controlsItem}>
+                <IconButton iconName='tap' size='extra-small' shape='rounded' />
+                <span>Выберите несколько модулей</span>
               </div>
-            )}
-          </div>
+              {activeScheme && schemes.length > 1 && (
+                <div className={classNames(styles.controlsItem, styles.scheme)}>
+                  <SchemeMode />
+                </div>
+              )}
+            </div>
+          )}
 
           <div className={styles.navigation}>
             <IconButton iconName='qr-code' size='large' onClick={qrCodeClickHandler} />
@@ -138,7 +117,7 @@ export const BookingDrawer = observer(() => {
           <Sheet.Scroller>
             {activeTab === 'bookings' && (
               <div className={styles.bookings}>
-                {locationBookings.length === 0 && (
+                {currentBookings?.bookingsData.length === 0 && (
                   <div className={styles.bookingsEmpty}>
                     На {sector?.name} пляжа {location?.name} на сегодня у вас броней нет
                   </div>
@@ -150,13 +129,7 @@ export const BookingDrawer = observer(() => {
                   onTabChange={(tab) => bookStore.setActiveBookingsTab(tab)}
                 />
 
-                {locationBookings.length > 0 && (
-                  <div className={styles.bookingsContainer}>
-                    {locationBookings.map((booking) => (
-                      <BookingCard key={booking.id} booking={booking} />
-                    ))}
-                  </div>
-                )}
+                <SectorBookings />
               </div>
             )}
 

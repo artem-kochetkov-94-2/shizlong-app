@@ -103,12 +103,12 @@
     background-color: #F3F4F6;
 }
 
-.bookingsContainer {
+/* .bookingsContainer {
     display: flex;
     flex-direction: column;
     gap: 8px;
     margin-top: 10px;
-}
+} */
 
 .bookingsEmpty {
     margin-bottom: 15px;

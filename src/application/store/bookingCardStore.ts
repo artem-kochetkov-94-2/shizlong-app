@@ -1,23 +1,36 @@
 import { makeAutoObservable } from 'mobx';
 import { BookingsStore, bookingsStore } from './bookingsStore';
+import { ProfileStore, profileStore } from './profileStore';
+import { bookingsService } from '@src/infrastructure/bookings/bookingsService';
+import { RawBooking, RawCashierBooking } from '@src/infrastructure/bookings/types';
+// import { bookingsService } from '@src/infrastructure/bookings/bookingsService';
 
 class BookingCardStore {
   isLoading: boolean = false;
-  // @todo
   bookingId: number | null = null;
   bookingsStore: BookingsStore = bookingsStore;
+  profileStore: ProfileStore = profileStore;
+  _booking: RawBooking | RawCashierBooking | null = null;
 
   constructor() {
     makeAutoObservable(this);
     this.bookingsStore = bookingsStore;
   }
 
-  // @todo
+  get booking() {
+    if (this.profileStore.isCashier) {
+      return this._booking as RawCashierBooking;
+    }
+
+    return this._booking as RawBooking;
+  }
+
   async setBookingId(id: number) {
     this.bookingId = id;
 
     try {
       this.isLoading = true;
+      this.fetchBooking(id);
     } catch (error) {
       console.error(error);
     } finally {
@@ -25,8 +38,19 @@ class BookingCardStore {
     }
   }
 
-  get booking() {
-    return this.bookingsStore.bookings.find((booking) => booking.id === this.bookingId);    
+  async fetchBooking(id: number) {
+    try {
+      if (this.profileStore.isCashier) {
+        const result = await bookingsService.getCashierBooking(id);
+        this._booking = result;
+      } else {
+        const result = await bookingsService.getClientBooking(id);
+        this._booking = result;
+      }
+      
+    } catch(e) {
+      console.log(e);
+    }
   }
 }
 

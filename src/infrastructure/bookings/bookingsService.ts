@@ -2,8 +2,10 @@ import { API_URL, API_URL_V2 } from '@src/const';
 import {
   BookingRequest,
   BookingResponse,
+  CashierBookingResponse,
   MyBookingsResponse,
-  // PaymentStatusResponse,
+  RawBooking,
+  RawCashierBooking,
 } from './types';
 import {
   VerificationStore,
@@ -16,7 +18,11 @@ const routes = {
   createGroup: '/booking/create-group',
   myBookings: '/customer/bookings',
   cancel: '/booking/cancel',
-  paymentStatus: '/booking/status/'
+  paymentStatus: '/booking/status/',
+  cashierBookings: '/cashier/bookings/get',
+
+  getClientBooking: '/customer/bookings',
+  getCashierBooking: '/cashier/bookings',
 };
 
 class BookingsService {
@@ -30,13 +36,45 @@ class BookingsService {
     this.restService = new RestService();
   }
 
-  async getMyBookings() {
+  async getClientBooking(id: number) {
     if (!this.verificationStore.accessToken) {
-      return [];
+      return null;
     }
 
+    const { response } = await this.restService.get<RawBooking>({
+      url: `${this.apiUrlV2}${routes.getClientBooking}/${id}`,
+    });
+
+    return response;
+  }
+
+  async getCashierBooking(id: number) {
+    if (!this.verificationStore.accessToken) {
+      return null;
+    }
+
+    const { response } = await this.restService.get<RawCashierBooking>({
+      url: `${this.apiUrlV2}${routes.getCashierBooking}/${id}`,
+    });
+
+    return response;
+  }
+
+  async getMyBookings(page: number, status?: string[], sectorId?: number) {
+    if (!this.verificationStore.accessToken) {
+      return null;
+    }
+
+    const data: {
+      status?: string[];
+      sector_id?: number;
+    } = {};
+    if (status) data.status = status;
+    if (sectorId) data['sector_id'] = sectorId;
+
     const { response } = await this.restService.post<MyBookingsResponse>({
-      url: `${this.apiUrlV2}${routes.myBookings}`,
+      url: `${this.apiUrlV2}${routes.myBookings}?page=${page}`,
+      data
     });
 
     return response;
@@ -68,13 +106,21 @@ class BookingsService {
     return response;
   }
 
-  // async getPaymentStatus(bookingId: number) {
-  //   const { response } = await this.restService.get<PaymentStatusResponse>({
-  //     url: `${this.apiUrlV2}${routes.paymentStatus}${bookingId}`,
-  //   });
+  async getCashierBookings(page: number, status?: string[], sectorId?: number) {
+    const data: {
+      status?: string[];
+      sector_id?: number;
+    } = {};
+    if (status) data.status = status;
+    if (sectorId) data['sector_id'] = sectorId;
 
-  //   return response;
-  // }
+    const { response } = await this.restService.post<CashierBookingResponse>({
+      url: `${this.apiUrlV2}${routes.cashierBookings}?page=${page}`,
+      data
+    });
+
+    return response;
+  }
 }
 
 export const bookingsService = new BookingsService();

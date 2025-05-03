@@ -34,6 +34,8 @@ const header = 160;
 const footer = 260;
 const headerWithFooter = header + footer;
 const arrowWidth = 25;
+  // 1217 это что то из админки - базовая ширина подложки
+const baseWidthImgPlan = 1217;
 
 export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) => {
   const reactFlow = useReactFlow();
@@ -46,8 +48,7 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
   const { modules, decorate } = locationStore;
   const { sector, activeScheme, size } = sectorStore;
 
-  // 1217 это что то из админки - базовая ширина подложки
-  const koef = size?.width / 1217;
+  const koef = size?.width / baseWidthImgPlan;
 
   const getNodes = (sector: RawSector, sectorModules: RawModule[], decorate: PlacedIcon[]) => {
     console.log('sectorModules', sectorModules);
@@ -106,6 +107,8 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
     const sectorModules = modules.filter((m) => m.sector_id === sector.id && m.sector_scheme_id === activeScheme?.id);
     const decorates = decorate.filter(d => d.sector_scheme_id === activeScheme?.id)
 
+    console.log('sectorModules', sectorModules);
+    console.log('decorates', decorates);
     const nodes = getNodes(sector, sectorModules, decorates);
     setNodes(nodes);
   }, [sector, modules, decorate, activeScheme, size]);

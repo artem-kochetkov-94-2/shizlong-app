@@ -29,3 +29,15 @@
   text-align: center;
   color: #a0a7b1;
 }
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: 10px;
+}
+
+.virtuoso {
+  overflow: hidden;
+}

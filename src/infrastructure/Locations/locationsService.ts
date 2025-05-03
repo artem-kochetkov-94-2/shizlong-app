@@ -12,7 +12,6 @@ import {
 } from './types';
 import { RestService } from '../restService/restService';
 import { VerificationStore, verificationStore } from '@src/application/store/verificationStore';
-import { CashierBookingResponse } from '../bookings/types';
 
 const routes = {
   locations: '/location/list',
@@ -28,7 +27,6 @@ const routes = {
 
   cashierSectors: '/cashier/sectors/get',
   cashierLocations: '/cashier/locations/get',
-  cashierBookings: '/cashier/bookings/get',
 
   decorate: '/location/:id/get-decor',
 };
@@ -170,13 +168,6 @@ class LocationsService {
   async getCashierLocations() {
     const { response } = await this.restService.get<RawLocation[]>({
       url: `${this.apiUrlV2}${routes.cashierLocations}`,
-    });
-    return response;
-  }
-
-  async getCashierBookings() {
-    const { response } = await this.restService.get<CashierBookingResponse>({
-      url: `${this.apiUrlV2}${routes.cashierBookings}`,
     });
     return response;
   }

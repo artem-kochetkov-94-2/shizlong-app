@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { notificationsService } from '@src/infrastructure/notifications/notificationService';
 import { EmailSettings } from '@src/presentation/pages/NotificationsSettings/components/EmailSettings';
 import { PushSettings } from '@src/presentation/pages/NotificationsSettings/components/PushSettings';
@@ -91,7 +91,9 @@ export class NotificationsStore {
       this.isLoading = true;
       const res = await this.notificationsService.checkTelegramStatus();
       this.notifications[0].status = res.is_subscribed_to_telegram;
-      this.isSubscribedToTelegram = res.is_subscribed_to_telegram;
+      runInAction(() => {
+        this.isSubscribedToTelegram = res.is_subscribed_to_telegram;
+      })
     } catch (error) {
       console.error(error);
     } finally {

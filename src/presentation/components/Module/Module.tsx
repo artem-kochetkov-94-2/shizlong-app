@@ -6,7 +6,6 @@ import { About } from "@src/presentation/components/About";
 import { Card } from "@src/presentation/ui-kit/Card";
 import { Icon } from "@src/presentation/ui-kit/Icon";
 import { Button } from "@src/presentation/ui-kit/Button";
-// import { AbonementCard } from "@src/presentation/components/AbonementCard";
 import { Sheet } from "react-modal-sheet";
 import { observer } from 'mobx-react-lite';
 import { locationStore } from '@src/application/store/locationStore';
@@ -24,10 +23,9 @@ const labels: Record<ModuleStatus, string> = {
 
 type ModuleProps = {
     onClose?: () => void;
-    onModuleRemove?: () => void;
 }
 
-export const Module = observer(({ onClose, onModuleRemove }: ModuleProps) => {
+export const Module = observer(({ onClose }: ModuleProps) => {
     const { beachAccessories, location, modules } = locationStore;
     const { formattedTime, formattedDate } = bookStore;
 
