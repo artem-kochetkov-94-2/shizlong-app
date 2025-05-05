@@ -120,7 +120,7 @@
 
 /* Disabled state */
 .disabled {
-  border-color: #F3F4F6 ;
+  border-color: #F3F4F6;
   background-color: #F3F4F6;
   color: #BEC5CF;
   cursor: not-allowed;

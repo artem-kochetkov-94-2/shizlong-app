@@ -12,9 +12,11 @@ interface PaymentProps {
 export const Payment = ({ booking }: PaymentProps) => {
     const navigate = useNavigate();
 
+    const text = <span>Оплачено <span style={{ whiteSpace: 'nowrap' }}>{booking.status.name === 'reserved' ? 0 : booking.total_price.formatted_value}</span></span>
+
     return (
         <>
-            <DecorateButton text={`Оплачено ${booking.status.name === 'reserved' ? 0 : booking.total_price.formatted_value}`} />
+            <DecorateButton text={text} />
             <Button
                 variant={'gray2'}
                 onClick={() => navigate(Routes.BookingDetailsReceipt.replace(':id', booking.id.toString()))}

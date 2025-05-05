@@ -79,8 +79,6 @@ export const Location = observer(() => {
                       items={additionalServicesAsFeatures}
                     />
                   )}
-                  {/* @todo - особенности */}
-                  {/* <Features title="Особенности" items={peculiarities} /> */}
                 </div>
               )}
             </Sheet.Scroller>

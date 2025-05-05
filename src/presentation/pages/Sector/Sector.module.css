@@ -5,6 +5,25 @@
     background-color: #F5D8AC;
 }
 
+.spin {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 100px;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1;
+
+    div {
+        border-color: #fff;
+        border-bottom-color: transparent;
+    }
+}
+
 .plan {
     position: absolute;
     top: 0;

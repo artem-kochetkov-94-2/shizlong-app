@@ -1,8 +1,9 @@
+import { ReactNode } from 'react';
 import styles from './DecorateButton.module.css';
 import classnames from 'classnames';
 
 interface DecorateButtonProps {
-    text: string;
+    text: ReactNode;
     color?: 'blue';
 }
 

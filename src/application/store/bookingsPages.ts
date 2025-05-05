@@ -1,6 +1,6 @@
 import { autorun, makeAutoObservable, runInAction } from 'mobx';
 import { bookingsService } from '@src/infrastructure/bookings/bookingsService';
-import { CashierBookingResponse, MyBookingsResponse } from '@src/infrastructure/bookings/types';
+import { CashierBookingResponse, MyBookingsResponse, RawBooking, RawCashierBooking } from '@src/infrastructure/bookings/types';
 
 type Reponse = MyBookingsResponse | CashierBookingResponse;
 
@@ -30,6 +30,32 @@ export class BookingsPages<T extends Reponse> {
         this.getMyBookings(page);
       }
     })
+  }
+
+  updateBookings(booking: RawBooking | RawCashierBooking) {
+    if (!this.bookings || !this.bookingsData) return;
+
+    const newBookings = {
+      ...this.bookings,
+      data: this.bookings.data.map(b => {
+        if (b.id === booking.id) {
+          return booking;
+        }
+
+        return b;
+      }),
+    };
+
+    const newBookingsData = this.bookingsData.map(b => {
+      if (b.id === booking.id) {
+        return booking;
+      }
+
+      return b;
+    });
+
+    this.bookings = newBookings;
+    this.bookingsData = newBookingsData;
   }
 
   async getMyBookings(page = 1) {
