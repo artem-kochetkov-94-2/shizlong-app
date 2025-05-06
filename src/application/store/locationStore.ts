@@ -103,7 +103,7 @@ export class LocationStore {
     this.fetchSectors(locationId);
     this.fetchAdditionalServices(locationId);
     this.fetchBeachAccessories(locationId);
-    this.fetchModules(locationId);
+    // this.fetchModules(locationId);
     this.fetchDecorate(locationId);
     this.fetchServices(locationId);
   }
