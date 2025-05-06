@@ -19,8 +19,8 @@ export class BookingsStore {
     this.completedBookings = new BookingsPages(['completed', 'cancelled']);
   }
 
-  initCurrentBookings() {
-    this.currentBookings = new BookingsPages(['confirmed', 'reserved', 'busy']);
+  initCurrentBookings(sectorId?: number) {
+    this.currentBookings = new BookingsPages(['confirmed', 'reserved', 'busy'], sectorId);
   }
 
   initCompletedBookings() {

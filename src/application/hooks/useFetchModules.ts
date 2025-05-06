@@ -21,6 +21,8 @@ export const useFetchModules = () => {
             to_date,
         } = formatDateTime(bookStore.date as Date, bookStore.formHours, bookStore.formStartTime);
 
+        if (!from_date || !to_date) return;
+
         locationStore.fetchModules(
             sector.location_id,
             from_date,

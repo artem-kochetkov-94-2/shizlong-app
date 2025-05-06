@@ -513,6 +513,7 @@ class BookStore {
           isActive: true,
           message: error.message,
         });
+        return;
       }
       eventService.emit(EVENT.MODAL_ERROR, {
         isActive: true,

@@ -16,6 +16,8 @@ export const ModuleNode = observer(({ data: { module }}: { data: { module: RawMo
   const height = Number(module.placed_icon?.height_icon) * pixelMeter;
   const fontSize = height * 0.3;
 
+  // console.log('module', JSON.parse(JSON.stringify(module.bookings)));
+
   return (
     <div className={styles.module}>
       <span

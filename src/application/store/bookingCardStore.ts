@@ -3,9 +3,8 @@ import { BookingsStore, bookingsStore } from './bookingsStore';
 import { ProfileStore, profileStore } from './profileStore';
 import { bookingsService } from '@src/infrastructure/bookings/bookingsService';
 import { RawBooking, RawCashierBooking } from '@src/infrastructure/bookings/types';
-// import { bookingsService } from '@src/infrastructure/bookings/bookingsService';
 
-class BookingCardStore {
+export class BookingCardStore {
   isLoading: boolean = false;
   bookingId: number | null = null;
   bookingsStore: BookingsStore = bookingsStore;
@@ -36,6 +35,10 @@ class BookingCardStore {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  setBooking(booking: RawBooking | RawCashierBooking | null) {
+    this._booking = booking;
   }
 
   async fetchBooking(id: number) {

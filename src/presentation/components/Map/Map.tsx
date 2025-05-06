@@ -17,7 +17,7 @@ export const Map = observer(() => {
     load().then((mapglAPI) => {
       const map = new mapglAPI.Map(MAP_CONTAINER_ID, {
         center: [39.712555, 43.587445],
-        zoom: 13,
+        zoom: 9,
         key: '1235a1dd-c965-44d9-b210-f52fb60b1e89',
         zoomControl: 'centerRight',
         style: 'caf7e397-ebea-4d36-8d7d-0822abf9c817',

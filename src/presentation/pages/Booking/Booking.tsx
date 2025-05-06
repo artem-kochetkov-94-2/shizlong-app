@@ -145,7 +145,6 @@ export const Booking = observer(() => {
                                     </div>
                                 </Card>
 
-                                {/* @_todo: количество гостей */}
                                 {/* <Card className={styles.card}>
                                     <div className={styles.people}>
                                         <div className={styles.cardTitle}>

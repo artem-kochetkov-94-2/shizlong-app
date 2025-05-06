@@ -3,7 +3,10 @@ import { paymentService } from '@src/infrastructure/payment/paymentService';
 import { Token } from '@src/infrastructure/payment/types';
 import { eventService } from '../services/EventService/EventService';
 import { EVENT } from '../services/EventService/EventList';
+import { BookingsService, bookingsService } from '@src/infrastructure/bookings/bookingsService';
+import { BookingCardStore, bookingCardStore } from './bookingCardStore';
 import { bookingsStore } from './bookingsStore';
+import { ApiError } from '@src/infrastructure/validateResponse';
 
 const baseStyle = {
   base: {
@@ -59,9 +62,13 @@ export class PaymentStore {
   isLoadingProcessPayment = new Set<number>();
   isPaymentError = new Set<number>();
   isPaymentSuccess = new Set<number>();
+  bookingCardStore: BookingCardStore;
+  bookingsService: BookingsService;
 
   constructor() {
     makeAutoObservable(this);
+    this.bookingCardStore = bookingCardStore;
+    this.bookingsService = bookingsService;
   }
 
   async getTokens() {
@@ -155,6 +162,7 @@ export class PaymentStore {
     }
   }
 
+  // only for client
   async processPayment(bookingId: number, token?: string, sessionId?: string) {
     try {
       if (token && sessionId) {
@@ -164,8 +172,11 @@ export class PaymentStore {
           token: token,
           session: sessionId,
         });
+        this.isPaymentSuccess.add(bookingId);
+        const booking = await this.bookingsService.getClientBooking(bookingId);
+        if (bookingCardStore.booking.id === bookingId) bookingCardStore.setBooking(booking);
+        if (booking) bookingsStore.currentBookings?.updateBookings(booking);
         await this.getTokens();
-        // @todo update booking
         return;
       }
 
@@ -175,8 +186,9 @@ export class PaymentStore {
         await paymentService.processPayment({ booking_id: bookingId, token_id: this.tokens[0].id });
         this.isPaymentSuccess.add(bookingId);
         await this.getTokens();
-        // @todo
-        // await bookingsStore.getMyBookings();
+        const booking = await this.bookingsService.getClientBooking(bookingId);
+        if (bookingCardStore.booking.id === bookingId) bookingCardStore.setBooking(booking);
+        if (booking) bookingsStore.currentBookings?.updateBookings(booking);
       } else {
         eventService.emit(EVENT.MODAL_ADD_CARD, {
           isActive: true,
@@ -184,7 +196,22 @@ export class PaymentStore {
         });
       }
     } catch (error) {
-      this.isPaymentError.add(bookingId);
+      if (!this.isPaymentSuccess.has(bookingId)) {
+        this.isPaymentError.add(bookingId);
+      }
+
+      if (error instanceof ApiError) {
+        eventService.emit(EVENT.MODAL_ERROR, {
+          isActive: true,
+          message: error.message,
+        });
+      } else {
+        eventService.emit(EVENT.MODAL_ERROR, {
+          isActive: true,
+          // @ts-ignore
+          message: error.message || 'Ошибка при создании бронирования',
+        });
+      }
       console.error(error);
     } finally {
       this.toggleLoadingPayment(bookingId, false);

@@ -25,7 +25,7 @@ const routes = {
   getCashierBooking: '/cashier/bookings',
 };
 
-class BookingsService {
+export class BookingsService {
   private readonly apiUrlV1 = API_URL;
   private readonly apiUrlV2 = API_URL_V2;
   private readonly verificationStore: VerificationStore;

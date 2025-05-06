@@ -13,12 +13,13 @@ import { Module } from '@src/presentation/components/Module';
 import { useOpenModule } from './hooks/useOpenModule';
 import { useFetchModules } from '@src/application/hooks/useFetchModules';
 import { ReactFlowProvider } from '@xyflow/react';
+import { Loader } from '@src/presentation/ui-kit/Loader';
 
 export const Sector = observer(() => {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
-  const { location, sectors } = locationStore;
+  const { location, sectors, isModulesLoading } = locationStore;
   const { sector } = sectorStore;
 
   // console.log('========== bookModules', JSON.parse(JSON.stringify(bookModules)));
@@ -52,6 +53,12 @@ export const Sector = observer(() => {
   return (
     <div className={styles.wrapper}>
       <Header name={location.name} sector={sector} />
+
+      {isModulesLoading && (
+        <div className={styles.spin}>
+          <Loader />
+        </div>
+      )}
 
       <ReactFlowProvider>
         <Plan
