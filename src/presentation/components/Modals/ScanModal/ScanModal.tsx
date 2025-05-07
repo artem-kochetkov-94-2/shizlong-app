@@ -48,7 +48,7 @@ export const ScanModal = observer(({ onClose }: ScanModalProps) => {
             if (data.includes('sector/') && data.includes('module=')) {
                 const sectorIndex = data.indexOf('sector');
                 const path = data.slice(sectorIndex);
-                navigate(path);
+                navigate(path + '&scan=true');
                 handleCloseModal();
             }
 
