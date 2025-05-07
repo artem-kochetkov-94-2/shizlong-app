@@ -1,7 +1,7 @@
 export type StatusCode = 'CLIENT_ERROR' | 'SERVER_ERROR' | 'SUCCESS';
 
 export type FormRequestSuccessResponse = {
-    statusCode: 'SUCCESS',
+    codeStatus: 'SUCCESS',
     token: string;
     cardUniqueIdentifier: string;
     cardExpirationDate: string;
@@ -20,7 +20,7 @@ type ErrorKey =
 type Errors = Record<ErrorKey, string>;
 
 export type FormRequestErrorResponse = {
-    statusCode: 'CLIENT_ERROR' | 'SERVER_ERROR';
+    codeStatus: 'CLIENT_ERROR' | 'SERVER_ERROR';
     errors: Errors;
 }
 

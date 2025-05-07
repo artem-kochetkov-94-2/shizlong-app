@@ -126,12 +126,14 @@ export class PaymentStore {
         }
       );
 
-      if (result.statusCode === 'SUCCESS') {
+      console.log('result', result);
+
+      if (result.codeStatus === 'SUCCESS') {
         successCb?.(result.token, this.sessionId);
         return;
       }
 
-      if (result.statusCode === 'CLIENT_ERROR' || result.statusCode === 'SERVER_ERROR') {
+      if (result.codeStatus === 'CLIENT_ERROR' || result.codeStatus === 'SERVER_ERROR') {
         const message = Object.values(result.errors)[0];
         eventService.emit(EVENT.MODAL_ERROR, {
           isActive: true,
