@@ -20,7 +20,7 @@ type ErrorKey =
 type Errors = Record<ErrorKey, string>;
 
 export type FormRequestErrorResponse = {
-    statusCode: 'CLIENT_ERROR';
+    statusCode: 'CLIENT_ERROR' | 'SERVER_ERROR';
     errors: Errors;
 }
 

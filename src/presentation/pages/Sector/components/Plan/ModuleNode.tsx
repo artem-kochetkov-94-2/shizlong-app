@@ -19,8 +19,11 @@ export const ModuleNode = observer(({ data: { module }}: { data: { module: RawMo
   // console.log('module', JSON.parse(JSON.stringify(module.bookings)));
 
   return (
-    <div className={styles.module}>
-      <span
+    <div className={cn(styles.module, {
+      [styles.available]: isAvailable,
+      [styles.booked]: !isAvailable,
+    })}>
+      {/* <span
         className={cn(styles.moduleId, {
           [styles.available]: isAvailable,
           [styles.booked]: !isAvailable,
@@ -39,7 +42,7 @@ export const ModuleNode = observer(({ data: { module }}: { data: { module: RawMo
         >
           {module.number}
         </span>
-      </span>
+      </span> */}
       <img
         src={module.placed_icon?.link_icon}
         alt={module.placed_icon?.name_icon}

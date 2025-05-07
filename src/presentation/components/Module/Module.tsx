@@ -14,6 +14,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ModuleStatus } from '@src/infrastructure/Locations/types';
 import { bookStore } from '@src/application/store/bookStore';
 import { formatTimeRange, getTimeRangeDurationInHoursAndMinutes } from '@src/application/utils/formatDate';
+import { useEffect } from 'react';
 
 const labels: Record<ModuleStatus, string> = {
     available: 'свободен',
@@ -31,10 +32,22 @@ export const Module = observer(({ onClose }: ModuleProps) => {
 
     const [searchParams] = useSearchParams();
     const moduleId = searchParams.get('module');
+    const scan = searchParams.get('scan');
     const module = modules.find((m) => m.id === Number(moduleId));
     const moduleCheapestPrice = module?.module_schemes?.reduce((min, scheme) => scheme.price.value < min.price.value ? scheme : min, module?.module_schemes[0]);
 
     const navigate = useNavigate();
+
+    const isModuleInBooking = module ? bookStore.bookModules.has(module.id) : false;
+    const isModuleAvailable = module ? bookStore.isModuleAvailable(module) : false;
+
+    useEffect(() => {
+        if (isModuleInBooking || !module) return;
+
+        if (isModuleAvailable && scan == 'true') {
+            bookStore.toggleModule(module);
+        }
+    }, [isModuleInBooking, isModuleAvailable, scan, module]);
 
     if (!module) return null;
 
@@ -56,9 +69,6 @@ export const Module = observer(({ onClose }: ModuleProps) => {
     const goToLocation = () => {
         navigate(Routes.Location.replace(':id', location?.id.toString() || ''));
     };
-
-    const isModuleInBooking = bookStore.bookModules.has(module.id);
-    const isModuleAvailable = bookStore.isModuleAvailable(module);
 
     return (
         <Sheet

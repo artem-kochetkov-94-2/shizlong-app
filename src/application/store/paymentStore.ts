@@ -7,6 +7,7 @@ import { BookingsService, bookingsService } from '@src/infrastructure/bookings/b
 import { BookingCardStore, bookingCardStore } from './bookingCardStore';
 import { bookingsStore } from './bookingsStore';
 import { ApiError } from '@src/infrastructure/validateResponse';
+import { FormRequestResponse } from '../../infrastructure/payment/types'
 
 const baseStyle = {
   base: {
@@ -127,6 +128,15 @@ export class PaymentStore {
 
       if (result.statusCode === 'SUCCESS') {
         successCb?.(result.token, this.sessionId);
+        return;
+      }
+
+      if (result.statusCode === 'CLIENT_ERROR' || result.statusCode === 'SERVER_ERROR') {
+        const message = Object.values(result.errors)[0];
+        eventService.emit(EVENT.MODAL_ERROR, {
+          isActive: true,
+          message,
+        });
         return;
       }
 

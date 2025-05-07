@@ -35,12 +35,17 @@
   color: #fff;
 }
 
-.available span {
+/* .available span {
   background: #64b64b;
-}
+} */
 
-.booked span {
+/* .booked span {
   background: #f95e5e;
+} */
+
+.booked {
+  opacity: 0.5;
+  filter: grayscale(1);
 }
 
 .activeModule {
