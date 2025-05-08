@@ -128,12 +128,20 @@ export class PaymentStore {
 
       console.log('result', result);
 
-      if (result.codeStatus === 'SUCCESS') {
+      // @ts-ignore
+      const isSuccess = result.codeStatus === 'SUCCESS' || result.statusCode === 'SUCCESS';
+      const isError =
+        result.codeStatus === 'CLIENT_ERROR' ||
+        result.codeStatus === 'SERVER_ERROR' ||
+        result.statusCode === 'CLIENT_ERROR' ||
+        result.statusCode === 'SERVER_ERROR';
+
+      if (isSuccess) {
         successCb?.(result.token, this.sessionId);
         return;
       }
 
-      if (result.codeStatus === 'CLIENT_ERROR' || result.codeStatus === 'SERVER_ERROR') {
+      if (isError) {
         const message = Object.values(result.errors)[0];
         eventService.emit(EVENT.MODAL_ERROR, {
           isActive: true,
@@ -186,7 +194,7 @@ export class PaymentStore {
         });
         this.isPaymentSuccess.add(bookingId);
         const booking = await this.bookingsService.getClientBooking(bookingId);
-        if (bookingCardStore.booking.id === bookingId) bookingCardStore.setBooking(booking);
+        if (bookingCardStore.booking?.id === bookingId) bookingCardStore.setBooking(booking);
         if (booking) bookingsStore.currentBookings?.updateBookings(booking);
         await this.getTokens();
         return;
@@ -199,7 +207,7 @@ export class PaymentStore {
         this.isPaymentSuccess.add(bookingId);
         await this.getTokens();
         const booking = await this.bookingsService.getClientBooking(bookingId);
-        if (bookingCardStore.booking.id === bookingId) bookingCardStore.setBooking(booking);
+        if (bookingCardStore.booking?.id === bookingId) bookingCardStore.setBooking(booking);
         if (booking) bookingsStore.currentBookings?.updateBookings(booking);
       } else {
         eventService.emit(EVENT.MODAL_ADD_CARD, {
