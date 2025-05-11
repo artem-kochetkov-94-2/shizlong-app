@@ -2,7 +2,7 @@ import { locationStore } from '@src/application/store/locationStore';
 import { observer } from 'mobx-react-lite';
 import { Contacts } from './components/Contacts';
 import { Features } from '@src/presentation/components/Features/Features';
-import { useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
@@ -97,6 +97,8 @@ export const Location = observer(() => {
         </Sheet.Container>
         {snap === 0 ? <Sheet.Backdrop /> : <></>}
       </Sheet>
+
+      <Outlet />
     </>
   );
 });

@@ -26,6 +26,7 @@ import { PaymentMethodsAdd } from './presentation/pages/PaymentMethodsAdd';
 import { PrivacyPolicy } from './presentation/pages/PrivacyPolicy';
 import { UiKit } from './presentation/pages/UiKit';
 import { ProfileBookings } from './presentation/pages/ProfileBookings';
+import { LocationPlan } from './presentation/pages/LocationPlan';
 // import { Filters } from './presentation/pages/Filters';
 // import { StaffCall } from './presentation/pages/StaffCall';
 
@@ -43,7 +44,10 @@ function App() {
             {/* <Route path={RoutesMap.Cities} element={<Cities />} /> */}
 
             <Route path={RoutesMap.Locations} element={<Locations />} />
-            <Route path={RoutesMap.Location} element={<Location />} />
+            <Route path={RoutesMap.Location} element={<Location />}>
+              <Route path={RoutesMap.LocationPlan} element={<LocationPlan />} />
+            </Route>
+
             <Route path={RoutesMap.Sector} element={<Sector />} />
             <Route path={RoutesMap.Booking} element={<Booking />} />
             <Route path={RoutesMap.BookingDetails} element={<BookingDetails />} />

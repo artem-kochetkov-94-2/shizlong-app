@@ -4,7 +4,7 @@ import { RawBooking } from '@src/infrastructure/bookings/types';
 import { Icon } from '@src/presentation/ui-kit/Icon';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Routes } from '@src/routes';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@src/presentation/ui-kit/Button';
 import { IconButton } from '@src/presentation/ui-kit/IconButton';
 import { paymentStore } from '@src/application/store/paymentStore';
@@ -15,6 +15,7 @@ import { CancelBookingPanel } from '../CancelBookingPanel';
 import styles from './BookingCard.module.css';
 import { createYandexMapsRouteLink } from '@src/application/utils/createYandexMapsRouteLink';
 import { geoStore } from '@src/application/store/geoStore';
+import { shareLink } from '@src/application/utils/shareLink';
 
 const bookingStatusMap = {
   reserved: 'Не оплачена',
@@ -173,6 +174,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               shape='rounded'
               color='white'
               iconColor='dark'
+              onClick={() => shareLink(Routes.Location.replace(':id', (booking.sector_scheme?.sector.location_id ?? '')))}
             />
           </div>
 

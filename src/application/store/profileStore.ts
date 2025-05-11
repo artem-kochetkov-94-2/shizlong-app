@@ -10,9 +10,7 @@ export class ProfileStore {
   }
 
   get isCashier() {
-    // return true;
-    return false;
-    return this.profile?.employee?.role.name === 'owner';
+    return this.profile?.employee?.role.name === 'cashier';
   }
 
   async init() {}

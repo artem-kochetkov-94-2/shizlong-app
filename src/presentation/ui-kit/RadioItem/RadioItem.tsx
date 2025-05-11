@@ -1,17 +1,17 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Icon } from '../Icon';
 import cn from 'classnames';
 import styles from './RadioItem.module.css';
 
-interface RadioItemProps extends HTMLAttributes<HTMLLabelElement> {
-  children: ReactNode;
+export interface RadioItemProps {
+  children?: ReactNode;
   caption?: ReactNode;
   id: string;
   label: string;
   selected: string;
   status?: boolean;
-  statusText: string;
-  onClick: () => void;
+  statusText?: string;
+  onClick: (id: string) => void;
   disabled?: boolean;
 }
 
@@ -30,7 +30,7 @@ export const RadioItem: React.FC<RadioItemProps> = ({
     <div
       key={id}
       className={cn(styles.radioItem, { [styles.disabled]: disabled })}
-      onClick={!disabled ? onClick : undefined}
+      onClick={!disabled ? () => onClick(id) : undefined}
     >
       <label htmlFor={id} className={styles.radioLabel}>
         <div className={styles.checkContainer}>
@@ -62,11 +62,11 @@ export const RadioItem: React.FC<RadioItemProps> = ({
           </div>
         )}
       </label>
-      <div
-        className={`${styles.expandableContent} ${selected === id ? styles.open : ''}`}
-      >
-        {selected === id && children}
-      </div>
+      {children && (
+        <div className={`${styles.expandableContent} ${selected === id ? styles.open : ''}`}>
+          {selected === id && children}
+        </div>
+      )}
     </div>
   );
 };

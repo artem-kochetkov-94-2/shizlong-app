@@ -3,9 +3,6 @@ import { Routes } from "@src/routes";
 import { Sheet } from "react-modal-sheet";
 import { useNavigate, useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { formatFullDate, formatTimeRange, getTimeRangeDurationInHours, declensionOfHours } from "@src/application/utils/formatDate";
-import { Icon } from "@src/presentation/ui-kit/Icon";
-import { Tag } from "@src/presentation/ui-kit/Tag";
 import { Card } from "@src/presentation/ui-kit/Card";
 import { Features } from "@src/presentation/components/Features";
 import waves from "@src/assets/waves.png";
@@ -18,6 +15,9 @@ import { Actions } from "./components/Actions";
 import { profileStore } from "@src/application/store/profileStore";
 import { Footer } from "./components/Footer";
 import { Payment } from "./components/Payment";
+import { Info } from "./components/Info";
+import { Accessories } from "./components/Accessories";
+import { Button } from "@src/presentation/ui-kit/Button";
 
 const bookingStatuses = {
   busy: 'оплачена',
@@ -27,187 +27,114 @@ const bookingStatuses = {
 }
 
 export const BookingDetails = observer(() => {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const { booking } = bookingCardStore;
-    const { isCashier } = profileStore;
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { booking } = bookingCardStore;
+  const { isCashier, profile } = profileStore;
+  const [isPaymentOpen, setIsPaymentOpen] = useState(true);
+  const [isCancelOpen, setCancelOpen] = useState(false);
 
-    const [isCancelOpen, setCancelOpen] = useState(false);
+  useEffect(() => {
+    bookingCardStore.setBookingId(Number(id));
+  }, [id]);
 
-    useEffect(() => {
-      bookingCardStore.setBookingId(Number(id));
-    }, [id]);
+  if (!booking) {
+    return <div>Бронь не найдена</div>;
+  }
 
-    if (!booking) {
-      return <div>Бронь не найдена</div>;
-    }
-  
-    return (
-      <>
-        <Sheet
-          isOpen={true}
-          onClose={() => navigate(Routes.Locations)}
-          detent="content-height"
-        >
-          <Sheet.Container>
-            <Sheet.Content>
-              <div className={styles.header} style={{ backgroundImage: `url(${waves})` }} />
-              <Sheet.Header />
-              <Sheet.Scroller>
-                <div className={styles.content}>
-                  <Card className={styles.card}>
-                    <div className={styles.cardHeader}>
-                      <IconButton
-                        size="medium"
-                        shape="rounded"
-                        iconName="arrow-left"
-                        onClick={() => navigate(-1)}
-                        withShadow={true}
-                        color="white"
-                        iconColor="dark"
-                      />
-                      <div className={styles.cardHeaderContent}>
-                        <div className={styles.cardTitle}>Моя бронь</div>
-                        <div className={styles.cardSubtitle}>
-                          {bookingStatuses[booking.status.name as keyof typeof bookingStatuses]}
-                        </div>
-                      </div>
+  const isBookingCreatedByMe = booking.customer.id === profile?.id;
 
-                      <HeaderRightContent booking={booking} />
-                    </div>
-
-                    <div className={styles.cardBody}>
-                      <div className={styles.cardBodyHeader}>
-                        <div className={styles.cardBodyHeaderRow}>
-                          <div className={styles.cardBodyHeaderCol}>
-                            <div className={styles.cardBodyHeaderTitle}>пляж</div>
-                            <div className={styles.cardBodyHeaderSubtitle}>
-                              {booking?.sector_scheme?.sector.location.name}
-                            </div>
-                            <div className={styles.cardBodyHeaderText}>
-                              {booking?.sector_scheme?.sector.name}
-                            </div>
-                          </div>
-                          <div className={styles.cardBodyHeaderCol}>
-                            <IconButton
-                              size="medium"
-                              shape="rounded"
-                              iconName="arrow-right"
-                              onClick={() => navigate(Routes.Location.replace(':id', booking?.sector_scheme?.sector.location.id.toString() ?? ''))}
-                              withShadow={true}
-                              color="white"
-                              iconColor="dark"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className={styles.contacts}>
-                        <div className={styles.contactItem}>
-                          <Icon name="time" size="extra-small" className={styles.icon} />
-                          <div className={styles.label}>
-                            {formatTimeRange(
-                              new Date(booking.booking_modules[0]!.start_time),
-                              new Date(booking.booking_modules[0]!.end_time)
-                            )}
-                          </div>
-                          <div className={styles.timeRangeTag}>
-                            <Tag
-                              size='medium'
-                              color='primary'
-                              text={
-                                getTimeRangeDurationInHours(
-                                  new Date(booking.booking_modules[0]!.start_time),
-                                  new Date(booking.booking_modules[0]!.end_time)
-                                ) + ' ' + declensionOfHours(
-                                  getTimeRangeDurationInHours(
-                                    new Date(booking.booking_modules[0]!.start_time),
-                                    new Date(booking.booking_modules[0]!.end_time)
-                                  )
-                              )}
-                            />
-                          </div>
-                        </div>
-                        <div className={styles.contactItem}>
-                          <Icon name="calendar" size="extra-small" className={styles.icon} />
-                          <div className={styles.label}>{formatFullDate(new Date(booking.booking_modules[0]!.start_time))}</div>
-                        </div>
-                        <div className={styles.contactItem}>
-                          <Icon
-                            name="location"
-                            size="extra-small"
-                            className={styles.icon}
-                          />
-                          <div className={styles.text}>
-                            {booking?.sector_scheme?.sector.location.region},{' '}
-                            {booking?.sector_scheme?.sector.location.city},{' '}
-                            {booking?.sector_scheme?.sector.location.address}
-                          </div>
-                        </div>
+  return (
+    <>
+      <Sheet
+        isOpen={true}
+        onClose={() => navigate(Routes.Locations)}
+        detent="content-height"
+      >
+        <Sheet.Container>
+          <Sheet.Content>
+            <div className={styles.header} style={{ backgroundImage: `url(${waves})` }} />
+            <Sheet.Header />
+            <Sheet.Scroller>
+              <div className={styles.content}>
+                <Card className={styles.card}>
+                  <div className={styles.cardHeader}>
+                    <IconButton
+                      size="medium"
+                      shape="rounded"
+                      iconName="arrow-left"
+                      onClick={() => navigate(-1)}
+                      withShadow={true}
+                      color="white"
+                      iconColor="dark"
+                    />
+                    <div className={styles.cardHeaderContent}>
+                      <div className={styles.cardTitle}>Моя бронь</div>
+                      <div className={styles.cardSubtitle}>
+                        {bookingStatuses[booking.status.name as keyof typeof bookingStatuses]}
                       </div>
                     </div>
-                  </Card>
 
-                  {isCashier ? null : (
-                    <Actions booking={booking} setCancelOpen={setCancelOpen} />
-                  )}
+                    <HeaderRightContent booking={booking} />
+                  </div>
 
-                  <Features
-                    title="Входящие модули"
-                    items={booking.booking_modules.map((module) => ({
-                      name: module.module.name,
-                      nameAccent: module.module.number ? `#${module.module.number}` : '',
-                      icon: module.module.placed_icon?.link_icon ?? '',
-                      onClick: () => {
-                        navigate(Routes.Sector.replace(':id', booking.sector_scheme?.sector.id.toString() ?? '') + `?module=${module.module.id}`);
-                      }
-                    }))}
-                  />
+                  <Info />
+                </Card>
 
-                  <Card>
-                    <div className={styles.accessories}>
-                      <div className={styles.accessoriesTitle}>Пляжные аксессуары</div>
-                      <div className={styles.accessoriesSubtitle}>входят в бронь</div>
+                {isCashier ? null : (
+                  <Actions booking={booking} setCancelOpen={setCancelOpen} />
+                )}
 
-                      <div className={styles.accessoriesContent}>
-                        {booking.accessories.map((accessory) => (
-                          <div className={styles.accessoryWrapper}>
-                            <div className={styles.accessory}>
-                              <img
-                                src={accessory.beach_accessory?.link_icon}
-                                alt={accessory.beach_accessory?.name}
-                              />
-                              <div className={styles.accessoryName}>
-                                {accessory.beach_accessory?.name}
-                              </div>
-                              <div className={styles.accessoryPrice}>
-                                {accessory.quantity} ед.
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </Card>
+                <Features
+                  title="Входящие модули"
+                  items={booking.booking_modules.map((module) => ({
+                    name: module.module.name,
+                    nameAccent: module.module.number ? `#${module.module.number}` : '',
+                    icon: module.module.placed_icon?.link_icon ?? '',
+                    onClick: () => {
+                      navigate(Routes.Sector.replace(':id', booking.sector_scheme?.sector.id.toString() ?? '') + `?module=${module.module.id}`);
+                    }
+                  }))}
+                />
 
-                  {isCashier && (
+                <Accessories />
+
+                {isCashier && (
+                  (booking.status.name === 'reserved' && isBookingCreatedByMe) ? (
+                    <Button
+                      variant="yellow"
+                      // onClick={() => setCancelOpen(true)}
+                      // isLoading={isLoadingCancelBooking.get(booking.id)}
+                      // disabled={isLoadingCancelBooking.get(booking.id)}
+                    >
+                      <span>Оплатить</span>
+                    </Button>
+                  ) : (
                     <div className={styles.payment}>
                       <Payment booking={booking} />
                     </div>
-                  )}
-                </div>
-              </Sheet.Scroller>
-              <Footer booking={booking} />
-            </Sheet.Content>
-          </Sheet.Container>
-          <Sheet.Backdrop />
-        </Sheet>
+                  )
+                )}
+              </div>
+            </Sheet.Scroller>
+            <Footer booking={booking} />
+          </Sheet.Content>
+        </Sheet.Container>
+        <Sheet.Backdrop />
+      </Sheet>
 
-        <CancelBookingPanel
-          isOpen={isCancelOpen}
-          onClose={() => setCancelOpen(false)}
-          bookingId={booking.id}
+      <CancelBookingPanel
+        isOpen={isCancelOpen}
+        onClose={() => setCancelOpen(false)}
+        bookingId={booking.id}
+      />
+
+      {/* {isCashier && (
+        <PaymentBookingByCashier
+          isOpen={isPaymentOpen}
+          onClose={() => setIsPaymentOpen(false)}
         />
-      </>
-    );
+      )} */}
+    </>
+  );
 });

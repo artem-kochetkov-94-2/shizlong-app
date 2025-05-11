@@ -7,6 +7,8 @@ import { paymentStore } from "@src/application/store/paymentStore";
 import { RawBooking } from "@src/infrastructure/bookings/types";
 import classNames from "classnames";
 import { Card } from "@src/presentation/ui-kit/Card";
+import { shareLink } from "@src/application/utils/shareLink";
+import { Routes } from "@src/routes";
 
 interface ActionsProps {
     booking: RawBooking;
@@ -78,6 +80,7 @@ export const Actions = observer(({ booking, setCancelOpen }: ActionsProps) => {
                     iconColor="dark"
                     iconSize="small"
                     color="white"
+                    onClick={() => shareLink(Routes.Location.replace(':id', (booking.sector_scheme?.sector?.location_id ?? '')))}
                 />
             </div>
 

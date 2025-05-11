@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import styles from './Toggle.module.css';
 import cn from 'classnames';
 
 interface ToggleProps {
   initialState?: boolean;
   onToggle?: (state: boolean) => void;
+  label: ReactNode;
 }
 
-const Toggle: React.FC<ToggleProps> = ({ initialState = false, onToggle }) => {
+const Toggle: React.FC<ToggleProps> = ({ initialState = false, onToggle, label }) => {
   const [isOn, setIsOn] = useState(initialState);
 
   const handleToggle = () => {
@@ -19,10 +20,14 @@ const Toggle: React.FC<ToggleProps> = ({ initialState = false, onToggle }) => {
   };
 
   return (
-    <div className={cn(styles.toggle, isOn && styles.on)} onClick={handleToggle}>
-      <div className={cn(styles.slider, isOn && styles.on)}></div>
+    <div className={styles.toggleWrapper}>
+      <div className={cn(styles.toggle, isOn && styles.on)} onClick={handleToggle}>
+        <div className={cn(styles.slider, isOn && styles.on)}></div>
+      </div>
+
+      {label && <div className={styles.toggleLabel}>{label}</div>}
     </div>
   );
 };
 
-export default Toggle; 
+export default Toggle;

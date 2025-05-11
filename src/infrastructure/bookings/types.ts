@@ -13,6 +13,8 @@ export type BookingModule = {
 export type BookingRequest = {
     modules: BookingModule[];
     accessories: Accessory[];
+    location_id: number;
+    promo_code?: string;
 };
 
 interface Card {
@@ -40,7 +42,7 @@ export interface BookingResponse {
     cards: Card[];
 }
 
-interface Accessory {
+export interface Accessory {
     id: string;
     type: string;
     quantity: string;

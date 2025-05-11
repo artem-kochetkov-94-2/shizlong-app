@@ -1,6 +1,6 @@
 import { RawSector } from '@src/infrastructure/Locations/types';
-import { Tag } from "@presentation/ui-kit/Tag";
-import { Icon } from '@presentation/ui-kit/Icon';
+// import { Tag } from "@presentation/ui-kit/Tag";
+// import { Icon } from '@presentation/ui-kit/Icon';
 import styles from './SectorItem.module.css';
 import { Routes } from '@src/routes';
 import { Link } from 'react-router-dom';
@@ -25,11 +25,11 @@ export const SectorItem = observer(({ data }: SectorItemProps) => {
             </div>
             <div className={styles.name}>{name}</div>
 
-            <Tag text={`Занято модулей 5 из 32`} size='small' />
+            {/* <Tag text={`Занято модулей 5 из 32`} size='small' />
             <div className={styles.tailBookings}>
               <Icon name='time' size='extra-small' />
               <span>Ещё сегодня броней <strong>12</strong></span>
-            </div>
+            </div> */}
           </div>
 
           <div className={styles.slider}>
