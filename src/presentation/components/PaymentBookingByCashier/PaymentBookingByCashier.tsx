@@ -3,10 +3,13 @@ import { RadioItem } from '@src/presentation/ui-kit/RadioItem';
 import styles from "./PaymentBookingByCashier.module.css";
 import { Button } from '@src/presentation/ui-kit/Button';
 import { useState } from 'react';
+import { bookingsStore } from '@src/application/store/bookingsStore';
+import { observer } from 'mobx-react-lite';
 
 interface PaymentBookingByCashierProps {
   isOpen: boolean;
   onClose: () => void;
+  bookingId: number;
 }
 
 interface Option {
@@ -37,9 +40,11 @@ const options: Option[] = [
   },
 ];
 
-export const PaymentBookingByCashier = ({ isOpen, onClose }: PaymentBookingByCashierProps) => {
-  if (!isOpen) return null;
+export const PaymentBookingByCashier = observer(({ isOpen, onClose, bookingId }: PaymentBookingByCashierProps) => {
+  const { isLoadingConfirmBooking } = bookingsStore;
   const [selectedOption, setSelectedOption] = useState('');
+
+  if (!isOpen) return null;
 
   return (
     <Sheet
@@ -73,18 +78,16 @@ export const PaymentBookingByCashier = ({ isOpen, onClose }: PaymentBookingByCas
             <Button
               size="medium"
               variant="yellow"
-              // disabled={isCreatingBooking}
-              // isLoading={isCreatingBooking}
-              // onClick={createBooking}
+              isLoading={isLoadingConfirmBooking.get(bookingId)}
+              disabled={isLoadingConfirmBooking.get(bookingId)}
+              onClick={() => bookingsStore.confirmBookingByCashier(bookingId, onClose)}
             >
               Заказать
             </Button>
             <Button
               size="medium"
               variant="tertiary"
-              // disabled={isCreatingBooking}
-              // isLoading={isCreatingBooking}
-              // onClick={createBooking}
+              onClick={onClose}
             >
               Отмена
             </Button>
@@ -94,4 +97,4 @@ export const PaymentBookingByCashier = ({ isOpen, onClose }: PaymentBookingByCas
       <Sheet.Backdrop />
     </Sheet>
   );
-};
+});

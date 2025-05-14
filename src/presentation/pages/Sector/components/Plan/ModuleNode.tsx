@@ -4,10 +4,15 @@ import cn from 'classnames';
 import styles from './ModuleNode.module.css';
 import { observer } from 'mobx-react-lite';
 import { sectorStore } from '@src/application/store/sectorStore';
+import { useNavigate } from 'react-router-dom';
+import { Routes } from '@src/routes';
+import { profileStore } from '@src/application/store/profileStore';
 
 export const ModuleNode = observer(({ data: { module }}: { data: { module: RawModule } }) => {
+  const navigate = useNavigate();
   const { bookModules } = bookStore;
   const { size, sector } = sectorStore;
+  const { isCashier } = profileStore;
   const isAvailable = bookStore.isModuleAvailable(module);
 
   const pixelMeter = size?.width / sector?.map_width_meter;
@@ -47,7 +52,13 @@ export const ModuleNode = observer(({ data: { module }}: { data: { module: RawMo
         src={module.placed_icon?.link_icon}
         alt={module.placed_icon?.name_icon}
         onClick={() => {
-          if (!isAvailable) return;
+          if (!isAvailable) {
+            if (isCashier) {
+              navigate(Routes.Sector.replace(':id', (sector?.id.toString() ?? '')) + `?module=${module?.id}`);
+            }
+
+            return;
+          };
           bookStore.toggleModule(module)
         }}
         width={width}

@@ -17,16 +17,22 @@ const routes = {
   create: '/booking/create',
   createGroup: '/booking/create-group',
   myBookings: '/customer/bookings',
-  cancel: '/booking/cancel',
+
+  cancelByClient: '/booking/:id/cancel',
+  closeByClient: '/booking/:id/close',
+
   paymentStatus: '/booking/status/',
   cashierBookings: '/cashier/bookings/get',
 
   getClientBooking: '/customer/bookings',
   getCashierBooking: '/cashier/bookings',
+
+  cancelByCashier: '/cashier/bookings/:id/cancel',
+  confirmByCashier: '/cashier/bookings/:id/confirm',
+  closeByCashier: '/cashier/bookings/:id/close',
 };
 
 export class BookingsService {
-  private readonly apiUrlV1 = API_URL;
   private readonly apiUrlV2 = API_URL_V2;
   private readonly verificationStore: VerificationStore;
   private readonly restService: RestService;
@@ -98,9 +104,41 @@ export class BookingsService {
     return response;
   }
 
-  async cancelBooking(bookingId: number) {
+  async cancelBookingByClient(bookingId: number) {
     const { response } = await this.restService.post<BookingResponse>({
-      url: `${this.apiUrlV1}${routes.cancel}/${bookingId}`,
+      url: `${this.apiUrlV2}${routes.cancelByClient.replace(':id', bookingId.toString())}`,
+    });
+
+    return response;
+  }
+
+  async cancelBookingByCashier(bookingId: number) {
+    const { response } = await this.restService.get<unknown>({
+      url: `${this.apiUrlV2}${routes.cancelByCashier.replace(':id', bookingId.toString())}`,
+    });
+
+    return response;
+  }
+
+  async confirmBookingByCashier(bookingId: number) {
+    const { response } = await this.restService.get<unknown>({
+      url: `${this.apiUrlV2}${routes.confirmByCashier.replace(':id', bookingId.toString())}`,
+    });
+
+    return response;
+  }
+
+  async closeBookingByClient(bookingId: number) {
+    const { response } = await this.restService.get<unknown>({
+      url: `${this.apiUrlV2}${routes.closeByClient.replace(':id', bookingId.toString())}`,
+    });
+
+    return response;
+  }
+
+  async closeBookingByCashier(bookingId: number) {
+    const { response } = await this.restService.get<unknown>({
+      url: `${this.apiUrlV2}${routes.closeByCashier.replace(':id', bookingId.toString())}`,
     });
 
     return response;

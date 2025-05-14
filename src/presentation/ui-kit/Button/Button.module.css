@@ -50,6 +50,10 @@
   background-color: #F3F4F6;
   color: #6B7280;
   border: 1px solid #F3F4F6;
+
+  &:hover {
+    color: #292C31;
+  }
 }
 
 .yellow {

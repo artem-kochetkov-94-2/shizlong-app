@@ -18,6 +18,10 @@ import { Payment } from "./components/Payment";
 import { Info } from "./components/Info";
 import { Accessories } from "./components/Accessories";
 import { Button } from "@src/presentation/ui-kit/Button";
+import { PaymentBookingByCashier } from "@src/presentation/components/PaymentBookingByCashier";
+import { RawBooking } from "@src/infrastructure/bookings/types";
+import { bookingsStore } from "@src/application/store/bookingsStore";
+import { CloseBookingPanel } from "@src/presentation/components/CloseBookingPanel";
 
 const bookingStatuses = {
   busy: 'оплачена',
@@ -29,10 +33,12 @@ const bookingStatuses = {
 export const BookingDetails = observer(() => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isLoadingCancelBooking } = bookingsStore;
   const { booking } = bookingCardStore;
   const { isCashier, profile } = profileStore;
-  const [isPaymentOpen, setIsPaymentOpen] = useState(true);
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [isCancelOpen, setCancelOpen] = useState(false);
+  const [isCloseOpen, setCloseOpen] = useState(false);
 
   useEffect(() => {
     bookingCardStore.setBookingId(Number(id));
@@ -82,7 +88,7 @@ export const BookingDetails = observer(() => {
                 </Card>
 
                 {isCashier ? null : (
-                  <Actions booking={booking} setCancelOpen={setCancelOpen} />
+                  <Actions booking={booking as RawBooking} setCancelOpen={setCancelOpen} setCloseOpen={setCloseOpen} />
                 )}
 
                 <Features
@@ -103,9 +109,9 @@ export const BookingDetails = observer(() => {
                   (booking.status.name === 'reserved' && isBookingCreatedByMe) ? (
                     <Button
                       variant="yellow"
-                      // onClick={() => setCancelOpen(true)}
-                      // isLoading={isLoadingCancelBooking.get(booking.id)}
-                      // disabled={isLoadingCancelBooking.get(booking.id)}
+                      onClick={() => setIsPaymentOpen(true)}
+                      isLoading={isLoadingCancelBooking.get(booking.id)}
+                      disabled={isLoadingCancelBooking.get(booking.id)}
                     >
                       <span>Оплатить</span>
                     </Button>
@@ -123,18 +129,25 @@ export const BookingDetails = observer(() => {
         <Sheet.Backdrop />
       </Sheet>
 
+      <CloseBookingPanel
+        isOpen={isCloseOpen}
+        onClose={() => setCloseOpen(false)}
+        bookingId={booking.id}
+      />
+
       <CancelBookingPanel
         isOpen={isCancelOpen}
         onClose={() => setCancelOpen(false)}
         bookingId={booking.id}
       />
 
-      {/* {isCashier && (
+      {isCashier && (
         <PaymentBookingByCashier
+          bookingId={booking.id}
           isOpen={isPaymentOpen}
           onClose={() => setIsPaymentOpen(false)}
         />
-      )} */}
+      )}
     </>
   );
 });

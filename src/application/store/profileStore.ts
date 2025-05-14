@@ -10,6 +10,7 @@ export class ProfileStore {
   }
 
   get isCashier() {
+    // return false;
     return this.profile?.employee?.role.name === 'cashier';
   }
 

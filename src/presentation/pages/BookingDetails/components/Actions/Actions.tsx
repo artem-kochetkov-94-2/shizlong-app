@@ -12,10 +12,11 @@ import { Routes } from "@src/routes";
 
 interface ActionsProps {
     booking: RawBooking;
-    setCancelOpen: (open: boolean) => void;
+    setCancelOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setCloseOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Actions = observer(({ booking, setCancelOpen }: ActionsProps) => {
+export const Actions = observer(({ booking, setCancelOpen, setCloseOpen }: ActionsProps) => {
     const { isLoadingProcessPayment, isPaymentError, isPaymentSuccess } = paymentStore;
 
     const hasPaymentStatus =
@@ -38,10 +39,17 @@ export const Actions = observer(({ booking, setCancelOpen }: ActionsProps) => {
                     </Button>
                 )}
 
-                {(booking.status.name === 'confirmed' || booking.status.name === 'busy' || booking.status.name === 'reserved') && (
+                {(booking.status.name === 'confirmed' || booking.status.name === 'reserved') && (
                     <Button variant={'gray2'} onClick={() => setCancelOpen(true)} withShadow={true}>
                         <Icon name={'cancel'} size='extra-small' />
                         <span>Отменить</span>
+                    </Button>
+                )}
+
+                {(booking.status.name === 'busy') && (
+                    <Button variant={'gray2'} onClick={() => setCloseOpen(true)} withShadow={true}>
+                        <Icon name={'cancel'} size='extra-small' />
+                        <span>Завершить</span>
                     </Button>
                 )}
 
@@ -51,14 +59,7 @@ export const Actions = observer(({ booking, setCancelOpen }: ActionsProps) => {
                         <span>Повторить</span>
                     </Button>
                 )}
-
-                {/* {booking.status.name === 'pending' && (
-                    <Button variant={'gray2'} withShadow={true}>
-                        <Icon name={'stop'} size='extra-small' />
-                        <span>Завершить</span>
-                    </Button>
-                )} */}
-                    
+                   
                 <IconButton
                     size="large"
                     shape="rounded"

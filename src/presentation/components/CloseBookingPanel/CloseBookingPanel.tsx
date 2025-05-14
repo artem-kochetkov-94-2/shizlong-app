@@ -4,26 +4,26 @@ import { bookingsStore } from '@src/application/store/bookingsStore';
 import { Sheet, SheetRef } from 'react-modal-sheet';
 import { Button } from '@src/presentation/ui-kit/Button';
 import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
-import styles from './CancelBookingPanel.module.css';
+import styles from './CloseBookingPanel.module.css';
 import { profileStore } from '@src/application/store/profileStore';
 
-interface CancelBookingPanelProps {
+interface CloseBookingPanelProps {
   bookingId: number;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const CancelBookingPanel = observer(
-  ({ bookingId, isOpen, onClose }: CancelBookingPanelProps) => {
+export const CloseBookingPanel = observer(
+  ({ bookingId, isOpen, onClose }: CloseBookingPanelProps) => {
     const ref = useRef<SheetRef>(null);
-    const { isLoadingCancelBooking } = bookingsStore;
+    const { isLoadingCloseBooking } = bookingsStore;
     const { isCashier } = profileStore;
 
-    const onCancel = () => {
+    const onCloseBooking = () => {
       if (isCashier) {
-        bookingsStore.cancelBookingByCashier(bookingId, onClose)
+        bookingsStore.closeBookingByCashier(bookingId, onClose)
       } else {
-        bookingsStore.cancelBookingByClient(bookingId, onClose)
+        bookingsStore.closeBookingByClient(bookingId, onClose)
       }
     }
 
@@ -40,14 +40,14 @@ export const CancelBookingPanel = observer(
           <Sheet.Header />
           <Sheet.Content>
             <div className={styles.headerDrawer}>
-              Вы уверены, что хотите отменить эту бронь?
+              Вы уверены, что хотите завершить эту бронь?
             </div>
             <div className={styles.buttons}>
               <Button
                 variant={'yellow'}
-                onClick={onCancel}
-                disabled={isLoadingCancelBooking.get(bookingId)}
-                isLoading={isLoadingCancelBooking.get(bookingId)}
+                onClick={onCloseBooking}
+                disabled={isLoadingCloseBooking.get(bookingId)}
+                isLoading={isLoadingCloseBooking.get(bookingId)}
               >
                 <span>Да</span>
               </Button>
