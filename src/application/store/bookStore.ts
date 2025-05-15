@@ -19,6 +19,8 @@ import { LocationStore, locationStore } from './locationStore';
 import { BookingModule, BookingRequest } from '@src/infrastructure/bookings/types';
 import { SectorStore, sectorStore } from './sectorStore';
 import { roundMinutesUpToNearestQuarter } from '../utils/roundMinutesUpToNearestQuarter';
+import { cashierService } from '@src/infrastructure/cashierService/cashierService';
+import { BookingRequestByCashier, GetUserResponse } from '@src/infrastructure/cashierService/types';
 
 function formatToLocalString(dateString: string): Date {
   // Разбиваем строку на дату и время
@@ -96,6 +98,11 @@ class BookStore {
   bookModules: Map<number, RawModule> = new Map();
 
   moduleSchemePeriod: ActivePeriod | null = null;
+
+  isFetchingUser = false;
+  isFetchingUserError: string | null = null;
+  userPhone: string = '';
+  user: null | GetUserResponse = null;
 
   paymentStore: PaymentStore;
   bookingsStore: BookingsStore;
@@ -471,7 +478,7 @@ class BookStore {
     this.moduleSchemePeriod = null;
   }
 
-  async createBooking(onCreated: (id: number) => void) {
+  async createBooking(onCreated: (id: number) => void, locationId: number) {
     try {
       this.isCreatingBooking = true;
       const moduleSchemePeriod = this.moduleSchemePeriod;
@@ -501,6 +508,7 @@ class BookStore {
           type: 'accessory',
           quantity: `${a.quantity}`,
         })),
+        location_id: locationId,
       };
 
       const result = await bookingsService.createGroupBooking(booking);
@@ -522,6 +530,92 @@ class BookStore {
       });
     } finally {
       this.isCreatingBooking = false;
+    }
+  }
+
+  async createBookingByCashier(onCreated: (id: number) => void, locationId: number) {
+    try {
+      this.isCreatingBooking = true;
+      const moduleSchemePeriod = this.moduleSchemePeriod;
+      const modules: BookingModule[] = [];
+     
+      this.bookModules.forEach((module) => {
+        if (isActiveRangePeriod(moduleSchemePeriod)) {
+          const moduleScheme = this.getScheme(module);
+          modules.push({
+            module_id: module.id,
+            module_scheme_id: moduleScheme?.id!,
+            module_scheme_date: convertToISO(this.date as Date).split('T')[0],
+          });
+        } else {
+          modules.push({
+            module_id: module.id,
+            start_time: convertToISO(this.date as Date).split('T')[0] + 'T' + this.formStartTime,
+            end_time: convertToISO(this.date as Date).split('T')[0] + 'T' + this.endTime,
+          });
+        }
+      });
+
+      const booking: BookingRequestByCashier = {
+        modules,
+        accessories: Object.values(this.accessories).map((a) => ({
+          id: `${a.accessory.id}`,
+          type: 'accessory',
+          quantity: `${a.quantity}`,
+        })),
+        location_id: locationId,
+      };
+
+      if (this.user) {
+        booking.user_id = this.user.id;
+      }
+
+      const result = await cashierService.createGroupBooking(booking);
+      onCreated(result.id);
+    } catch (error) {
+      console.log('createBooking error', error);
+      if (error instanceof ApiError) {
+        eventService.emit(EVENT.MODAL_ERROR, {
+          isActive: true,
+          message: error.message,
+        });
+        return;
+      }
+      eventService.emit(EVENT.MODAL_ERROR, {
+        isActive: true,
+        // @ts-ignore
+        message: error.message || 'Ошибка при создании бронирования',
+      });
+    } finally {
+      this.isCreatingBooking = false;
+    }
+  }
+
+  clearUser() {
+    this.userPhone = '';
+    this.isFetchingUser = false;
+    this.isFetchingUserError = null;
+    this.user = null;
+  }
+
+  setUserPhone(phone: string) {
+    this.userPhone = phone;
+  }
+
+  async getUser(phone: string) {
+    try {
+      this.isFetchingUser = true;
+      this.isFetchingUserError = null;
+      const user = await cashierService.getUser(phone);
+      this.user = user;
+      console.log('getUser', user);
+    } catch (error) {
+      runInAction(() => {
+        this.isFetchingUserError = 'Пользователь не найден';
+      })
+      console.log('getUser error', error);
+    } finally {
+      this.isFetchingUser = false;
     }
   }
 

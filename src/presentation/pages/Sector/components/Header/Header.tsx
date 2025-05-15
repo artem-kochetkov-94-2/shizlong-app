@@ -23,13 +23,13 @@ export const Header = observer(({ name, sector }: HeaderProps) => {
             <IconButton
                 iconName="arrow-left"
                 size="medium"
-                onClick={() => navigate(Routes.Location.replace(':id', sector.location_id.toString()))}
+                onClick={() => navigate(Routes.LocationPlan.replace(':id', sector.location_id.toString()))}
                 className={styles.backButton}
                 shape="rounded"
                 color="white"
             />
             <div className={styles.title}>
-                <span className={styles.category}>{sector.name}</span>
+                <span className={styles.category}>Сектор #{sector.name} пляжа</span>
                 <span className={styles.name}>{name}</span>
             </div>
             {isCashier ? null : (

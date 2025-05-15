@@ -1,0 +1,14 @@
+.rules {
+    max-width: 231px;
+    margin: 0 auto;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.8px;
+    text-align: center;
+    color: #A0A7B1;
+
+    span {
+        color: #292C31;
+    }
+}

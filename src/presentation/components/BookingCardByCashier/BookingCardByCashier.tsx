@@ -5,15 +5,15 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Routes } from '@src/routes';
 import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import styles from './BookingCard.module.css';
+import styles from './BookingCardByCashier.module.css';
 import { Tag } from '@src/presentation/ui-kit/Tag';
 import { declension } from '@src/application/utils/delcension';
 
-interface BookingCardProps {
+interface BookingCardByCashierProps {
   booking: RawCashierBooking;
 }
 
-export const BookingCard = observer(({ booking }: BookingCardProps) => {
+export const BookingCardByCashier = observer(({ booking }: BookingCardByCashierProps) => {
   const navigate = useNavigate();
   console.log('booking', JSON.parse(JSON.stringify(booking)));
 

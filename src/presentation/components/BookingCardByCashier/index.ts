@@ -1,0 +1,1 @@
+export { BookingCardByCashier } from "./BookingCardByCashier";

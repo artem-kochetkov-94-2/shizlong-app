@@ -1,0 +1,33 @@
+.card {
+    padding: 7px 15px;
+}
+
+.cardTitle {
+    display: flex;
+    flex-direction: column;
+    margin-right: auto;
+
+    span:first-child {
+        font-family: Roboto;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 14.4px;
+        color: #A0A7B1;
+    }
+
+    span:last-child {
+        font-family: Roboto;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 18.75px;
+        color: #292C31;
+    }
+}
+
+.time {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    
+}

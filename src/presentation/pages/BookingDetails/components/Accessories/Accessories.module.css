@@ -1,0 +1,76 @@
+/* Accessories */
+
+.accessories {
+  display: flex;
+  flex-direction: column;
+}
+
+.accessoriesTitle {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19.2px;
+  color: #161d25;
+}
+
+.accessoriesSubtitle {
+  margin-bottom: 10px;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  color: #a0a7b1;
+}
+
+.accessoriesContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.accessoryWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.accessory {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  img {
+    max-width: 18px;
+    max-height: 18px;
+    display: block;
+  }
+}
+
+.accessoryName {
+  padding-right: 20px;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  color: #292c31;
+}
+
+.accessoryPrice {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
+  color: #a0a7b1;
+}
+
+.accessoryToggle {
+  flex-shrink: 0;
+}

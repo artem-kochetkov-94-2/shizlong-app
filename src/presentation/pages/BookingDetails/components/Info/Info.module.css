@@ -1,0 +1,80 @@
+/* cardBody */
+
+.cardBodyHeader {
+    margin-bottom: 15px;
+}
+
+.cardBodyHeaderRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+/* .cardBodyHeaderCol {} */
+
+.cardBodyHeaderTitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 120%;
+    letter-spacing: 0%;
+    color: #a0a7b1;
+}
+
+.cardBodyHeaderSubtitle {
+    margin-bottom: 2px;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 100%;
+    color: #292c31;
+}
+
+.cardBodyHeaderText {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 120%;
+    color: #a0a7b1;
+}
+
+/* contacts */
+
+.contactItem {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.contactItem:last-child {
+    margin-bottom: 0;
+}
+
+.icon {
+    flex-shrink: 0;
+    color: #ffbc02;
+}
+
+.label {
+    padding-top: 2px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #292c31;
+}
+
+.text {
+    padding-top: 2px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: #a0a7b1;
+}
+
+.timeRangeTag {
+    position: relative;
+    top: -4px;
+}

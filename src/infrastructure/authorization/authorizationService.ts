@@ -1,6 +1,6 @@
 import { API_URL_V2 } from '@src/const';
 import { ApiResponse } from '@src/infrastructure/types';
-import { TryCodeResponse } from './types';
+import { CheckReverseCallVerification, RquestReverseCallResponse, TryCodeResponse } from './types';
 import { RestService } from '../restService/restService';
 
 const routes = {
@@ -9,6 +9,8 @@ const routes = {
   logout: '/auth/logout',
   sendSms: '/send-sms',
   verifySms: '/verify-sms-code',
+  requestReverseCall: '/auth/request_reverse_call',
+  checkReverseCallVerification: '/auth/check_reverse_call_verification',
 };
 
 class AuthorizationService {
@@ -50,6 +52,33 @@ class AuthorizationService {
     });
     return response;
   }
+
+  async requestReverseCall(phone: string) {
+    const { response } = await this.restService.post<RquestReverseCallResponse>({
+      url: `${this.apiUrl}${routes.requestReverseCall}`,
+      data: { phone },
+    });
+
+    if (!response.success) {
+      throw new Error('Request reverse call error');
+    }
+
+    return response;
+  }
+
+  async checkReverseCallVerification(phone: string) {
+    const { response } = await this.restService.post<CheckReverseCallVerification>({
+      url: `${this.apiUrl}${routes.checkReverseCallVerification}`,
+      data: { phone },
+    });
+
+    if ('access_token' in response) {
+      return response;
+    }
+
+    throw new Error('Check reverse call verification error');
+  }
+
   async logout() {
     const { response } = await this.restService.get({
       url: `${this.apiUrl}${routes.logout}`,

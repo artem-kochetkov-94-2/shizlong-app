@@ -8,6 +8,7 @@ export const Routes = {
   ProfileEdit: '/profile-edit',
   Locations: '/locations',
   Location: '/location/:id',
+  LocationPlan: '/location/:id/plan',
   Sector: '/sector/:id',
   Favorites: '/favorites',
   Notifications: '/notifications',

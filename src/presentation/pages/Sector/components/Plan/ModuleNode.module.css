@@ -2,52 +2,39 @@
   position: relative;
 }
 
-.moduleId {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2px;
-  bottom: calc(100% + 5px);
-  left: 50%;
-  border-radius: 49.31px;
-
-  box-shadow: 0px 1.64px 6.58px 0px #00000040;
-  color: #fff;
-
-  transform: translateX(-50%);
-}
-
-.moduleId span {
-  flex-shrink: 0;
-  display: flex;
-  padding: 1px 3px;
-  justify-content: center;
-  align-items: center;
-  line-height: normal;
-  font-family: Roboto;
-  font-weight: 700;
-  font-size: 16px;
-  text-align: center;
-
-  border-radius: 49.31px;
-
-  color: #fff;
-}
-
-/* .available span {
-  background: #64b64b;
-} */
-
-/* .booked span {
-  background: #f95e5e;
-} */
-
 .booked {
   opacity: 0.5;
   filter: grayscale(1);
 }
 
-.activeModule {
+.activeModule, .withMarker {
   outline: 2px solid #000;
+}
+
+.marker {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -50%) translateY(-10px);
+}
+
+.markerHint {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 13px;
+  padding: 0 5px;
+  border-radius: 3.72px;
+  background: #161D25B2;
+  box-shadow: 0px 2.48px 2.48px 0px #00000040;
+
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 7.44px;
+  line-height: 120%;
+  text-align: center;
+  color: #FFFFFF;
 }

@@ -1,0 +1,45 @@
+.row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.button {
+    width: 70px;
+}
+
+.cardTitle {
+    display: flex;
+    flex-direction: column;
+    margin-right: auto;
+    margin-bottom: 12px;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19.2px;
+    color: #161D25;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.userName {
+    margin-right: auto;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 120%;
+    color: #4C515B;
+}
+
+.userNotFound {
+    margin-bottom: 12px;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 120%;
+    color: #F95E5E;
+}

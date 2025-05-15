@@ -15,12 +15,13 @@ import { CancelBookingPanel } from '../CancelBookingPanel';
 import styles from './BookingCard.module.css';
 import { createYandexMapsRouteLink } from '@src/application/utils/createYandexMapsRouteLink';
 import { geoStore } from '@src/application/store/geoStore';
+import { shareLink } from '@src/application/utils/shareLink';
+import { CloseBookingPanel } from '../CloseBookingPanel';
 
 const bookingStatusMap = {
   reserved: 'Не оплачена',
   confirmed: 'Оплачена',
-  busy: 'Оплачена',
-  pending: 'Активна',
+  busy: 'Активна',
   cancelled: 'Отменена',
   completed: 'Завершена',
 };
@@ -45,6 +46,7 @@ export const colorByStatus = {
 
 export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
   const [isCancelOpen, setCancelOpen] = useState(false);
+  const [isCloseOpen, setCloseOpen] = useState(false);
   const navigate = useNavigate();
   const isFavorite = locationsStore.getFavoriteStatus(booking.sector_scheme?.sector.location_id);
   const { isLoadingProcessPayment } = paymentStore;
@@ -60,6 +62,11 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
       <CancelBookingPanel
         isOpen={isCancelOpen}
         onClose={() => setCancelOpen(false)}
+        bookingId={booking.id}
+      />
+      <CloseBookingPanel
+        isOpen={isCloseOpen}
+        onClose={() => setCloseOpen(false)}
         bookingId={booking.id}
       />
       <div className={styles.item} key={booking.id}>
@@ -173,6 +180,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
               shape='rounded'
               color='white'
               iconColor='dark'
+              onClick={() => shareLink(Routes.Location.replace(':id', (booking.sector_scheme?.sector.location_id ?? '')))}
             />
           </div>
 
@@ -199,7 +207,7 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
                 </Button>
               </>
             )}
-            {booking.status.name === 'busy' && (
+            {booking.status.name === 'confirmed' && (
               <Button
                 size='medium'
                 variant='tertiary'
@@ -208,19 +216,28 @@ export const BookingCard = observer(({ booking }: { booking: RawBooking }) => {
                 <span>Отменить</span>
               </Button>
             )}
+            {booking.status.name === 'busy' && (
+              <Button
+                size='medium'
+                variant='tertiary'
+                onClick={() => setCloseOpen(true)}
+              >
+                <span>Завершить</span>
+              </Button>
+            )}
             {/* <IconButton
-                iconName="stop"
-                size="large"
-                iconSize="small"
-                shape="rounded"
-                color="white"
+              iconName="stop"
+              size="large"
+              iconSize="small"
+              shape="rounded"
+              color="white"
             />
             <IconButton
-                iconName="megaphone"
-                size="large"
-                iconSize="small"
-                shape="rounded"
-                color="white"
+              iconName="megaphone"
+              size="large"
+              iconSize="small"
+              shape="rounded"
+              color="white"
             /> */}
           </div>
         </div>

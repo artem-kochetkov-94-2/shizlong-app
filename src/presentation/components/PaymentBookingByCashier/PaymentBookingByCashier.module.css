@@ -1,0 +1,30 @@
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px;
+    padding-bottom: 10px;
+}
+
+.title {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 100%;
+    text-align: center;
+    color: #292C31;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    background-color: #F3F4F6;
+}
+
+.footer {
+    display: flex;
+    gap: 10px;
+    padding: 16px;
+}

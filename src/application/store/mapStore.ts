@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import markerIcon from '@presentation/components/Map/assets/marker.png';
+import clustererIcon from '@presentation/components/Map/assets/clusterer.png';
 import markerActiveIcon from '@presentation/components/Map/assets/markerActive.png';
 import markerUserIcon from '@presentation/components/Map/assets/markerUser.png';
 import { RawLocation, RawSector } from '@src/infrastructure/Locations/types';
@@ -7,10 +8,12 @@ import { GeoStore, geoStore } from './geoStore';
 import mapTooltip from '@src/assets/mapTooltip.svg';
 import mapTooltipFavorite from '@src/assets/mapTooltipFavorite.svg';
 import { getPolygonCenter } from '../utils/getPolygonCenter';
+import { Clusterer, InputMarker } from '@2gis/mapgl-clusterer';
 
 const labelParams = {
   color: '#ffffff',
   fontSize: 16,
+  offset: [0, -40],
   image: {
     url: mapTooltip,
     padding: [5, 10, 5, 10],
@@ -40,8 +43,10 @@ class MapStore {
   markerClickCb: ((location: RawLocation) => void) | null = null;
   sectorClickCb: ((sector: RawSector) => void) | null = null;
   locationMarkers: Map<number, any> = new Map();
+  clusterer: Clusterer | null = null;
   plan: Map<number, { polygon: any; label: any }> = new Map();
   userMarker: unknown | null = null;
+
   private geoStore: GeoStore;
 
   constructor() {
@@ -63,6 +68,7 @@ class MapStore {
     this.map.destroy();
     this.map = null;
     this.locationMarkers.clear();
+    this.clusterer?.destroy();
     this.userMarker = null;
     this.plan.clear();
   }
@@ -108,51 +114,77 @@ class MapStore {
   }
 
   setLocationMarker(location: RawLocation, isFavorite: boolean) {
-    const existingMarker = this.locationMarkers.get(location.id);
 
-    if (existingMarker) {
-      existingMarker.setLabel({
-        ...(isFavorite ? labelFavoriteParams : labelParams),
-        text: location.name,
-      });
-
-      return existingMarker;
-    }
-
-    const marker = new this.mapglAPI.Marker(this.map, {
+    const marker = {
       coordinates: location.coordinates,
       icon: markerIcon,
       label: {
         ...(isFavorite ? labelFavoriteParams : labelParams),
         text: location.name,
       },
-    });
-
-    marker.on('click', () => {
-      this.markerClickCb?.(location);
-    });
+      userData: {
+        location,
+      }
+    };
 
     return marker;
   }
 
-  setMarkers(locations: RawLocation[], favoriteLocations: RawLocation[]) {
-    if (!this.map) return;
-
-    const markers = new Map();
-
+  getMarkers(locations: RawLocation[], favoriteLocations: RawLocation[]) {
+    const markers = new Map<number, InputMarker>();
     locations.forEach((location) => {
       const isFavorite = favoriteLocations.some((l) => l.id === location.id);
       markers.set(location.id, this.setLocationMarker(location, isFavorite));
     });
+    return markers;
+  }
 
+  drawMarkers(locations: RawLocation[], favoriteLocations: RawLocation[]) {
+    if (!this.map) return;
+
+    if (this.clusterer) {
+      this.clusterer.destroy();
+    }
+
+    const markers = this.getMarkers(locations, favoriteLocations);
+    const clusterer = new Clusterer(this.map, {
+      radius: 60,
+      clusterStyle: (pointsCount: number) => {
+        const labelOffset = pointsCount < 10 ? [-3, -10, 0, 0] : [-3, -10, 0, 0];
+        return {
+          icon: clustererIcon,
+          labelOffset,
+          labelFontSize: 18,
+        };
+      },
+    });
+
+    if (markers.size > 0) {
+      clusterer.load([...markers.values()]);
+    }
+
+    clusterer.on('click', (event) => {
+      console.log('event', event.target);
+      if (event.target.type === 'marker') {
+        this.markerClickCb?.(event.target.data.userData.location);
+      }
+    });
+
+    this.clusterer = clusterer;
     this.locationMarkers = markers;
   }
 
   toggleSelectionLocationMarker(id: number, selected: boolean) {
-    // @ts-ignore
-    this.locationMarkers.get(id)?.setIcon({
+    const newMarkers = new Map(this.locationMarkers);
+    const marker = newMarkers.get(id);
+    if (!marker) return;
+
+    newMarkers.set(id, {
+      ...marker,
       icon: selected ? markerActiveIcon : markerIcon,
     });
+    this.clusterer?.load([...newMarkers.values()]);
+    this.locationMarkers = newMarkers;
   }
 
   setMarkerClickCb(cb: (location: RawLocation) => void) {

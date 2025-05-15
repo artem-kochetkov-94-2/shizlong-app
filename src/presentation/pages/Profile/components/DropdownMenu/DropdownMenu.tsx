@@ -4,8 +4,12 @@ import { Link } from 'react-router-dom';
 import { Routes } from '@src/routes';
 import { userStore } from '@src/application/store/userStore';
 import { useNavigate } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import { profileStore } from '@src/application/store/profileStore';
 
-export const DropdownMenu = () => {
+export const DropdownMenu = observer(() => {
+  const { isCashier } = profileStore;
+
   const navigate = useNavigate();
   const handleLogout = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -20,10 +24,13 @@ export const DropdownMenu = () => {
         <Icon name={'edit'} size={'small'} />
         <span>Изменить информацию</span>
       </Link>
-      <Link to={Routes.PaymentMethods} className={styles.link}>
-        <Icon name={'credit-card'} size={'small'} />
-        <span>Способ оплаты</span>
-      </Link>
+      {!isCashier && (
+        <Link to={Routes.PaymentMethods} className={styles.link}>
+          <Icon name={'credit-card'} size={'small'} />
+          <span>Способ оплаты</span>
+        </Link>
+      )}
+      
       <Link to={Routes.NotificationSettings} className={styles.link}>
         <Icon name={'notifi'} size={'small'} />
         <span>Настройка уведомлений</span>
@@ -38,4 +45,4 @@ export const DropdownMenu = () => {
       </Link>
     </div>
   );
-};
+});

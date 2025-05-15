@@ -1,0 +1,1 @@
+export { LocationPlan } from './LocationPlan';

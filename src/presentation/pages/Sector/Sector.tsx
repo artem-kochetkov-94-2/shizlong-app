@@ -1,7 +1,7 @@
 import { locationStore } from '@src/application/store/locationStore';
 import { observer } from 'mobx-react-lite';
 import { Header } from './components/Header';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import styles from './Sector.module.css';
 import { BookingDrawer } from "./components/BookingDrawer";
 import { useEffect } from "react";
@@ -14,6 +14,8 @@ import { useOpenModule } from './hooks/useOpenModule';
 import { useFetchModules } from '@src/application/hooks/useFetchModules';
 import { ReactFlowProvider } from '@xyflow/react';
 import { Loader } from '@src/presentation/ui-kit/Loader';
+import { OrderDrawer } from './components/OrderDrawer';
+import { bookingCardStore } from '@src/application/store/bookingCardStore';
 
 export const Sector = observer(() => {
   const navigate = useNavigate();
@@ -21,6 +23,10 @@ export const Sector = observer(() => {
   const { id } = useParams<{ id: string }>();
   const { location, sectors, isModulesLoading } = locationStore;
   const { sector } = sectorStore;
+  const { booking } = bookingCardStore;
+
+  const [searchParams] = useSearchParams();
+  const showBookingDetails = searchParams.get('show-booking-details');
 
   // console.log('========== bookModules', JSON.parse(JSON.stringify(bookModules)));
   // console.log('SCHEME MODULES', JSON.parse(JSON.stringify(modules.filter((m) => m.sector_scheme_id === activeScheme?.id))));
@@ -71,6 +77,10 @@ export const Sector = observer(() => {
 
       <BookingDrawer />
       <Module />
+
+      {showBookingDetails && booking && (
+        <OrderDrawer />
+      )}
     </div>
   );
 });
