@@ -6,22 +6,69 @@ import { bookingsStore } from '@src/application/store/bookingsStore';
 import { profileStore } from '@src/application/store/profileStore';
 import { cashierStore } from '@src/application/store/cashierStore';
 import { BookingCardByCashier } from '@src/presentation/components/BookingCardByCashier';
+import { Tabs, useTabs } from '@src/presentation/ui-kit/Tabs';
+import { TabItem } from '@src/presentation/ui-kit/Tabs/Tabs';
+import { BookingsPages } from '@src/application/store/bookingsPages';
+import { CashierBookingResponse } from '@src/infrastructure/bookings/types';
+
+type TabName = 'active' | 'expected' | 'history';
+const tabs: TabItem<TabName>[] = [
+  {
+    value: 'active',
+    label: 'Активные',
+  },
+  {
+    value: 'expected',
+    label: 'Ожидаемые',
+  },
+  {
+    value: 'history',
+    label: 'Завершенные',
+  },
+];
 
 export const SectorBookings = observer(() => {
   const { currentBookings } = bookingsStore;
-  const { activeBookings } = cashierStore;
+  const { activeBookings, expectedBookings, historyBookings } = cashierStore;
   const { isCashier } = profileStore;
 
-  if (isCashier && activeBookings) {
+  const { currentTab, setCurrentTab } = useTabs<TabName>(tabs[0].value);
+  const tabBookings: Record<TabName, BookingsPages<CashierBookingResponse> | null> = {
+    active: activeBookings,
+    expected: expectedBookings,
+    history: historyBookings,
+  };
+  const cashierBookings = tabBookings[currentTab];
+
+  if (isCashier && activeBookings && cashierBookings) {
     return (
       <div className={styles.container}>
+        <div className={styles.navigation}>
+          <Tabs
+            tabs={tabs.map((t) => {
+              let label = '';
+
+              if (t.value === 'active') label = `${t.label} ${activeBookings?.bookingsData.length}`;
+              if (t.value === 'expected') label = `${t.label} ${expectedBookings?.bookingsData.length}`;
+              if (t.value === 'history') label = `${t.label} ${historyBookings?.bookingsData.length}`;
+
+              return {
+                ...t,
+                label,
+              };
+            })}
+            activeTab={currentTab}
+            onTabChange={(t) => setCurrentTab(t as TabName)}
+          />
+        </div>
+
         <Virtuoso
           style={{ flex: 1 }}
           className={styles.virtuoso}
-          totalCount={activeBookings.bookingsData.length}
+          totalCount={cashierBookings.bookingsData.length}
           itemContent={(index) => {
-            const booking = activeBookings.bookingsData[index];
-            const isLast = index === activeBookings.bookingsData.length - 1;
+            const booking = cashierBookings.bookingsData[index];
+            const isLast = index === cashierBookings.bookingsData.length - 1;
             return (
               <>
                 <BookingCardByCashier key={booking.id} booking={booking} />
@@ -29,7 +76,7 @@ export const SectorBookings = observer(() => {
               </>
             );
           }}
-          endReached={() => activeBookings.nextPage()}
+          endReached={() => cashierBookings.nextPage()}
           increaseViewportBy={200}
         />
       </div>
@@ -37,7 +84,6 @@ export const SectorBookings = observer(() => {
   }
 
   if (!currentBookings) return;
-
    return (
     <div className={styles.container}>
       <Virtuoso

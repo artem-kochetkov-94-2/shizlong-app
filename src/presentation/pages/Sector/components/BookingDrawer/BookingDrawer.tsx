@@ -126,11 +126,11 @@ export const BookingDrawer = observer(() => {
                   </div>
                 )}
 
-                <Tabs
+                {/* <Tabs
                   tabs={bookingTabs}
                   activeTab={activeBookingsTab}
                   onTabChange={(tab) => bookStore.setActiveBookingsTab(tab)}
-                />
+                /> */}
 
                 <SectorBookings />
               </div>
