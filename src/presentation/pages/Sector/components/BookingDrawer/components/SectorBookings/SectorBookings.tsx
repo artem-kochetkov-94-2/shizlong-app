@@ -5,6 +5,7 @@ import { Virtuoso } from 'react-virtuoso';
 import { bookingsStore } from '@src/application/store/bookingsStore';
 import { profileStore } from '@src/application/store/profileStore';
 import { cashierStore } from '@src/application/store/cashierStore';
+import { BookingCardByCashier } from '@src/presentation/components/BookingCardByCashier';
 
 export const SectorBookings = observer(() => {
   const { currentBookings } = bookingsStore;
@@ -23,7 +24,7 @@ export const SectorBookings = observer(() => {
             const isLast = index === activeBookings.bookingsData.length - 1;
             return (
               <>
-                <BookingCard key={booking.id} booking={booking} />
+                <BookingCardByCashier key={booking.id} booking={booking} />
                 {isLast && <div style={{ height: 100}} />}
               </>
             );

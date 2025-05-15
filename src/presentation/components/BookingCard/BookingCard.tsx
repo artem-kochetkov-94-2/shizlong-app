@@ -21,8 +21,7 @@ import { CloseBookingPanel } from '../CloseBookingPanel';
 const bookingStatusMap = {
   reserved: 'Не оплачена',
   confirmed: 'Оплачена',
-  busy: 'Оплачена',
-  pending: 'Активна',
+  busy: 'Активна',
   cancelled: 'Отменена',
   completed: 'Завершена',
 };

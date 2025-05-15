@@ -39,8 +39,7 @@ export const Footer = observer(({ booking }: FooterProps) => {
 
                     <Button
                         variant={'gray2'}
-                        onClick={() => navigate(Routes.Sector.replace(':id', booking.sector_scheme?.sector.id.toString() ?? ''))}
-                        disabled={booking.status.name === 'reserved'}
+                        onClick={() => navigate(Routes.Sector.replace(':id', booking.sector_scheme?.sector.id.toString() ?? '') + '?show-booking-details=true')}
                     >
                         <Icon name={'location-flag'} size='extra-small' />
                         <span>На сектор</span>

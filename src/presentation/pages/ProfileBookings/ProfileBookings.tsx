@@ -1,7 +1,6 @@
 import { PageHeader } from '@src/presentation/ui-kit/PageHeader';
 import { observer } from 'mobx-react-lite';
 import { Tabs, useTabs } from '@src/presentation/ui-kit/Tabs';
-import { BookingCard } from './components/BookingCard/BookingCard';
 import { Virtuoso } from 'react-virtuoso';
 import { cashierStore } from '@src/application/store/cashierStore';
 import styles from './ProfileBookings.module.css';
@@ -9,6 +8,7 @@ import { useEffect } from 'react';
 import { CashierBookingResponse } from '@src/infrastructure/bookings/types';
 import { BookingsPages } from '@src/application/store/bookingsPages';
 import { TabItem } from '@src/presentation/ui-kit/Tabs/Tabs';
+import { BookingCardByCashier } from '@src/presentation/components/BookingCardByCashier';
 
 type TabName = 'active' | 'expected' | 'history';
 
@@ -80,7 +80,7 @@ export const ProfileBookings = observer(() => {
 
             return (
               <>
-                {booking && <BookingCard key={booking.id} booking={booking} />}
+                {booking && <BookingCardByCashier key={booking.id} booking={booking} />}
                 {isLast && <div style={{ height: 100 }} />}
               </>
             );

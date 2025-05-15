@@ -45,9 +45,9 @@ export class CashierStore {
     }
   }
 
-  initBookigns(sectorId?: number, statuses = []) {
-    this.activeBookings = new BookingsPages(statuses, sectorId, true);
-    this.expectedBookings = new BookingsPages(statuses, sectorId, true);
+  initBookigns(sectorId?: number) {
+    this.activeBookings = new BookingsPages(['busy'], sectorId, true);
+    this.expectedBookings = new BookingsPages(['reserved', 'confirmed'], sectorId, true);
     this.historyBookings = new BookingsPages(['completed', 'cancelled'], sectorId, true);
   }
 
