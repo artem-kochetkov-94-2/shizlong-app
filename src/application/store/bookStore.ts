@@ -45,6 +45,18 @@ export const sectorTabs: Tab[] = [
   },
 ];
 
+export const cashierSectorTabs: Tab[] = [
+  {
+    value: 'bookings',
+    label: 'Брони',
+  },
+  {
+    value: 'order',
+    label: 'Схема',
+  },
+];
+
+
 export const bookingTabs: Tab[] = [
   {
     value: 'bookings',
