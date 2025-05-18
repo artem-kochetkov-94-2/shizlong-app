@@ -14,7 +14,7 @@ export interface ProfileData {
     id: number;
     photo: string;
     role?: {
-      name: string;
+      name: 'cashier' | string;
       description: string;
     }
   };

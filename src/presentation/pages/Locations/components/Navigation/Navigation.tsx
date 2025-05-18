@@ -7,6 +7,7 @@ import { locationsStore } from "@src/application/store/locationsStore";
 import { useEffect, useState } from "react";
 import { Button } from "@src/presentation/ui-kit/Button";
 import styles from "./Navigation.module.css";
+import { profileStore } from "@src/application/store/profileStore";
 
 interface NavigationProps {
   onInputFocus: () => void;
@@ -23,7 +24,9 @@ export const Navigation = observer(({ onInputFocus, onInputBlur }: NavigationPro
 
   return (
     <div className={styles.navigation}>
-      <FavoriteButton />
+      {!profileStore.isCashier && (
+        <FavoriteButton />
+      )}
       <SearchInput
         placeholder="Поиск"
         rightContent={<Icon name="filter" size="small" />}

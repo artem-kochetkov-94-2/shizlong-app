@@ -16,6 +16,8 @@ import { Icon } from '@src/presentation/ui-kit/Icon';
 import { ModuleNode } from './ModuleNode';
 import { PlanImageNode } from './PlanImageNode';
 import { DecorateNode } from './DecorateNode';
+import { useSearchParams } from 'react-router-dom';
+import { bookingCardStore } from '@src/application/store/bookingCardStore';
 
 const nodeTypes = {
     ModuleNode,
@@ -47,11 +49,14 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
   });
   const { modules, decorate } = locationStore;
   const { sector, activeScheme, size } = sectorStore;
+  const { booking } = bookingCardStore;
 
   const koef = size?.width / baseWidthImgPlan;
 
+  const [searchParams] = useSearchParams();
+  const showBookingDetails = searchParams.get('show-booking-details');
+
   const getNodes = (sector: RawSector, sectorModules: RawModule[], decorate: PlacedIcon[]) => {
-    console.log('sectorModules', sectorModules);
     const nodes: Node[] = [{
         id: 'sector_scheme',
         type: 'PlanImageNode',
@@ -72,6 +77,7 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
             type: 'ModuleNode',
             data: {
                 module: m,
+                hasMarker: showBookingDetails && booking?.booking_modules.find((bm) => bm.module.id === m.id) ? true : false,
             },
             position: {
                 x: Number(m.placed_icon?.left) * koef || 1,
@@ -107,11 +113,9 @@ export const Plan = observer(({ onNext, onPrev, hasNext, hasPrev }: PlanProps) =
     const sectorModules = modules.filter((m) => m.sector_id === sector.id && m.sector_scheme_id === activeScheme?.id);
     const decorates = decorate.filter(d => d.sector_scheme_id === activeScheme?.id)
 
-    console.log('sectorModules', sectorModules);
-    console.log('decorates', decorates);
     const nodes = getNodes(sector, sectorModules, decorates);
-    setNodes(nodes);
-  }, [sector, modules, decorate, activeScheme, size]);
+    setNodes([...nodes]);
+  }, [sector, modules, decorate, activeScheme, size, showBookingDetails, booking]);
 
   useEffect(() => {
     reactFlow.fitView();

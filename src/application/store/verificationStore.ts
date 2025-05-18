@@ -8,7 +8,7 @@ import { CallStrategy, callStrategy } from '@src/domain/common/verification/call
 import { smsStrategy } from '@src/domain/common/verification/smsStrategy';
 import { cacheService } from '@src/application/services/cacheService/cacheService';
 import { KEY } from '@src/application/services/cacheService/types';
-
+import { authorizationService } from '@src/infrastructure/authorization/authorizationService';
 
 export class VerificationStore {
   private verificationController: VerificationController;
@@ -18,6 +18,12 @@ export class VerificationStore {
   private _isFetchingCode: boolean = false;
   private _isSendingCode: boolean = false;
   private _accessToken: string | null = null;
+
+  private _requestReverseCallFetching = false;
+  private _requestReverseCallPhone: string | null = null;
+
+  private _checkReverseCallVerificationFetching = false;
+  private _checkReverseCallVerificationPreparing = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -53,6 +59,26 @@ export class VerificationStore {
 
   get isVerified() {
     return !!this._accessToken;
+  }
+
+  get requestReverseCallPhone() {
+    return this._requestReverseCallPhone;
+  }
+
+  get requestReverseCallFetching() {
+    return this._requestReverseCallFetching;
+  }
+
+  get checkReverseCallVerificationFetching() {
+    return this._checkReverseCallVerificationFetching;
+  }
+
+  get checkReverseCallVerificationPreparing() {
+    return this._checkReverseCallVerificationPreparing;
+  }
+
+  setCheckReverseCallVerificationPreparing(v: boolean) {
+    this._checkReverseCallVerificationPreparing = v;
   }
 
   setStrategy(strategy: VerificationStrategy) {
@@ -100,6 +126,34 @@ export class VerificationStore {
     }
   }
 
+  async requestReverseCall(phone: string) {
+    try {
+      this._requestReverseCallFetching = true;
+      const result = await authorizationService.requestReverseCall(phone);
+      this._requestReverseCallPhone = result.reverse_call_phone;
+    } catch(e) {
+      console.log(e);
+    } finally {
+      this._requestReverseCallFetching = false;
+    }
+  }
+
+  async checkReverseCallVerification(phone: string, successCb: VoidFunction) {
+    try {
+      this._checkReverseCallVerificationFetching = true;
+      const result = await authorizationService.checkReverseCallVerification(phone);
+      this._accessToken = result?.access_token || null;
+      cacheService.set(KEY.Token, this._accessToken || '');
+      successCb();
+    } catch(e) {
+      this._verificationError = 'Ошибка верификации';
+      console.log(e);
+    } finally {
+      this._checkReverseCallVerificationFetching = false;
+      this._checkReverseCallVerificationPreparing = false;
+    }
+  }
+
   reset() {
     this._verificationError = null;
   }
@@ -111,6 +165,7 @@ export class VerificationStore {
     this._isFetchingCode = false;
     this._isSendingCode = false;
     this._accessToken = null;
+    this._requestReverseCallPhone = null;
     cacheService.delete(KEY.Token);
   }
 }

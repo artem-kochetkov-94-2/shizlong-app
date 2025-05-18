@@ -3,6 +3,8 @@ import { RawLocation, RawSector } from '@src/infrastructure/Locations/types';
 import { locationsService } from '@src/infrastructure/Locations/locationsService';
 import { BookingsPages } from './bookingsPages';
 import { CashierBookingResponse } from '@src/infrastructure/bookings/types';
+import { bookingsService } from '@src/infrastructure/bookings/bookingsService';
+import { bookingCardStore } from './bookingCardStore';
 
 export class CashierStore {
   locations: RawLocation[] = [];
@@ -29,9 +31,23 @@ export class CashierStore {
     }
   }
 
-  initBookigns(sectorId?: number, statuses = []) {
-    this.activeBookings = new BookingsPages(statuses, sectorId, true);
-    this.expectedBookings = new BookingsPages(statuses, sectorId, true);
+  async updateBooking(bookingId: number) {
+    try {
+      const booking = await bookingsService.getCashierBooking(bookingId);
+      if (bookingCardStore.booking?.id === bookingId) bookingCardStore.setBooking(booking);
+      if (booking) {
+        this.activeBookings?.updateBookings(booking);
+        this.expectedBookings?.updateBookings(booking);
+        this.historyBookings?.updateBookings(booking);    
+      };
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  initBookigns(sectorId?: number) {
+    this.activeBookings = new BookingsPages(['busy'], sectorId, true);
+    this.expectedBookings = new BookingsPages(['reserved', 'confirmed'], sectorId, true);
     this.historyBookings = new BookingsPages(['completed', 'cancelled'], sectorId, true);
   }
 

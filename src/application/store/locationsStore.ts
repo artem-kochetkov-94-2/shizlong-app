@@ -3,6 +3,7 @@ import { locationsService } from '@src/infrastructure/Locations/locationsService
 import { makeAutoObservable, runInAction } from 'mobx';
 import { mapStore } from './mapStore';
 import { verificationStore } from './verificationStore';
+import { profileStore, ProfileStore } from './profileStore';
 
 export class LocationsStore {
   locations: RawLocation[] = [];
@@ -13,8 +14,11 @@ export class LocationsStore {
   mapStore = mapStore;
   search = '';
 
+  profileStore: ProfileStore
+
   constructor() {
     makeAutoObservable(this);
+    this.profileStore = profileStore;
   }
 
   get filteredLocations() {
@@ -42,7 +46,7 @@ export class LocationsStore {
 
   async init() {
     await this.fetchLocations();
-    if (verificationStore.isVerified) {
+    if (verificationStore.isVerified && !this.profileStore.isCashier) {
       await this.fetchfavoriteLocations();
     }
   }

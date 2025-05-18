@@ -5,6 +5,7 @@ import { Sheet, SheetRef } from 'react-modal-sheet';
 import { Button } from '@src/presentation/ui-kit/Button';
 import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
 import styles from './CancelBookingPanel.module.css';
+import { profileStore } from '@src/application/store/profileStore';
 
 interface CancelBookingPanelProps {
   bookingId: number;
@@ -16,6 +17,15 @@ export const CancelBookingPanel = observer(
   ({ bookingId, isOpen, onClose }: CancelBookingPanelProps) => {
     const ref = useRef<SheetRef>(null);
     const { isLoadingCancelBooking } = bookingsStore;
+    const { isCashier } = profileStore;
+
+    const onCancel = () => {
+      if (isCashier) {
+        bookingsStore.cancelBookingByCashier(bookingId, onClose)
+      } else {
+        bookingsStore.cancelBookingByClient(bookingId, onClose)
+      }
+    }
 
     return (
       <Sheet
@@ -35,7 +45,7 @@ export const CancelBookingPanel = observer(
             <div className={styles.buttons}>
               <Button
                 variant={'yellow'}
-                onClick={() => bookingsStore.cancelBooking(bookingId, onClose)}
+                onClick={onCancel}
                 disabled={isLoadingCancelBooking.get(bookingId)}
                 isLoading={isLoadingCancelBooking.get(bookingId)}
               >

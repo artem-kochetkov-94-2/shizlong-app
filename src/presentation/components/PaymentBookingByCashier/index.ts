@@ -1,0 +1,1 @@
+export { PaymentBookingByCashier } from './PaymentBookingByCashier';

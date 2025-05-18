@@ -17,6 +17,8 @@ export const Verification = observer(() => {
       navigate(Routes.Auth);
       return;
     }
+
+    verificationStore.requestReverseCall(phoneNumber);
   }, [phoneNumber]);
 
   const handleFocus = () => {

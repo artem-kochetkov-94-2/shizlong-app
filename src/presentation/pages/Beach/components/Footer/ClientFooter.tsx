@@ -9,6 +9,8 @@ import cn from 'classnames';
 import { createYandexMapsRouteLink } from '@src/application/utils/createYandexMapsRouteLink';
 import { geoStore } from '@src/application/store/geoStore';
 import { observer } from 'mobx-react-lite';
+import { shareLink } from '@src/application/utils/shareLink';
+import { profileStore } from '@src/application/store/profileStore';
 
 interface ClientFooterProps {
     snapTo: (snap: number) => void;
@@ -23,6 +25,8 @@ export const ClientFooter = observer(({
     handleToggleFavorite,
     isFavorite,
 }: ClientFooterProps) => {
+    const { isCashier } = profileStore;
+
     const navigate = useNavigate();
     const { location: geoLocation } = geoStore;
     const { location, sectors } = locationStore;
@@ -35,12 +39,16 @@ export const ClientFooter = observer(({
                     locationStore.choosePlace();
                     if (sectors.length === 1) {
                         navigate(Routes.Sector.replace(':id', sectors[0].id.toString()));
-                    } else if (snap === 0) {
+                    } else {
+                        navigate(Routes.LocationPlan.replace(':id', location?.id.toString() ?? ''))
+                    }
+
+                    if (snap === 0) {
                         snapTo(1);
                     }
                 }}
             >
-                Выбрать место
+                {isCashier ? 'К секторам пляжа' : 'Выбрать место'}
             </Button>
             {snap === 0 ? (
                 <div className={styles.actions}>
@@ -67,6 +75,7 @@ export const ClientFooter = observer(({
                         size='large'
                         shape='rounded'
                         color='white'
+                        onClick={() => shareLink('')}
                     />
                 </div>
             ) : null}

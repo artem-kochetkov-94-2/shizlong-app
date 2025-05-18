@@ -51,18 +51,16 @@ export const Profile = observer(() => {
         {isCashier ? <CashierActions /> : <ClientActions />}
 
         <div className={styles.reminders}>
-          {/* @todo */}
-          {/* <div className={styles.reminderItem}>
-            <Icon size='small' name='profile-circle' />
-            <span>Добавить фото и имя</span>
-            <Icon size='small' name='arrow-right' />
-          </div> */}
-          {!tokens.length && (
-            <div className={styles.reminderItem} onClick={() => navigate(Routes.PaymentMethodsAdd)}>
-              <Icon size='small' name='card' />
-              <span>Привязать банковскую карту</span>
-              <Icon size='small' name='arrow-right' />
-            </div>
+          {!isCashier && (
+            <>
+              {!tokens.length && (
+                <div className={styles.reminderItem} onClick={() => navigate(Routes.PaymentMethodsAdd)}>
+                  <Icon size='small' name='card' />
+                  <span>Привязать банковскую карту</span>
+                  <Icon size='small' name='arrow-right' />
+                </div>
+              )}
+            </>
           )}
           {!isSubscribedToTelegram && (
             <div
@@ -74,6 +72,12 @@ export const Profile = observer(() => {
               <Icon size='small' name='arrow-right' />
             </div>
           )}
+          {/* @todo */}
+          {/* <div className={styles.reminderItem}>
+            <Icon size='small' name='profile-circle' />
+            <span>Добавить фото и имя</span>
+            <Icon size='small' name='arrow-right' />
+          </div> */}
           {/* @todo */}
           {/* <div className={styles.reminderItem}>
             <Icon size='small' name='check' />
