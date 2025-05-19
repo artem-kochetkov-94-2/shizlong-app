@@ -45,6 +45,18 @@ export const sectorTabs: Tab[] = [
   },
 ];
 
+export const cashierSectorTabs: Tab[] = [
+  {
+    value: 'bookings',
+    label: 'Брони',
+  },
+  {
+    value: 'order',
+    label: 'Схема',
+  },
+];
+
+
 export const bookingTabs: Tab[] = [
   {
     value: 'bookings',
@@ -336,12 +348,15 @@ class BookStore {
     if (!availableSlot) return false;
 
     const scheme = this.getScheme(module);
+    if (scheme?.is_active === false) return false;
     if (!scheme) return false;
 
     return scheme.is_active;
   }
 
   isModuleAvailable = (module: RawModule): boolean => {
+    if (module?.is_active === false) return false;
+
     if (isActiveHourlyPeriod(this.moduleSchemePeriod)) {
       return this.isModuleAvailableForHourlySchemes(module);
     };

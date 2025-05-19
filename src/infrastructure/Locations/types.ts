@@ -160,7 +160,8 @@ export interface RawModule {
     name: ModuleStatus;
     description: string;
   }
-  module_schemes?: ModuleScheme[]
+  module_schemes?: ModuleScheme[];
+  is_active?: boolean;
 }
 
 export interface FavoriteUpdateResult {

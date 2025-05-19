@@ -25,6 +25,8 @@ export const BookingDetailsReceipt = observer(() => {
     return <div>Бронь не найдена</div>;
   }
 
+  console.log('booking', JSON.parse(JSON.stringify(booking)));
+
   return (
     <Sheet
       isOpen={true}
@@ -48,7 +50,7 @@ export const BookingDetailsReceipt = observer(() => {
                     <div className={styles.subHeader}>Операция </div>
                     <div className={styles.info}>Оплата услуг</div>
                     <div className={styles.subHeader}>ФИО плательщика</div>
-                    <div className={styles.info}>Иванов Иван Иванович</div>
+                    <div className={styles.info}>{booking.customer.name}</div>
                     <div className={styles.subHeader}>Телефон плательщика</div>
                     <div className={styles.info}>{booking.customer.phone}</div>
                   </div>

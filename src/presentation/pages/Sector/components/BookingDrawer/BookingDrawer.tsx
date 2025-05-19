@@ -5,13 +5,12 @@ import {
   bookStore,
   sectorTabs,
   SectorTab,
-  bookingTabs,
+  cashierSectorTabs,
 } from '@src/application/store/bookStore';
 import { observer } from 'mobx-react-lite';
 import { sectorStore } from '@src/application/store/sectorStore';
 import { SchemeMode } from '../SchemeMode/SchemeMode';
 import classNames from 'classnames';
-import { Tabs } from '@src/presentation/ui-kit/Tabs';
 import { Sheet } from 'react-modal-sheet';
 import { DRAG_VELOCITY_THRESHOLD } from '@src/const';
 import { useEffect } from 'react';
@@ -39,10 +38,11 @@ const INITIAL_SNAP_POINT = 1;
 
 export const BookingDrawer = observer(() => {
   const { activeTab } = bookStore;
-  const { activeBookingsTab, bookModules, modulesPrice } = bookStore;
+  const { bookModules, modulesPrice } = bookStore;
   const { activeScheme, schemes, sector } = sectorStore;
   const { location } = locationStore;
   const { currentBookings } = bookingsStore;
+  const { isCashier } = profileStore;
 
   const navigate = useNavigate();
 
@@ -111,7 +111,7 @@ export const BookingDrawer = observer(() => {
             <IconButton iconName='qr-code' size='large' onClick={qrCodeClickHandler} />
             <RoundedTabs
               activeTab={activeTab}
-              tabs={sectorTabs}
+              tabs={isCashier ? cashierSectorTabs : sectorTabs}
               onTabChange={(tab) => bookStore.setActiveTab(tab as SectorTab)}
             />
             <ProfileButton />
