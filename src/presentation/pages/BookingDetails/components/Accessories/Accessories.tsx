@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { bookingCardStore } from "@src/application/store/bookingCardStore";
-import styles from './accessories.module.css';
+import styles from './Accessories.module.css';
 import { Card } from "@src/presentation/ui-kit/Card";
 
 export const Accessories = observer(() => {
